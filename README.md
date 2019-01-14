@@ -36,6 +36,10 @@ Is located inside `src/demo` directory, here you can test your library while dev
 
 `npm run test` or `yarn run test`
 
+## Run Demo
+
+`npm run start` or `yarn run start`
+
 ## Build library
 
 `npm run build` or `yarn run build`
