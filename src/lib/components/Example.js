@@ -1,12 +1,24 @@
 import React from 'react';
+import styled from 'styled-components';
 import solidLogo from './logo.svg';
-import './Example.css';
+
+const ExampleWrapper = styled.section`
+  margin-top: 60px;
+  text-align: center;
+  width: 100%;
+`;
+
+const Headline = styled.h1`
+  color: #333;
+  font-size: 36px;
+  font-weight: 300;
+`;
 
 const Example = () => (
-  <div className="Example">
+  <ExampleWrapper>
     <img src={solidLogo} alt="React logo" width="62" />
-    <h1 className="Example-text">Solid React Components</h1>
-  </div>
+    <Headline>Solid React Components</Headline>
+  </ExampleWrapper>
 );
 
 export default Example;

@@ -1,28 +1,44 @@
 import React from 'react';
-import './SecondExample.css';
+import styled from 'styled-components';
+
+const SecondExampleWrapper = styled.section`
+  text-align: center;
+  width: 100%;
+`;
+
+const CopyText = styled.p`
+  color: #4b5658;
+  font-size: 20px;
+`;
+
+const Link = styled.a`
+  color: #3079ab;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const SecondExample = () => (
-  <div className="SecondExample">
-    <p className="SecondExample-text">
+  <SecondExampleWrapper>
+    <CopyText>
       Based on Facebook's {'\u00A0'}
-      <a
-        className="SecondExample-link"
+      <Link
         target="_blank"
         rel="noopener noreferrer"
         href="https://github.com/facebookincubator/create-react-app"
       >
         Create react app
-      </a>
-    </p>
-    <a
-      className="SecondExample-github-link"
+      </Link>
+    </CopyText>
+    <Link
       target="_blank"
       rel="noopener noreferrer"
       href="https://github.com/Inrupt-inc/solid-react-components"
     >
       Documentation
-    </a>
-  </div>
+    </Link>
+  </SecondExampleWrapper>
 );
 
 export default SecondExample;
