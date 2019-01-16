@@ -45,6 +45,7 @@ export default class LoginComponent extends Component<Props> {
       const { callback } = this.props;
 
       if (!idp) {
+        //@TODO: better error handling will be here
         throw new SolidError("Solid Provider is required", "idp");
       }
 
@@ -56,7 +57,7 @@ export default class LoginComponent extends Component<Props> {
       if (session) {
         return this.setState({ session });
       }
-
+      //@TODO: better error handling will be here
       throw new SolidError(
         "Something is wrong, please try again...",
         "unknow"
