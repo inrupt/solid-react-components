@@ -16,13 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DimiMikadze/create-react-library.git"
+    "url": "git+https://github.com/Inrupt-inc/solid-react-components"
   },
   "author": "Solid",
   "bugs": {
-    "url": "https://github.com/DimiMikadze/create-react-library/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/DimiMikadze/create-react-library#readme",
+  "homepage": "https://github.com/Inrupt-inc/solid-react-components",
   "license": "MIT",
   "dependencies": {
     "@solid/query-ldflex": "^1.2.1",

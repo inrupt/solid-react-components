@@ -485,7 +485,10 @@ module.exports = {
   externals: {
     react: 'react',
     'react-dom': 'react-dom',
-    'solid-auth-client': ['solid', 'auth'],
+    'solid-auth-client': {
+      commonjs: ['solid', 'auth'],
+      commonjs2: ['solid', 'auth'],
+    },
     '@solid/query-ldflex': ['solid', 'data']
   },
   // Some libraries import Node modules but don't use them in the browser.
