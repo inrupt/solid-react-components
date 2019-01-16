@@ -486,8 +486,9 @@ module.exports = {
     react: 'react',
     'react-dom': 'react-dom',
     'solid-auth-client': {
-      commonjs: ['solid', 'auth'],
-      commonjs2: ['solid', 'auth'],
+        root: ['solid', 'auth'],
+        commonjs: 'solid-auth-client',
+        commonjs2: 'solid-auth-client',
     },
     '@solid/query-ldflex': ['solid', 'data']
   },
