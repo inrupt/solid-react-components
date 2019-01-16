@@ -1,13 +1,13 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import ProviderLogin from "./provider-login.container";
-import { ProviderSelect } from "../../components";
+import { ProviderSelect } from "@components";
 import {
   SolidLinkButton,
   SolidButton,
   ErrorMessage,
   SolidInput
-} from "../../styled-components";
+} from "@styled-components";
 
 import "../../../utils/enzymeSetup";
 
