@@ -181,10 +181,10 @@ module.exports = {
     // Automatically split vendor and commons
     // https://twitter.com/wSokra/status/969633336732905474
     // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-    splitChunks: {
+    /* splitChunks: {
       chunks: 'all',
       name: false,
-    },
+    }, */
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
