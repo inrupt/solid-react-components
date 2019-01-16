@@ -3,9 +3,9 @@ import auth from "solid-auth-client";
 // In-house Components
 import LoginFormUi from "./provider-login.ui";
 // Utils
-import { SolidError } from "../../../utils";
+import { SolidError } from "@utils";
 // Entities
-import { Provider } from "../../entities";
+import { Provider } from "@entities";
 
 type Props = {
   providers: Array<Provider>,

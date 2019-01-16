@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { ProviderSelect } from "../../components";
+import { ProviderSelect } from "@components";
 import {
   SolidInput,
   SolidLinkButton,
   SolidButton,
   ErrorMessage
-} from "../../styled-components";
+} from "@styled-components";
 
 const LoginFormWrapper = styled.div`
   button {
