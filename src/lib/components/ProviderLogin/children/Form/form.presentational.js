@@ -15,7 +15,7 @@ const LoginFormWrapper = styled.div`
   }
 `;
 
-const LoginFormUi = props => {
+const LoginForm = props => {
   return (
     <LoginFormWrapper
       className={`solid-provider-login-component ${
@@ -51,4 +51,4 @@ const LoginFormUi = props => {
   );
 };
 
-export default LoginFormUi;
+export default LoginForm;

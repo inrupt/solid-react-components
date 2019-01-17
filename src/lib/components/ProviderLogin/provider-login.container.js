@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import auth from "solid-auth-client";
 // In-house Components
-import LoginFormUi from "./provider-login.ui";
+import LoginForm from "./children/Form";
 // Utils
 import { SolidError } from "@utils";
 // Entities
 import { Provider } from "@entities";
+
+import SolidImg from '../../../assets/solid_logo.png';
+import InruptImg from '../../../assets/inrupt_logo.png';
 
 type Props = {
   providers: Array<Provider>,
@@ -87,7 +90,7 @@ export default class LoginComponent extends Component<Props> {
 
   render() {
     return (
-      <LoginFormUi
+      <LoginForm
         {...this.props}
         error={this.state.error}
         withWebId={this.state.withWebId}
@@ -108,14 +111,14 @@ LoginComponent.defaultProps = {
   providers: [
     {
       label: "Inrupt",
-      image: "/img/inrupt_logo.png",
+      image: InruptImg,
       value: "https://inrupt.net/auth",
       registerLink: "https://inrupt.net/register",
       description: "This is a prototype implementation of a Solid server"
     },
     {
       label: "Solid Community",
-      image: "/img/Solid.png",
+      image: SolidImg,
       value: "https://solid.community",
       registerLink: "https://solid.community/register",
       description: "This is a prototype implementation of a Solid server"
