@@ -144,7 +144,8 @@ module.exports = {
       '@styled-components': path.resolve(__dirname, '../src/lib/styled-components'),
       '@components': path.resolve(__dirname, '../src/lib/components'),
       '@entities': path.resolve(__dirname, '../src/lib/entities'),
-      '@utils': path.resolve(__dirname, '../src/utils')
+      '@utils': path.resolve(__dirname, '../src/utils'),
+      '@testSetup': path.resolve(__dirname, '../src/test/setup')
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding

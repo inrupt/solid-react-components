@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 import { ProviderSelect } from "@components";
 
-import "../../../utils/enzymeSetup";
+import "@testSetup";
 
 const setup = () => shallow(<ProviderSelect />);
 

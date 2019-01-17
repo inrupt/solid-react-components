@@ -10,7 +10,7 @@ import {
   SolidInput
 } from "@styled-components";
 
-import "../../../utils/enzymeSetup";
+import "@testSetup";
 
 const setup = () => shallow(<ProviderLogin />);
 const setupMount = () => mount(<ProviderLogin />);

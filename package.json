@@ -126,6 +126,7 @@
       "@styled-components": "<rootDir>/src/lib/styled-components/",
       "@utils": "<rootDir>/src/utils",
       "@entities": "<rootDir>/src/lib/entities",
+      "@testSetup": "<rootDir>/src/test/setup",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
     "moduleFileExtensions": [
