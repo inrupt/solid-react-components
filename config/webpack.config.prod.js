@@ -181,10 +181,10 @@ module.exports = {
     // Automatically split vendor and commons
     // https://twitter.com/wSokra/status/969633336732905474
     // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-    splitChunks: {
+    /* splitChunks: {
       chunks: 'all',
       name: false,
-    },
+    }, */
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -206,6 +206,11 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      '@styled-components': path.resolve(__dirname, '../src/lib/styled-components'),
+      '@components': path.resolve(__dirname, '../src/lib/components'),
+      '@entities': path.resolve(__dirname, '../src/lib/entities'),
+      '@utils': path.resolve(__dirname, '../src/utils'),
+      '@testSetup': path.resolve(__dirname, '../src/test/setup')
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding
@@ -481,7 +486,11 @@ module.exports = {
   externals: {
     react: 'react',
     'react-dom': 'react-dom',
-    'solid-auth-client': ['solid', 'auth'],
+    'solid-auth-client': {
+        root: ['solid', 'auth'],
+        commonjs: 'solid-auth-client',
+        commonjs2: 'solid-auth-client',
+    },
     '@solid/query-ldflex': ['solid', 'data']
   },
   // Some libraries import Node modules but don't use them in the browser.
