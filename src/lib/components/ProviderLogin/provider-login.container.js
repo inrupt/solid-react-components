@@ -7,8 +7,8 @@ import { SolidError } from "@utils";
 // Entities
 import { Provider } from "@entities";
 
-import SolidImg from '../../../assets/solid_logo.png';
-import InruptImg from '../../../assets/inrupt_logo.png';
+import SolidImg from "../../../assets/solid_logo.png";
+import InruptImg from "../../../assets/inrupt_logo.png";
 
 type Props = {
   providers: Array<Provider>,
@@ -17,7 +17,8 @@ type Props = {
   selectPlaceholder: String,
   inputPlaholder: String,
   formButtonText: String,
-  toggleButton: String,
+  btnTxtWebId: String,
+  btnTxtProvider: String,
   onError: (error: Error) => void
 };
 
@@ -35,7 +36,7 @@ export default class LoginComponent extends Component<Props> {
 
   componentDidUpdate(prevProps, prevState) {
     // Reset error state after user choose provider
-    if (prevProps.idp !== '' && prevProps.idp !== this.props.idp) {
+    if (prevProps.idp !== "" && prevProps.idp !== this.props.idp) {
       this.setState({ error: null });
     }
   }
@@ -61,18 +62,15 @@ export default class LoginComponent extends Component<Props> {
         return this.setState({ session });
       }
       //@TODO: better error handling will be here
-      throw new SolidError(
-        "Something is wrong, please try again...",
-        "unknow"
-      );
+      throw new SolidError("Something is wrong, please try again...", "unknow");
     } catch (error) {
       // Error callback for custom error handling
       if (this.props.onError) {
         this.props.onError(error);
       }
       // Show form error messsage when idp is null
-      if (error.name === 'idp') {
-        this.setState({error});
+      if (error.name === "idp") {
+        this.setState({ error });
       }
     }
   };
@@ -105,9 +103,10 @@ export default class LoginComponent extends Component<Props> {
 
 LoginComponent.defaultProps = {
   selectPlaceholder: "Select ID Provider",
-  inputPlaholder: "ID Provider",
+  inputPlaholder: "WebID",
   formButtonText: "Log In",
-  toggleButton: "Log in with WebID",
+  btnTxtWebId: "Log In with WebId",
+  btnTxtProvider: "Log In with Provider",
   providers: [
     {
       label: "Inrupt",
