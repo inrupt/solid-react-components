@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import withWebId from './WithWebId';
 import SolidImg from '../../assets/solid_logo.png';
 
 const ExampleWrapper = styled.section`
@@ -14,11 +15,13 @@ const Headline = styled.h1`
   font-weight: 300;
 `;
 
-const Example = () => (
-  <ExampleWrapper>
-    <img src={SolidImg} alt="React logo" width="62" />
-    <Headline>Solid React Components</Headline>
-  </ExampleWrapper>
-);
+const Example = (props) => {
+  return (
+    <ExampleWrapper>
+      <img src={SolidImg} alt="React logo" width="62" />
+      <Headline>Solid React Components</Headline>
+    </ExampleWrapper>
+  );
+};
 
-export default Example;
+export default withWebId(Example);
