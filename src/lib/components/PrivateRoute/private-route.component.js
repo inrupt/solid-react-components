@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect, Route } from "react-router-dom";
-import withWebId from "./WithWebId";
+import withWebId from "../WithWebId";
 
 type Props = {
   webId?: String,

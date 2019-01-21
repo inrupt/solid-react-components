@@ -27,6 +27,7 @@
   "dependencies": {
     "@solid/query-ldflex": "^1.2.1",
     "html-webpack-include-assets-plugin": "^1.0.6",
+    "react-router-dom": "^4.3.1",
     "react-select": "^2.2.0",
     "solid-auth-client": "^2.2.14",
     "styled-components": "^4.1.3"
