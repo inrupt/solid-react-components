@@ -1,10 +1,3 @@
-import Example from '@components/Example';
-import SecondExample from '@components/SecondExample';
-import { ProviderLogin } from '@components';
+import { ProviderLogin, PrivateRoute } from "@components";
 
-export default Example;
-
-export {
-  SecondExample,
-  ProviderLogin
-};
+export { ProviderLogin, PrivateRoute };

@@ -15,12 +15,6 @@ class SolidAuthClient extends EventEmitter {
     callback(this.session);
     this.on('session', callback);
   }
-
-  mockWebId(webId) {
-    this.session = webId ? { webId } : null;
-    this.emit('session', this.session);
-    return new Promise(resolve => setImmediate(resolve));
-  }
 }
 
 const instance = new SolidAuthClient();
