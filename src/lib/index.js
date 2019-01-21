@@ -1,3 +1,3 @@
-import { ProviderLogin, withWebId, PrivateRoute } from "@components";
+import { ProviderLogin, PrivateRoute } from "@components";
 
-export { ProviderLogin, withWebId, PrivateRoute };
+export { ProviderLogin, PrivateRoute };
