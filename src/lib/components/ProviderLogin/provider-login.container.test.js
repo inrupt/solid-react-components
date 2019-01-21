@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import auth from 'solid-auth-client';
+import auth from "solid-auth-client";
 import ProviderLogin from "./provider-login.container";
 import { ProviderSelect } from "@components";
 import {
@@ -40,15 +40,15 @@ describe("Provider Login Container", () => {
     expect(!initialState).toBeTruthy();
   });
 
-  it('logs the user in when submit', async () => {
+  it("logs the user in when submit", async () => {
     const wrapper = setupMount();
     const button = wrapper.find(SolidButton);
     expect(auth.login).not.toBeCalled();
 
-    wrapper.setState({ idp: 'https://inrupt.net/auth' });
+    wrapper.setState({ idp: "https://inrupt.net/auth" });
     wrapper.setProps({ callback: () => {} });
 
-    await button.simulate('submit');
+    await button.simulate("submit");
     expect(auth.login).toBeCalledTimes(1);
   });
 
