@@ -1,5 +1,5 @@
 {
-  "name": "solid-react-components",
+  "name": "@inrupt/solid-react-components",
   "version": "0.1.0-rc.1",
   "description": "Solid React Components",
   "main": "build/index.js",
