@@ -2,7 +2,7 @@
 
 Based on Facebook's <a href="https://github.com/facebookincubator/create-react-app" target="_blank">Create React App</a>.
 
-A basic React components for building your own Solid applications.
+Basic React components for building your own <a href="https://solid.inrupt.com/" target="_blank">Solid</a> applications.
 
  ## External Dependencies
 
@@ -44,10 +44,10 @@ Many of our components include class names from the style guide, so including th
 
 ### What makes a bad Component?
 A bad component is anything that breaks the above rules:
-* If it's a one-time use thing that's too specific to the application
-* If it's too large (like a page)
-* If it's too heavily styled
-* If it contains any proprietary information
+* If it's a one-time use thing that's too specific to the application.
+* If it's too large (like a page).
+* If it's too heavily styled.
+* If it contains any proprietary information.
 
 ## Components
 
@@ -73,7 +73,7 @@ btnTxtProvider  |  String | Log In with Provider  |
 
 ### PrivateRoute
 
-Protected routes are an important part of any web application. We are using a custom component to redirect in cases where you are not logged. We are using with WebID from @solid/react library.
+Protected routes are an important part of any web application. We are using a custom component, from the from @solid/react library, to redirect in cases where you are not logged.
 
 ```javascript
   <PrivateRoute component={Container}/>
@@ -105,4 +105,4 @@ We re-expose this component from [@solid/react](https://github.com/solid/react-c
   <LogoutButton/>
 ```
 
-We currently re-expose withWebId and LogoutButton, the idea being that you can use the basic components without installing  other libraries.
+We currently re-expose withWebId and LogoutButton so you can use the basic components without installing other libraries.
