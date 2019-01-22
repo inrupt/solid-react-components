@@ -1,6 +1,6 @@
 {
-  "name": "solid-react-components",
-  "version": "0.1.0-dev-05",
+  "name": "@solid/solid-react-components",
+  "version": "0.1.0-dev-01",
   "description": "Solid React Components",
   "main": "build/index.js",
   "scripts": {
