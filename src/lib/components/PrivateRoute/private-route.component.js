@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import { withWebId } from "@solid/react";
 import { Redirect, Route } from "react-router-dom";
-import auth from "solid-auth-client";
 
 import { Loader } from "./private-route.style";
 
@@ -12,26 +12,9 @@ type Props = {
 };
 
 class PrivateRoute extends Component<Props> {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      webId: null,
-      checked: false
-    };
-  }
-  componentDidMount() {
-    this.getCurrentSession();
-  }
-  getCurrentSession = async () => {
-    const session = await auth.currentSession();
-
-    this.setState({ webId: session && session.webId, checked: true });
-  };
-
   renderRouter = (): React.Element => {
-    const { redirect, component: Component, ...rest } = this.props;
-    return this.state.webId ? (
+    const { webId, redirect, component: Component, ...rest } = this.props;
+    return webId ? (
       <Route {...rest} component={Component} />
     ) : (
       <Redirect to={redirect} />
@@ -39,9 +22,9 @@ class PrivateRoute extends Component<Props> {
   };
 
   render() {
-    return this.state.checked
-      ? this.renderRouter()
-      : this.props.loaderComponent();
+    return this.props.webId === undefined
+      ? this.props.loaderComponent()
+      : this.renderRouter();
   }
 }
 
@@ -52,4 +35,4 @@ PrivateRoute.defaultProps = {
   )
 };
 
-export default PrivateRoute;
+export default withWebId(PrivateRoute);

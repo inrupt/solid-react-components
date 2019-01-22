@@ -1,8 +1,7 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { shallow } from "enzyme";
+import { Route, Redirect, MemoryRouter } from "react-router-dom";
+import { mount } from "enzyme";
 import { PrivateRoute } from "@components";
-
 
 import "@testSetup";
 
@@ -19,35 +18,37 @@ const shallowErrors = codeRun => {
 describe("Private Route", () => {
   const defaultWeb = "https://example.org/#me";
   shallowErrors(() => {
-    const setup = () => shallow(<PrivateRoute redirect="/test" />);
+    const setup = webId =>
+      mount(
+        <MemoryRouter>
+          <PrivateRoute webId={webId} redirect="/test" />
+        </MemoryRouter>
+      );
 
     describe("before check session", () => {
       const wrapper = setup();
 
       it("should render loading", () => {
-        wrapper.setState({ webId: null, checked: false });
-        expect(wrapper.text()).toEqual('We are validating your data...');
+        expect(wrapper.text()).toEqual("We are validating your data...");
       });
     });
 
-    describe("after check invalid session", () => {
-      const wrapper = setup();
+    describe("invalid session", () => {
+      const wrapper = setup(null);
+      const childWrapper = wrapper.find(PrivateRoute);
 
       it("should render redirect", () => {
-        wrapper.setState({ webId: null, checked: true });
-        expect(wrapper.find(Redirect).length).toEqual(1);
+        expect(childWrapper.find(Redirect).length).toEqual(1);
       });
     });
 
-    describe("before user logged", () => {
-      const wrapper = setup();
+    describe("when user is logged", () => {
+      const wrapper = setup(defaultWeb);
+      const childWrapper = wrapper.find(PrivateRoute);
 
       it("should render route", () => {
-        wrapper.setState({ webId: defaultWeb, checked: true });
-        wrapper.update();
-
-        expect(wrapper.state().webId).toEqual(defaultWeb);
-        expect(wrapper.find(Route).length).toEqual(1);
+        expect(childWrapper.props().webId).toEqual(defaultWeb);
+        expect(childWrapper.find(Route).length).toEqual(1);
       });
     });
   });
