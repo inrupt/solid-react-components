@@ -1,7 +1,8 @@
 import React from "react";
-import { Route, Redirect, MemoryRouter } from "react-router-dom";
-import { mount } from "enzyme";
+import { Route, Redirect } from "react-router-dom";
+import { shallow } from "enzyme";
 import { PrivateRoute } from "@components";
+
 
 import "@testSetup";
 
@@ -18,29 +19,34 @@ const shallowErrors = codeRun => {
 describe("Private Route", () => {
   const defaultWeb = "https://example.org/#me";
   shallowErrors(() => {
-    const setup = webId =>
-      mount(
-        <MemoryRouter>
-          <PrivateRoute webId={webId} redirect="/test" />
-        </MemoryRouter>
-      );
+    const setup = () => shallow(<PrivateRoute redirect="/test" />);
 
-    describe("before user login", () => {
-      const wrapper = setup(null);
-      const wrapperChild = wrapper.find(PrivateRoute);
+    describe("before check session", () => {
+      const wrapper = setup();
+
+      it("should render loading", () => {
+        wrapper.setState({ webId: null, checked: false });
+        expect(wrapper.text()).toEqual('We are validating your data...');
+      });
+    });
+
+    describe("after check invalid session", () => {
+      const wrapper = setup();
 
       it("should render redirect", () => {
-        expect(wrapperChild.props().webId).toEqual(null);
+        wrapper.setState({ webId: null, checked: true });
         expect(wrapper.find(Redirect).length).toEqual(1);
       });
     });
 
-    describe("before user login", () => {
-      const wrapper = setup(defaultWeb);
-      const wrapperChild = wrapper.find(PrivateRoute);
+    describe("before user logged", () => {
+      const wrapper = setup();
 
       it("should render route", () => {
-        expect(wrapperChild.props().webId).toEqual(defaultWeb);
+        wrapper.setState({ webId: defaultWeb, checked: true });
+        wrapper.update();
+
+        expect(wrapper.state().webId).toEqual(defaultWeb);
         expect(wrapper.find(Route).length).toEqual(1);
       });
     });

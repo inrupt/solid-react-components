@@ -15,6 +15,7 @@ class SolidAuthClient extends EventEmitter {
     callback(this.session);
     this.on('session', callback);
   }
+  currentSession() {}
 }
 
 const instance = new SolidAuthClient();
