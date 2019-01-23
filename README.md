@@ -1,6 +1,6 @@
 ## Solid React Components Library
 
-Basic React components for building your own <a href="https://solid.inrupt.com/" target="_blank">Solid</a> applications.
+React components for building your own [Solid](https://solid.inrupt.com/") applications. Part of the [React SDK for Solid](https://github.com/inrupt-inc/solid-react-sdk).
 
  ## External Dependencies
 
@@ -28,17 +28,16 @@ import { ProviderLogin, withWebId } from '@inrupt/solid-react-components'
 ## What is a Component?
 A component is a small, stand-alone piece of code that can be reused by many different applications. Most of the time, that means there will be a User Interface (UI) component and a Logic component.
 
-### What comprises a Component?
-A Component in our library consists of two major pieces: A Container component and a UI Component. The intention is to split out the logic and UI/Styling into separate components for more readability and reducing the size of each piece of the component.
+In our library, a component consists of two major pieces: A *Container Component* and a *UI Component*. The intention is to split out the logic and UI/Styling into separate components for better readability and to reduce the size of each piece of the component.
 
-This pattern is typically referred to as Presentational and Container Components.
+This pattern is typically referred to as *Presentational and Container Components*.
 
 ## What makes a good Component?
-A good component is reusable and that many people could use. Typically, this means it contains it's own data management and/or takes a set or props that are used internally. 
+A good component is reusable. It should be versatile and support a range of applicable use cases. Typically, this means it contains its own data management and/or takes a set or props that are used internally.
 
-In terms of styling, a good component in our library is also not styled aggressively, so it will fit in any site or application's look and feel. At most it is styled only for internal layout and structure. For example, a form layout but without styling the inputs.
+A good component in our library is also not styled aggressively. Styling is limited to internal layout and structure. It will fit in any site or application's look and feel. For example, to provide a form layout without styling the inputs.
 
-Many of our components include class names from the style guide, so including the style guide will apply the styling. This way, people who want the style guide can have it, but it's not compulsory.
+Many of our components include class names from our [Atomic Style Guide](http://design.inrupt.com), so including the style guide will apply the styling. This way, people who want the style guide can have it, but it's not required.
 
 ### What makes a bad Component?
 A bad component is anything that breaks the above rules:
@@ -52,8 +51,7 @@ Since our components are not styled and don't want to assume anything about the 
 
 We have made a custom Error object type, extended from the standard [Error object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), called SolidError. It contains a message and a name. The message is a consumable error message to display, and the name is essentially the error or component that failed.
 
-To see how to consume these error messages, please refer to the [generator-solid-react documentation](https://github.com/Inrupt-inc/generator-solid-react).
-
+To see how to consume these error messages, please refer to the documentation at [generator-solid-react](https://github.com/Inrupt-inc/generator-solid-react).
 
 ## Component List
 
@@ -81,7 +79,7 @@ btnTxtProvider  |  String | Log In with Provider  |
 
 ### PrivateRoute
 
-Protected routes are an important part of any web application. Here we provide a custom component that can be used to check Solid authentication for you. 
+Protected routes are an important part of any web application. Here we provide a custom component that can be used to check Solid authentication for you.
 
 The component will check to see if the user is logged in, using the withWebId component from the [@solid/react library](https://github.com/solid/react-components). If the user is not authenticated, they will be redirected to a route of your choosing, passed in via the props. If none is provided it will redirect to a /login route.
 
