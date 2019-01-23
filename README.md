@@ -61,13 +61,9 @@ To see how to consume these error messages, please refer to the [generator-solid
 
 ### ProviderLogin
 
-<<<<<<< HEAD
 The ProviderLogin component is primarily a Login Form component. Using it in your application will provide a relatively unstyled login form, complete with a dropdown of potential Solid Providers for users to select from.
 
 For now, the list of Providers is passed in as a parameter. In the future, this could include an option to fetch Providers from a registry. Without a Provider, the user will not be able to login, so this should help accelerate application development.
-=======
-This component allows you to login into Pods using a list of providers or your WebID.
->>>>>>> 73194aa529f701ad3cace8a66498203379fedc41
 
 ```javascript
   <ProviderLogin />
@@ -87,14 +83,9 @@ btnTxtProvider  |  String | Log In with Provider  |
 
 ### PrivateRoute
 
-<<<<<<< HEAD
 Protected routes are an important part of any web application. Here we provide a custom component that can be used to check Solid authentication for you. 
 
 The component will check to see if the user is logged in, using the withWebId component from the [@solid/react library](https://github.com/solid/react-components). If the user is not authenticated, they will be redirected to a route of your choosing, passed in via the props. If none is provided it will redirect to a /login route.
-
-=======
-Protected routes are an important part of any web application. We are using a custom component, from the from @solid/react library, to redirect in cases where you are not logged.
->>>>>>> 73194aa529f701ad3cace8a66498203379fedc41
 
 ```javascript
   <PrivateRoute component={Container}/>
@@ -118,21 +109,22 @@ const MyComponent = withWebId(props =>
   <p>Hey user, your WebID is {props.webID}.</p>);
 ```
 
+### withAuthorization
+
+This component is a wrapper for withWebId. It provides additional functionality, such as discovering when a user is not authenticated and redirecting them to a custom route, or to /login, when the user is not authenticated.
+
+```javascript
+export default withAuthorization(WelcomeComponent, <Loader show={true} />);
+```
+
 ### LogoutButton
 
-<<<<<<< HEAD
 This component uses solid-auth-client to provide a simple button that logs out the user. It is a simple helper component to integrate with solid-auth-client.
 
-We are re-expose this component from [@solid/react](https://github.com/solid/react-components).
-=======
 We re-expose this component from [@solid/react](https://github.com/solid/react-components) library.
->>>>>>> 73194aa529f701ad3cace8a66498203379fedc41
 
 ```javascript
   <LogoutButton/>
 ```
-<<<<<<< HEAD
-=======
 
 We currently re-expose withWebId and LogoutButton so you can use the basic components without installing other libraries.
->>>>>>> 73194aa529f701ad3cace8a66498203379fedc41
