@@ -50,11 +50,21 @@ A bad component is anything that breaks the above rules.
 * If it's too heavily styled
 * If it contains any proprietary information
 
-## Components
+## Error Handling
+Since our components are not styled and don't want to assume anything about the application they're used in, we didn't build an explicit error handling UI. No toast or popups are included here. Instead, we capture and surface error objects to the parent and let them bubble up to the application.
+
+We have made a custom Error object type, extended from the standard [Error object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), called SolidError. It contains a message and a name. The message is a consumable error message to display, and the name is essentially the error or component that failed.
+
+To see how to consume these error messages, please refer to the [generator-solid-react documentation](https://github.com/Inrupt-inc/generator-solid-react).
+
+
+## Component List
 
 ### ProviderLogin
 
-This component will allow you to login into pods using a list of providers or your webId.
+The ProviderLogin component is primarily a Login Form component. Using it in your application will provide a relatively unstyled login form, complete with a dropdown of potential Solid Providers for users to select from.
+
+For now, the list of Providers is passed in as a parameter. In the future, this could include an option to fetch Providers from a registry. Without a Provider, the user will not be able to login, so this should help accelerate application development.
 
 ```javascript
   <ProviderLogin />
@@ -74,7 +84,10 @@ btnTxtProvider  |  String | Log In with Provider  |
 
 ### PrivateRoute
 
-Protected routes are an important part of any web application, we are using a custom component to redirect in cases that you are not logged. We are using withWebId from @solid/react library.
+Protected routes are an important part of any web application. Here we provide a custom component that can be used to check Solid authentication for you. 
+
+The component will check to see if the user is logged in, using the withWebId component from the [@solid/react library](https://github.com/solid/react-components). If the user is not authenticated, they will be redirected to a route of your choosing, passed in via the props. If none is provided it will redirect to a /login route.
+
 
 ```javascript
   <PrivateRoute component={Container}/>
@@ -87,7 +100,7 @@ redirect  | String  | /login  | Redirect to login if user is not logged.
 
 ### withWebId
 
-In Solid, people are identified by a WebID, which is a URL that points to them and leads to their data.
+In Solid, people are identified by a WebID, which is essentially a URL link that points to them and leads to their data.
 
 By wrapping your component definition with withWebId, the webId property will automatically be set on your component's instances whenever the login status changes.
 
@@ -100,10 +113,10 @@ const MyComponent = withWebId(props =>
 
 ### LogoutButton
 
+This component uses solid-auth-client to provide a simple button that logs out the user. It is a simple helper component to integrate with solid-auth-client.
+
 We are re-expose this component from [@solid/react](https://github.com/solid/react-components).
 
 ```javascript
   <LogoutButton/>
 ```
-
-We are re-expose withWebId and LogoutButton for now, the idea is that you can use the basic components without install another libraries.
