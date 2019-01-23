@@ -25,23 +25,30 @@ describe("Private Route", () => {
         </MemoryRouter>
       );
 
-    describe("before user login", () => {
-      const wrapper = setup(null);
-      const wrapperChild = wrapper.find(PrivateRoute);
+    describe("before check session", () => {
+      const wrapper = setup();
 
-      it("should render redirect", () => {
-        expect(wrapperChild.props().webId).toEqual(null);
-        expect(wrapper.find(Redirect).length).toEqual(1);
+      it("should render loading", () => {
+        expect(wrapper.text()).toEqual("We are validating your data...");
       });
     });
 
-    describe("before user login", () => {
+    describe("invalid session", () => {
+      const wrapper = setup(null);
+      const childWrapper = wrapper.find(PrivateRoute);
+
+      it("should render redirect", () => {
+        expect(childWrapper.find(Redirect).length).toEqual(1);
+      });
+    });
+
+    describe("when user is logged", () => {
       const wrapper = setup(defaultWeb);
-      const wrapperChild = wrapper.find(PrivateRoute);
+      const childWrapper = wrapper.find(PrivateRoute);
 
       it("should render route", () => {
-        expect(wrapperChild.props().webId).toEqual(defaultWeb);
-        expect(wrapper.find(Route).length).toEqual(1);
+        expect(childWrapper.props().webId).toEqual(defaultWeb);
+        expect(childWrapper.find(Route).length).toEqual(1);
       });
     });
   });
