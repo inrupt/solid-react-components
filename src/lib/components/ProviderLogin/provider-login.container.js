@@ -12,7 +12,7 @@ import InruptImg from "../../../assets/inrupt_logo.png";
 
 type Props = {
   providers: Array<Provider>,
-  callback: String,
+  callbackUri: String,
   className: String,
   selectPlaceholder: String,
   inputPlaholder: String,
@@ -46,7 +46,7 @@ export default class LoginComponent extends Component<Props> {
       e.preventDefault();
 
       const { idp } = this.state;
-      const { callback } = this.props;
+      const { callbackUri } = this.props;
 
       if (!idp) {
         //@TODO: better error handling will be here
@@ -54,7 +54,7 @@ export default class LoginComponent extends Component<Props> {
       }
 
       const session = await auth.login(idp, {
-        callback,
+        callbackUri,
         storage: localStorage
       });
 
