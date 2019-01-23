@@ -9,6 +9,9 @@
     "demo": "node scripts/demo.js",
     "test": "node scripts/test.js --env=jsdom"
   },
+  "files": [
+    "build"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "jest && eslint --ignore-path .gitignore ."
