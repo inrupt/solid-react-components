@@ -12,7 +12,7 @@ import InruptImg from "../../../assets/inrupt_logo.png";
 
 type Props = {
   providers: Array<Provider>,
-  callback: String,
+  callback: () => void,
   className: String,
   selectPlaceholder: String,
   inputPlaholder: String,
@@ -53,6 +53,7 @@ export default class LoginComponent extends Component<Props> {
         throw new SolidError("Solid Provider is required", "idp");
       }
 
+      console.log(callback, 'callback');
       const session = await auth.login(idp, {
         callback,
         storage: localStorage
