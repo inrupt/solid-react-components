@@ -1,7 +1,5 @@
 ## Solid React Components Library
 
-Based on Facebook's <a href="https://github.com/facebookincubator/create-react-app" target="_blank">Create React App</a>.
-
 Basic React components for building your own <a href="https://solid.inrupt.com/" target="_blank">Solid</a> applications.
 
  ## External Dependencies
