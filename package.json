@@ -18,11 +18,29 @@
     "type": "git",
     "url": "git+https://github.com/Inrupt-inc/solid-react-components"
   },
-  "author": "Solid",
-  "bugs": {
-    "url": ""
-  },
-  "homepage": "https://github.com/Inrupt-inc/solid-react-components",
+  "homepage": "https://solid.inrupt.com/docs",
+  "contributors": [
+    {
+      "name": "Justin Bingham",
+      "email": "justin.bingham@janeirodigital.com"
+    },
+    {
+      "name": "James Martin",
+      "email": "james.martin@janeirodigital.com"
+    },
+    {
+      "name": "Pablo Rodriguez",
+      "email": "pablo.rodriguez@janeirodigital.com"
+    },
+    {
+      "name": "Jairo Campos",
+      "email": "jairo.campos@janeirodigital.com"
+    },
+    {
+      "name": "Arne Hassel",
+      "email": "arneh@inrupt.com"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "@solid/query-ldflex": "^1.2.1",
