@@ -22,6 +22,10 @@ class SolidAuthClient extends EventEmitter {
     return new Promise(resolve => setImmediate(resolve));
   }
   currentSession() {}
+
+  fetch() {
+    return { ok: true };
+  }
 }
 
 const instance = new SolidAuthClient();
@@ -29,5 +33,6 @@ jest.spyOn(instance, 'login');
 jest.spyOn(instance, 'logout');
 jest.spyOn(instance, 'trackSession');
 jest.spyOn(instance, 'removeListener');
+jest.spyOn(instance, 'fetch');
 
 export default instance;
