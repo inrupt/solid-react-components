@@ -6,13 +6,15 @@
 
 ### Added
 
-- Create React Library basic scaffolding
-- LDFlex as a dependecy to handle Solid's data
-- [React Components for Solid](https://github.com/solid/react-components) as a dependency
-- Several Components
+- Create basic scaffolding for a React Library
+- LDFlex dependency as the primary interface for most Linked Data operations
+- [React Components for Solid](https://github.com/solid/react-components) dependency
+- Initial set of components:
   - Private Route
   - Provider Login
   - Provider Select
 - Higher Order Components
   - withAuthorization
-- Unit testing for all components
+- Test infrastructure
+- Unit tests for each component
+- Error exposure to the parent application
