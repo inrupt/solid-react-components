@@ -1,20 +1,18 @@
-# Changelog
+# Solid React Components Library
 
-## 2.0 ( November 25, 2018 )
+## 0.1.0 ( January 30, 2019 )
 
-- Updated to `create-react-app` version 2.0
+**First Release**
 
-## 1.1.0 ( December 27, 2017 )
+### Added
 
-### News
-
-We have decided to track and follow philosophy of `create-react-app` and constantly update our NPM library starter with the updates of `create-react-app` 
-
-### Breaking
-
-- Removed Sass support by default
-
-### Main
-
-- Updated to `create-react-app` version `1.4.3`
-- Updated demo example of library 
+- Create React Library basic scaffolding
+- LDFlex as a dependecy to handle Solid's data
+- [React Components for Solid](https://github.com/solid/react-components) as a dependency
+- Several Components
+  - Private Route
+  - Provider Login
+  - Provider Select
+- Higher Order Components
+  - withAuthorization
+- Unit testing for all components
