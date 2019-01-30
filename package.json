@@ -10,7 +10,8 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "files": [
-    "build"
+    "build",
+    "CONTRIBUTING.md"
   ],
   "husky": {
     "hooks": {
