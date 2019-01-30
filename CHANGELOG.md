@@ -8,7 +8,7 @@
 
 - Create React Library basic scaffolding
 - LDFlex as a dependecy to handle Solid's data
-- [Solid React Components](https://github.com/solid/react-components) as a dependency
+- [React Components for Solid](https://github.com/solid/react-components) as a dependency
 - Several Components
   - Private Route
   - Provider Login
