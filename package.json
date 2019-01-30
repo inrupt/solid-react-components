@@ -1,6 +1,6 @@
 {
-  "name": "solid-react-components",
-  "version": "0.1.0-rc.1",
+  "name": "@inrupt/solid-react-components",
+  "version": "0.1.0-rc.0",
   "description": "Solid React Components",
   "main": "build/index.js",
   "scripts": {
@@ -9,6 +9,9 @@
     "demo": "node scripts/demo.js",
     "test": "node scripts/test.js --env=jsdom"
   },
+  "files": [
+    "build"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "jest && eslint --ignore-path .gitignore ."
@@ -18,22 +21,40 @@
     "type": "git",
     "url": "git+https://github.com/Inrupt-inc/solid-react-components"
   },
-  "author": "Solid",
-  "bugs": {
-    "url": ""
-  },
-  "homepage": "https://github.com/Inrupt-inc/solid-react-components",
+  "homepage": "https://solid.inrupt.com/docs",
+  "contributors": [
+    {
+      "name": "Justin Bingham",
+      "email": "justin.bingham@janeirodigital.com"
+    },
+    {
+      "name": "James Martin",
+      "email": "james.martin@janeirodigital.com"
+    },
+    {
+      "name": "Pablo Rodriguez",
+      "email": "pablo.rodriguez@janeirodigital.com"
+    },
+    {
+      "name": "Jairo Campos",
+      "email": "jairo.campos@janeirodigital.com"
+    },
+    {
+      "name": "Arne Hassel",
+      "email": "arneh@inrupt.com"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "@solid/query-ldflex": "^1.2.1",
-    "@solid/react": "^1.1.3",
+    "@solid/react": "^1.3.0",
     "html-webpack-include-assets-plugin": "^1.0.6",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.2.0",
-    "solid-auth-client": "^2.2.14",
-    "styled-components": "^4.1.3"
+    "solid-auth-client": "^2.2.14"
   },
   "devDependencies": {
+    "styled-components": "^4.1.3",
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
     "babel-core": "7.0.0-bridge.0",
@@ -88,6 +109,9 @@
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3"
+  },
+  "peerDependencies": {
+    "styled-components": "^4.1.3"
   },
   "eslintConfig": {
     "extends": "react-app"

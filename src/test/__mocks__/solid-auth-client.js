@@ -4,7 +4,7 @@ import EventEmitter from 'events';
 class SolidAuthClient extends EventEmitter {
   constructor() {
     super();
-    this.session = null;
+    this.session = undefined;
   }
 
   login() {}
@@ -12,14 +12,22 @@ class SolidAuthClient extends EventEmitter {
   logout() {}
 
   trackSession(callback) {
-    callback(this.session);
+    if (this.session !== undefined)
+      callback(this.session);
     this.on('session', callback);
   }
+  mockWebId(webId) {
+    this.session = webId ? { webId } : null;
+    this.emit('session', this.session);
+    return new Promise(resolve => setImmediate(resolve));
+  }
+  currentSession() {}
 }
 
 const instance = new SolidAuthClient();
 jest.spyOn(instance, 'login');
 jest.spyOn(instance, 'logout');
+jest.spyOn(instance, 'trackSession');
 jest.spyOn(instance, 'removeListener');
 
 export default instance;

@@ -42,7 +42,7 @@ const LoginForm = props => {
             placeholder={props.inputPlaholder}
           />
         )}
-        <SolidLinkButton type="button" onClick={props.optionToggle}>
+        <SolidLinkButton type="button" className="link" onClick={props.optionToggle}>
           {props.withWebId ? props.btnTxtProvider : props.btnTxtWebId}
         </SolidLinkButton>
         <SolidButton type="submit">{props.formButtonText}</SolidButton>
