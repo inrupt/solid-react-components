@@ -22,8 +22,7 @@ class Uploader extends Component<Props> {
     this.state = {
       dragging: false,
       files: [],
-      uploadedFiles: [],
-      errorFiles: []
+      uploadedFiles: []
     };
     this.fileInput = React.createRef();
     this.positionFile = 0;
@@ -44,8 +43,11 @@ class Uploader extends Component<Props> {
       this.upload();
     }
     // we check if all files was uploaded and fire onComplete props
-    if (this.state.uploadedFiles.length > 0) {
-      this.onComplete(this.state.uploadedFiles, this.state.errorFiles);
+    if (
+      this.state.uploadedFiles.length > 0 &&
+      prevState.uploadedFiles !== this.state.uploadedFiles
+    ) {
+      this.onComplete(this.state.uploadedFiles);
     }
   }
   /**
@@ -88,7 +90,8 @@ class Uploader extends Component<Props> {
             method: "PUT",
             force: true,
             headers: {
-              "content-type": file.type
+              "content-type": file.type,
+              credentials: "include"
             },
             body: data
           });
@@ -111,19 +114,18 @@ class Uploader extends Component<Props> {
     });
   };
   /**
-   * If onComplete function props come will check after all
-   * files is upload it
+   * will fire when all files was uploaded
    * @params {Array<UpoadFiles>} uploadFiles
-   */
+  */
   onComplete = (
-    uploadedFiles: Array<UploadedFiles>,
-    errorFiles: Array<Object>
+    uploadedFiles: Array<UploadedFiles>
   ) => {
-    if (
-      this.props.onComplete &&
-      this.state.uploadedFiles.length === this.state.files.length
-    ) {
-      this.props.onComplete(uploadedFiles, errorFiles);
+    if (this.state.uploadedFiles.length === this.state.files.length) {
+      this.setState({ inProgress: false });
+
+      if (this.props.onComplete) {
+        this.props.onComplete(uploadedFiles);
+      }
     }
   };
   /* onError = (error, file) => {
@@ -154,9 +156,10 @@ class Uploader extends Component<Props> {
     }
   };
   onDrop = async (event: React.DragEvent) => {
-    const files = [];
     this.overrideEvent(event);
     this.counter = 0;
+
+    let files = [];
 
     if (
       this.props.limitFiles &&
@@ -172,24 +175,31 @@ class Uploader extends Component<Props> {
     }
 
     if (event.dataTransfer.items) {
-      for (let i = 0; i < event.dataTransfer.files.length; i++) {
-        files.push(event.dataTransfer.files[i]);
-      }
+      files = event.dataTransfer.files.map(file => file);
     }
-    this.setState({ files });
+
     if (this.props.onDrop) {
       this.props.onDrop(files);
     }
+
     this.onStart();
+    this.setState({ files });
   };
   onClickFile = () => {
     if (this.fileInput) {
       this.fileInput.current.click();
     }
   };
+  /**
+   * Will call when file start to upload.
+  */
   onStart = () => {
+    // If onStart callback come will fire it.
     if (this.props.onStart) {
       this.props.onStart();
+    }
+    if (!this.state.inProgress) {
+      this.setState({ inProgress: true });
     }
   };
   onFileChanged = (event: React.onFileChanged) => {
