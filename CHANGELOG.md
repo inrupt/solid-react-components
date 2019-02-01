@@ -8,7 +8,7 @@
 
 ### News
 
-We have decided to track and follow philosophy of `create-react-app` and constantly update our NPM library starter with the updates of `create-react-app` 
+We have decided to track and follow philosophy of `create-react-app` and constantly update our NPM library starter with the updates of `create-react-app`
 
 ### Breaking
 
@@ -17,4 +17,9 @@ We have decided to track and follow philosophy of `create-react-app` and constan
 ### Main
 
 - Updated to `create-react-app` version `1.4.3`
-- Updated demo example of library 
+- Updated demo example of library
+
+### Components
+
+- Added Uploader Component
+- Added ProfileUploader Component

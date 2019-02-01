@@ -1,21 +1,24 @@
 import React from "react";
+import { UploadedFiles } from "@entities";
 import {
   ProfileWrapper,
   ImgStyle,
   ButtonStyle
 } from "./profile-uploader.style";
 
+/**
+ * Basic Uploader UI Component Example 
+*/
+
 type Props = {
-  onDragStart: () => void,
-  onDragOver: () => void,
-  onDragEnd: () => void,
   onDrag: () => void,
   onDrop: () => void,
   onDragLeave: () => void,
-  onDragEnter: () => void,
   onClickFile: () => void,
-  className: String,
+  overrideEventDefaults: () => void,
   uploadedFiles: Array<Object>,
+  uploadedFiles: Array<UploadedFiles>,
+  className: String,
 };
 
 export const ProfileUploader = (props: Props) => {

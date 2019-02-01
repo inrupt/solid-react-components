@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { lookup, extension } from "mime-types";
 import auth from "solid-auth-client";
-import { UploadedFiles } from "@entities";
+import { UploadedFiles, SolidError } from "@entities";
 
 type Props = {
-  image: string,
-  fileBase: string,
-  onComplete?: (callBack: () => void) => void,
-  onDrop?: (ev: Event) => void,
-  onStart: () => void,
+  fileBase: String,
   limitFiles: number,
-  render: Node
+  render: Node,
+  onComplete?: (files: Array<UploadedFiles>) => void,
+  onDrop?: (files: Array<UploadedFiles>) => void,
+  onError?: (error: SolidError) => void,
+  onStart?: () => void,
 };
 
 class Uploader extends Component<Props> {
@@ -116,10 +116,8 @@ class Uploader extends Component<Props> {
   /**
    * will fire when all files was uploaded
    * @params {Array<UpoadFiles>} uploadFiles
-  */
-  onComplete = (
-    uploadedFiles: Array<UploadedFiles>
-  ) => {
+   */
+  onComplete = (uploadedFiles: Array<UploadedFiles>) => {
     if (this.state.uploadedFiles.length === this.state.files.length) {
       this.setState({ inProgress: false });
 
@@ -128,11 +126,6 @@ class Uploader extends Component<Props> {
       }
     }
   };
-  /* onError = (error, file) => {
-    const newErrorFiles = [...this.state.errorFiles, { error, file }];
-
-    this.setState({ errorFiles: newErrorFiles });
-  }; */
   onDragEnter = (event: React.DragEvent) => {
     this.overrideEvent(event);
     // Counter drag events
@@ -192,7 +185,7 @@ class Uploader extends Component<Props> {
   };
   /**
    * Will call when file start to upload.
-  */
+   */
   onStart = () => {
     // If onStart callback come will fire it.
     if (this.props.onStart) {
