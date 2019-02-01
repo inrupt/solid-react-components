@@ -124,11 +124,9 @@ We re-expose this component from [@solid/react](https://github.com/solid/react-c
 ```
 
 ### Uploader
+This component allows you to upload files in your POD. This is using React render prop patterns.
 
-This component allow you upload files in your pod. This is using React render prop patterns.
-
-We have a basic ProfileUploader component in demo to show you how you can add your own Uploader UI.
-
+The Uploader component contains the file uploading logic and Solid integration, but does not include the UI. You may pass in your own UI as demonstrated here:
 
 ```javascript
 <Uploader
@@ -140,6 +138,8 @@ We have a basic ProfileUploader component in demo to show you how you can add yo
   }}
 />
 ```
+
+We have a basic ProfileUploader component in demo to show you how you can add your own Uploader UI.
 
 Props  | Type | Default | Description
 ------------- | ------------- | ------------- | -------------
