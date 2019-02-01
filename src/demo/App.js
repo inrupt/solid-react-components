@@ -35,7 +35,7 @@ const App = () => (
     <ProviderLogin />
     <Uploader
       {...{
-        fileBase: "YOUR WEBID HERE",
+        fileBase: "Your POD folder here",
         limitFiles: 1,
         render: (props) => (
           <ProfileUploader {...{ ...props }} />
