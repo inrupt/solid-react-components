@@ -35,12 +35,8 @@ const App = () => (
     <ProviderLogin />
     <Uploader
       {...{
-        className: "pure-u-12-12",
-        fileBase: "https://jairo88.inrupt.net/public/uploader",
+        fileBase: "YOUR WEBID HERE",
         limitFiles: 1,
-        onStart: () => console.log('init'),
-        onError: (error, file) => console.log(error, file, 'this catch errors'),
-        onComplete: () => console.log('finished'),
         render: (props) => (
           <ProfileUploader {...{ ...props }} />
         )
