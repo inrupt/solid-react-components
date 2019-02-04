@@ -46,7 +46,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@solid/query-ldflex": "^1.2.1",
+    "@solid/query-ldflex": "^2.0.0",
     "@solid/react": "^1.3.0",
     "html-webpack-include-assets-plugin": "^1.0.6",
     "react-router-dom": "^4.3.1",
