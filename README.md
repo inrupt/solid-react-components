@@ -139,8 +139,6 @@ The Uploader component contains the file uploading logic and Solid integration, 
 />
 ```
 
-We have a basic ProfileUploader component in demo to show you how you can add your own Uploader UI.
-
 Props  | Type | Default | Description
 ------------- | ------------- | ------------- | -------------
 fileBase  | String  |  null |  Files Destination
@@ -149,5 +147,7 @@ onError  | Function  | null  | Return any error from upload process
 onDrop  | Function  | null | Will fire when you drop finish  
 onStart  |  Function | null | Will fire when upload start
 
+### ProfileUploader
+Basic UI example to show you how can you works with Uploader component.
 
 We currently re-expose withWebId and LogoutButton so you can use the basic components without installing other libraries.

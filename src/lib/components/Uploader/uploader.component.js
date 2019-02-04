@@ -38,11 +38,11 @@ class Uploader extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
-    // When files updates means that we have a new files to upload
+    // Upload file will init when input file change or you drop an file
     if (this.state.files !== prevState.files && this.state.files.length > 0) {
       this.upload();
     }
-    // we check if all files was uploaded and fire onComplete props
+    // We check if all files were uploaded, then fire the onComplete handler
     if (
       this.state.uploadedFiles.length > 0 &&
       prevState.uploadedFiles !== this.state.uploadedFiles
@@ -95,7 +95,7 @@ class Uploader extends Component<Props> {
             },
             body: data
           });
-          // Is all is fine we add new files into uploadedFiles array
+          // If everything is fine, we add new files into the uploadedFiles array
           if (response.ok) {
             const newUploadedFiles = [
               ...this.state.uploadedFiles,
@@ -104,7 +104,7 @@ class Uploader extends Component<Props> {
 
             return this.setState({ uploadedFiles: newUploadedFiles });
           }
-          // If something come bad throw error
+          // If something went wrong, throw an error
           throw response;
         } catch (error) {
           onError(error, file);
@@ -114,7 +114,7 @@ class Uploader extends Component<Props> {
     });
   };
   /**
-   * will fire when all files was uploaded
+   * This will fire when all files have been uploaded
    * @params {Array<UpoadFiles>} uploadFiles
    */
   onComplete = (uploadedFiles: Array<UploadedFiles>) => {
@@ -160,7 +160,7 @@ class Uploader extends Component<Props> {
     ) {
       const error = {
         type: "file",
-        statusText: "Sorry you exceed files allowed per upload",
+        statusText: "Sorry, you have exceeded the maximum number of files allowed per upload",
         code: 400
       };
 
@@ -187,7 +187,7 @@ class Uploader extends Component<Props> {
    * Will call when file start to upload.
    */
   onStart = () => {
-    // If onStart callback come will fire it.
+    // When upload start this event will fire.
     if (this.props.onStart) {
       this.props.onStart();
     }

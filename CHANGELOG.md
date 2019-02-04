@@ -18,5 +18,10 @@
 - Test infrastructure
 - Unit tests for each component
 - Error exposure to the parent application
+
+## 0.1.1 ( February 6, 2019 )
+
+### Added
+
 - Added Uploader Component
 - Added ProfileUploader Component

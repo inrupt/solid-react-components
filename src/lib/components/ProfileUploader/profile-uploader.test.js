@@ -21,7 +21,7 @@ describe('should render without crashing', () => {
     expect(wrapper.find(ImgStyle).length).toEqual(1);
   });
 
-  it('should render image if was uploaded', () => {
+  it('should render upload button', () => {
     expect(wrapper.find(ButtonStyle).length).toEqual(1);
   });
 });
