@@ -51,7 +51,7 @@ class Uploader extends Component<Props> {
     }
   }
   /**
-   * Upload files to Solid Pod using fetch from solid-auth-client
+   * Upload files to Solid POD using fetch from solid-auth-client
    * @params{Object} options
    */
   upload = async (options: Object) => {
@@ -59,7 +59,7 @@ class Uploader extends Component<Props> {
     const { files } = this.state;
     let suffix = "";
 
-    // We read each file and upload to pod using Base64
+    // We read each file and upload to POD using Base64
     files.forEach(file => {
       const reader = new FileReader();
 
