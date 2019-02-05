@@ -141,13 +141,13 @@ The Uploader component contains the file uploading logic and Solid integration, 
 
 Props  | Type | Default | Description
 ------------- | ------------- | ------------- | -------------
-fileBase  | String  |  null |  Files Destination
-onComplete  | Function  | null | Return an array of uploaded files
-onError  | Function  | null  | Return any error from upload process  
-onDrop  | Function  | null | Will fire when you drop finish  
-onStart  |  Function | null | Will fire when upload start
+fileBase  | String  |  null |  The URL to the container where you want to upload the files
+onComplete  | Function  | null | Returns an array of successfully uploaded files
+onError  | Function  | null  | Returns any errors from upload process  
+onDrop  | Function  | null |  A callback function that fires when you drop a file  
+onStart  |  Function | null | A callback function that fires when upload start
 
 ### ProfileUploader
-Basic UI example to show you how can you works with Uploader component.
+Here's an example of a basic ProfileUploader component, demonstrating how to add your own Uploader UI
 
 We currently re-expose withWebId and LogoutButton so you can use the basic components without installing other libraries.

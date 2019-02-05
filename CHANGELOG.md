@@ -19,7 +19,7 @@
 - Unit tests for each component
 - Error exposure to the parent application
 
-## 0.1.1 ( February 6, 2019 )
+## 0.2.1 ( February 6, 2019 )
 
 ### Added
 

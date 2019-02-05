@@ -38,7 +38,7 @@ class Uploader extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
-    // Upload file will init when input file change or you drop an file
+    // When the 'files' prop changes, that means we have new files to upload.
     if (this.state.files !== prevState.files && this.state.files.length > 0) {
       this.upload();
     }
