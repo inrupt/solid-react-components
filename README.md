@@ -142,6 +142,8 @@ The Uploader component contains the file uploading logic and Solid integration, 
 Props  | Type | Default | Description
 ------------- | ------------- | ------------- | -------------
 fileBase  | String  |  null |  The URL to the container where you want to upload the files
+limitSize  | Integer  | null  | File size limit  
+accept  |  String | null  | Allowed file formats  
 onComplete  | Function  | null | Returns an array of successfully uploaded files
 onError  | Function  | null  | Returns any errors from upload process  
 onDrop  | Function  | null |  A callback function that fires when you drop a file  

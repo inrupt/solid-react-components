@@ -5,6 +5,8 @@ import { UploadedFiles, SolidError } from "@entities";
 
 type Props = {
   fileBase: String,
+  accept: String,
+  limitSize: number,
   limitFiles: number,
   render: Node,
   onComplete?: (files: Array<UploadedFiles>) => void,
@@ -55,7 +57,7 @@ class Uploader extends Component<Props> {
    * @params{Object} options
    */
   upload = async (options: Object) => {
-    const { fileBase, onError } = this.props;
+    const { fileBase, onError, limitSize } = this.props;
     const { files } = this.state;
     let suffix = "";
 
@@ -67,6 +69,15 @@ class Uploader extends Component<Props> {
         try {
           // Get image Base64 string
           const data = f.target.result;
+
+          if (limitSize && file.size > limitSize ) {
+            const error = {
+              type: 'file',
+              statusText: 'File size exceeds the allowable limit',
+              code: 400
+            };
+            throw error;
+          }
           // Check if file has extension and add suffix string
           if (file.type && file.type !== "") {
             if (file.type !== lookup(file.name)) {
@@ -74,8 +85,8 @@ class Uploader extends Component<Props> {
             }
           } else {
             const error = {
-              type: "file",
-              statusText: "Unsupported Media Type",
+              type: 'file',
+              statusText: 'Unsupported Media Type',
               code: 415
             };
             throw error;
@@ -218,6 +229,7 @@ class Uploader extends Component<Props> {
           type="file"
           className="file-uploader--input"
           onChange={this.onFileChanged}
+          accept={this.props.accept}
           style={{ display: "none" }}
         />
         {this.props.render({
