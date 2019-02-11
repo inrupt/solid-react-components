@@ -50,7 +50,7 @@ export default class LoginComponent extends Component<Props> {
 
       if (!idp) {
         //@TODO: better error handling will be here
-        throw new SolidError("Solid Provider is required", "idp");
+        throw new SolidError("Valid WebID is required", "idp");
       }
 
       const session = await auth.login(idp, {
