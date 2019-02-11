@@ -76,7 +76,8 @@ export default class LoginComponent extends Component<Props> {
   };
 
   onProviderSelect = ($event: Event) => {
-    this.setState({ idp: $event.value || "" });
+    const idp = $event && $event.value;
+    this.setState({ idp: idp || "", error: !idp });
   };
 
   optionToggle = () =>
