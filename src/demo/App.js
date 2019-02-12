@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin } from '../lib';
+import React from "react";
+import styled from "styled-components";
+import SolidImg from "../assets/solid_logo.png";
+import { ProviderLogin, Uploader, ProfileUploader } from "../lib";
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -20,7 +20,7 @@ const Headline = styled.h1`
   font-weight: 300;
 `;
 
-const Header = (props) => {
+const Header = props => {
   return (
     <HeaderWrapper>
       <img src={SolidImg} alt="React logo" width="62" />
@@ -33,6 +33,17 @@ const App = () => (
   <DemoWrapper>
     <Header />
     <ProviderLogin />
+    <Uploader
+      {...{
+        fileBase: "Your POD folder here",
+        limitFiles: 1,
+        limitSize: 500000,
+        accept: 'image/*',
+        render: (props) => (
+          <ProfileUploader {...{ ...props }} />
+        )
+      }}
+    />
   </DemoWrapper>
 );
 
