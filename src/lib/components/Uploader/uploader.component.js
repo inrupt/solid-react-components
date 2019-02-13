@@ -118,7 +118,8 @@ class Uploader extends Component<Props> {
           // If something went wrong, throw an error
           throw response;
         } catch (error) {
-          onError(error, file);
+          onError && onError(error, file);
+          this.setState({ inProgress: false });
         }
       };
       reader.readAsArrayBuffer(file);
