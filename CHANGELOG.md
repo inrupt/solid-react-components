@@ -1,6 +1,12 @@
 # Solid React Components Library
 
-## 0.2.0 ( February 12, 2019 )
+## 0.2.2 ( February 13, 2019 )
+
+### Fixed
+- Fixed an issue with the uploader where an error in the file upload didn't cancel the progress status and loader image
+- Added validation to the error handling for the uploader
+
+## 0.2.1 ( February 12, 2019 )
 
 ### Added
 
