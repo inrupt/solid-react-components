@@ -34,6 +34,15 @@ export default class LoginComponent extends Component<Props> {
     };
   }
 
+  isWebIdValid = webId => {
+    const regex = new RegExp(
+      /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+      "i",
+      "g"
+    );
+    return regex.test(webId);
+  };
+
   componentDidUpdate(prevProps, prevState) {
     // Reset error state after user choose provider
     if (prevProps.idp !== "" && prevProps.idp !== this.props.idp) {
@@ -45,12 +54,19 @@ export default class LoginComponent extends Component<Props> {
     try {
       e.preventDefault();
 
-      const { idp } = this.state;
+      const { idp, withWebId } = this.state;
       const { callbackUri } = this.props;
 
       if (!idp) {
+        const errorMessage = withWebId
+          ? "Valid WebID is required"
+          : "Solid Provider is required";
         //@TODO: better error handling will be here
-        throw new SolidError("Valid WebID is required", "idp");
+        throw new SolidError(errorMessage, "idp");
+      }
+
+      if (idp && withWebId && !this.isWebIdValid(idp)) {
+        throw new SolidError("WeibID is not valid", "idp");
       }
 
       const session = await auth.login(idp, {
@@ -81,10 +97,13 @@ export default class LoginComponent extends Component<Props> {
   };
 
   optionToggle = () =>
-    this.setState({ withWebId: !this.state.withWebId, idp: "" });
+    this.setState({ withWebId: !this.state.withWebId, idp: "", error: null });
 
   onChangeInput = (e: Event) => {
     this.setState({ [e.target.name]: e.target.value });
+    if (this.isWebIdValid(e.target.value)) {
+      this.setState({ error: null });
+    }
   };
 
   render() {
