@@ -143,7 +143,7 @@ Props  | Type | Default | Description
 ------------- | ------------- | ------------- | -------------
 fileBase  | String  |  null |  The URL to the container where you want to upload the files
 limitSize  | Integer  | null  | File size limit  
-accept  |  String | null  | Allowed file formats. To specify more than one value, separate the values with a comma. [More info](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file)
+accept  |  String | null  | Allowed file formats. To specify more than one value, separate the extension name with a comma.
 onComplete  | Function  | null | Returns an array of successfully uploaded files
 onError  | Function  | null  | Returns any errors from upload process  
 onDrop  | Function  | null |  A callback function that fires when you drop a file  
