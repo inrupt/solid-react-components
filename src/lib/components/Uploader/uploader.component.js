@@ -56,7 +56,7 @@ class Uploader extends Component<Props> {
   validateAcceptFiles = (accept: String, type: String) => {
     const extensions = accept.split(',');
 
-    return extensions.find(ext => extension(type) === ext);
+    return extensions.find(ext => extension(type.trim()) === ext);
   };
   removeFileOnError = (file: File) => {
     const updatedFiles = this.state.files.filter(f => f.name !== file.name);
