@@ -1,7 +1,8 @@
-import React, { Component } from "react";
-import { lookup, extension } from "mime-types";
-import auth from "solid-auth-client";
-import { UploadedFiles, SolidError } from "@entities";
+import React, { Component } from 'react';
+import { SolidError } from '@utils';
+import { lookup, extension } from 'mime-types';
+import auth from 'solid-auth-client';
+import { UploadedFiles, SolidError as SolidErrorEntity } from '@entities';
 
 type Props = {
   fileBase: String,
@@ -11,8 +12,8 @@ type Props = {
   render: Node,
   onComplete?: (files: Array<UploadedFiles>) => void,
   onDrop?: (files: Array<UploadedFiles>) => void,
-  onError?: (error: SolidError) => void,
-  onStart?: () => void,
+  onError?: (error: SolidErrorEntity) => void,
+  onStart?: () => void
 };
 
 class Uploader extends Component<Props> {
@@ -31,10 +32,10 @@ class Uploader extends Component<Props> {
   }
 
   componentDidMount() {
-    window.addEventListener("dragover", (event: React.EventHandler) => {
+    window.addEventListener('dragover', (event: React.EventHandler) => {
       this.overrideEvent(event);
     });
-    window.addEventListener("drop", (event: React.EventHandler) => {
+    window.addEventListener('drop', (event: React.EventHandler) => {
       this.overrideEvent(event);
     });
   }
@@ -52,14 +53,24 @@ class Uploader extends Component<Props> {
       this.onComplete(this.state.uploadedFiles);
     }
   }
+  validateAcceptFiles = (accept: String, type: String) => {
+    const extensions = accept.split(',');
+
+    return extensions.find(ext => extension(type.trim()) === ext);
+  };
+  removeFileOnError = (file: File) => {
+    const updatedFiles = this.state.files.filter(f => f.name !== file.name);
+
+    this.setState({ files: updatedFiles, inProgress: false });
+  };
   /**
    * Upload files to Solid POD using fetch from solid-auth-client
    * @params{Object} options
    */
   upload = async (options: Object) => {
-    const { fileBase, onError, limitSize } = this.props;
+    const { fileBase, onError, limitSize, accept } = this.props;
     const { files } = this.state;
-    let suffix = "";
+    let suffix = '';
 
     // We read each file and upload to POD using Base64
     files.forEach(file => {
@@ -70,27 +81,27 @@ class Uploader extends Component<Props> {
           // Get image Base64 string
           const data = f.target.result;
 
-          if (limitSize && file.size > limitSize ) {
-            const error = {
-              type: 'file',
-              statusText: 'File size exceeds the allowable limit',
-              code: 400
-            };
-            throw error;
+          if (limitSize && file.size > limitSize) {
+            throw new SolidError(
+              'File size exceeds the allowable limit',
+              'file',
+              400
+            );
           }
+
           // Check if file has extension and add suffix string
-          if (file.type && file.type !== "") {
+          if (file.type && file.type !== '') {
             if (file.type !== lookup(file.name)) {
               suffix = `_. ${extension(file.type)}`;
             }
           } else {
-            const error = {
-              type: 'file',
-              statusText: 'Unsupported Media Type',
-              code: 415
-            };
-            throw error;
+            throw new SolidError('Unsupported Media Type', 'file', 415);
           }
+
+          if (accept && !this.validateAcceptFiles(accept, file.type)) {
+            throw new SolidError('Unsupported Media Type', 'file', 415);
+          }
+
           // Get destination file url
           const destinationUri = `${fileBase}/${encodeURIComponent(
             file.name
@@ -98,11 +109,11 @@ class Uploader extends Component<Props> {
 
           // Send file on Base64 to server using fetch from solid-auth-client
           const response = await auth.fetch(destinationUri, {
-            method: "PUT",
+            method: 'PUT',
             force: true,
             headers: {
-              "content-type": file.type,
-              credentials: "include"
+              'content-type': file.type,
+              credentials: 'include'
             },
             body: data
           });
@@ -119,7 +130,7 @@ class Uploader extends Component<Props> {
           throw response;
         } catch (error) {
           onError && onError(error, file);
-          this.setState({ inProgress: false });
+          this.removeFileOnError(file);
         }
       };
       reader.readAsArrayBuffer(file);
@@ -147,7 +158,7 @@ class Uploader extends Component<Props> {
       (event.dataTransfer.items &&
         event.dataTransfer.items[this.positionFile]) ||
       (event.dataTransfer.types &&
-        event.dataTransfer.types[this.positionFile] === "Files")
+        event.dataTransfer.types[this.positionFile] === 'Files')
     ) {
       this.setState({ dragging: true });
     }
@@ -170,11 +181,11 @@ class Uploader extends Component<Props> {
       this.props.limitFiles &&
       event.dataTransfer.items.length > this.props.limitFiles
     ) {
-      const error = {
-        type: "file",
-        statusText: "Sorry, you have exceeded the maximum number of files allowed per upload",
-        code: 400
-      };
+      const error = new SolidError(
+        'Sorry, you have exceeded the maximum number of files allowed per upload',
+        'file',
+        400
+      );
 
       return this.props.onError(error, []);
     }
@@ -227,11 +238,10 @@ class Uploader extends Component<Props> {
       <div>
         <input
           ref={this.fileInput}
-          type="file"
-          className="file-uploader--input"
+          type='file'
+          className='file-uploader--input'
           onChange={this.onFileChanged}
-          accept={this.props.accept}
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
         />
         {this.props.render({
           ...this.state,

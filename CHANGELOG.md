@@ -1,5 +1,14 @@
 # Solid React Components Library
 
+## 0.2.3 ( February 19, 2019 )
+
+### Updated
+- Added validation to login form, to ensure webIDs are in a valid format
+
+### Fixed
+- Fixed allowed filetypes for upload in Windows/Chrome
+- Removed queued files when an error occurs during an upload
+
 ## 0.2.2 ( February 13, 2019 )
 
 ### Fixed
@@ -10,12 +19,12 @@
 
 ### Added
 
-- New component: 
+- New component:
     - File Uploader
-    
+
 ### Fixed
 - Provider-Login Component
-    - Error message when using a custom Provider, but without a WebID entered, correctly indicates that a WebID is required 
+    - Error message when using a custom Provider, but without a WebID entered, correctly indicates that a WebID is required
 
 ## 0.1.0 ( January 30, 2019 )
 

@@ -38,7 +38,10 @@ const App = () => (
         fileBase: "Your POD folder here",
         limitFiles: 1,
         limitSize: 500000,
-        accept: 'image/*',
+        accept: 'png,jpg,jpeg',
+        onError: (error) => {
+          console.log(error.statusText);
+        },
         render: (props) => (
           <ProfileUploader {...{ ...props }} />
         )
