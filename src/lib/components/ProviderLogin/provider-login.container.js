@@ -29,7 +29,7 @@ export default class LoginComponent extends Component<Props> {
     this.state = {
       session: null,
       idp: null,
-      withWebId: false,
+      withWebId: true,
       error: null
     };
   }

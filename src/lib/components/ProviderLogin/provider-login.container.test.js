@@ -27,17 +27,17 @@ describe("Provider Login Container", () => {
     expect(initialState).toBe(null);
   });
 
-  it("clicking link button should update to true withWebId state", () => {
+  it("clicking link button should update to false withWebId state", () => {
     const wrapper = setupMount();
     const initialState = wrapper.state("withWebId");
     const button = wrapper.find(SolidLinkButton);
 
-    expect(initialState).toBeFalsy();
+    expect(initialState).toBeTruthy();
 
     button.simulate("click");
     wrapper.update();
 
-    expect(!initialState).toBeTruthy();
+    expect(!initialState).toBeFalsy();
   });
 
   it("logs the user in when submit", async () => {
@@ -64,21 +64,21 @@ describe("Provider Login Container", () => {
     expect(errorMessage).toEqual(1);
   });
 
-  it("clicking to change select to input webId should render solid text input", () => {
+  it("clicking to change login type should change to provide select", () => {
     const wrapper = setupMount();
     const button = wrapper.find(SolidLinkButton);
 
     button.simulate("click");
     wrapper.update();
 
-    const errorMessage = wrapper.find(SolidInput).length;
+    const errorMessage = wrapper.find(ProviderSelect).length;
 
     expect(errorMessage).toEqual(1);
   });
 
-  it("initial withWebId state should render select provider component", () => {
+  it("initial withWebId state should render custom webid input", () => {
     const wrapper = setupMount();
-    const errorMessage = wrapper.find(ProviderSelect).length;
+    const errorMessage = wrapper.find(SolidInput).length;
 
     expect(errorMessage).toEqual(1);
   });
