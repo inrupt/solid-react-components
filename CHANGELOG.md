@@ -1,5 +1,13 @@
 # Solid React Components Library
 
+## 0.2.4 ( February 27, 2019 )
+
+### Updated
+- Rename uploaded files
+
+### Fixed
+- Image Loaded hangs after Multiple Loads
+
 ## 0.2.3 ( February 19, 2019 )
 
 ### Updated
