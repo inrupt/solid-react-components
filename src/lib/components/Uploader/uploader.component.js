@@ -63,6 +63,14 @@ class Uploader extends Component<Props> {
 
     this.setState({ files: updatedFiles, inProgress: false });
   };
+
+  renameFile = (file: Object, suffix: String) => {
+    const randomSuffix = Date.parse(new Date());
+    const ext = extension(file.type);
+    const name = file.name.substr(0, file.name.lastIndexOf(`.${ext}`));
+
+    return `${name}_${randomSuffix}_.${suffix || ext}`;
+  }
   /**
    * Upload files to Solid POD using fetch from solid-auth-client
    * @params{Object} options
@@ -70,13 +78,15 @@ class Uploader extends Component<Props> {
   upload = async (options: Object) => {
     const { fileBase, onError, limitSize, accept } = this.props;
     const { files } = this.state;
-    let suffix = '';
 
     // We read each file and upload to POD using Base64
-    files.forEach(file => {
+    for await (const file of files) {
       const reader = new FileReader();
+      let suffix = false;
+
 
       reader.onload = async f => {
+        
         try {
           // Get image Base64 string
           const data = f.target.result;
@@ -91,8 +101,9 @@ class Uploader extends Component<Props> {
 
           // Check if file has extension and add suffix string
           if (file.type && file.type !== '') {
+            
             if (file.type !== lookup(file.name)) {
-              suffix = `_. ${extension(file.type)}`;
+              suffix = `${extension(file.type)}`;
             }
           } else {
             throw new SolidError('Unsupported Media Type', 'file', 415);
@@ -101,11 +112,13 @@ class Uploader extends Component<Props> {
           if (accept && !this.validateAcceptFiles(accept, file.type)) {
             throw new SolidError('Unsupported Media Type', 'file', 415);
           }
+          
+          const newFileName = this.renameFile(file, suffix);
 
           // Get destination file url
           const destinationUri = `${fileBase}/${encodeURIComponent(
-            file.name
-          )}${suffix}`;
+            newFileName
+          )}`;
 
           // Send file on Base64 to server using fetch from solid-auth-client
           const response = await auth.fetch(destinationUri, {
@@ -121,10 +134,12 @@ class Uploader extends Component<Props> {
           if (response.ok) {
             const newUploadedFiles = [
               ...this.state.uploadedFiles,
-              { uri: destinationUri, name: file.name }
+              { uri: destinationUri, name: newFileName }
             ];
-
-            return this.setState({ uploadedFiles: newUploadedFiles });
+            // Remove uploaded file from files state
+            const newFiles = this.state.files.filter(f => f.name !== file.name);
+            // Add uploaded files to state and remove files uploaded
+            return this.setState({ uploadedFiles: newUploadedFiles, files: newFiles });
           }
           // If something went wrong, throw an error
           throw response;
@@ -134,19 +149,16 @@ class Uploader extends Component<Props> {
         }
       };
       reader.readAsArrayBuffer(file);
-    });
+    };
   };
   /**
    * This will fire when all files have been uploaded
    * @params {Array<UpoadFiles>} uploadFiles
    */
   onComplete = (uploadedFiles: Array<UploadedFiles>) => {
-    if (this.state.uploadedFiles.length === this.state.files.length) {
-      this.setState({ inProgress: false });
-
-      if (this.props.onComplete) {
-        this.props.onComplete(uploadedFiles);
-      }
+    this.setState({ inProgress: false });
+    if (this.props.onComplete) {
+      this.props.onComplete(uploadedFiles);
     }
   };
   onDragEnter = (event: React.DragEvent) => {
