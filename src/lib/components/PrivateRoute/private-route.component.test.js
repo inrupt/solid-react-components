@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Redirect, MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { render, cleanup } from 'react-testing-library';
 import { PrivateRoute } from "@components";
 
