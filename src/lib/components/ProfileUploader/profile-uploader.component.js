@@ -7,8 +7,8 @@ import {
 } from "./profile-uploader.style";
 
 /**
- * Basic Uploader UI Component Example 
-*/
+ * Basic Uploader UI Component Example
+ */
 
 type Props = {
   onDrag: () => void,
@@ -18,7 +18,7 @@ type Props = {
   overrideEventDefaults: () => void,
   uploadedFiles: Array<Object>,
   uploadedFiles: Array<UploadedFiles>,
-  className: String,
+  className: String
 };
 
 export const ProfileUploader = (props: Props) => {
@@ -35,10 +35,20 @@ export const ProfileUploader = (props: Props) => {
         className: props.className
       }}
     >
-      {props.uploadedFiles && props.uploadedFiles.length > 0 && (
-        <ImgStyle src={props.uploadedFiles[props.uploadedFiles.length - 1].uri} alt="profile" />
+      {props.uploadedFiles && props.uploadedFiles.length > 0 ? (
+        <ImgStyle
+          src={props.uploadedFiles[props.uploadedFiles.length - 1].uri}
+          alt="profile"
+          data-testid="image-style"
+        />
+      ) : (
+        <p>No Image</p>
       )}
-      <ButtonStyle type="button" onClick={props.onClickFile}>
+      <ButtonStyle
+        type="button"
+        onClick={props.onClickFile}
+        data-testid="button-style"
+      >
         Upload File
       </ButtonStyle>
     </ProfileWrapper>

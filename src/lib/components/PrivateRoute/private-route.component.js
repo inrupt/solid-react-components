@@ -17,7 +17,7 @@ class PrivateRoute extends Component<Props> {
     return webId ? (
       <Route {...rest} component={Component} />
     ) : (
-      <Redirect to={redirect} />
+      <Redirect to={redirect} data-testid="redirect-component" />
     );
   };
 

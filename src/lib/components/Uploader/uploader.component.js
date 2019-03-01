@@ -86,7 +86,7 @@ class Uploader extends Component<Props> {
 
 
       reader.onload = async f => {
-        
+
         try {
           // Get image Base64 string
           const data = f.target.result;
@@ -101,7 +101,7 @@ class Uploader extends Component<Props> {
 
           // Check if file has extension and add suffix string
           if (file.type && file.type !== '') {
-            
+
             if (file.type !== lookup(file.name)) {
               suffix = `${extension(file.type)}`;
             }
@@ -112,7 +112,7 @@ class Uploader extends Component<Props> {
           if (accept && !this.validateAcceptFiles(accept, file.type)) {
             throw new SolidError('Unsupported Media Type', 'file', 415);
           }
-          
+
           const newFileName = this.renameFile(file, suffix);
 
           // Get destination file url
@@ -251,6 +251,7 @@ class Uploader extends Component<Props> {
         <input
           ref={this.fileInput}
           type='file'
+          data-testid="input-file"
           className='file-uploader--input'
           onChange={this.onFileChanged}
           style={{ display: 'none' }}

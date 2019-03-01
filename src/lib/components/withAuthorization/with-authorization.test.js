@@ -1,28 +1,23 @@
 import React from "react";
 import auth from 'solid-auth-client';
-import { Redirect, MemoryRouter } from "react-router-dom";
-
-import { mount } from "enzyme";
+import { MemoryRouter } from "react-router-dom";
+import { render, cleanup } from 'react-testing-library';
 import { withAuthorization } from "@components";
-
-import "@testSetup";
-
+import 'jest-dom/extend-expect';
 
 const ComponentExample = () => <div>Component Example</div>;
-const ComponentLoader = () => <div>Loader Example</div>;
+const ComponentLoader = () => <div>Loader Component</div>;
 
 describe('A withWebId wrapper', () => {
   const defaultWeb = "https://example.org/#me";
   const Wrapper = withAuthorization(ComponentExample, <ComponentLoader />);
-  let wrapper;
+  const { container } = render(<MemoryRouter><Wrapper /></MemoryRouter>);
 
-  beforeAll(() => (wrapper = mount(<MemoryRouter><Wrapper /></MemoryRouter>)));
-  beforeEach(() => wrapper.update());
-  afterAll(() => wrapper.unmount());
+  afterAll(cleanup);
 
   describe('before a session is received', () => {
     it('renders the loader component', () => {
-      expect(wrapper.find(ComponentLoader).length).toEqual(1);
+      expect(container).toHaveTextContent('Loader Component');
     });
   });
 
@@ -30,7 +25,8 @@ describe('A withWebId wrapper', () => {
     beforeAll(() => auth.mockWebId(null));
 
     it('redirect user', () => {
-      expect(wrapper.find(Redirect).length).toEqual(1);
+      expect(container).not.toHaveTextContent('Component');
+      expect(container).not.toHaveTextContent('Loader Component');
     });
   });
 
@@ -38,7 +34,7 @@ describe('A withWebId wrapper', () => {
     beforeAll(() => auth.mockWebId(defaultWeb));
 
     it('renders the wrapped component', () => {
-      expect(wrapper.find(ComponentExample).length).toEqual(1);
+      expect(container).toHaveTextContent('Component Example');
     });
   });
 });
