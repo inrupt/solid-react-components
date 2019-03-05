@@ -1,5 +1,15 @@
 # Solid React Components Library
 
+## 0.3.0 ( March 5, 2019 )
+
+### Updated
+- Login component updated so the custom webID login is the default state
+- Components error and text messages are now props that can be passed in and customized. This also enables applications to use internationalized strings, as it can be passed in dynamically from the parent application
+
+### Fixed
+- Webpack config updated to fix yarn demo build
+- File Upload component will now create a new unique filename in the POD. This is to prevent naming collisions, which was causing some errors uploading files with the same name
+
 ## 0.2.3 ( February 19, 2019 )
 
 ### Updated

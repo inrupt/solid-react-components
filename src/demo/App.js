@@ -42,6 +42,9 @@ const App = () => (
         onError: (error) => {
           console.log(error.statusText);
         },
+        onComplete: uploadedFiles => {
+          console.log(uploadedFiles);
+        },
         render: (props) => (
           <ProfileUploader {...{ ...props }} />
         )
