@@ -503,8 +503,16 @@ module.exports = {
   externals: {
     react: 'react',
     'react-dom': 'react-dom',
-    'solid-auth-client': ['solid', 'auth'],
-    '@solid/query-ldflex': ['solid', 'data']
+    'solid-auth-client': {
+      root: ['solid', 'auth'],
+      commonjs: 'solid-auth-client',
+      commonjs2: 'solid-auth-client',
+    },
+    '@solid/query-ldflex': {
+      root: ['solid', 'data'],
+      commonjs: '@solid/query-ldflex',
+      commonjs2: '@solid/query-ldflex',
+    },
   },
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

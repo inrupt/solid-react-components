@@ -29,7 +29,7 @@ export default class LoginComponent extends Component<Props> {
     this.state = {
       session: null,
       idp: null,
-      withWebId: false,
+      withWebId: true,
       error: null
     };
   }
@@ -55,18 +55,18 @@ export default class LoginComponent extends Component<Props> {
       e.preventDefault();
 
       const { idp, withWebId } = this.state;
-      const { callbackUri } = this.props;
+      const { callbackUri, errorsText } = this.props;
 
       if (!idp) {
         const errorMessage = withWebId
-          ? "Valid WebID is required"
-          : "Solid Provider is required";
+          ? errorsText.emptyWebId
+          : errorsText.emptyProvider;
         //@TODO: better error handling will be here
         throw new SolidError(errorMessage, "idp");
       }
 
       if (idp && withWebId && !this.isWebIdValid(idp)) {
-        throw new SolidError("WeibID is not valid", "idp");
+        throw new SolidError(errorsText.webIdNotValid, "idp");
       }
 
       const session = await auth.login(idp, {
@@ -78,7 +78,7 @@ export default class LoginComponent extends Component<Props> {
         return this.setState({ session });
       }
       //@TODO: better error handling will be here
-      throw new SolidError("Something is wrong, please try again...", "unknow");
+      throw new SolidError(errorsText.unknown, "unknown");
     } catch (error) {
       // Error callback for custom error handling
       if (this.props.onError) {
@@ -127,6 +127,12 @@ LoginComponent.defaultProps = {
   formButtonText: "Log In",
   btnTxtWebId: "Log In with WebId",
   btnTxtProvider: "Log In with Provider",
+  errorsText: {
+    unknown: "Something is wrong, please try again...",
+    webIdNotValid: "WeibID is not valid",
+    emptyProvider: "Solid Provider is required",
+    emptyWebId: "Valid WebID is required"
+  },
   providers: [
     {
       label: "Inrupt",

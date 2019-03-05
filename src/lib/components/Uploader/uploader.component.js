@@ -10,6 +10,7 @@ type Props = {
   limitSize: number,
   limitFiles: number,
   render: Node,
+  errorsText: Object,
   onComplete?: (files: Array<UploadedFiles>) => void,
   onDrop?: (files: Array<UploadedFiles>) => void,
   onError?: (error: SolidErrorEntity) => void,
@@ -63,18 +64,26 @@ class Uploader extends Component<Props> {
 
     this.setState({ files: updatedFiles, inProgress: false });
   };
+
+  renameFile = (file: Object, suffix: String) => {
+    const randomSuffix = Date.parse(new Date());
+    const ext = extension(file.type);
+    const name = file.name.substr(0, file.name.lastIndexOf(`.${ext}`));
+
+    return `${name}_${randomSuffix}_.${suffix || ext}`;
+  };
   /**
    * Upload files to Solid POD using fetch from solid-auth-client
    * @params{Object} options
    */
   upload = async (options: Object) => {
-    const { fileBase, onError, limitSize, accept } = this.props;
+    const { fileBase, onError, limitSize, accept, errorsText } = this.props;
     const { files } = this.state;
-    let suffix = '';
 
     // We read each file and upload to POD using Base64
-    files.forEach(file => {
+    for await (const file of files) {
       const reader = new FileReader();
+      let suffix = false;
 
       reader.onload = async f => {
         try {
@@ -82,30 +91,28 @@ class Uploader extends Component<Props> {
           const data = f.target.result;
 
           if (limitSize && file.size > limitSize) {
-            throw new SolidError(
-              'File size exceeds the allowable limit',
-              'file',
-              400
-            );
+            throw new SolidError(errorsText.sizeLimit, 'file', 400);
           }
 
           // Check if file has extension and add suffix string
           if (file.type && file.type !== '') {
             if (file.type !== lookup(file.name)) {
-              suffix = `_. ${extension(file.type)}`;
+              suffix = `${extension(file.type)}`;
             }
           } else {
-            throw new SolidError('Unsupported Media Type', 'file', 415);
+            throw new SolidError(errorsText.unsupported, 'file', 415);
           }
 
           if (accept && !this.validateAcceptFiles(accept, file.type)) {
-            throw new SolidError('Unsupported Media Type', 'file', 415);
+            throw new SolidError(errorsText.unsupported, 'file', 415);
           }
+
+          const newFileName = this.renameFile(file, suffix);
 
           // Get destination file url
           const destinationUri = `${fileBase}/${encodeURIComponent(
-            file.name
-          )}${suffix}`;
+            newFileName
+          )}`;
 
           // Send file on Base64 to server using fetch from solid-auth-client
           const response = await auth.fetch(destinationUri, {
@@ -121,10 +128,15 @@ class Uploader extends Component<Props> {
           if (response.ok) {
             const newUploadedFiles = [
               ...this.state.uploadedFiles,
-              { uri: destinationUri, name: file.name }
+              { uri: destinationUri, name: newFileName }
             ];
-
-            return this.setState({ uploadedFiles: newUploadedFiles });
+            // Remove uploaded file from files state
+            const newFiles = this.state.files.filter(f => f.name !== file.name);
+            // Add uploaded files to state and remove files uploaded
+            return this.setState({
+              uploadedFiles: newUploadedFiles,
+              files: newFiles
+            });
           }
           // If something went wrong, throw an error
           throw response;
@@ -134,19 +146,16 @@ class Uploader extends Component<Props> {
         }
       };
       reader.readAsArrayBuffer(file);
-    });
+    }
   };
   /**
    * This will fire when all files have been uploaded
    * @params {Array<UpoadFiles>} uploadFiles
    */
   onComplete = (uploadedFiles: Array<UploadedFiles>) => {
-    if (this.state.uploadedFiles.length === this.state.files.length) {
-      this.setState({ inProgress: false });
-
-      if (this.props.onComplete) {
-        this.props.onComplete(uploadedFiles);
-      }
+    this.setState({ inProgress: false });
+    if (this.props.onComplete) {
+      this.props.onComplete(uploadedFiles);
     }
   };
   onDragEnter = (event: React.DragEvent) => {
@@ -172,6 +181,7 @@ class Uploader extends Component<Props> {
     }
   };
   onDrop = async (event: React.DragEvent) => {
+    const { errorsText } = this.props;
     this.overrideEvent(event);
     this.counter = 0;
 
@@ -181,11 +191,7 @@ class Uploader extends Component<Props> {
       this.props.limitFiles &&
       event.dataTransfer.items.length > this.props.limitFiles
     ) {
-      const error = new SolidError(
-        'Sorry, you have exceeded the maximum number of files allowed per upload',
-        'file',
-        400
-      );
+      const error = new SolidError(errorsText.maximumFiles, 'file', 400);
 
       return this.props.onError(error, []);
     }
@@ -255,5 +261,14 @@ class Uploader extends Component<Props> {
     );
   }
 }
+
+Uploader.defaultProps = {
+  errorsText: {
+    sizeLimit: 'File size exceeds the allowable limit',
+    unsupported: 'Unsupported media type',
+    maximumFiles:
+      'Sorry, you have exceeded the maximum number of files allowed per upload'
+  }
+};
 
 export default Uploader;
