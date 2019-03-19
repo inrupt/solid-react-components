@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.3.0-rc.29",
+  "version": "0.3.0",
   "description": "Solid React Components",
   "main": "build/index.js",
   "scripts": {
