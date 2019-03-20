@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { withWebId } from "@solid/react";
 import { Redirect, Route } from "react-router-dom";
 
+
 import { Loader } from "./private-route.style";
+
 
 type Props = {
   webId?: String,
@@ -11,13 +13,13 @@ type Props = {
   loaderComponent: Node
 };
 
-class PrivateRoute extends Component<Props> {
+export class PrivateRoute extends Component<Props> {
   renderRouter = (): React.Element => {
     const { webId, redirect, component: Component, ...rest } = this.props;
     return webId ? (
       <Route {...rest} component={Component} />
     ) : (
-      <Redirect to={redirect} />
+      <Redirect to={redirect} data-testid="redirect-component" />
     );
   };
 
@@ -34,5 +36,6 @@ PrivateRoute.defaultProps = {
     <Loader className="auth-loader">We are validating your data...</Loader>
   )
 };
+
 
 export default withWebId(PrivateRoute);
