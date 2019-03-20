@@ -22,7 +22,7 @@ const LoginForm = props => {
         props.className
       } ${props.error && "error"}`}
     >
-      <form onSubmit={props.onSubmit} >
+      <form onSubmit={props.onSubmit}>
         {props.error && <ErrorMessage>{props.error.message}</ErrorMessage>}
         {!props.withWebId ? (
           <ProviderSelect
@@ -40,13 +40,12 @@ const LoginForm = props => {
             name="idp"
             onChange={props.onChangeInput}
             placeholder={props.inputPlaholder}
-            data-testid="input-webid"
           />
         )}
-        <SolidLinkButton type="button" className="link" onClick={props.optionToggle} data-testid="change-mode-button">
+        <SolidLinkButton type="button" className="link" onClick={props.optionToggle}>
           {props.withWebId ? props.btnTxtProvider : props.btnTxtWebId}
         </SolidLinkButton>
-        <SolidButton type="submit" data-testid="provider-form-button">{props.formButtonText}</SolidButton>
+        <SolidButton type="submit">{props.formButtonText}</SolidButton>
       </form>
     </LoginFormWrapper>
   );
