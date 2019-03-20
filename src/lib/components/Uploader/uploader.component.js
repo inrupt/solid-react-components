@@ -245,7 +245,6 @@ class Uploader extends Component<Props> {
         <input
           ref={this.fileInput}
           type='file'
-          data-testid="input-file"
           className='file-uploader--input'
           onChange={this.onFileChanged}
           style={{ display: 'none' }}
