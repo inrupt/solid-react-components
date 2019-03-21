@@ -25,27 +25,4 @@ describe('Solid Uploader', () => {
       expect(inputEl).toBeTruthy();
     });
   });
-
-  /* describe('on input file change', () => {
-    let mockUploadFn = jest.fn();
-    let mockOnCompleteFn = jest.fn();
-
-    it('should call upload function after input file change', () => {
-
-      const { getByTestId, wrapper } = render(<Uploader render={() => <BasicComponent />} />);
-      const inputEl = getByTestId('input-file');
-
-      const file = new File(["(⌐□_□)"], "chucknorris.png", {
-        type: "image/png"
-      });
-
-      Object.defineProperty(inputEl, "files", {
-        value: [file]
-      });
-
-      fireEvent.change(inputEl);
-
-      expect(wrapper.upload).toHaveBeenCalledTimes(1);
-    });
-  }); */
 });

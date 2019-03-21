@@ -22,7 +22,7 @@ const LoginForm = props => {
         props.className
       } ${props.error && "error"}`}
     >
-      <form onSubmit={props.onSubmit} >
+      <form onSubmit={props.onSubmit}>
         {props.error && <ErrorMessage>{props.error.message}</ErrorMessage>}
         {!props.withWebId ? (
           <ProviderSelect

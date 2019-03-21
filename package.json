@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.3.0",
+  "version": "0.3.0styled-components",
   "description": "Solid React Components",
   "main": "build/index.js",
   "scripts": {
@@ -72,8 +72,6 @@
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.7.1",
     "eslint": "5.6.0",
     "eslint-config-react-app": "^3.0.5",
     "eslint-loader": "2.1.1",
@@ -107,13 +105,13 @@
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
-    "styled-components": "^4.1.3",
     "terser-webpack-plugin": "1.1.0",
     "url-loader": "1.1.1",
     "webpack": "4.19.1",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
-    "workbox-webpack-plugin": "3.6.3"
+    "workbox-webpack-plugin": "3.6.3",
+    "styled-components": "^4.1.3"
   },
   "peerDependencies": {
     "styled-components": "^4.1.3",

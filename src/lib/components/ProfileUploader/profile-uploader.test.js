@@ -14,7 +14,7 @@ describe('should render without crashing', () => {
   });
 
   it('should render No image without upload file', () => {
-    expect(container).toHaveTextContent('No Image');
+    expect(container).toHaveTextContent('Upload File');
   });
 
   it('should render image if was uploaded', () => {

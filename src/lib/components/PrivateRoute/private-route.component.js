@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { withWebId } from "@solid/react";
 import { Redirect, Route } from "react-router-dom";
 
-
 import { Loader } from "./private-route.style";
-
 
 type Props = {
   webId?: String,
@@ -19,7 +17,7 @@ export class PrivateRoute extends Component<Props> {
     return webId ? (
       <Route {...rest} component={Component} />
     ) : (
-      <Redirect to={redirect} data-testid="redirect-component" />
+      <Redirect to={redirect} />
     );
   };
 
@@ -36,6 +34,5 @@ PrivateRoute.defaultProps = {
     <Loader className="auth-loader">We are validating your data...</Loader>
   )
 };
-
 
 export default withWebId(PrivateRoute);
