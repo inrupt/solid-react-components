@@ -159,6 +159,7 @@ class Uploader extends Component<Props> {
     }
   };
   onDragEnter = (event: React.DragEvent) => {
+    console.log(event.dataTransfer);
     this.overrideEvent(event);
     // Counter drag events
     this.counter += 1;
@@ -197,7 +198,9 @@ class Uploader extends Component<Props> {
     }
 
     if (event.dataTransfer.items) {
-      files = event.dataTransfer.files.map(file => file);
+      for (const file of event.dataTransfer.files) {
+        files = [...files, file];
+      }
     }
 
     if (this.props.onDrop) {
