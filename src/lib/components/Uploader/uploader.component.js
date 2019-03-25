@@ -248,6 +248,7 @@ class Uploader extends Component<Props> {
           className='file-uploader--input'
           onChange={this.onFileChanged}
           style={{ display: 'none' }}
+          data-testid="input-file"
         />
         {this.props.render({
           ...this.state,

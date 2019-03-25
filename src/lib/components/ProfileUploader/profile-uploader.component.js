@@ -7,7 +7,7 @@ import {
 } from "./profile-uploader.style";
 
 /**
- * Basic Uploader UI Component Example 
+ * Basic Uploader UI Component Example
 */
 
 type Props = {
@@ -36,9 +36,9 @@ export const ProfileUploader = (props: Props) => {
       }}
     >
       {props.uploadedFiles && props.uploadedFiles.length > 0 && (
-        <ImgStyle src={props.uploadedFiles[props.uploadedFiles.length - 1].uri} alt="profile" />
+        <ImgStyle src={props.uploadedFiles[props.uploadedFiles.length - 1].uri} alt="profile" data-testid="image-style" />
       )}
-      <ButtonStyle type="button" onClick={props.onClickFile}>
+      <ButtonStyle type="button" onClick={props.onClickFile} data-testid="button-style">
         Upload File
       </ButtonStyle>
     </ProfileWrapper>

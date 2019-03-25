@@ -1,4 +1,11 @@
-import { withWebId, LogoutButton, Image } from "@solid/react";
+import { 
+  withWebId, 
+  LogoutButton, 
+  Image, 
+  LiveUpdate,
+  useWebId,
+  UpdateContext,
+  useLiveUpdate } from "@solid/react";
 import {
   ProviderLogin,
   PrivateRoute,
@@ -10,10 +17,14 @@ import {
 export {
   ProviderLogin,
   PrivateRoute,
-  withWebId,
   withAuthorization,
+  Uploader,
+  ProfileUploader,
+  withWebId,
   LogoutButton,
   Image,
-  Uploader,
-  ProfileUploader
+  LiveUpdate,
+  useWebId,
+  UpdateContext,
+  useLiveUpdate
 };
