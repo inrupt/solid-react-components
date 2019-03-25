@@ -59,14 +59,14 @@ export default class LoginComponent extends Component<Props> {
 
       if (!idp) {
         const errorMessage = withWebId
-          ? errorsText.emptyWebId
-          : errorsText.emptyProvider;
+          ? 'emptyWebId'
+          : 'emptyProvider';
         //@TODO: better error handling will be here
-        throw new SolidError(errorMessage, "idp");
+        throw new SolidError(errorsText[errorMessage], errorMessage);
       }
 
       if (idp && withWebId && !this.isWebIdValid(idp)) {
-        throw new SolidError(errorsText.webIdNotValid, "idp");
+        throw new SolidError(errorsText.webIdNotValid, "webIdNotValid");
       }
 
       const session = await auth.login(idp, {
@@ -81,14 +81,22 @@ export default class LoginComponent extends Component<Props> {
       throw new SolidError(errorsText.unknown, "unknown");
     } catch (error) {
       // Error callback for custom error handling
-      if (this.props.onError) {
+      if (this.props.onError ) {
         this.props.onError(error);
       }
       // Show form error messsage when idp is null
-      if (error.name === "idp") {
+      if (error.name !== "unknown") {
         this.setState({ error });
       }
     }
+  };
+
+  static getDerivedStateFromProps = (props,state) => {
+    const {error} = state;
+    if(error){
+      return {error: {...error, message: props.errorsText[state.error.name] }};
+    }
+    return null;
   };
 
   onProviderSelect = ($event: Event) => {
