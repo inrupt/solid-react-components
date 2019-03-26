@@ -1,27 +1,33 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, cleanup } from 'react-testing-library';
 import { ProfileUploader } from './profile-uploader.component';
-import {
-  ImgStyle,
-  ButtonStyle
-} from "./profile-uploader.style";
+import 'jest-dom/extend-expect';
 
-import "@testSetup";
 
 describe('should render without crashing', () => {
-  const wrapper = shallow(<ProfileUploader />);
+  const { container, rerender } = render(<ProfileUploader />);
+
+  afterAll(cleanup);
 
   it('should render component', () => {
-    expect(wrapper).toBeTruthy();
+    expect(container).toBeTruthy();
+  });
+
+  it('should render No image without upload file', () => {
+    expect(container).toHaveTextContent('Upload File');
   });
 
   it('should render image if was uploaded', () => {
-    wrapper.setProps({ uploadedFiles: [{ uri: 'img.png' }] });
+    rerender(<ProfileUploader uploadedFiles={[{ uri: 'img.png' }]} />);
 
-    expect(wrapper.find(ImgStyle).length).toEqual(1);
+    const ImageEl = document.querySelector('[data-testid="image-style"]');
+
+    expect(ImageEl).toBeInTheDocument();
   });
 
   it('should render upload button', () => {
-    expect(wrapper.find(ButtonStyle).length).toEqual(1);
+    const ImageEl = document.querySelector('[data-testid="button-style"]');
+
+    expect(ImageEl).toBeInTheDocument();
   });
 });

@@ -1,14 +1,13 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, cleanup } from 'react-testing-library';
 import { ProviderSelect } from "@components";
 
-import "@testSetup";
 
-const setup = () => shallow(<ProviderSelect />);
+afterAll(cleanup);
 
 describe("ProviderSelect", () => {
-  it("renders without crashing", () => {
-    const wrapper = setup();
-    expect(wrapper).toBeTruthy();
+  const { container } = render(<ProviderSelect />);
+  it("should render without crashing", () => {
+    expect(container).toBeTruthy();
   });
 });

@@ -11,7 +11,7 @@ type Props = {
   loaderComponent: Node
 };
 
-class PrivateRoute extends Component<Props> {
+export class PrivateRoute extends Component<Props> {
   renderRouter = (): React.Element => {
     const { webId, redirect, component: Component, ...rest } = this.props;
     return webId ? (

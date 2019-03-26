@@ -197,7 +197,9 @@ class Uploader extends Component<Props> {
     }
 
     if (event.dataTransfer.items) {
-      files = event.dataTransfer.files.map(file => file);
+      for (const file of event.dataTransfer.files) {
+        files = [...files, file];
+      }
     }
 
     if (this.props.onDrop) {
@@ -248,6 +250,7 @@ class Uploader extends Component<Props> {
           className='file-uploader--input'
           onChange={this.onFileChanged}
           style={{ display: 'none' }}
+          data-testid="input-file"
         />
         {this.props.render({
           ...this.state,

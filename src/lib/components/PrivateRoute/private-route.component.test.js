@@ -1,55 +1,30 @@
 import React from "react";
-import { Route, Redirect, MemoryRouter } from "react-router-dom";
-import { mount } from "enzyme";
-import { PrivateRoute } from "@components";
+import { MemoryRouter } from "react-router-dom";
+import { render, cleanup } from 'react-testing-library';
+import { PrivateRoute } from "./private-route.component";
 
-import "@testSetup";
+import 'jest-dom/extend-expect';
 
-const shallowErrors = codeRun => {
-  const error = console.error;
 
-  console.error = () => {};
-
-  codeRun();
-
-  console.error = error;
-};
+afterAll(cleanup);
 
 describe("Private Route", () => {
+
   const defaultWeb = "https://example.org/#me";
-  shallowErrors(() => {
-    const setup = webId =>
-      mount(
-        <MemoryRouter>
-          <PrivateRoute webId={webId} redirect="/test" />
-        </MemoryRouter>
-      );
+  const { container, rerender } = render(<MemoryRouter>
+    <PrivateRoute webId={undefined}/>
+  </MemoryRouter>);
 
-    describe("before check session", () => {
-      const wrapper = setup();
+  it("should render loading when user is not logged", () => {
+    expect(container).toHaveTextContent("We are validating your data...");
+  });
 
-      it("should render loading", () => {
-        expect(wrapper.text()).toEqual("We are validating your data...");
-      });
-    });
 
-    describe("invalid session", () => {
-      const wrapper = setup(null);
-      const childWrapper = wrapper.find(PrivateRoute);
+  it("should not render loader when user is logged", () => {
+    rerender(<MemoryRouter>
+      <PrivateRoute webId={defaultWeb} />
+    </MemoryRouter>);
 
-      it("should render redirect", () => {
-        expect(childWrapper.find(Redirect).length).toEqual(1);
-      });
-    });
-
-    describe("when user is logged", () => {
-      const wrapper = setup(defaultWeb);
-      const childWrapper = wrapper.find(PrivateRoute);
-
-      it("should render route", () => {
-        expect(childWrapper.props().webId).toEqual(defaultWeb);
-        expect(childWrapper.find(Route).length).toEqual(1);
-      });
-    });
+    expect(container).not.toHaveTextContent("We are validating your data...");
   });
 });

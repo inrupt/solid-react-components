@@ -1,5 +1,10 @@
 # Solid React Components Library
 
+## 0.3.1 ( March 20, 2019 )
+
+### Fixed
+- Currently displayed error messages will now correctly update language when language is changed
+
 ## 0.3.0 ( March 5, 2019 )
 
 ### Updated
