@@ -9,6 +9,8 @@
 
 # testing
 /coverage
+jest-test-results.json
+
 
 # misc
 .DS_Store

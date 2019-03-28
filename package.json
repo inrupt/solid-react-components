@@ -8,8 +8,11 @@
     "build": "node scripts/build.js",
     "demo": "node scripts/demo.js",
     "test": "node scripts/test.js --env=jsdom",
+    "test:generate-output": "jest --json --outputFile=jest-test-results.json",
     "storybook": "start-storybook -s ./public -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prebuild:storybook": "npm run test:generate-output",
+    "build:storybook": "build-storybook -c .storybook -o build/"
   },
   "files": [
     "build",
@@ -57,6 +60,7 @@
     "@babel/core": "7.1.6",
     "@storybook/addon-actions": "^5.0.5",
     "@storybook/addon-console": "^1.1.0",
+    "@storybook/addon-jest": "^5.0.5",
     "@storybook/addon-knobs": "^5.0.5",
     "@storybook/addon-links": "^5.0.5",
     "@storybook/addons": "^5.0.5",
@@ -107,6 +111,8 @@
     "react-testing-library": "^6.0.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
+    "storybook-addon-jsx": "^7.1.0",
+    "storybook-react-router": "^1.0.5",
     "storybook-readme": "^5.0.1",
     "style-loader": "0.23.0",
     "styled-components": "^4.1.3",

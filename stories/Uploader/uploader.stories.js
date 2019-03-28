@@ -11,8 +11,8 @@ storiesOf('Uploader', module).addParameters({
     readme: {
         // Show readme at the addons panel
         sidebar: UploaderReadme,
-    },
-}).add('to Storybook', () => <Uploader
+    },jest: ['uploader.test.js']
+}).add('default', () => <Uploader
     {...{
             render: props => <ProfileUploader {...{ ...props }} />,
             limitFiles: 1,

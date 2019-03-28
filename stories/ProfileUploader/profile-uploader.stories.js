@@ -9,5 +9,5 @@ storiesOf('Profile Uploader', module).addParameters({
     readme: {
         // Show readme at the addons panel
         sidebar: ProfileUploaderReadme,
-    },
+    },jest: ['profile-uploader.test.js']
 }).add('default', () => <ProfileUploader />);

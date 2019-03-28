@@ -5,13 +5,13 @@ import {
 } from "@solid-react-components";
 import withWebIdReadme from "./README.md";
 
-const Component = props => <span>WebId: <strong>{JSON.stringify(props.webId)}</strong></span>;
+const Component = props => <span>Props: <strong>{JSON.stringify(props)}</strong></span>;
 
 const ComponentWebId =  withWebId(Component);
 
 storiesOf('withWebId', module).addParameters({
     readme: {
         // Show readme at the addons panel
-        sidebar: withWebIdReadme,
+        content: withWebIdReadme,
     },
 }).add('default', () => <ComponentWebId  />);
