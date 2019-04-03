@@ -40,12 +40,13 @@ const LoginForm = props => {
             name="idp"
             onChange={props.onChangeInput}
             placeholder={props.inputPlaholder}
+            data-testid="input-webid"
           />
         )}
-        <SolidLinkButton type="button" className="link" onClick={props.optionToggle}>
+        <SolidLinkButton type="button" className="link" onClick={props.optionToggle} data-testid="change-mode-button">
           {props.withWebId ? props.btnTxtProvider : props.btnTxtWebId}
         </SolidLinkButton>
-        <SolidButton type="submit">{props.formButtonText}</SolidButton>
+        <SolidButton type="submit" data-testid="provider-form-button">{props.formButtonText}</SolidButton>
       </form>
     </LoginFormWrapper>
   );

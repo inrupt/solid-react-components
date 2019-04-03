@@ -1,85 +1,40 @@
 import React from "react";
-import { shallow, mount } from "enzyme";
+import { render, cleanup, fireEvent } from 'react-testing-library';
 import auth from "solid-auth-client";
 import ProviderLogin from "./provider-login.container";
-import { ProviderSelect } from "@components";
-import {
-  SolidLinkButton,
-  SolidButton,
-  ErrorMessage,
-  SolidInput
-} from "@styled-components";
+import 'jest-dom/extend-expect';
 
-import "@testSetup";
 
-const setup = () => shallow(<ProviderLogin />);
-const setupMount = () => mount(<ProviderLogin />);
+afterAll(cleanup);
+
 
 describe("Provider Login Container", () => {
-  it("renders without crashing", () => {
-    const wrapper = setup();
-    expect(wrapper).toBeTruthy();
+  const { container, getByTestId } = render(<ProviderLogin />);
+
+  it("shoud renders without crashing", () => {
+    expect(container).toBeTruthy();
   });
 
-  it("initial error state should be null", () => {
-    const wrapper = setup();
-    const initialState = wrapper.state("error");
-    expect(initialState).toBe(null);
+  it("should render WebId by default", () => {
+    const selectEl = document.querySelector('[data-testid="input-webid"]')
+
+    expect(selectEl).toBeInTheDocument();
   });
 
-  it("clicking link button should update to false withWebId state", () => {
-    const wrapper = setupMount();
-    const initialState = wrapper.state("withWebId");
-    const button = wrapper.find(SolidLinkButton);
+  it("clicking link button should render Provider Select", () => {
+    const button = getByTestId('change-mode-button');
 
-    expect(initialState).toBeTruthy();
+    fireEvent.click(button);
 
-    button.simulate("click");
-    wrapper.update();
-
-    expect(!initialState).toBeFalsy();
+    expect(container).toHaveTextContent('Select ID Provider');
   });
 
-  it("logs the user in when submit", async () => {
-    const wrapper = setupMount();
-    const button = wrapper.find(SolidButton);
-    expect(auth.login).not.toBeCalled();
+  it("should not call login without webId or provider", async () => {
+    const formButtonEl = document.querySelector('[data-testid="provider-form-button"]')
 
-    wrapper.setState({ idp: "https://inrupt.net/auth" });
-    wrapper.setProps({ callback: () => {} });
+    fireEvent.click(formButtonEl);
 
-    await button.simulate("submit");
-    expect(auth.login).toBeCalledTimes(1);
+    expect(auth.login).toBeCalledTimes(0);
   });
 
-  it("clicking submit login form should render error message component", () => {
-    const wrapper = setupMount();
-    const button = wrapper.find(SolidButton);
-
-    button.simulate("submit");
-    wrapper.update();
-
-    const errorMessage = wrapper.find(ErrorMessage).length;
-
-    expect(errorMessage).toEqual(1);
-  });
-
-  it("clicking to change login type should change to provide select", () => {
-    const wrapper = setupMount();
-    const button = wrapper.find(SolidLinkButton);
-
-    button.simulate("click");
-    wrapper.update();
-
-    const errorMessage = wrapper.find(ProviderSelect).length;
-
-    expect(errorMessage).toEqual(1);
-  });
-
-  it("initial withWebId state should render custom webid input", () => {
-    const wrapper = setupMount();
-    const errorMessage = wrapper.find(SolidInput).length;
-
-    expect(errorMessage).toEqual(1);
-  });
 });

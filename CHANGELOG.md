@@ -1,5 +1,10 @@
 # Solid React Components Library
 
+## 0.3.2 ( April 3, 2019 )
+
+### Fixed
+- Uploader control now correctly allows dragging and dropping files
+
 ## 0.3.1 ( March 20, 2019 )
 
 ### Fixed

@@ -1,43 +1,28 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, cleanup } from 'react-testing-library';
 import Uploader from './uploader.component';
-import "@testSetup";
 
-const BasicComponent = () => <div>Basic Component</div>;
+const BasicComponent = () => <div data-testid="render-component">Basic Component</div>;
+
+afterAll(cleanup);
 
 describe('Solid Uploader', () => {
-  const wrapper = shallow(<Uploader render={() => <BasicComponent />} />);
 
   describe('render without crashing', () => {
+    const { container, getByTestId } = render(<Uploader render={() => <BasicComponent />} />);
 
-    it('renders uploader component', () => {
-      expect(wrapper).toBeTruthy();
+    it('should render uploader component', () => {
+      expect(container).toBeTruthy();
     });
 
-    it('renders prop component', () => {
-      expect(wrapper.find(BasicComponent).length).toEqual(1);
-    });
-  });
-
-  describe('on input file change', () => {
-    let mockUploadFn = jest.fn();
-    let mockOnCompleteFn = jest.fn();
-
-    wrapper.instance().upload = mockUploadFn;
-    it('should call upload function after input file change', () => {
-
-      wrapper.setState({ files: [{ name: 'Test' }] });
-      wrapper.update();
-      expect(mockUploadFn).toHaveBeenCalledTimes(1);
+    it('should render component by prop', () => {
+      const childComponent = getByTestId('render-component');
+      expect(childComponent).toBeTruthy();
     });
 
-    wrapper.instance().onComplete = mockOnCompleteFn;
-    it('should call onComplete function after files uploaded', () => {
-      const files = [{ name: 'Test' }];
-
-      wrapper.setState({ files: [files], uploadedFiles: [files]});
-      wrapper.update();
-      expect(mockOnCompleteFn).toHaveBeenCalledTimes(1);
+    it('should render input file', () => {
+      const inputEl = getByTestId('input-file');
+      expect(inputEl).toBeTruthy();
     });
   });
 });
