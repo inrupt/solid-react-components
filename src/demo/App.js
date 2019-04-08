@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import SolidImg from "../assets/solid_logo.png";
-import { ProviderLogin, Uploader, ProfileUploader } from "../lib";
+import { ProviderLogin, Uploader, ProfileUploader, ShexForm } from "../lib";
+import shexj from "../assets/shexj.json";
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -50,6 +51,7 @@ const App = () => (
         )
       }}
     />
+    <ShexForm shexj={shexj} />
   </DemoWrapper>
 );
 

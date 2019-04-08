@@ -9,7 +9,7 @@ afterAll(cleanup);
 
 
 describe("Shex Form Component", () => {
-    const { container, getByTestId } = render(<ShexForm />);
+    const { container, getByTestId } = render(<ShexForm shexj={{}} />);
 
     it("shoud renders without crashing", () => {
         expect(container).toBeTruthy();

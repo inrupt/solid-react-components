@@ -11,7 +11,8 @@ import {
   PrivateRoute,
   withAuthorization,
   Uploader,
-  ProfileUploader
+  ProfileUploader,
+  ShexForm
 } from "@components";
 
 export {
@@ -26,5 +27,6 @@ export {
   LiveUpdate,
   useWebId,
   UpdateContext,
-  useLiveUpdate
+  useLiveUpdate,
+  ShexForm
 };
