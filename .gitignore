@@ -9,7 +9,6 @@
 
 # testing
 /coverage
-jest-test-results.json
 
 
 # misc
