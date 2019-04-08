@@ -1,5 +1,5 @@
 import React from "react";
-import ReactJson from 'react-json-view'
+import { Field } from './children';
 import styled from 'styled-components';
 
 const Panel = styled.div`
@@ -8,26 +8,18 @@ padding: 10px;
 
 `
 
-const Field = ({data}) => (<div>
-    <h2>{data.predicate}</h2>
-    {
-        <ReactJson src={data} />
-    }
-</div>)
-
-
-const ShexForm = ({shexj}) => {
+const ShexForm = ({shexj, parent = null}) => {
     const { expression } = shexj;
     return <Panel>
-
+        {parent && parent.predicate && <h4>{parent.predicate.split("#has")[1]}</h4>}
         {
-            expression ? expression.expressions.map((expr) => {
-                if(typeof expr.valueExpr === 'string'){
-                    return <ShexForm shexj={expr._formValues[0]} />
+            expression && expression.expressions.map((expression) => {
+                if(typeof expression.valueExpr === 'string'){
+                    return expression._formValues.map((shexj,i) => <ShexForm key={i} shexj={shexj} parent={shexj._formFocus} /> )
                 }else{
-                    return <Field data={expr}/>
+                    return <Field data={expression}/>
                 }
-            }) : <ReactJson src={expression} />
+            })
         }
     </Panel>
 }

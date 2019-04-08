@@ -149,6 +149,63 @@
             "type": "Shape",
             "_formFocus": {
               "value": "https://joseprod.inrupt.net/profile/card#id1541615431443",
+              "predicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
+              "type": "NodeLink"
+            },
+            "expression": {
+              "type": "EachOf",
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": [
+                      "http://www.w3.org/2006/vcard/ns#Home",
+                      "http://www.w3.org/2006/vcard/ns#Work"
+                    ]
+                  },
+                  "_formValues": [
+                    {
+                      "_formFocus": {
+                        "value": "Home",
+                        "type": "literal"
+                      },
+                      "type": "NodeConstraint",
+                      "values": [
+                        "http://www.w3.org/2006/vcard/ns#Home",
+                        "http://www.w3.org/2006/vcard/ns#Work"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#value",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "_formValues": [
+                    {
+                      "_formFocus": {
+                        "value": "jose.rdrz.rojas@gmail.com",
+                        "type": "literal"
+                      },
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "http://localhost:3000/profile#vcard_value",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://joseprod.inrupt.net/profile/card#id1541615431447",
+              "predicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
               "type": "NodeLink"
             },
             "expression": {
@@ -188,7 +245,7 @@
                   "_formValues": [
                     {
                       "_formFocus": {
-                        "value": "jose.rdrz.rojas@gmail.com",
+                        "value": "pablo.rodriguez@janeirodigital.com",
                         "type": "literal"
                       },
                       "type": "NodeConstraint",
@@ -266,8 +323,9 @@
             "id": "http://localhost:3000/profile#vcard_street-address",
             "type": "Shape",
             "closed": true,
-            "formFocus": {
-              "value": "https://joseprod.inrupt.net/profile/card#id1544112947437"
+            "_formFocus": {
+              "value": "https://joseprod.inrupt.net/profile/card#id1544112947437",
+              "predicate": "http://www.w3.org/2006/vcard/ns#hasAddress"
             },
             "expression": {
               "type": "EachOf",
@@ -399,7 +457,29 @@
                           "value": "United States"
                         },
                         { "value": "Zimbabwe" }
-                      ]
+                      ],
+                      "expression": {
+                        "type": "EachOf",
+                        "expressions": [
+                          {
+                            "type": "TripleConstraint",
+                            "predicate": "http://www.w3.org/2006/vcard/country_name",
+                            "valueExpr": {
+                              "type": "NodeConstraint",
+                              "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                            },
+                            "_formValues": [
+                              {
+                                "_formFocus": {
+                                  "value": "Costa Rica",
+                                  "type": "literal"
+                                },
+                                "type": "NodeConstraint",
+                                "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
+                          }]
+                      }
                     }
                   ]
                 },
