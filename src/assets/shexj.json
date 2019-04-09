@@ -1,8 +1,7 @@
 {
-  "id": "http://localhost:3000/profile#UserProfile",
+  "id": "https://localhost:3000/profile#UserProfile",
   "type": "Shape",
   "expression": {
-    "type": "EachOf",
     "expressions": [
       {
         "type": "TripleConstraint",
@@ -30,12 +29,14 @@
         ],
         "_formValues": [
           {
-            "_formFocus": {
-              "value": "Pablo Rodriguez Rojas",
-              "type": "literal"
-            },
             "type": "NodeConstraint",
-            "datatype": "http://www.w3.org/2001/XMLSchema#string"
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Jairo 2" }
+          },
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Jairo Campos" }
           }
         ]
       },
@@ -68,13 +69,10 @@
         ],
         "_formValues": [
           {
-            "_formFocus": {
-              "value": "85737539",
-              "type": "literal"
-            },
             "type": "NodeConstraint",
             "nodeKind": "iri",
-            "pattern": "^tel:\\+?[0-9.-]"
+            "pattern": "^tel:\\+?[0-9.-]",
+            "_formFocus": { "value": "70124238" }
           }
         ]
       },
@@ -106,19 +104,16 @@
         ],
         "_formValues": [
           {
-            "_formFocus": {
-              "value": "Desarrollador",
-              "type": "Literal"
-            },
             "type": "NodeConstraint",
-            "datatype": "http://www.w3.org/2001/XMLSchema#string"
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Senior Full Stack Developer" }
           }
         ]
       },
       {
         "type": "TripleConstraint",
         "predicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
-        "valueExpr": "http://localhost:3000/profile#vcard_value",
+        "valueExpr": "https://localhost:3000/profile#vcard_value",
         "min": 0,
         "max": 1,
         "annotations": [
@@ -145,15 +140,12 @@
         ],
         "_formValues": [
           {
-            "id": "http://localhost:3000/profile#vcard_value",
+            "id": "https://localhost:3000/profile#vcard_value",
             "type": "Shape",
             "_formFocus": {
-              "value": "https://joseprod.inrupt.net/profile/card#id1541615431443",
-              "predicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
-              "type": "NodeLink"
+              "value": "https://jairocampos.solid.community/profile/card#id1554390400000"
             },
             "expression": {
-              "type": "EachOf",
               "expressions": [
                 {
                   "type": "TripleConstraint",
@@ -167,15 +159,14 @@
                   },
                   "_formValues": [
                     {
-                      "_formFocus": {
-                        "value": "Home",
-                        "type": "literal"
-                      },
                       "type": "NodeConstraint",
                       "values": [
                         "http://www.w3.org/2006/vcard/ns#Home",
                         "http://www.w3.org/2006/vcard/ns#Work"
-                      ]
+                      ],
+                      "_formFocus": {
+                        "value": "http://www.w3.org/2006/vcard/ns#Work"
+                      }
                     }
                   ]
                 },
@@ -188,12 +179,11 @@
                   },
                   "_formValues": [
                     {
-                      "_formFocus": {
-                        "value": "jose.rdrz.rojas@gmail.com",
-                        "type": "literal"
-                      },
                       "type": "NodeConstraint",
-                      "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "mailto:jairo.campos@janeirodigital.com"
+                      }
                     }
                   ]
                 }
@@ -201,15 +191,12 @@
             }
           },
           {
-            "id": "http://localhost:3000/profile#vcard_value",
+            "id": "https://localhost:3000/profile#vcard_value",
             "type": "Shape",
             "_formFocus": {
-              "value": "https://joseprod.inrupt.net/profile/card#id1541615431447",
-              "predicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
-              "type": "NodeLink"
+              "value": "https://jairocampos.solid.community/profile/card#id1554478551830"
             },
             "expression": {
-              "type": "EachOf",
               "expressions": [
                 {
                   "type": "TripleConstraint",
@@ -223,15 +210,14 @@
                   },
                   "_formValues": [
                     {
-                      "_formFocus": {
-                        "value": "Work",
-                        "type": "literal"
-                      },
                       "type": "NodeConstraint",
                       "values": [
                         "http://www.w3.org/2006/vcard/ns#Home",
                         "http://www.w3.org/2006/vcard/ns#Work"
-                      ]
+                      ],
+                      "_formFocus": {
+                        "value": "http://www.w3.org/2006/vcard/ns#Home"
+                      }
                     }
                   ]
                 },
@@ -244,12 +230,9 @@
                   },
                   "_formValues": [
                     {
-                      "_formFocus": {
-                        "value": "pablo.rodriguez@janeirodigital.com",
-                        "type": "literal"
-                      },
                       "type": "NodeConstraint",
-                      "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "mailto:jairocamposv@gmail.com" }
                     }
                   ]
                 }
@@ -286,19 +269,16 @@
         ],
         "_formValues": [
           {
-            "_formFocus": {
-              "value": "Janeiro Digital",
-              "type": "literal"
-            },
             "type": "NodeConstraint",
-            "datatype": "http://www.w3.org/2001/XMLSchema#string"
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Janeiro Digital 2" }
           }
         ]
       },
       {
         "type": "TripleConstraint",
         "predicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
-        "valueExpr": "http://localhost:3000/profile#vcard_street-address",
+        "valueExpr": "https://localhost:3000/profile#vcard_street-address",
         "min": 0,
         "max": 1,
         "annotations": [
@@ -320,39 +300,22 @@
         ],
         "_formValues": [
           {
-            "id": "http://localhost:3000/profile#vcard_street-address",
+            "id": "https://localhost:3000/profile#vcard_street-address",
             "type": "Shape",
-            "closed": true,
             "_formFocus": {
-              "value": "https://joseprod.inrupt.net/profile/card#id1544112947437",
-              "predicate": "http://www.w3.org/2006/vcard/ns#hasAddress"
+              "value": "https://jairocampos.solid.community/profile/card#id1551123212000"
             },
             "expression": {
-              "type": "EachOf",
               "expressions": [
                 {
                   "type": "TripleConstraint",
                   "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
                   "valueExpr": {
                     "type": "NodeConstraint",
-                    "values": [
-                      "http://www.w3.org/2006/vcard/ns#StreetAddress"
-                    ]
+                    "values": ["http://www.w3.org/2006/vcard/ns#StreetAddress"]
                   },
                   "min": 0,
-                  "max": 1,
-                  "_formValues": [
-                    {
-                      "_formFocus": {
-                        "value": "",
-                        "type": "literal"
-                      },
-                      "type": "NodeConstraint",
-                      "values": [
-                        "http://www.w3.org/2006/vcard/ns#StreetAddress"
-                      ]
-                    }
-                  ]
+                  "max": 1
                 },
                 {
                   "type": "TripleConstraint",
@@ -365,12 +328,9 @@
                   "max": 1,
                   "_formValues": [
                     {
-                      "_formFocus": {
-                        "value": "Calle 9, San Rafael",
-                        "type": "literal"
-                      },
                       "type": "NodeConstraint",
-                      "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "Santa Barbara" }
                     }
                   ]
                 },
@@ -382,17 +342,7 @@
                     "datatype": "http://www.w3.org/2001/XMLSchema#string"
                   },
                   "min": 0,
-                  "max": 1,
-                  "_formValues": [
-                    {
-                      "_formFocus": {
-                        "value": "Heredia",
-                        "type": "literal"
-                      },
-                      "type": "NodeConstraint",
-                      "datatype": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                  ]
+                  "max": 1
                 },
                 {
                   "type": "TripleConstraint",
@@ -402,22 +352,15 @@
                     "datatype": "http://www.w3.org/2001/XMLSchema#string"
                   },
                   "min": 0,
-                  "max": 1,
-                  "_formValues": [
-                    {
-                      "_formFocus": {
-                        "value": "Heredia",
-                        "type": "literal"
-                      },
-                      "type": "NodeConstraint",
-                      "datatype": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                  ]
+                  "max": 1
                 },
                 {
                   "type": "TripleConstraint",
                   "predicate": "http://www.w3.org/2006/vcard/ns#country-name",
-                  "valueExpr": "http://localhost:3000/profile#vcard_country-name",
+                  "valueExpr": "https://localhost:3000/profile#vcard_country-name",
+                  "formFocus": {
+                    "value": "...id#124123123"
+                  },
                   "min": 0,
                   "max": 1,
                   "annotations": [
@@ -439,47 +382,10 @@
                   ],
                   "_formValues": [
                     {
-                      "id": "http://localhost:3000/profile#vcard_country-name",
+                      "id": "https://localhost:3000/profile#vcard_country-name",
                       "type": "NodeConstraint",
-                      "_formFocus": {
-                        "value": "https://joseprod.inrupt.net/profile/card#id1541615431445"
-                      },
-                      "values": [
-                        { "value": "Afghanistan" },
-                        { "value": "Belgium" },
-                        { "value": "Costa Rica" },
-                        { "value": "France" },
-                        { "value": "日本" },
-                        {
-                          "value": "United Kingdom"
-                        },
-                        {
-                          "value": "United States"
-                        },
-                        { "value": "Zimbabwe" }
-                      ],
-                      "expression": {
-                        "type": "EachOf",
-                        "expressions": [
-                          {
-                            "type": "TripleConstraint",
-                            "predicate": "http://www.w3.org/2006/vcard/country_name",
-                            "valueExpr": {
-                              "type": "NodeConstraint",
-                              "datatype": "http://www.w3.org/2001/XMLSchema#string"
-                            },
-                            "_formValues": [
-                              {
-                                "_formFocus": {
-                                  "value": "Costa Rica",
-                                  "type": "literal"
-                                },
-                                "type": "NodeConstraint",
-                                "datatype": "http://www.w3.org/2001/XMLSchema#string"
-                              }
-                            ]
-                          }]
-                      }
+                      "_formFocus": { "value": "Costa Rica" },
+                      "expression": { "expressions": [] }
                     }
                   ]
                 },
@@ -494,12 +400,116 @@
                   "max": 1,
                   "_formValues": [
                     {
-                      "_formFocus": {
-                        "value": "40205",
-                        "type": "literal"
-                      },
                       "type": "NodeConstraint",
-                      "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "506" }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "https://localhost:3000/profile#vcard_street-address",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jairocampos.solid.community/profile/card#id1554495127135"
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": ["http://www.w3.org/2006/vcard/ns#StreetAddress"]
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#street-address",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "San Jose" }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#locality",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#region",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#country-name",
+                  "valueExpr": "https://localhost:3000/profile#vcard_country-name",
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "id": "https://localhost:3000/profile#vcard_country-name",
+                      "type": "NodeConstraint",
+                      "_formFocus": { "value": "CR" },
+                      "expression": { "expressions": [] }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#postal-code",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "123" }
                     }
                   ]
                 }

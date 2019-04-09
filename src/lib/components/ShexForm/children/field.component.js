@@ -3,7 +3,7 @@ import React from 'react';
 const Field = (props) => {
     const { data } = props;
     const label = data.predicate.includes("#") ? data.predicate.split("#")[1] : data.predicate.split("/").pop();
-    const values = data._formValues.map(value => value._formFocus.value);
+    const values = data._formValues ? data._formValues.map(value => value._formFocus.value) : [];
     const inputType = data.valueExpr.values ? 'select' : 'text';
     console.log("Label", data)
     return (<div>
