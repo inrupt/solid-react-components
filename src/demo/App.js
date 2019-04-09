@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { useWebId } from "@solid/react";
 import styled from "styled-components";
 import SolidImg from "../assets/solid_logo.png";
-import { ProviderLogin, Uploader, ProfileUploader, ShexForm } from "../lib";
-import shexj from "../assets/shexj.json";
+import { ProviderLogin, Uploader, ProfileUploader } from "../lib";
+import { ShapeForm } from "./components/ShapeForm/shape-form.component";
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -21,6 +22,17 @@ const Headline = styled.h1`
   font-weight: 300;
 `;
 
+const ShexFormComponent = styled.div`
+    border-top: 1px solid black;
+    
+    input {
+        margin: 20px 0;
+        padding: 10px;
+        width: 100%
+        box-sizing: border-box;
+    }
+`;
+
 const Header = props => {
   return (
     <HeaderWrapper>
@@ -30,29 +42,44 @@ const Header = props => {
   );
 };
 
-const App = () => (
-  <DemoWrapper>
-    <Header />
-    <ProviderLogin />
-    <Uploader
-      {...{
-        fileBase: "Your POD folder here",
-        limitFiles: 1,
-        limitSize: 500000,
-        accept: 'png,jpg,jpeg',
-        onError: (error) => {
-          console.log(error.statusText);
-        },
-        onComplete: uploadedFiles => {
-          console.log(uploadedFiles);
-        },
-        render: (props) => (
-          <ProfileUploader {...{ ...props }} />
-        )
-      }}
-    />
-    <ShexForm shexj={shexj} />
-  </DemoWrapper>
-);
+const App = () => {
+  const [shexFormConfig, setShexFormConfig] = useState({});
+  const webId = useWebId();
+  const onChangeInput = (e: Event) => {
+      setShexFormConfig({...shexFormConfig, [e.target.name]: e.target.value});
+  }
+  return (
+    <DemoWrapper>
+      <Header />
+      <ProviderLogin callbackUri="/" />
+      <Uploader
+        {...{
+          fileBase: "Your POD folder here",
+          limitFiles: 1,
+          limitSize: 500000,
+          accept: "png,jpg,jpeg",
+          onError: error => {
+            console.log(error.statusText);
+          },
+          onComplete: uploadedFiles => {
+            console.log(uploadedFiles);
+          },
+          render: props => <ProfileUploader {...{ ...props }} />
+        }}
+      />
+        { webId && <ShexFormComponent>
+            <h2>Shex Form</h2>
+            <input placeholder={'Document Url'} name='documentUri' onChange={onChangeInput}/>
+            <input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
+            <ShapeForm
+                {...{
+                documentUri: shexFormConfig.documentUri || webId,
+                shexUri: shexFormConfig.shexUri || "/shapes/userProfile.shex"
+                }}
+            />
+      </ShexFormComponent> }
+    </DemoWrapper>
+  );
+};
 
 export default App;

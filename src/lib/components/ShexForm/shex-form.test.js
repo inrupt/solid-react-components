@@ -8,7 +8,7 @@ import 'jest-dom/extend-expect';
 afterAll(cleanup);
 
 
-describe("Shex Form Component", () => {
+describe("Shex ShapeForm Component", () => {
     const { container, getByTestId } = render(<ShexForm shexj={{}} />);
 
     it("shoud renders without crashing", () => {

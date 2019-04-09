@@ -13,11 +13,11 @@ const ShexForm = ({shexj, parent = null}) => {
     return <Panel>
         {parent && parent.predicate && <h4>{parent.predicate.split("#has")[1]}</h4>}
         {
-            expression && expression.expressions.map((expression) => {
+            expression && expression.expressions.map((expression, i) => {
                 if(typeof expression.valueExpr === 'string'){
                     return expression._formValues.map((shexj,i) => <ShexForm key={i} shexj={shexj} parent={shexj._formFocus} /> )
                 }else{
-                    return <Field data={expression}/>
+                    return <Field  data={expression} key={ i }/>
                 }
             })
         }
