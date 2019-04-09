@@ -42,14 +42,15 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
                     if (isLink(currentExpression.valueExpr)) {
                         const childExpression = await fillFormData(
-                            { id: newExpression.valueExpr, linkValue: value }, data[value]);
+                            { id: newExpression.valueExpr, linkValue: value,
+                                parentPredicate: newExpression.predicate }, data[value]);
 
                         newExpression._formValues = [
                             ...newExpression._formValues,
                             {
                                 id: childExpression.id,
                                 type: childExpression.type,
-                                _formFocus: { value },
+                                _formFocus: { value, parentPredicate: rootShape.parentPredicate },
                                 expression: childExpression.expression,
                             }];
                     } else {
