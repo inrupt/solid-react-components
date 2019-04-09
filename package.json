@@ -7,17 +7,22 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "demo": "node scripts/demo.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "test:generate-output": "jest --json --outputFile=jest-test-results.json",
+    "storybook": "start-storybook -s ./public -p 6006",
+    "build-storybook": "build-storybook",
+    "prebuild:storybook": "npm run test:generate-output",
+    "build:storybook": "build-storybook -c .storybook -o build/"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test:generate-output"
+    }
   },
   "files": [
     "build",
     "CONTRIBUTING.md"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "jest && eslint --ignore-path .gitignore ."
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Inrupt-inc/solid-react-components"
@@ -58,10 +63,17 @@
   },
   "devDependencies": {
     "@babel/core": "7.1.6",
+    "@storybook/addon-actions": "^5.0.5",
+    "@storybook/addon-console": "^1.1.0",
+    "@storybook/addon-jest": "^5.0.5",
+    "@storybook/addon-knobs": "^5.0.5",
+    "@storybook/addon-links": "^5.0.5",
+    "@storybook/addons": "^5.0.5",
+    "@storybook/react": "^5.0.5",
     "@svgr/webpack": "2.4.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
-    "babel-jest": "23.6.0",
+    "babel-jest": "^23.6.0",
     "babel-loader": "8.0.4",
     "babel-plugin-named-asset-import": "^0.3.1",
     "babel-preset-react-app": "^7.0.2",
@@ -88,7 +100,7 @@
     "jest": "23.6.0",
     "jest-dom": "^3.1.3",
     "jest-pnp-resolver": "1.0.1",
-    "jest-resolve": "23.6.0",
+    "jest-resolve": "^23.6.0",
     "lint-staged": "^8.1.0",
     "mini-css-extract-plugin": "0.4.3",
     "optimize-css-assets-webpack-plugin": "5.0.1",
@@ -104,14 +116,17 @@
     "react-testing-library": "^6.0.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
+    "storybook-addon-jsx": "^7.1.0",
+    "storybook-react-router": "^1.0.5",
+    "storybook-readme": "^5.0.1",
     "style-loader": "0.23.0",
+    "styled-components": "^4.1.3",
     "terser-webpack-plugin": "1.1.0",
     "url-loader": "1.1.1",
     "webpack": "4.19.1",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
-    "workbox-webpack-plugin": "3.6.3",
-    "styled-components": "^4.1.3"
+    "workbox-webpack-plugin": "3.6.3"
   },
   "peerDependencies": {
     "styled-components": "^4.1.3",
