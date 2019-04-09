@@ -53,6 +53,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
+    "@shexjs/core": "^1.0.0-alpha.4",
+    "@shexjs/parser": "^1.0.0-alpha.4",
     "@solid/query-ldflex": "^2.5.1",
     "@solid/react": "^1.6.0",
     "file-type": "^10.7.1",
