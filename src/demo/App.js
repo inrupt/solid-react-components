@@ -51,7 +51,7 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
-      <ProviderLogin callbackUri="/" />
+      <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <Uploader
         {...{
           fileBase: "Your POD folder here",

@@ -56,11 +56,12 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                 expression: childExpression.expression,
                             }];
                     } else {
+                        const formFocus = rootShape.parentPredicate ? { value, parentPredicate: rootShape.linkValue } : { value };
 
                         if (rootShape.linkValue) {
                             newExpression = {
                                 ...newExpression,
-                                _formValues: [{...newExpression.valueExpr, _formFocus: { value }}],
+                                _formValues: [{...newExpression.valueExpr, _formFocus: formFocus}],
                             }
 
                         } else {
