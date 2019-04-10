@@ -29,6 +29,10 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return typeof valueExpr === 'string' || null;
     };
 
+    const getFormFocusObject = (subject: String, value: String) => {
+        return subject ? { value, parentSubject: subject, name: unique() } : { value, name: unique() };
+    }
+
     const fillFormData = async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];
@@ -38,6 +42,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 let newExpression = {...currentExpression};
 
                 if (!newExpression._formValues) newExpression._formValues = [];
+                console.log(newExpression, 'value');
                 for await (let node of document[currentExpression.predicate]) {
                     const value = node.value;
                     if (isLink(currentExpression.valueExpr)) {
@@ -45,27 +50,25 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             { id: newExpression.valueExpr, linkValue: value,
                                 parentSubject: newExpression.predicate }, data[value]);
 
-                        const formFocus = rootShape.parentSubject ? { value, parentSubject: rootShape.parentSubject, name: unique() } : { value, name: unique() };
-
                         newExpression._formValues = [
                             ...newExpression._formValues,
                             {
                                 id: childExpression.id,
                                 type: childExpression.type,
-                                _formFocus: formFocus,
+                                _formFocus: getFormFocusObject(rootShape.parentSubject, value),
                                 expression: childExpression.expression,
                             }];
                     } else {
-                        const formFocus = rootShape.parentSubject ? { value, parentSubject: rootShape.linkValue, name: unique()  } : { value, name: unique() };
 
                         if (rootShape.linkValue) {
                             newExpression = {
                                 ...newExpression,
-                                _formValues: [{...newExpression.valueExpr, _formFocus: formFocus}],
+                                _formValues: [{
+                                    ...newExpression.valueExpr,
+                                    _formFocus: getFormFocusObject(rootShape.linkValue, value)}],
                             }
 
                         } else {
-                            const formFocus = documentUri ? { value,  parentSubject: documentUri, name: unique() } : { value, name: unique() };
 
                             newExpression = {
                                 ...newExpression,
@@ -73,13 +76,18 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                     ...newExpression._formValues,
                                     {
                                         ...newExpression.valueExpr,
-                                        _formFocus: formFocus
+                                        _formFocus: getFormFocusObject(documentUri, value)
                                     }]
                             };
                         }
                     }
                 }
-                if (newExpression._formValues.length === 0) delete newExpression._formValues;
+
+                if (newExpression._formValues.length === 0) {
+                    newExpression = {...newExpression, _formValues: [
+                        { _formFocus: getFormFocusObject(rootShape.linkValue, '') }
+                        ]};
+                }
 
                 newExpressions = [...newExpressions, newExpression];
             }
