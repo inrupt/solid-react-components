@@ -8,7 +8,7 @@ const Fields = props => {
   const values = data._formValues
     ? data._formValues.map(value => value._formFocus.value)
     : [];
-  console.log("Label", data);
+
   return (
     <div>
       <label>{label}</label>
@@ -49,7 +49,6 @@ const Field = ({ data, value }: FieldProps) => {
   return inputType === 'text' ? <input type='text' value={fieldData.value} /> : <select>{data.valueExpr.values.map(value => <option value={value}>{value.split("#")[1]}</option>)}</select>;
 };
 
-//
-//                 }
 
 export default Fields;
+

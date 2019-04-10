@@ -45,12 +45,14 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             { id: newExpression.valueExpr, linkValue: value,
                                 parentPredicate: newExpression.predicate }, data[value]);
 
+                        const formFocus = rootShape.parentPredicate ? { value, parentPredicate: rootShape.parentPredicate } : { value };
+
                         newExpression._formValues = [
                             ...newExpression._formValues,
                             {
                                 id: childExpression.id,
                                 type: childExpression.type,
-                                _formFocus: { value, parentPredicate: rootShape.parentPredicate },
+                                _formFocus: formFocus,
                                 expression: childExpression.expression,
                             }];
                     } else {
@@ -62,15 +64,15 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             }
 
                         } else {
+                            const formFocus = documentUri ? { value,  parentSubject: documentUri } : { value };
+
                             newExpression = {
                                 ...newExpression,
                                 _formValues:[
                                     ...newExpression._formValues,
                                     {
                                         ...newExpression.valueExpr,
-                                        _formFocus: {
-                                            value,
-                                        }
+                                        _formFocus: formFocus
                                     }]
                             };
                         }
