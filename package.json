@@ -14,11 +14,6 @@
     "prebuild:storybook": "npm run test:generate-output",
     "build:storybook": "build-storybook -c .storybook -o build/"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run test:generate-output"
-    }
-  },
   "files": [
     "build",
     "CONTRIBUTING.md"

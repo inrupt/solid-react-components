@@ -1,2 +1,2 @@
-import Field from './field.component';
-export  {Field};
+import Fields from './field.component';
+export  {Fields};
