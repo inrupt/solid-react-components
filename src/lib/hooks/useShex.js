@@ -40,7 +40,6 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 if (!newExpression._formValues) newExpression._formValues = [];
                 for await (let node of document[currentExpression.predicate]) {
                     const value = node.value;
-
                     if (isLink(currentExpression.valueExpr)) {
                         const childExpression = await fillFormData(
                             { id: newExpression.valueExpr, linkValue: value,

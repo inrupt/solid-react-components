@@ -9,19 +9,17 @@
       // :key "name"
       // :label "Name"
       // :icon "user";
-    vcard:phone IRI /^tel:\+?[0-9.-]/ ?
-      // :key "phone"
+    vcard:hasTelephone @<#vcard_has-telephone> ?
       // :label "Phone"
       // :icon "phone" ;
     vcard:role xsd:string ?
       // :key "role"
       // :label "Role"
       // :icon "user-astronaut" ;
-    vcard:hasEmail @<#vcard_value> ?
+    vcard:hasEmail @<#vcard_has-email> ?
       // :key "email"
       // :label "Email"
-      // :icon "envelope"
-      // :nodeBlank "vcard:value" ;
+      // :icon "envelope";
     vcard:organization-name xsd:string ?
       // :key "company"
       // :label "Company"
@@ -32,7 +30,7 @@
       // :icon "map-marker-alt" ;
   }
 
-  <#vcard_value> CLOSED {
+  <#vcard_has-email> CLOSED {
     a [vcard:Home vcard:Work] ;
     vcard:value xsd:string
   }
@@ -48,6 +46,11 @@
       // :icon "flag" ;
     vcard:postal-code xsd:string ?
   }
+
+    <#vcard_has-telephone> CLOSED {
+      a [vcard:Home vcard:Work] ;
+      vcard:value xsd:string ? ;
+    }
 
   <#vcard_country-name> [
      "Afghanistan"

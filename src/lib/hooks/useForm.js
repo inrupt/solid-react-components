@@ -1,5 +1,5 @@
-import { useCallback, useState, useEffect } from "react";
-import data from "@solid/query-ldflex";
+import { useState } from "react";
+import ldflex from "@solid/query-ldflex";
 
 export const useForm = (
   fileShex: String,
@@ -11,7 +11,8 @@ export const useForm = (
   const onChange = e => {
     const defaultValue = e.target.getAttribute("data-default");
     const value = e.target.value;
-    const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
+    const action =
+      defaultValue === "" ? "create" : value === "" ? "delete" : "update";
     const data = {
       [e.target.name]: {
         value: e.target.value,
@@ -26,9 +27,23 @@ export const useForm = (
     setFormValues({ ...formValues, ...data });
   };
 
-  const onSubmit = e => {
-    e.preventDefault();
-    console.log("Submit form", formValues);
+  const onSubmit = async (e,successCallback,errorCallback) => {
+    try {
+      e.preventDefault();
+
+      for await (const key of Object.keys(formValues)) {
+        const field = formValues[key];
+
+        if (field.action === "update" || field.action === 'create') {
+          await ldflex[field.subject][field.predicate].set(field.value);
+        } else {
+          await ldflex[field.subject][field.predicate].delete();
+        }
+      }
+      successCallback();
+    } catch (error) {
+      errorCallback(error)
+    }
   };
 
   return { formValues, onChange, onSubmit };

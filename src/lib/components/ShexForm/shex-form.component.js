@@ -27,7 +27,7 @@ const ShexForm = ({ shexj, parent = null, onChange, formValues } : ShexFormProps
         expression.expressions.map((expression, i) => {
           if (typeof expression.valueExpr === "string") {
             return expression._formValues.map((shexj, i) => (
-              <ShexForm key={i} shexj={shexj} parent={shexj._formFocus} onChange={onChange} formValues={formValues} parent={expression}/>
+              <ShexForm key={i} shexj={shexj} onChange={onChange} formValues={formValues} parent={expression}/>
             ));
           } else {
             return <Fields data={expression} key={i} onChange={onChange} formValues={formValues}/>;
@@ -37,14 +37,19 @@ const ShexForm = ({ shexj, parent = null, onChange, formValues } : ShexFormProps
   ): null;
 };
 
-const Form = ({shexj}) => {
+const Form = ({shexj, successCallback, errorCallback}) => {
   const { onSubmit, onChange, formValues } = useForm();
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={(e) => onSubmit(e,successCallback,errorCallback)}>
       <ShexForm formValues={formValues} onChange={onChange} shexj={shexj} />
       <button type="submit">Save</button>
     </form>
   );
 };
+
+Form.defaultProps = {
+    successCallback : () => console.log('Form submitted successfully'),
+    errorCallback : () => console.log('Error submitting form')
+}
 
 export default Form;
