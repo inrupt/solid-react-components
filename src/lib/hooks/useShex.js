@@ -42,6 +42,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 let newExpression = {...currentExpression};
 
                 if (!newExpression._formValues) newExpression._formValues = [];
+                console.log(newExpression, 'value');
                 for await (let node of document[currentExpression.predicate]) {
                     const value = node.value;
 
@@ -82,7 +83,12 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                         }
                     }
                 }
-                if (newExpression._formValues.length === 0) delete newExpression._formValues;
+
+                if (newExpression._formValues.length === 0) {
+                    newExpression = {...newExpression, _formValues: [
+                        { _formFocus: getFormFocusObject(rootShape.linkValue, '') }
+                        ]};
+                }
 
                 newExpressions = [...newExpressions, newExpression];
             }
