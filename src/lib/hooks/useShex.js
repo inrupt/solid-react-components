@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect } from 'react';
 import data from '@solid/query-ldflex';
 import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
+import unique from 'unique-string';
 
 export const useShex = (fileShex: String, documentUri: String, shapeName: String) => {
     const [shexData, setShexData] = useState({});
@@ -43,9 +44,9 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                     if (isLink(currentExpression.valueExpr)) {
                         const childExpression = await fillFormData(
                             { id: newExpression.valueExpr, linkValue: value,
-                                parentPredicate: newExpression.predicate }, data[value]);
+                                parentSubject: newExpression.predicate }, data[value]);
 
-                        const formFocus = rootShape.parentPredicate ? { value, parentPredicate: rootShape.parentPredicate } : { value };
+                        const formFocus = rootShape.parentSubject ? { value, parentSubject: rootShape.parentSubject, name: unique() } : { value, name: unique() };
 
                         newExpression._formValues = [
                             ...newExpression._formValues,
@@ -56,7 +57,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                 expression: childExpression.expression,
                             }];
                     } else {
-                        const formFocus = rootShape.parentPredicate ? { value, parentPredicate: rootShape.linkValue } : { value };
+                        const formFocus = rootShape.parentSubject ? { value, parentSubject: rootShape.linkValue, name: unique()  } : { value, name: unique() };
 
                         if (rootShape.linkValue) {
                             newExpression = {
@@ -65,7 +66,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             }
 
                         } else {
-                            const formFocus = documentUri ? { value,  parentSubject: documentUri } : { value };
+                            const formFocus = documentUri ? { value,  parentSubject: documentUri, name: unique() } : { value, name: unique() };
 
                             newExpression = {
                                 ...newExpression,

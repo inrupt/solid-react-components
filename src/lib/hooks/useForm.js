@@ -12,14 +12,16 @@ export const useForm = (
     const data = {
       [e.target.name]: {
         value: e.target.value,
-        id: e.target.name,
-        predicate: e.target,
-        subject: e.target,
-        defaultValue: e.target.data.defaultValue
+        name: e.target.name,
+        predicate: e.target.getAttribute('data-predicate'),
+        subject: e.target.getAttribute('data-subject'),
+        defaultValue: e.target.getAttribute('data-default')
       }
     };
 
-    setFormValues({ ...formValues, data });
+    setFormValues({ ...formValues, ...data });
+    console.log("Formvalues", formValues)
+
   };
 
   const onSubmit = () => {console.log("Submit form")};
