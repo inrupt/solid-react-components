@@ -40,6 +40,27 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return null;
     }
 
+    const addNewExpression = (expression: Object) => {
+        const { formData } = shexData;
+
+        return formData.expression.expressions.map(exp => {
+           if(exp.predicate === expression.predicate) {
+               if (isLink(expression.valueExpr)) {
+                   return false;
+               }
+
+               return {
+                   ...exp,
+                   _formValues: [
+                       ...exp._formValues,
+                       {...exp.valueExpr, value: ''},
+                   ]
+               };
+           }
+           return exp;
+        });
+    };
+
     const fillFormData = async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];
@@ -127,6 +148,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
     }, [fileShex, documentUri]);
 
     return {
-        shexData
+        shexData,
+        addNewExpression
     };
 };

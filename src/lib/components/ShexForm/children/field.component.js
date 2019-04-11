@@ -6,11 +6,22 @@ type FieldsProps = {
   data: Object
 };
 
+const allowNewFields = (data: Object) => {
+  const totalData = data._formValues.length;
+
+  if ((!data.min && !data.max) || (data.min > 0 && data.max < totalData)) {
+    return true;
+  }
+
+  return false;
+}
+
 const Fields = (props: FieldsProps) => {
-  const { data, onChange, formValues } = props;
+  const { data, onChange, formValues, addNewExpression } = props;
   const label = data.predicate.includes("#")
     ? data.predicate.split("#")[1]
     : data.predicate.split("/").pop();
+
   return (
     <div>
       <label>{label}</label>
@@ -30,6 +41,7 @@ const Fields = (props: FieldsProps) => {
             </li>
           ))}
       </ul>
+      { allowNewFields(data) && <button onClick={addNewExpression} type='button'>Add new label</button>}
     </div>
   );
 };

@@ -16,8 +16,9 @@ type ShexFormProps = {
     onChange: Function
 }
 
-const ShexForm = ({ shexj, parent = null, onChange, formValues } : ShexFormProps) => {
+const ShexForm = ({ shexj, parent = null, onChange, formValues, addNewExpression } : ShexFormProps) => {
   const expression = shexj ? shexj.expression : {};
+
   return shexj ? (
     <Panel>
       {parent && parent.predicate && (
@@ -27,21 +28,21 @@ const ShexForm = ({ shexj, parent = null, onChange, formValues } : ShexFormProps
         expression.expressions.map((expression, i) => {
           if (typeof expression.valueExpr === "string") {
             return expression._formValues.map((shexj, i) => (
-              <ShexForm key={i} shexj={shexj} onChange={onChange} formValues={formValues} parent={expression}/>
+              <ShexForm key={i} shexj={shexj} onChange={onChange} formValues={formValues} addNewExpression={addNewExpression} parent={expression}/>
             ));
           } else {
-            return <Fields data={expression} key={i} onChange={onChange} formValues={formValues}/>;
+            return <Fields data={expression} key={i} onChange={onChange} formValues={formValues} addNewExpression={addNewExpression} />;
           }
         })}
     </Panel>
   ): null;
 };
 
-const Form = ({shexj, successCallback, errorCallback}) => {
+const Form = ({shexj, successCallback, errorCallback, addNewExpression}) => {
   const { onSubmit, onChange, formValues } = useForm();
   return (
     <form onSubmit={(e) => onSubmit(e,successCallback,errorCallback)}>
-      <ShexForm formValues={formValues} onChange={onChange} shexj={shexj} />
+      <ShexForm formValues={formValues} onChange={onChange} shexj={shexj} addNewExpression={addNewExpression}/>
       <button type="submit">Save</button>
     </form>
   );
