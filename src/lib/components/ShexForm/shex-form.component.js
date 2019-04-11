@@ -51,7 +51,7 @@ const Form = ({shexj, successCallback, errorCallback, addNewExpression}) => {
 
 Form.defaultProps = {
     successCallback : () => console.log('Form submitted successfully'),
-    errorCallback : () => console.log('Error submitting form')
+    errorCallback : (e) => console.log('Error submitting form', e)
 }
 
 export default Form;

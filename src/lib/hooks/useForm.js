@@ -27,25 +27,38 @@ export const useForm = (
     setFormValues({ ...formValues, ...data });
   };
 
-  const onReset = () => setFormValues({})
+  const onReset = () => setFormValues({});
 
-
-  const onSubmit = async (e,successCallback,errorCallback) => {
+  const onSubmit = async (e, successCallback, errorCallback) => {
     try {
       e.preventDefault();
 
       for await (const key of Object.keys(formValues)) {
         const field = formValues[key];
+        console.log("Field to update", field);
 
-        if (field.action === "update" || field.action === 'create') {
-          await ldflex[field.subject][field.predicate].set(field.value);
-        } else {
-          await ldflex[field.subject][field.predicate].delete();
+        switch (field.action) {
+          case "update":
+            await ldflex[field.subject][field.predicate].replace(
+              field.defaultValue,
+              field.value
+            );
+            break;
+          case "create":
+            await ldflex[field.subject][field.predicate].add(field.value);
+            break;
+          case "delete":
+            await ldflex[field.subject][field.predicate].delete(
+              field.defaultValue
+            );
+            break;
+          default:
+            break;
         }
       }
       successCallback();
     } catch (error) {
-      errorCallback(error)
+      errorCallback(error);
     }
   };
 
