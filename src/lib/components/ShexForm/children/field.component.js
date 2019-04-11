@@ -21,7 +21,7 @@ const Fields = (props: FieldsProps) => {
   const label = data.predicate.includes("#")
     ? data.predicate.split("#")[1]
     : data.predicate.split("/").pop();
-
+  console.log(data);
   return (
     <div>
       <label>{label}</label>
@@ -41,7 +41,7 @@ const Fields = (props: FieldsProps) => {
             </li>
           ))}
       </ul>
-      { allowNewFields(data) && <button onClick={addNewExpression} type='button'>Add new label</button>}
+      { allowNewFields(data) && <button onClick={() => addNewExpression(data)} type='button'>Add new label</button>}
     </div>
   );
 };

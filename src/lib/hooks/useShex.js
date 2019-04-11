@@ -41,9 +41,11 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
     }
 
     const addNewExpression = (expression: Object) => {
-        const { formData } = shexData;
+        const { formData, shexJ } = shexData;
 
-        return formData.expression.expressions.map(exp => {
+        console.log('click', expression);
+
+        const newFormData = formData.expression.expressions.map(exp => {
            if(exp.predicate === expression.predicate) {
                if (isLink(expression.valueExpr)) {
                    return false;
@@ -53,12 +55,18 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                    ...exp,
                    _formValues: [
                        ...exp._formValues,
-                       {...exp.valueExpr, value: ''},
+                       {
+                           _formFocus: {
+                               ...exp.valueExpr, value: ''
+                           },
+                       }
                    ]
                };
            }
            return exp;
         });
+
+        setShexData({...shexJ, formData: newFormData})
     };
 
     const fillFormData = async (rootShape: Object, document: Object) => {
