@@ -33,6 +33,13 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return subject ? { value, parentSubject: subject, name: unique() } : { value, name: unique() };
     }
 
+    const isDropDown = (expression: Object) => {
+        if (Array.isArray(expression.values)) {
+            return { values: expression.values };
+        }
+        return null;
+    }
+
     const fillFormData = async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];
@@ -42,7 +49,6 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 let newExpression = {...currentExpression};
 
                 if (!newExpression._formValues) newExpression._formValues = [];
-                console.log(newExpression, 'value');
                 for await (let node of document[currentExpression.predicate]) {
                     const value = node.value;
                     if (isLink(currentExpression.valueExpr)) {
@@ -55,8 +61,9 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             {
                                 id: childExpression.id,
                                 type: childExpression.type,
+                                ...isDropDown(childExpression),
                                 _formFocus: getFormFocusObject(rootShape.parentSubject, value),
-                                expression: childExpression.expression,
+                                expression: childExpression.expression
                             }];
                     } else {
 
