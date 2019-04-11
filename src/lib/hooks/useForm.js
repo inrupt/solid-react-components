@@ -27,6 +27,9 @@ export const useForm = (
     setFormValues({ ...formValues, ...data });
   };
 
+  const onReset = () => setFormValues({})
+
+
   const onSubmit = async (e,successCallback,errorCallback) => {
     try {
       e.preventDefault();
@@ -46,5 +49,5 @@ export const useForm = (
     }
   };
 
-  return { formValues, onChange, onSubmit };
+  return { formValues, onChange, onSubmit, onReset };
 };

@@ -39,11 +39,12 @@ const ShexForm = ({ shexj, parent = null, onChange, formValues, addNewExpression
 };
 
 const Form = ({shexj, successCallback, errorCallback, addNewExpression}) => {
-  const { onSubmit, onChange, formValues } = useForm();
+  const { onSubmit, onChange, onReset, formValues } = useForm();
   return (
     <form onSubmit={(e) => onSubmit(e,successCallback,errorCallback)}>
       <ShexForm formValues={formValues} onChange={onChange} shexj={shexj} addNewExpression={addNewExpression}/>
       <button type="submit">Save</button>
+        <button type="button" onClick={onReset}>Reset</button>
     </form>
   );
 };
