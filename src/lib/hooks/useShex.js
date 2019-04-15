@@ -104,7 +104,8 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             ...addLinkExpression(expression, parentExpresion, idLink),
                             _formFocus: {
                                 value: idLink,
-                                name: unique()
+                                name: unique(),
+                                parentSubject: documentUri
                             },
                         }
                     ]
@@ -147,15 +148,16 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                         const childExpression = await fillFormData(
                             { id: newExpression.valueExpr, linkValue: value,
                                 parentSubject: newExpression.predicate }, data[value]);
-
                         const dropDownValues = isDropDown(childExpression);
+                        const currentSubject = dropDownValues ? rootShape.linkValue || documentUri : rootShape.parentSubject;
+
                         newExpression._formValues = [
                             ...newExpression._formValues,
                             {
                                 id: childExpression.id,
                                 type: childExpression.type,
                                 ...dropDownValues,
-                                _formFocus: getFormFocusObject(dropDownValues ? rootShape.linkValue || documentUri : rootShape.parentSubject, value),
+                                _formFocus: getFormFocusObject(currentSubject, value),
                                 expression: childExpression.expression
                             }];
                     } else {
