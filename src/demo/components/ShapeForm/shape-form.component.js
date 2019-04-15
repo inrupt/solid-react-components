@@ -6,6 +6,6 @@ export const ShapeForm = ({ shexUri, documentUri }) => {
     const { shexData, addNewExpression } = useShex(shexUri, documentUri, 'UserProfile');
     console.log(shexData, 'shexJ');
     return (
-        shexData.formData ? <ShexForm  shexj={shexData.formData} addNewExpression={addNewExpression} /> : null
+        shexData.formData ? <ShexForm  shexj={shexData.formData} addNewExpression={addNewExpression} documentUri={documentUri} /> : null
     );
 }

@@ -69,8 +69,8 @@ const ShexForm = ({
   ) : null;
 };
 
-const Form = ({ shexj, successCallback, errorCallback, addNewExpression }) => {
-  const { onSubmit, onChange, onReset, formValues } = useForm();
+const Form = ({ shexj, successCallback, errorCallback, addNewExpression, documentUri }) => {
+  const { onSubmit, onChange, onReset, formValues } = useForm(documentUri);
   return (
     <form onSubmit={e => onSubmit(e, successCallback, errorCallback)}>
       <ShexForm

@@ -34,7 +34,8 @@ const ExpressionFields = (props: FieldsProps) => {
                   fieldData: value,
                   inputData:
                     formValues[value._formFocus.name] || value._formFocus,
-                  onChange
+                  onChange,
+                  parent
                 }}
               />
             </li>
@@ -55,7 +56,7 @@ type FieldProps = {
   onChange: (e: Event) => {}
 };
 
-const Field = ({ data, fieldData, inputData, onChange }: FieldProps) => {
+const Field = ({ data, fieldData, inputData, onChange, parent }: FieldProps) => {
   const inputType = data.valueExpr.values ? "select" : "text";
   const predicate = data.predicate;
   const subject = fieldData._formFocus.parentSubject;
@@ -70,6 +71,7 @@ const Field = ({ data, fieldData, inputData, onChange }: FieldProps) => {
       data-predicate={predicate}
       data-subject={subject}
       data-default={defaultValue}
+      data-parent-predicate={parent && parent.predicate ? parent.predicate : null}
     />
   ) : (
     <select
@@ -79,6 +81,7 @@ const Field = ({ data, fieldData, inputData, onChange }: FieldProps) => {
       data-predicate={predicate}
       data-subject={subject}
       data-default={defaultValue}
+      data-parent-predicate={parent && parent.predicate ? parent.predicate : null}
     >
       {data.valueExpr.values.map(value => (
         <option value={value} key={value}>
