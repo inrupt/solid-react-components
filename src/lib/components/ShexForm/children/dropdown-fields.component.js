@@ -5,9 +5,14 @@ const DropdownFields = ({ shexj, onChange, formValues, parent }) => {
   const { name, parentSubject, value } = _formFocus;
   const inputValue = formValues[name] ? formValues[name].value : _formFocus.value;
 
-  return (
+    const label = parent.predicate.includes("#")
+        ? parent.predicate.split("#")[1]
+        : parent.predicate.split("/").pop();
+
+
+    return (
     <Fragment>
-        <label htmlFor={name}>{parent.predicate.split("#")[1]}</label>
+        <label htmlFor={name}>{label}</label>
       {values && (
         <select
           value={inputValue}
