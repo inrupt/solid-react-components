@@ -22,7 +22,7 @@ const ShexForm = ({
   formValues,
   addNewExpression
 }: ShexFormProps) => {
-  const { expression, values } = shexj;
+  const { expression } = shexj;
 
   return shexj ? (
     <Panel>
@@ -52,6 +52,7 @@ const ShexForm = ({
                 onChange={onChange}
                 formValues={formValues}
                 addNewExpression={addNewExpression}
+                parent={parent}
               />
             );
           }

@@ -17,7 +17,7 @@ const allowNewFields = (data: Object) => {
 };
 
 const ExpressionFields = (props: FieldsProps) => {
-  const { data, onChange, formValues, addNewExpression } = props;
+  const { data, onChange, formValues, addNewExpression, parent } = props;
   const label = data.predicate.includes("#")
     ? data.predicate.split("#")[1]
     : data.predicate.split("/").pop();

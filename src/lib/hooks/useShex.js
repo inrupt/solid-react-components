@@ -174,7 +174,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                         const childExpression = await fillFormData(
                             { id: newExpression.valueExpr, linkValue: value,
                                 parentSubject: newExpression.predicate }, data[value]);
-                        
+
                         const dropDownValues = isDropDown(childExpression);
                         newExpression._formValues = [
                             ...newExpression._formValues,
