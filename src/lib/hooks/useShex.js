@@ -46,11 +46,10 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return namedNode (id).value;
     }
 
-    const addLinkExpression = (currentShape, parent) => {
+    const addLinkExpression = (currentShape, parent, idLink) => {
         if (parent) {
             const {shexJ: {shapes}} = shexData;
             const shape = shapes.find(shape => shape.id.includes(parent.valueExpr));
-            const linkId = unique();
             let updatedExpressions = [];
 
             if (shape && shape.expression.expressions) {
@@ -64,7 +63,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             ...exp.valueExpr,
                             _formFocus: {
                                 value: '',
-                                parentSubject: linkId,
+                                parentSubject: idLink,
                                 name: unique()
                             },
                         }]
@@ -77,13 +76,17 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 currentShape,
                 expression: {expressions: updatedExpressions},
                 _formFocus: {
-                    value: linkId,
+                    value: currentShape.predicate,
                     parentSubject: currentShape.predicate
                 }
             }
         }
         return null;
     };
+
+    /* const addNewExpression = () => {
+
+    } */
 
     const addNewExpression = (expression: Object, parent: Object) => {
         const { formData, shexJ } = shexData;
@@ -92,15 +95,17 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
            if(exp.predicate === currentPredicate) {
                const childExpresion = parent ? { id: parent.valueExpr, type: parent.type } : null;
+               const idLink = parent ? createIdNode() : '';
+
                return {
                    ...exp,
                    _formValues: [
                        ...exp._formValues,
                        {
                            ...childExpresion,
-                           ...addLinkExpression(expression, parent),
+                           ...addLinkExpression(expression, parent, idLink),
                            _formFocus: {
-                               value: parent ? createIdNode() : '',
+                               value: idLink,
                                name: unique()
                            },
                        }
