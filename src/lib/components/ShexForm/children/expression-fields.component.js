@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 
 type FieldsProps = {
   formValues: Object,
@@ -14,7 +14,7 @@ const allowNewFields = (data: Object) => {
   }
 
   return false;
-}
+};
 
 const ExpressionFields = (props: FieldsProps) => {
   const { data, onChange, formValues, addNewExpression } = props;
@@ -40,7 +40,11 @@ const ExpressionFields = (props: FieldsProps) => {
             </li>
           ))}
       </ul>
-      { allowNewFields(data) && <button onClick={() => addNewExpression(data)} type='button'>Add new label</button>}
+      {allowNewFields(data) && (
+        <button onClick={() => addNewExpression(data, parent)} type="button">
+          Add new label
+        </button>
+      )}
     </Fragment>
   );
 };
@@ -57,7 +61,7 @@ const Field = ({ data, fieldData, inputData, onChange }: FieldProps) => {
   const subject = fieldData._formFocus.parentSubject;
   const defaultValue = fieldData._formFocus.value;
 
-  return inputType === "text"  ? (
+  return inputType === "text" ? (
     <input
       type="text"
       value={inputData.value}
@@ -77,7 +81,9 @@ const Field = ({ data, fieldData, inputData, onChange }: FieldProps) => {
       data-default={defaultValue}
     >
       {data.valueExpr.values.map(value => (
-        <option value={value} key={value}>{value.split("#")[1]}</option>
+        <option value={value} key={value}>
+          {value.split("#")[1]}
+        </option>
       ))}
     </select>
   );
