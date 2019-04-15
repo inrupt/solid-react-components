@@ -11,45 +11,37 @@ export const useForm = (
   const [formValues, setFormValues] = useState({});
 
   const onChange = e => {
+    const { value, name } = e.target;
     const defaultValue = e.target.getAttribute("data-default");
-    const value = e.target.value;
     const action =
       defaultValue === "" ? "create" : value === "" ? "delete" : "update";
     const data = {
       [e.target.name]: {
-        value: e.target.value,
-        name: e.target.name,
+        value,
+        name,
+        action,
+        defaultValue,
         predicate: e.target.getAttribute("data-predicate"),
         subject: e.target.getAttribute("data-subject"),
-        defaultValue: e.target.getAttribute("data-default"),
-        parentPredicate: e.target.getAttribute("data-parent-predicate"),
+        parentPredicate: e.target.getAttribute("data-parent-predicate")
 
-        action
       }
     };
+
     setFormValues({ ...formValues, ...data });
   };
 
-  const isNew = async documentUri => {
-    const exists = await solid.fetch(documentUri);
-    console.log("Exists", exists);
-    return exists === undefined;
-  };
-
   const create = async field => {
-    console.log("Field", field);
+    const { subject, predicate, value } = field;
     if (field.parentPredicate) await createLink(field);
-    await ldflex[field.subject][field.predicate].add(field.value);
+    await ldflex[subject][predicate].add(value);
   };
 
   const createLink = async field => {
     const { subject, parentPredicate } = field;
     let isNew = true;
-    console.log("Parent Predicate", parentPredicate, "Uri", documentUri);
-    for await (let item of ldflex[documentUri][parentPredicate]) {
-      console.log("Item",item.value);
+    for await (let item of ldflex[documentUri][parentPredicate])
       if (item.value === subject) isNew = false;
-    }
     if (isNew) {
       const id = subject.split("#").pop();
       await ldflex[documentUri][parentPredicate].add(namedNode(id));

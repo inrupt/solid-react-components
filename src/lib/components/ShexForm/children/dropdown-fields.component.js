@@ -21,6 +21,7 @@ const DropdownFields = ({ shexj, onChange, formValues, parent }) => {
           data-subject={parentSubject}
           data-default={value}
           data-predicate={parent.predicate}
+          data-parent-predicate={parent && parent.predicate ? parent.predicate : null}
         >
           {values.map((item, key) => (
             <option key={key} value={item.value}>
