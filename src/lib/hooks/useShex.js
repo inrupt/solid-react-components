@@ -84,23 +84,22 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return null;
     }
 
-    /* const updateShexJObject = (shexJ: Object, expression: Object, parentExpresion: Object) => {
-
-
+    const updateShexJObject = (shexJ: Object, expression: Object, parentExpresion: Object) => {
+        let found = false;
         return shexJ.expression.expressions.map(exp => {
-            const currentPredicate = parent ? parent.predicate : expression.predicate;
+            const currentPredicate = parentExpresion ? parentExpresion.predicate : expression.predicate;
 
             if(exp.predicate === currentPredicate) {
-                const childExpresion = parent ? { id: parent.valueExpr, type: parent.type } : null;
-                const idLink = parent ? createIdNode() : '';
-
+                const childExpresion = parentExpresion ? { id: parentExpresion.valueExpr, type: parentExpresion.type } : null;
+                const idLink = parentExpresion ? createIdNode() : '';
+                found = true;
                 return {
                     ...exp,
                     _formValues: [
                         ...exp._formValues,
                         {
                             ...childExpresion,
-                            ...addLinkExpression(expression, parent, idLink),
+                            ...addLinkExpression(expression, parentExpresion, idLink),
                             _formFocus: {
                                 value: idLink,
                                 name: unique()
@@ -108,8 +107,15 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                         }
                     ]
                 };
-            } else {
-                const
+            } else if (!found) {
+                if ( exp._formValues.length > 0 && exp._formValues.expression) {
+                    return {
+                        ...exp,
+                        expression: {
+                            expressions: updateShexJObject(exp._formValues, expression, parentExpresion)
+                        }
+                    };
+                }
             }
             return exp;
         });
@@ -121,10 +127,10 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         const newFormData = updateShexJObject(formData, expression, parentExpresion);
 
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
-    } */
+    }
 
 
-    const addNewExpression = (expression: Object, parent: Object) => {
+    /* const addNewExpression = (expression: Object, parent: Object) => {
         const { formData, shexJ } = shexData;
         const newFormData = formData.expression.expressions.map(exp => {
            const currentPredicate = parent ? parent.predicate : expression.predicate;
@@ -151,7 +157,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
            return exp;
         });
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
-    };
+    }; */
 
     const fillFormData = async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
@@ -168,6 +174,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                         const childExpression = await fillFormData(
                             { id: newExpression.valueExpr, linkValue: value,
                                 parentSubject: newExpression.predicate }, data[value]);
+                        console.log(childExpression, 'child');
                         const dropDownValues = isDropDown(childExpression);
                         newExpression._formValues = [
                             ...newExpression._formValues,
@@ -175,7 +182,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                 id: childExpression.id,
                                 type: childExpression.type,
                                 ...dropDownValues,
-                                _formFocus: getFormFocusObject(dropDownValues ? documentUri : rootShape.parentSubject, value),
+                                _formFocus: getFormFocusObject(dropDownValues ? rootShape.linkValue || documentUri : rootShape.parentSubject, value),
                                 expression: childExpression.expression
                             }];
                     } else {
