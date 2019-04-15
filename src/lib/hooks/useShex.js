@@ -93,6 +93,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
             if(exp.predicate === currentPredicate) {
                 const childExpresion = buildExpression(parentExpresion);
                 const idLink = parentExpresion ? createIdNode() : '';
+                const parentSubject = parentExpresion ? null : { documentUri };
                 found = true;
 
                 return {
@@ -105,7 +106,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             _formFocus: {
                                 value: idLink,
                                 name: unique(),
-                                parentSubject: documentUri
+                                parentSubject,
                             },
                         }
                     ]
