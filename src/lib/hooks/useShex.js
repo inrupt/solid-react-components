@@ -54,9 +54,6 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
             if (shape && shape.expression.expressions) {
                 updatedExpressions = shape.expression.expressions.map(exp => {
-                    if (isLink(exp.valueExpr)) {
-                        return addLinkExpression(exp, currentShape);
-                    }
                     return {
                         ...exp,
                         _formValues: [{
@@ -74,7 +71,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
             return {
                 currentShape,
-                expression: {expressions: updatedExpressions},
+                expression: { expressions: updatedExpressions},
                 _formFocus: {
                     value: currentShape.predicate,
                     parentSubject: currentShape.predicate
@@ -84,15 +81,20 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return null;
     }
 
+    const buildExpression = (parentExpresion: Object) => {
+        return parentExpresion ? { id: parentExpresion.valueExpr, type: parentExpresion.type } : null
+    }
+
     const updateShexJObject = (shexJ: Object, expression: Object, parentExpresion: Object) => {
         let found = false;
         return shexJ.expression.expressions.map(exp => {
             const currentPredicate = parentExpresion ? parentExpresion.predicate : expression.predicate;
 
             if(exp.predicate === currentPredicate) {
-                const childExpresion = parentExpresion ? { id: parentExpresion.valueExpr, type: parentExpresion.type } : null;
+                const childExpresion = buildExpression(parentExpresion);
                 const idLink = parentExpresion ? createIdNode() : '';
                 found = true;
+
                 return {
                     ...exp,
                     _formValues: [
@@ -129,35 +131,6 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
     }
 
-
-    /* const addNewExpression = (expression: Object, parent: Object) => {
-        const { formData, shexJ } = shexData;
-        const newFormData = formData.expression.expressions.map(exp => {
-           const currentPredicate = parent ? parent.predicate : expression.predicate;
-
-           if(exp.predicate === currentPredicate) {
-               const childExpresion = parent ? { id: parent.valueExpr, type: parent.type } : null;
-               const idLink = parent ? createIdNode() : '';
-
-               return {
-                   ...exp,
-                   _formValues: [
-                       ...exp._formValues,
-                       {
-                           ...childExpresion,
-                           ...addLinkExpression(expression, parent, idLink),
-                           _formFocus: {
-                               value: idLink,
-                               name: unique()
-                           },
-                       }
-                   ]
-               };
-           }
-           return exp;
-        });
-        setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
-    }; */
 
     const fillFormData = async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
