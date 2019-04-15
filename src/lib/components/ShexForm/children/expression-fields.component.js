@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 type FieldsProps = {
   formValues: Object,
@@ -14,16 +14,15 @@ const allowNewFields = (data: Object) => {
   }
 
   return false;
-}
+};
 
-const Fields = (props: FieldsProps) => {
-  const { data, onChange, formValues, addNewExpression, parent } = props;
+const ExpressionFields = (props: FieldsProps) => {
+  const { data, onChange, formValues, addNewExpression } = props;
   const label = data.predicate.includes("#")
     ? data.predicate.split("#")[1]
     : data.predicate.split("/").pop();
-  // console.log(data);
   return (
-    <div>
+    <Fragment>
       <label>{label}</label>
       <ul>
         {data._formValues &&
@@ -41,8 +40,12 @@ const Fields = (props: FieldsProps) => {
             </li>
           ))}
       </ul>
-      { allowNewFields(data) && <button onClick={() => addNewExpression(data, parent)} type='button'>Add new label</button>}
-    </div>
+      {allowNewFields(data) && (
+        <button onClick={() => addNewExpression(data, parent)} type="button">
+          Add new label
+        </button>
+      )}
+    </Fragment>
   );
 };
 
@@ -78,10 +81,12 @@ const Field = ({ data, fieldData, inputData, onChange }: FieldProps) => {
       data-default={defaultValue}
     >
       {data.valueExpr.values.map(value => (
-        <option value={value} key={value}>{value.split("#")[1]}</option>
+        <option value={value} key={value}>
+          {value.split("#")[1]}
+        </option>
       ))}
     </select>
   );
 };
 
-export default Fields;
+export default ExpressionFields;
