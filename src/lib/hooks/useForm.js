@@ -23,7 +23,6 @@ export const useForm = (
         action
       }
     };
-
     setFormValues({ ...formValues, ...data });
   };
 
@@ -35,7 +34,6 @@ export const useForm = (
 
       for await (const key of Object.keys(formValues)) {
         const field = formValues[key];
-        console.log("Field to update", field);
 
         switch (field.action) {
           case "update":
