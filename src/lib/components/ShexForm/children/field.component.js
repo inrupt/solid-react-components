@@ -17,11 +17,11 @@ const allowNewFields = (data: Object) => {
 }
 
 const Fields = (props: FieldsProps) => {
-  const { data, onChange, formValues, addNewExpression } = props;
+  const { data, onChange, formValues, addNewExpression, parent } = props;
   const label = data.predicate.includes("#")
     ? data.predicate.split("#")[1]
     : data.predicate.split("/").pop();
-  console.log(data);
+  // console.log(data);
   return (
     <div>
       <label>{label}</label>
@@ -41,7 +41,7 @@ const Fields = (props: FieldsProps) => {
             </li>
           ))}
       </ul>
-      { allowNewFields(data) && <button onClick={() => addNewExpression(data)} type='button'>Add new label</button>}
+      { allowNewFields(data) && <button onClick={() => addNewExpression(data, parent)} type='button'>Add new label</button>}
     </div>
   );
 };

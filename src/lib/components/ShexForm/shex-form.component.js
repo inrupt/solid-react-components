@@ -31,7 +31,7 @@ const ShexForm = ({ shexj, parent = null, onChange, formValues, addNewExpression
               <ShexForm key={i} shexj={shexj} onChange={onChange} formValues={formValues} addNewExpression={addNewExpression} parent={expression}/>
             ));
           } else {
-            return <Fields data={expression} key={i} onChange={onChange} formValues={formValues} addNewExpression={addNewExpression} />;
+            return <Fields data={expression} key={i} onChange={onChange} formValues={formValues} parent={parent} addNewExpression={addNewExpression} />;
           }
         })}
     </Panel>
