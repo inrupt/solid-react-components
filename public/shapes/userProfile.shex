@@ -19,7 +19,8 @@
     vcard:hasEmail @<#vcard_has-email> ?
       // :key "email"
       // :label "Email"
-      // :icon "envelope";
+      // :icon "envelope"
+      // :prefix "mailto:";
     vcard:organization-name xsd:string ?
       // :key "company"
       // :label "Company"
