@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { shexFormLabel } from '@utils';
 
 type FieldsProps = {
   formValues: Object,
@@ -16,23 +17,14 @@ const allowNewFields = (data: Object) => {
   return false;
 };
 
-const showAnnotation = (key: String, data: Object) => {
-  if (data.annotations) {
-    const annotation = data.annotations.find(annotation => annotation.predicate.includes(key));
 
-    return annotation.object.value;
-  }
-  return data.predicate.includes("#")
-      ? data.predicate.split("#")[1]
-      : data.predicate.split("/").pop();
-};
 
 const ExpressionFields = (props: FieldsProps) => {
   const { data, onChange, formValues, addNewExpression, parent } = props;
 
   return (
     <Fragment>
-      <label>{showAnnotation('layoutlabel', data)}</label>
+      <label>{shexFormLabel(data)}</label>
       <ul>
         {data._formValues &&
           data._formValues.map((value, i) => (
