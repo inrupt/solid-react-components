@@ -3,6 +3,7 @@ import data from '@solid/query-ldflex';
 import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
+import { findAnnotation } from "@utils";
 // import {namedNode} from '@rdfjs/data-model';
 
 export const useShex = (fileShex: String, documentUri: String, shapeName: String) => {
@@ -30,9 +31,29 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return typeof valueExpr === 'string' || null;
     };
 
-    const getFormFocusObject = (subject: String, value: String) => {
-        return subject ? { value, parentSubject: subject, name: unique() } : { value, name: unique() };
-    }
+    const fieldValue = (annotations: Array<Object>, value: String) => {
+        const hasPrefix = findAnnotation('layoutprefix', annotations);
+        if (hasPrefix) {
+            return value.split(hasPrefix.object.value).pop();
+        }
+
+        return value;
+    };
+
+    const getFormFocusObject = (
+      subject: String,
+      valueEx: String,
+      annotations?: Array<Object>
+    ) => {
+      let value = valueEx;
+      if (annotations) {
+        value = fieldValue(annotations, valueEx);
+      }
+
+      return subject
+        ? { value, parentSubject: subject, name: unique() }
+        : { value, name: unique() };
+    };
 
     const isDropDown = (expression: Object) => {
         if (Array.isArray(expression.values)) {
@@ -148,7 +169,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                     if (isLink(currentExpression.valueExpr)) {
                         const childExpression = await fillFormData(
                             { id: newExpression.valueExpr, linkValue: value,
-                                parentSubject: newExpression.predicate }, data[value]);
+                                parentSubject: newExpression.predicate, annotations: newExpression.annotations }, data[value]);
                         const dropDownValues = isDropDown(childExpression);
                         const currentSubject = dropDownValues ? rootShape.linkValue || documentUri : rootShape.parentSubject;
 
@@ -158,7 +179,10 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                 id: childExpression.id,
                                 type: childExpression.type,
                                 ...dropDownValues,
-                                _formFocus: getFormFocusObject(currentSubject, value),
+                                _formFocus: getFormFocusObject(
+                                    currentSubject,
+                                    value,
+                                    currentExpression.annotations),
                                 expression: childExpression.expression
                             }];
                     } else {
@@ -168,18 +192,23 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                 ...newExpression,
                                 _formValues: [{
                                     ...newExpression.valueExpr,
-                                    _formFocus: getFormFocusObject(rootShape.linkValue, value)}],
+                                    _formFocus: getFormFocusObject(
+                                        rootShape.linkValue,
+                                        value,
+                                        rootShape.annotations)}],
                             }
 
                         } else {
-
                             newExpression = {
                                 ...newExpression,
                                 _formValues:[
                                     ...newExpression._formValues,
                                     {
                                         ...newExpression.valueExpr,
-                                        _formFocus: getFormFocusObject(documentUri, value)
+                                        _formFocus: getFormFocusObject(
+                                            documentUri,
+                                            value,
+                                            newExpression.annotations)
                                     }]
                             };
                         }

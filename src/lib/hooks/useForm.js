@@ -22,6 +22,7 @@ export const useForm = (
         defaultValue,
         predicate: e.target.getAttribute("data-predicate"),
         subject: e.target.getAttribute("data-subject"),
+        prefix: e.target.getAttribute("data-prefix"),
         parentPredicate: e.target.getAttribute("data-parent-predicate")
 
       }
@@ -48,6 +49,13 @@ export const useForm = (
     }
   };
 
+  const setFieldValue = (value: String, prefix: ?String) => {
+    if (prefix) {
+      return namedNode(`${prefix}${value}`);
+    }
+    return value;
+  }
+
   const onReset = () => setFormValues({});
 
   const onSubmit = async (e, successCallback, errorCallback) => {
@@ -55,7 +63,11 @@ export const useForm = (
       e.preventDefault();
 
       for await (const key of Object.keys(formValues)) {
-        const field = formValues[key];
+        const field = {
+          ...formValues[key],
+          value: setFieldValue(formValues[key].value, formValues[key].prefix),
+          defaultValue: setFieldValue(formValues[key].defaultValue, formValues[key].prefix)
+        };
 
         switch (field.action) {
           case "update":

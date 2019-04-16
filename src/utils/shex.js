@@ -1,11 +1,14 @@
-const findAnnotation = (key: String, expression: Object) => {
-    return expression.annotations.find(annotation => annotation.predicate.includes(key));
+const findAnnotation = (key: String, annotations: Object) => {
+    if (annotations) {
+        return annotations.find(annotation => annotation.predicate.includes(key));
+    }
+    return null;
 };
 
 
 const shexFormLabel = (data: Object) => {
     if (data.annotations) {
-        const annotation = findAnnotation('layoutlabel', data);
+        const annotation = findAnnotation('layoutlabel', data.annotations);
 
         return annotation.object.value;
     }

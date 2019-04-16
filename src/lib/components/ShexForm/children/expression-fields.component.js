@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { shexFormLabel } from '@utils';
+import { shexFormLabel, findAnnotation } from '@utils';
 
 type FieldsProps = {
   formValues: Object,
@@ -62,6 +62,9 @@ const Field = ({ data, fieldData, inputData, onChange, parent }: FieldProps) => 
   const predicate = data.predicate;
   const subject = fieldData._formFocus.parentSubject;
   const defaultValue = fieldData._formFocus.value;
+  const currentExpression = parent || data;
+  const annotation = findAnnotation('layoutprefix', currentExpression.annotations);
+  const hasPrefix = annotation && annotation.object.value;
 
   return inputType === "text" ? (
     <input
@@ -72,6 +75,7 @@ const Field = ({ data, fieldData, inputData, onChange, parent }: FieldProps) => 
       data-predicate={predicate}
       data-subject={subject}
       data-default={defaultValue}
+      data-prefix={hasPrefix}
       data-parent-predicate={parent && parent.predicate ? parent.predicate : null}
     />
   ) : (
@@ -82,6 +86,7 @@ const Field = ({ data, fieldData, inputData, onChange, parent }: FieldProps) => 
       data-predicate={predicate}
       data-subject={subject}
       data-default={defaultValue}
+      data-prefix={hasPrefix}
       data-parent-predicate={parent && parent.predicate ? parent.predicate : null}
     >
       {data.valueExpr.values.map(value => (
