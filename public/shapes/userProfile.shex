@@ -37,14 +37,26 @@
 
   <#vcard_street-address> CLOSED {
     a [vcard:StreetAddress] ? ;
-    vcard:street-address xsd:string ? ;
-    vcard:locality xsd:string ? ;
-    vcard:region xsd:string ? ;
+    vcard:street-address xsd:string ?
+       // :key "street-address"
+       // :label "Street Address"
+       // :icon "flag" ;
+    vcard:locality xsd:string ?
+       // :key "locality"
+       // :label "Locality"
+       // :icon "flag" ;
+    vcard:region xsd:string ?
+       // :key "region"
+       // :label "Region"
+       // :icon "flag" ;
     vcard:country-name @<#vcard_country-name> ?
       // :key "country"
       // :label "Country"
       // :icon "flag" ;
-    vcard:postal-code xsd:string ?
+    vcard:postal-code xsd:string
+       // :key "postal-code"
+       // :label "Postal Code"
+       // :icon "flag" ;
   }
 
     <#vcard_has-telephone> CLOSED {
