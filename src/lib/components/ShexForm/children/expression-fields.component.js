@@ -16,14 +16,23 @@ const allowNewFields = (data: Object) => {
   return false;
 };
 
+const showAnnotacion = (key: String, data: Object) => {
+  if (data.annotations) {
+    const annotation = data.annotations.find(annotation => annotation.predicate.includes(key));
+
+    return annotation.object.value;
+  }
+  return data.predicate.includes("#")
+      ? data.predicate.split("#")[1]
+      : data.predicate.split("/").pop();
+};
+
 const ExpressionFields = (props: FieldsProps) => {
   const { data, onChange, formValues, addNewExpression, parent } = props;
-  const label = data.predicate.includes("#")
-    ? data.predicate.split("#")[1]
-    : data.predicate.split("/").pop();
+
   return (
     <Fragment>
-      <label>{label}</label>
+      <label>{showAnnotacion('layoutlabel', data)}</label>
       <ul>
         {data._formValues &&
           data._formValues.map((value, i) => (
