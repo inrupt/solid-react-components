@@ -16,7 +16,7 @@ const allowNewFields = (data: Object) => {
   return false;
 };
 
-const showAnnotacion = (key: String, data: Object) => {
+const showAnnotation = (key: String, data: Object) => {
   if (data.annotations) {
     const annotation = data.annotations.find(annotation => annotation.predicate.includes(key));
 
@@ -32,7 +32,7 @@ const ExpressionFields = (props: FieldsProps) => {
 
   return (
     <Fragment>
-      <label>{showAnnotacion('layoutlabel', data)}</label>
+      <label>{showAnnotation('layoutlabel', data)}</label>
       <ul>
         {data._formValues &&
           data._formValues.map((value, i) => (
