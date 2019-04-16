@@ -3,7 +3,7 @@ import data from '@solid/query-ldflex';
 import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
-import {namedNode} from '@rdfjs/data-model';
+// import {namedNode} from '@rdfjs/data-model';
 
 export const useShex = (fileShex: String, documentUri: String, shapeName: String) => {
     const [shexData, setShexData] = useState({});
@@ -43,7 +43,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
     const createIdNode = () => {
         const id = `${documentUri.split('#')[0]}#id${Date.parse (new Date ())}`;
-        return namedNode (id).value;
+        return id;
     }
 
     const addLinkExpression = (currentShape, parent, idLink) => {

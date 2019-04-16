@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ldflex from "@solid/query-ldflex";
 import { namedNode } from "@rdfjs/data-model";
-import solid from "solid-auth-client";
 
 export const useForm = (
   documentUri: String,
@@ -43,7 +42,8 @@ export const useForm = (
     for await (let item of ldflex[documentUri][parentPredicate])
       if (item.value === subject) isNew = false;
     if (isNew) {
-      const id = subject.split("#").pop();
+      let id = subject.split("#").pop();
+      id = `#${id}`;
       await ldflex[documentUri][parentPredicate].add(namedNode(id));
     }
   };
