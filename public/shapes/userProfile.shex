@@ -33,12 +33,15 @@
   }
 
   <#vcard_has-email> CLOSED {
-    a [vcard:Home vcard:Work] ;
-    vcard:value xsd:string
+    a [vcard:Home vcard:Work] ?
+    // :label "";
+    vcard:value xsd:string ?
+    // :label "Email";
   }
 
   <#vcard_street-address> CLOSED {
-    a [vcard:StreetAddress] ? ;
+    a [vcard:StreetAddress] ?
+    // :label "";
     vcard:street-address xsd:string ?
        // :key "street-address"
        // :label "Street Address"
@@ -62,8 +65,10 @@
   }
 
     <#vcard_has-telephone> CLOSED {
-      a [vcard:Home vcard:Work] ;
-      vcard:value xsd:string ? ;
+      a [vcard:Home vcard:Work] ?
+      // :label "";
+      vcard:value xsd:string ?
+      // :label "Phone";
     }
 
   <#vcard_country-name> [

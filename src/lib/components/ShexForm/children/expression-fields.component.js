@@ -21,10 +21,10 @@ const allowNewFields = (data: Object) => {
 
 const ExpressionFields = (props: FieldsProps) => {
   const { data, onChange, formValues, addNewExpression, parent } = props;
-
+  const label = shexFormLabel(data);
   return (
     <Fragment>
-      <label>{shexFormLabel(data)}</label>
+      <label>{label}</label>
       <ul>
         {data._formValues &&
           data._formValues.map((value, i) => (
@@ -42,9 +42,9 @@ const ExpressionFields = (props: FieldsProps) => {
             </li>
           ))}
       </ul>
-      {allowNewFields(data) && (
+      {allowNewFields(data) && !parent && (
         <button onClick={() => addNewExpression(data, parent)} type="button">
-          Add new label
+          Add new {label}
         </button>
       )}
     </Fragment>

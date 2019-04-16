@@ -2,10 +2,26 @@ import React from "react";
 import { ExpressionFields, DropdownFields } from "./children";
 import styled from "styled-components";
 import { useForm } from "@hooks";
+import { shexFormLabel } from '@utils';
 
 const Panel = styled.div`
   border: solid 1px red;
   padding: 10px;
+   
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+   
+  li {
+   list-style: none;
+  }
+  
+  select {
+    display: block;
+    margin: 20px 0;
+    padding: 10px;
+  }
 `;
 
 type ShexFormProps = {
@@ -26,24 +42,27 @@ const ShexForm = ({
 
   return shexj ? (
     <Panel>
-      {parent && parent.predicate && (
-        <h4>{parent.predicate.split("#has")[1]}</h4>
-      )}
       {expression &&
       expression.expressions &&
       expression.expressions.length > 0 ? (
         expression.expressions.map((expression, i) => {
           if (typeof expression.valueExpr === "string") {
-            return expression._formValues.map((shexj, i) => (
-              <ShexForm
-                key={i}
-                shexj={shexj}
-                onChange={onChange}
-                formValues={formValues}
-                addNewExpression={addNewExpression}
-                parent={expression}
-              />
-            ));
+             return(<React.Fragment key={i}>
+                 <h4>{shexFormLabel(expression)}</h4>
+                 { expression._formValues.map((shexj, i) => (
+                  <ShexForm
+                    key={i}
+                    shexj={shexj}
+                    onChange={onChange}
+                    formValues={formValues}
+                    addNewExpression={addNewExpression}
+                    parent={expression}
+                  />
+                )) }
+                 <button onClick={() => addNewExpression(expression._formValues[0], expression)} type="button">
+                     Add new {shexFormLabel(expression)}
+                 </button>
+             </React.Fragment>);
           } else {
             return (
               <ExpressionFields
