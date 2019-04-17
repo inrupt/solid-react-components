@@ -241,7 +241,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                     _formFocus: getFormFocusObject(
                                         rootShape.linkValue,
                                         value,
-                                        rootShape.annotations)}],
+                                        newExpression.annotations)}],
                             }
 
                         } else {

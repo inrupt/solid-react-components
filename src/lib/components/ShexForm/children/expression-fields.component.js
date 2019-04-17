@@ -94,10 +94,9 @@ const Field = ({
   const predicate = data.predicate;
   const subject = fieldData._formFocus.parentSubject;
   const defaultValue = fieldData._formFocus.value;
-  const currentExpression = parent || data;
   const annotation = findAnnotation(
     "layoutprefix",
-    currentExpression.annotations
+      data.annotations
   );
   const hasPrefix = annotation && annotation.object.value;
 
