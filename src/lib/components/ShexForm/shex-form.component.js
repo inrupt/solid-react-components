@@ -31,7 +31,20 @@ const Panel = styled.div`
   
   button {
     margin: 20px 0;
+    border: 1px solid hsl(0,0%,80%);
+    cursor: pointer;
+    padding: 10px 30px;
   }
+`;
+
+const FormComponent = styled.form`
+  button {
+    margin: 20px 10px;
+    border: 1px solid hsl(0,0%,80%);
+    cursor: pointer;
+    padding: 10px 30px;
+  }
+
 `;
 
 type ShexFormProps = {
@@ -101,7 +114,7 @@ const ShexForm = ({
 const Form = ({ shexj, successCallback, errorCallback, addNewExpression, documentUri }) => {
   const { onSubmit, onChange, onReset, formValues } = useForm(documentUri);
   return (
-    <form onSubmit={e => onSubmit(e, successCallback, errorCallback)}>
+    <FormComponent onSubmit={e => onSubmit(e, successCallback, errorCallback)}>
       <ShexForm
         formValues={formValues}
         onChange={onChange}
@@ -112,7 +125,7 @@ const Form = ({ shexj, successCallback, errorCallback, addNewExpression, documen
       <button type="button" onClick={onReset}>
         Reset
       </button>
-    </form>
+    </FormComponent>
   );
 };
 
