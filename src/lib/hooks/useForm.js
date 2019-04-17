@@ -51,36 +51,33 @@ export const useForm = (
   const setFieldValue = (value: String, prefix: ?String) =>
     prefix ? namedNode(`${prefix}${value}`) : value;
 
-  const deleteLink = async (shexj, parent) => {
+  const deleteLink = async (shexj, parent,cb) => {
     const subject = shexj._formFocus.value;
     let id = subject.split("#").pop();
     id = namedNode(`#${id}`);
     const { predicate: parentPredicate } = parent;
     const expressions = shexj.expression.expressions;
-    console.log("Expressions", expressions)
-    console.log("Subject", subject);
-    console.log("Id", id);
-    console.log("Predicate", parentPredicate);
-    console.log("Document URI", documentUri);
-
     try{
       for (let expression of expressions){
-        console.log("Expression Predicate", expression.predicate);
-        await ldflex[subject][expression.predicate].delete();
+        const value = await ldflex[subject][expression.predicate];
+        if(value)
+         await ldflex[subject][expression.predicate].delete();
       }
       await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
+      cb(subject);
     }catch(e){
       throw e;
     }
   };
 
-  const onDelete = async (expression, parent = false) => {
+  const onDelete = async (expression, parent = false, cb) => {
     try {
       if (parent) {
-        await deleteLink(expression, parent);
+        await deleteLink(expression, parent,cb);
       } else {
         const { subject, predicate, defaultValue } = expression;
         await ldflex[subject][predicate].delete(defaultValue);
+        cb(defaultValue);
       }
       console.log("Succesfully deleted");
     } catch (e) {

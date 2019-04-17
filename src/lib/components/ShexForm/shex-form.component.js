@@ -9,7 +9,7 @@ const Panel = styled.div`
   padding: 10px;
   position: relative;
   margin: 10px 0;
-   
+
   ul {
     padding: 0;
     margin: 0;
@@ -24,15 +24,15 @@ const Panel = styled.div`
     margin: 20px 0;
     padding: 10px;
   }
-  
+
   label {
     display: block;
     margin-top: 15px;
   }
-  
+
   button {
     margin: 20px 0;
-    border: 1px solid hsl(0,0%,80%);
+    border: 1px solid hsl(0, 0%, 80%);
     cursor: pointer;
     padding: 10px 30px;
   }
@@ -41,11 +41,10 @@ const Panel = styled.div`
 const FormComponent = styled.form`
   button {
     margin: 20px 10px;
-    border: 1px solid hsl(0,0%,80%);
+    border: 1px solid hsl(0, 0%, 80%);
     cursor: pointer;
     padding: 10px 30px;
   }
-
 `;
 
 const DeleteButton = styled.button`
@@ -74,6 +73,7 @@ const ShexForm = ({
   parent = null,
   onChange,
   onDelete,
+  onDeleteExpression,
   formValues,
   addNewExpression
 }: ShexFormProps) => {
@@ -82,7 +82,10 @@ const ShexForm = ({
   return shexj ? (
     <Panel>
       {parent && (
-        <DeleteButton type="button" onClick={() => onDelete(shexj, parent)}>
+        <DeleteButton
+          type="button"
+          onClick={() => onDelete(shexj, parent, onDeleteExpression)}
+        >
           X
         </DeleteButton>
       )}
@@ -101,6 +104,7 @@ const ShexForm = ({
                     shexj={shexj}
                     onChange={onChange}
                     onDelete={onDelete}
+                    onDeleteExpression={onDeleteExpression}
                     formValues={formValues}
                     addNewExpression={addNewExpression}
                     parent={expression}
@@ -123,6 +127,7 @@ const ShexForm = ({
                 key={i}
                 onChange={onChange}
                 onDelete={onDelete}
+                onDeleteExpression={onDeleteExpression}
                 formValues={formValues}
                 addNewExpression={addNewExpression}
                 parent={parent}
@@ -147,6 +152,7 @@ const Form = ({
   successCallback,
   errorCallback,
   addNewExpression,
+  onDeleteExpression,
   documentUri
 }) => {
   const { onSubmit, onChange, onDelete, onReset, formValues } = useForm(
@@ -158,6 +164,7 @@ const Form = ({
         formValues={formValues}
         onChange={onChange}
         onDelete={onDelete}
+        onDeleteExpression={onDeleteExpression}
         shexj={shexj}
         addNewExpression={addNewExpression}
       />

@@ -156,6 +156,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
     const onDeleteExpression = (defaultValue: String) => {
         const { formData, shexJ } = shexData;
+        console.log("Default Value",defaultValue)
         const newFormData = deleteExpression(formData, defaultValue);
 
         if (newFormData) {

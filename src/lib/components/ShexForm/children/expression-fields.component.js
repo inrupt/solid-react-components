@@ -39,6 +39,7 @@ const ExpressionFields = (props: FieldsProps) => {
     onDelete,
     formValues,
     addNewExpression,
+    onDeleteExpression,
     parent
   } = props;
   const label = shexFormLabel(data);
@@ -57,6 +58,7 @@ const ExpressionFields = (props: FieldsProps) => {
                     formValues[value._formFocus.name] || value._formFocus,
                   onChange,
                   onDelete,
+                  onDeleteExpression,
                   parent
                 }}
               />
@@ -64,7 +66,7 @@ const ExpressionFields = (props: FieldsProps) => {
           ))}
       </ul>
       {allowNewFields(data) && !parent && (
-        <button type="button" onClick={() => addNewExpression(data, parent)} >
+        <button type="button" onClick={() => addNewExpression(data, parent)}>
           Add new {label}
         </button>
       )}
@@ -84,6 +86,7 @@ const Field = ({
   inputData,
   onChange,
   onDelete,
+  onDeleteExpression,
   parent
 }: FieldProps) => {
   const [hover, setHover] = useState(false);
@@ -140,8 +143,15 @@ const Field = ({
       )}
       {!parent && (
         <DeleteButton
+          type="button"
           show={hover}
-          onClick={() => onDelete({ subject, predicate, defaultValue })}
+          onClick={() =>
+            onDelete(
+              { subject, predicate, defaultValue },
+              null,
+              onDeleteExpression
+            )
+          }
         >
           X
         </DeleteButton>
