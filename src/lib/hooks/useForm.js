@@ -24,7 +24,6 @@ export const useForm = (
         subject: e.target.getAttribute("data-subject"),
         prefix: e.target.getAttribute("data-prefix"),
         parentPredicate: e.target.getAttribute("data-parent-predicate")
-
       }
     };
 
@@ -49,12 +48,45 @@ export const useForm = (
     }
   };
 
-  const setFieldValue = (value: String, prefix: ?String) => {
-    if (prefix) {
-      return namedNode(`${prefix}${value}`);
+  const setFieldValue = (value: String, prefix: ?String) =>
+    prefix ? namedNode(`${prefix}${value}`) : value;
+
+  const deleteLink = async (shexj, parent) => {
+    const subject = shexj._formFocus.value;
+    let id = subject.split("#").pop();
+    id = namedNode(`#${id}`);
+    const { predicate: parentPredicate } = parent;
+    const expressions = shexj.expression.expressions;
+    console.log("Expressions", expressions)
+    console.log("Subject", subject);
+    console.log("Id", id);
+    console.log("Predicate", parentPredicate);
+    console.log("Document URI", documentUri);
+
+    try{
+      for (let expression of expressions){
+        console.log("Expression Predicate", expression.predicate);
+        await ldflex[subject][expression.predicate].delete();
+      }
+      await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
+    }catch(e){
+      throw e;
     }
-    return value;
-  }
+  };
+
+  const onDelete = async (expression, parent = false) => {
+    try {
+      if (parent) {
+        await deleteLink(expression, parent);
+      } else {
+        const { subject, predicate, defaultValue } = expression;
+        await ldflex[subject][predicate].delete(defaultValue);
+      }
+      console.log("Succesfully deleted");
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const onReset = () => setFormValues({});
 
@@ -66,7 +98,10 @@ export const useForm = (
         const field = {
           ...formValues[key],
           value: setFieldValue(formValues[key].value, formValues[key].prefix),
-          defaultValue: setFieldValue(formValues[key].defaultValue, formValues[key].prefix)
+          defaultValue: setFieldValue(
+            formValues[key].defaultValue,
+            formValues[key].prefix
+          )
         };
 
         switch (field.action) {
@@ -94,5 +129,5 @@ export const useForm = (
     }
   };
 
-  return { formValues, onChange, onSubmit, onReset };
+  return { formValues, onChange, onSubmit, onReset, onDelete };
 };

@@ -20,8 +20,7 @@
     vcard:hasEmail @<#vcard_has-email> ?
       // :key "email"
       // :label "Email"
-      // :icon "envelope"
-      // :prefix "mailto:";
+      // :icon "envelope";
     vcard:organization-name xsd:string ?
       // :key "company"
       // :label "Company"
@@ -36,7 +35,8 @@
     a [vcard:Home vcard:Work] ?
     // :label "";
     vcard:value xsd:string ?
-    // :label "Email";
+    // :label "Email"
+    // :prefix "mailto:";
   }
 
   <#vcard_street-address> CLOSED {
