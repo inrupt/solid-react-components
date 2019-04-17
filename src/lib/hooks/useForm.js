@@ -53,10 +53,9 @@ export const useForm = (
 
   const deleteLink = async (shexj, parent,cb) => {
     const subject = shexj._formFocus.value;
-    let id = subject.split("#").pop();
-    id = namedNode(`#${id}`);
     const { predicate: parentPredicate } = parent;
     const expressions = shexj.expression.expressions;
+
     try{
       for (let expression of expressions){
         const value = await ldflex[subject][expression.predicate];

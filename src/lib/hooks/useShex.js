@@ -156,7 +156,6 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
     const onDeleteExpression = (defaultValue: String) => {
         const { formData, shexJ } = shexData;
-        console.log("Default Value",defaultValue)
         const newFormData = deleteExpression(formData, defaultValue);
 
         if (newFormData) {
@@ -165,27 +164,24 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
     }
 
     const deleteExpression = (formData: Object, defaultValue: String) => {
-
         if (formData && formData.expression) {
             return formData.expression.expressions.map(expression => {
                 if (isLink(expression.valueExpr)) {
-                    const _formValues = expression._formValues.map(childExpression => {
+                    const _formValues = expression._formValues.filter(childExpression => {
+                        if (childExpression._formFocus.value === defaultValue) {
+                            return null;
+                        }
                        return deleteExpression(childExpression, defaultValue);
 
                     });
 
-
                     return {
                       ...expression,
-                      expression: {
-                          expressions: {
-                              ...expression,
-                            _formValues: _formValues
-                          },
-                      }
+                        _formValues: _formValues
                     };
 
                 } else {
+
                     const _formValues = expression._formValues.filter(childExpression => {
                         if (childExpression._formFocus.value === defaultValue) {
                             return null;
@@ -245,7 +241,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                     _formFocus: getFormFocusObject(
                                         rootShape.linkValue,
                                         value,
-                                        rootShape.annotations)}],
+                                        newExpression.annotations)}],
                             }
 
                         } else {
