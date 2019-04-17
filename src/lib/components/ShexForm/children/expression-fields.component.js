@@ -59,7 +59,8 @@ const ExpressionFields = (props: FieldsProps) => {
                   onChange,
                   onDelete,
                   onDeleteExpression,
-                  parent
+                  parent,
+                  count: i
                 }}
               />
             </li>
@@ -87,6 +88,7 @@ const Field = ({
   onChange,
   onDelete,
   onDeleteExpression,
+  count,
   parent
 }: FieldProps) => {
   const [hover, setHover] = useState(false);
@@ -105,6 +107,12 @@ const Field = ({
 
   const onMouseLeave = () => setHover(false);
 
+  const checkNumber = data => {
+    return data.min ? count > data.min : true;
+  };
+
+  if(!subject)
+  console.log("NO Subject", data,fieldData);
   return (
     <InputWrapper onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {inputType === "text" ? (
@@ -141,7 +149,7 @@ const Field = ({
           ))}
         </select>
       )}
-      {!parent && (
+      {!parent && checkNumber(data) && (
         <DeleteButton
           type="button"
           show={hover}

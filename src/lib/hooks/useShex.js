@@ -266,8 +266,9 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 }
 
                 if (newExpression._formValues.length === 0) {
+                    const parentSubject = rootShape.linkValue || documentUri
                     newExpression = {...newExpression, _formValues: [
-                        { _formFocus: getFormFocusObject(rootShape.linkValue, '') }
+                        { _formFocus: getFormFocusObject(parentSubject, '', newExpression.annotations) }
                         ]};
                 }
 
