@@ -154,6 +154,55 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
     }
 
+    const onDeleteExpression = (defaultValue: String) => {
+        const { formData, shexJ } = shexData;
+        const newFormData = deleteExpression(formData, defaultValue);
+
+        if (newFormData) {
+            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
+        }
+    }
+
+    const deleteExpression = (formData: Object, defaultValue: String) => {
+
+        if (formData && formData.expression) {
+            return formData.expression.expressions.map(expression => {
+                if (isLink(expression.valueExpr)) {
+                    const _formValues = expression._formValues.map(childExpression => {
+                       return deleteExpression(childExpression, defaultValue);
+
+                    });
+
+
+                    return {
+                      ...expression,
+                      expression: {
+                          expressions: {
+                              ...expression,
+                            _formValues: _formValues
+                          },
+                      }
+                    };
+
+                } else {
+                    const _formValues = expression._formValues.filter(childExpression => {
+                        if (childExpression._formFocus.value === defaultValue) {
+                            return null;
+                        }
+                        return childExpression;
+                    });
+
+                    return {
+                        ...expression,
+                        _formValues: [..._formValues],
+                    }
+                }
+            });
+        }
+
+        return formData;
+    }
+
 
     const fillFormData = async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
@@ -253,6 +302,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
     return {
         shexData,
-        addNewExpression
+        addNewExpression,
+        onDeleteExpression
     };
 };
