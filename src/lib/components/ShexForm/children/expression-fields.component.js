@@ -43,6 +43,9 @@ const ExpressionFields = (props: FieldsProps) => {
     parent
   } = props;
   const label = shexFormLabel(data);
+
+  const canDelete = data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
+
   return (
     <Fragment>
       <label>{label}</label>
@@ -60,7 +63,7 @@ const ExpressionFields = (props: FieldsProps) => {
                   onDelete,
                   onDeleteExpression,
                   parent,
-                  count: i
+                  canDelete
                 }}
               />
             </li>
@@ -88,7 +91,7 @@ const Field = ({
   onChange,
   onDelete,
   onDeleteExpression,
-  count,
+  canDelete,
   parent
 }: FieldProps) => {
   const [hover, setHover] = useState(false);
@@ -96,22 +99,13 @@ const Field = ({
   const predicate = data.predicate;
   const subject = fieldData._formFocus.parentSubject;
   const defaultValue = fieldData._formFocus.value;
-  const annotation = findAnnotation(
-    "layoutprefix",
-      data.annotations
-  );
+  const annotation = findAnnotation("layoutprefix", data.annotations);
   const hasPrefix = annotation && annotation.object.value;
 
   const onMouseEnter = () => setHover(true);
 
   const onMouseLeave = () => setHover(false);
 
-  const checkNumber = data => {
-    return data.min ? count > data.min : true;
-  };
-
-  if(!subject)
-  console.log("NO Subject", data,fieldData);
   return (
     <InputWrapper onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {inputType === "text" ? (
@@ -148,7 +142,7 @@ const Field = ({
           ))}
         </select>
       )}
-      {!parent && checkNumber(data) && (
+      {!parent && canDelete && (
         <DeleteButton
           type="button"
           show={hover}
