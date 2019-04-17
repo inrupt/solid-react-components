@@ -7,6 +7,7 @@ import { shexFormLabel } from '@utils';
 const Panel = styled.div`
   border: solid 1px red;
   padding: 10px;
+  margin: 10px 0;
    
   ul {
     padding: 0;
@@ -21,6 +22,15 @@ const Panel = styled.div`
     display: block;
     margin: 20px 0;
     padding: 10px;
+  }
+  
+  label {
+    display: block;
+    margin-top: 15px;
+  }
+  
+  button {
+    margin: 20px 0;
   }
 `;
 
