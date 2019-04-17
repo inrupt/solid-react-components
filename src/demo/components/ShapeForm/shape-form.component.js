@@ -3,9 +3,14 @@ import { useShex } from "@hooks";
 import { ShexForm } from '../../../lib';
 
 export const ShapeForm = ({ shexUri, documentUri }) => {
-    const { shexData, addNewExpression } = useShex(shexUri, documentUri, 'UserProfile');
-    // console.log(shexData);
+    const { shexData, addNewExpression, onDeleteExpression } = useShex(shexUri, documentUri, 'UserProfile');
+
     return (
-        shexData.formData ? <ShexForm  shexj={shexData.formData} addNewExpression={addNewExpression} documentUri={documentUri} /> : null
+        shexData.formData ? <ShexForm  {...{
+            shexj: shexData.formData,
+            documentUri: documentUri,
+            addNewExpression,
+            onDeleteExpression
+        }} /> : null
     );
 }

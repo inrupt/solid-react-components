@@ -8,7 +8,8 @@ const Panel = styled.div`
   border: solid 1px red;
   padding: 10px;
   position: relative;
-
+  margin: 10px 0;
+   
   ul {
     padding: 0;
     margin: 0;
@@ -23,6 +24,28 @@ const Panel = styled.div`
     margin: 20px 0;
     padding: 10px;
   }
+  
+  label {
+    display: block;
+    margin-top: 15px;
+  }
+  
+  button {
+    margin: 20px 0;
+    border: 1px solid hsl(0,0%,80%);
+    cursor: pointer;
+    padding: 10px 30px;
+  }
+`;
+
+const FormComponent = styled.form`
+  button {
+    margin: 20px 10px;
+    border: 1px solid hsl(0,0%,80%);
+    cursor: pointer;
+    padding: 10px 30px;
+  }
+
 `;
 
 const DeleteButton = styled.button`
@@ -130,7 +153,7 @@ const Form = ({
     documentUri
   );
   return (
-    <form onSubmit={e => onSubmit(e, successCallback, errorCallback)}>
+    <FormComponent onSubmit={e => onSubmit(e, successCallback, errorCallback)}>
       <ShexForm
         formValues={formValues}
         onChange={onChange}
@@ -142,7 +165,7 @@ const Form = ({
       <button type="button" onClick={onReset}>
         Reset
       </button>
-    </form>
+    </FormComponent>
   );
 };
 
