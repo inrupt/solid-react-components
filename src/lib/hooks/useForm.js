@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ldflex from "@solid/query-ldflex";
 import { namedNode } from "@rdfjs/data-model";
+import { shexParentLinkOnDropDowns } from "@utils";
 
 export const useForm = (
   documentUri: String,
@@ -72,11 +73,19 @@ export const useForm = (
 
   const onDelete = async (expression, parent = false, cb) => {
     try {
-      if (parent) {
+      if (shexParentLinkOnDropDowns(parent)) {
         await deleteLink(expression, parent,cb);
       } else {
         const { subject, predicate, defaultValue } = expression;
-        await ldflex[subject][predicate].delete(defaultValue);
+        /*
+        * We check if parent is a link shape and not link data id
+        * @TODO: we need to find a better way to do this
+         */
+        const newPredicate = (parent && parent.predicate) || predicate;
+        const newSubject = (expression._formFocus && expression._formFocus.parentSubject) || subject;
+        const newValue = (expression._formFocus && expression._formFocus.value) || defaultValue;
+
+        await ldflex[newSubject][newPredicate].delete(newValue);
         cb(defaultValue);
       }
       console.log("Succesfully deleted");
