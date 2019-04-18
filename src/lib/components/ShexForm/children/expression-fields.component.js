@@ -43,6 +43,9 @@ const ExpressionFields = (props: FieldsProps) => {
     parent
   } = props;
   const label = shexFormLabel(data);
+
+  const canDelete = data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
+
   return (
     <Fragment>
       <label>{label}</label>
@@ -59,7 +62,8 @@ const ExpressionFields = (props: FieldsProps) => {
                   onChange,
                   onDelete,
                   onDeleteExpression,
-                  parent
+                  parent,
+                  canDelete
                 }}
               />
             </li>
@@ -87,6 +91,7 @@ const Field = ({
   onChange,
   onDelete,
   onDeleteExpression,
+  canDelete,
   parent
 }: FieldProps) => {
   const [hover, setHover] = useState(false);
@@ -94,10 +99,7 @@ const Field = ({
   const predicate = data.predicate;
   const subject = fieldData._formFocus.parentSubject;
   const defaultValue = fieldData._formFocus.value;
-  const annotation = findAnnotation(
-    "layoutprefix",
-      data.annotations
-  );
+  const annotation = findAnnotation("layoutprefix", data.annotations);
   const hasPrefix = annotation && annotation.object.value;
 
   const onMouseEnter = () => setHover(true);
@@ -140,7 +142,7 @@ const Field = ({
           ))}
         </select>
       )}
-      {!parent && (
+      {!parent && canDelete && (
         <DeleteButton
           type="button"
           show={hover}
