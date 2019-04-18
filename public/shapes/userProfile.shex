@@ -4,6 +4,8 @@
   PREFIX : <http://janeirodigital.com/ns#layout>
   # PREFIX solid: <http://www.w3.org/ns/solid/terms#>
 
+  START=@<#BookDemo>
+
   <#UserProfile> {
     vcard:fn xsd:string
       // :key "name"

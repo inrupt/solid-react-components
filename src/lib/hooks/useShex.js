@@ -6,7 +6,7 @@ import unique from 'unique-string';
 import { findAnnotation } from "@utils";
 // import {namedNode} from '@rdfjs/data-model';
 
-export const useShex = (fileShex: String, documentUri: String, shapeName: String) => {
+export const useShex = (fileShex: String, documentUri: String) => {
     const [shexData, setShexData] = useState({});
     let shapes = [];
 
@@ -300,6 +300,10 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return newShape;
     }
 
+    const findRootShape = (shexJ: Object) => {
+        return shexJ.start.split('#').pop();
+    };
+
 
 
     const toShexJS = useCallback(async () => {
@@ -312,7 +316,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
         if (shapes.length > 0) {
             const formData = await fillFormData(
-                { id: shapeName },
+                { id: findRootShape(shexJ) },
                 podDocument
             );
             setShexData({ shexJ, formData });
