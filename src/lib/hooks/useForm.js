@@ -86,7 +86,7 @@ export const useForm = (
         const newValue = (expression._formFocus && expression._formFocus.value) || defaultValue;
 
         await ldflex[newSubject][newPredicate].delete(newValue);
-        cb(defaultValue);
+        cb(newValue);
       }
       console.log("Succesfully deleted");
     } catch (e) {
