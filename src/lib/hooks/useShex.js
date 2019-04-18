@@ -275,12 +275,14 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
 
                 if (newExpression._formValues.length === 0) {
                     const parentSubject = rootShape.linkValue || documentUri;
-
+                    const currentShape = shapes.find(shape => shape.id.includes(newExpression.valueExpr));
+                    const dropDown = currentShape && isDropDown(currentShape);
+                    
                     newExpression = {
                       ...newExpression,
                       _formValues: [
                         {
-                          ...isDropDown(newExpression),
+                            ...dropDown,
                           _formFocus: getFormFocusObject(
                             parentSubject,
                             "",
