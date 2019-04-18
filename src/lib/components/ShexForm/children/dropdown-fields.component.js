@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { shexFormLabel } from "@utils";
+import { shexFormLabel, shexParentLinkOnDropDowns } from "@utils";
 
 const DropdownFields = ({ shexj, onChange, formValues, parent }) => {
   const { values, _formFocus } = shexj;
@@ -21,9 +21,7 @@ const DropdownFields = ({ shexj, onChange, formValues, parent }) => {
           data-subject={parentSubject}
           data-default={value}
           data-predicate={parent.predicate}
-          data-parent-predicate={
-            parent && parent.predicate ? parent.predicate : null
-          }
+          data-parent-predicate={shexParentLinkOnDropDowns(parent)}
         >
           {values.map((item, key) => (
             <option key={key} value={item.value}>

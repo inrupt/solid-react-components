@@ -18,7 +18,17 @@ const shexFormLabel = (data: Object) => {
     return predicate.includes("#") ? predicate.split("#")[1] : predicate.split("/").pop();
 };
 
+const shexParentLinkOnDropDowns = (parent: Object) => {
+  return parent &&
+    parent.predicate &&
+    parent.expression &&
+    parent.expression.expressions.legnth > 0
+    ? parent.predicate
+    : null;
+};
+
 export {
     shexFormLabel,
-    findAnnotation
+    findAnnotation,
+    shexParentLinkOnDropDowns
 };

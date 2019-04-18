@@ -38,6 +38,7 @@ export const useForm = (
 
   const createLink = async field => {
     const { subject, parentPredicate } = field;
+    console.log(field, 'fields');
     let isNew = true;
     for await (let item of ldflex[documentUri][parentPredicate])
       if (item.value === subject) isNew = false;

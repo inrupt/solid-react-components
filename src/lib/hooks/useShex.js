@@ -73,7 +73,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
             const shape = shapes.find(shape => shape.id.includes(parent.valueExpr));
             let updatedExpressions = [];
 
-            if (shape && shape.expression.expressions) {
+            if (shape && shape.expression && shape.expression.expressions) {
                 updatedExpressions = shape.expression.expressions.map(exp => {
                     return {
                         ...exp,
@@ -81,7 +81,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             ...exp.valueExpr,
                             _formFocus: {
                                 value: '',
-                                parentSubject: idLink,
+                                parentSubject: idLink || documentUri,
                                 name: unique()
                             },
                         }]
@@ -89,13 +89,13 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 });
 
             }
-
             return {
                 currentShape,
                 expression: { expressions: updatedExpressions},
+                ...isDropDown(currentShape),
                 _formFocus: {
                     value: currentShape.predicate,
-                    parentSubject: currentShape.predicate
+                    parentSubject: currentShape.predicate || parent.predicate
                 }
             }
         }
@@ -106,15 +106,24 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
         return parentExpresion ? { id: parentExpresion.valueExpr, type: parentExpresion.type } : null
     }
 
+    const findParentExpression = (parentExpresion, expression) => {
+        if (parentExpresion && parentExpresion._formFocus && parentExpresion._formFocus.value) {
+            return parentExpresion._formFocus.value;
+        }
+        return documentUri;
+
+    };
+
     const updateShexJObject = (shexJ: Object, expression: Object, parentExpresion: Object) => {
         let found = false;
+
+
         return shexJ.expression.expressions.map(exp => {
             const currentPredicate = parentExpresion ? parentExpresion.predicate : expression.predicate;
-
             if(exp.predicate === currentPredicate) {
                 const childExpresion = buildExpression(parentExpresion);
-                const idLink = parentExpresion ? createIdNode() : '';
-                const parentSubject = parentExpresion ? null :  documentUri ;
+                const idLink = parentExpresion && !expression.values ? createIdNode() :  '';
+                const parentSubject = findParentExpression(parentExpresion, expression);
                 found = true;
 
                 return {
@@ -234,7 +243,7 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                           : rootShape.parentSubject;
 
                         newExpression._formValues = [
-                            // ...newExpression._formValues,
+                            ...newExpression._formValues,
                             {
                                 id: childExpression.id,
                                 type: childExpression.type,
@@ -247,15 +256,20 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                             }];
                     } else {
                         newExpression = {
-                            ...newExpression,
-                            _formValues: [{
-                                ...newExpression.valueExpr,
-                                _formFocus: getFormFocusObject(
-                                    rootShape.linkValue || documentUri,
-                                    value,
-                                    newExpression.annotations)
-                            }],
-                        }
+                          ...newExpression,
+                          _formValues: [
+                            ...newExpression._formValues,
+                            {
+                              ...newExpression.valueExpr,
+                              _formFocus: getFormFocusObject(
+                                rootShape.linkValue ||
+                                  documentUri,
+                                value,
+                                newExpression.annotations
+                              )
+                            }
+                          ]
+                        };
                     }
                 }
 

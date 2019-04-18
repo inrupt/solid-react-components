@@ -1,4 +1,4 @@
 import SolidError from './error';
-import { shexFormLabel, findAnnotation } from './shex';
+import { shexFormLabel, findAnnotation, shexParentLinkOnDropDowns } from './shex';
 
-export { SolidError, shexFormLabel, findAnnotation };
+export { SolidError, shexFormLabel, findAnnotation, shexParentLinkOnDropDowns };
