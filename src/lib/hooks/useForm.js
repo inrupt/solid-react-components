@@ -73,7 +73,7 @@ export const useForm = (
 
   const onDelete = async (expression, parent = false, cb) => {
     try {
-      if (shexParentLinkOnDropDowns(parent)) {
+      if (shexParentLinkOnDropDowns(parent, expression)) {
         await deleteLink(expression, parent,cb);
       } else {
         const { subject, predicate, defaultValue } = expression;
