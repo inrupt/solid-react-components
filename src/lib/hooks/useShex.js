@@ -212,15 +212,29 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                 if (!newExpression._formValues) newExpression._formValues = [];
                 for await (let node of document[currentExpression.predicate]) {
                     const value = node.value;
+
                     if (isLink(currentExpression.valueExpr)) {
                         const childExpression = await fillFormData(
-                            { id: newExpression.valueExpr, linkValue: value,
-                                parentSubject: newExpression.predicate, annotations: newExpression.annotations }, data[value]);
-                        const dropDownValues = isDropDown(childExpression);
-                        const currentSubject = dropDownValues ? rootShape.linkValue || documentUri : rootShape.parentSubject;
+                          {
+                            id: newExpression.valueExpr,
+                            linkValue: value,
+                            parentSubject:
+                              newExpression.predicate,
+                            annotations:
+                              newExpression.annotations
+                          },
+                          data[value]
+                        );
+                        const dropDownValues = isDropDown(
+                          childExpression
+                        );
+                        const currentSubject = dropDownValues
+                          ? rootShape.linkValue ||
+                            documentUri
+                          : rootShape.parentSubject;
 
                         newExpression._formValues = [
-                            ...newExpression._formValues,
+                            // ...newExpression._formValues,
                             {
                                 id: childExpression.id,
                                 type: childExpression.type,
@@ -232,40 +246,35 @@ export const useShex = (fileShex: String, documentUri: String, shapeName: String
                                 expression: childExpression.expression
                             }];
                     } else {
-
-                        if (rootShape.linkValue) {
-                            newExpression = {
-                                ...newExpression,
-                                _formValues: [{
-                                    ...newExpression.valueExpr,
-                                    _formFocus: getFormFocusObject(
-                                        rootShape.linkValue,
-                                        value,
-                                        newExpression.annotations)}],
-                            }
-
-                        } else {
-                            newExpression = {
-                                ...newExpression,
-                                _formValues:[
-                                    ...newExpression._formValues,
-                                    {
-                                        ...newExpression.valueExpr,
-                                        _formFocus: getFormFocusObject(
-                                            documentUri,
-                                            value,
-                                            newExpression.annotations)
-                                    }]
-                            };
+                        newExpression = {
+                            ...newExpression,
+                            _formValues: [{
+                                ...newExpression.valueExpr,
+                                _formFocus: getFormFocusObject(
+                                    rootShape.linkValue || documentUri,
+                                    value,
+                                    newExpression.annotations)
+                            }],
                         }
                     }
                 }
 
                 if (newExpression._formValues.length === 0) {
-                    const parentSubject = rootShape.linkValue || documentUri
-                    newExpression = {...newExpression, _formValues: [
-                        { _formFocus: getFormFocusObject(parentSubject, '', newExpression.annotations) }
-                        ]};
+                    const parentSubject = rootShape.linkValue || documentUri;
+
+                    newExpression = {
+                      ...newExpression,
+                      _formValues: [
+                        {
+                          ...isDropDown(newExpression),
+                          _formFocus: getFormFocusObject(
+                            parentSubject,
+                            "",
+                            newExpression.annotations
+                          )
+                        }
+                      ]
+                    };
                 }
 
                 newExpressions = [...newExpressions, newExpression];
