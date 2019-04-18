@@ -82,4 +82,6 @@ const App = () => {
   );
 };
 
+//https://jairocampos.solid.community/public/book.ttl
+// https://jairocampos.solid.community/public/book.shex
 export default App;

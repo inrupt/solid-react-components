@@ -9,8 +9,9 @@ const findAnnotation = (key: String, annotations: Object) => {
 const shexFormLabel = (data: Object) => {
     if (data.annotations) {
         const annotation = findAnnotation('layoutlabel', data.annotations);
-
-        return annotation.object.value;
+        if (annotation) {
+            return annotation.object.value;
+        }
     }
     const { predicate } = data;
 
