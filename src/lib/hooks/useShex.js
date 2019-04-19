@@ -163,36 +163,53 @@ export const useShex = (fileShex: String, documentUri: String) => {
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
     }
 
-    const onDeleteExpression = (defaultValue: String) => {
+    const onDeleteExpression = (key: String) => {
         const { formData, shexJ } = shexData;
-        const newFormData = deleteExpression(formData, defaultValue);
+        const newFormData = updateShexJ(formData, 'filter', { key });
 
         if (newFormData) {
             setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
         }
     }
-
-    const deleteExpression = (formData: Object, defaultValue: String) => {
-        if (formData && formData.expression) {
-            return formData.expression.expressions.map(expression => {
+    /*
+     * Recursive Function to update values into ShexJ object
+     * action allowed delete and update
+     */
+    const updateShexJ = (rootShape: Object, action: String, options: Object) => {
+        if (rootShape && rootShape.expression) {
+            return rootShape.expression.expressions.map(expression => {
                 if (isLink(expression.valueExpr)) {
-                    const _formValues = expression._formValues.filter(childExpression => {
-                        if (childExpression._formFocus.value === defaultValue) {
+                    const _formValues = expression._formValues[action](childExpression => {
+
+                        if (childExpression._formFocus.name === options.key) {
                             return null;
                         }
-                       return deleteExpression(childExpression, defaultValue);
+
+                        const linkExpression = updateShexJ(childExpression, action, options);
+
+                        return {
+                            ...childExpression,
+                            expression: {
+                                expressions: [
+                                    ...childExpression
+                                        .expression
+                                        .expressions,
+                                    linkExpression
+                                ]
+                            }
+                        };
 
                     });
 
                     return {
-                      ...expression,
+                        ...expression,
                         _formValues: _formValues
                     };
 
                 } else {
 
-                    const _formValues = expression._formValues.filter(childExpression => {
-                        if (childExpression._formFocus.value === defaultValue) {
+                    const _formValues = expression._formValues[action](childExpression => {
+                        if (childExpression._formFocus.name === options.key) {
                             return null;
                         }
                         return childExpression;
@@ -206,7 +223,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
             });
         }
 
-        return formData;
+        return rootShape;
     }
 
 

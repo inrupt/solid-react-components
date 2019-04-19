@@ -39,7 +39,7 @@ export const useForm = (
 
   const createLink = async field => {
     const { subject, parentPredicate } = field;
-    console.log(field, 'fields');
+
     let isNew = true;
     for await (let item of ldflex[documentUri][parentPredicate])
       if (item.value === subject) isNew = false;
@@ -65,7 +65,8 @@ export const useForm = (
          await ldflex[subject][expression.predicate].delete();
       }
       await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
-      cb(subject);
+
+      cb(shexj._formFocus.name);
     }catch(e){
       throw e;
     }
@@ -76,7 +77,7 @@ export const useForm = (
       if (shexParentLinkOnDropDowns(parent, expression)) {
         await deleteLink(expression, parent,cb);
       } else {
-        const { subject, predicate, defaultValue } = expression;
+        const { subject, predicate, defaultValue, key } = expression;
         /*
         * We check if parent is a link shape and not link data id
         * @TODO: we need to find a better way to do this
@@ -86,7 +87,10 @@ export const useForm = (
         const newValue = (expression._formFocus && expression._formFocus.value) || defaultValue;
 
         await ldflex[newSubject][newPredicate].delete(newValue);
-        cb(newValue);
+
+        const keyTodelete = key || expression._formFocus.name;
+
+        cb(keyTodelete);
       }
       console.log("Succesfully deleted");
     } catch (e) {

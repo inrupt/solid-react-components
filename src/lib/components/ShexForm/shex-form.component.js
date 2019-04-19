@@ -75,7 +75,8 @@ const ShexForm = ({
   onDelete,
   onDeleteExpression,
   formValues,
-  addNewExpression
+  addNewExpression,
+  linkName
 }: ShexFormProps) => {
   const { expression } = shexj;
 
@@ -84,7 +85,9 @@ const ShexForm = ({
       {parent && (
         <DeleteButton
           type="button"
-          onClick={() => onDelete(shexj, parent, onDeleteExpression)}
+          onClick={() =>
+            onDelete(shexj, parent, onDeleteExpression)
+          }
         >
           X
         </DeleteButton>

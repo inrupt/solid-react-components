@@ -24,7 +24,7 @@ type FieldsProps = {
 
 const allowNewFields = (data: Object) => {
   const totalData = data._formValues.length;
-  
+
   if ((!data.min && !data.max) || (data.min > 0 && data.max > totalData) || (data.max === -1)) {
     return true;
   }
@@ -148,7 +148,7 @@ const Field = ({
           show={hover}
           onClick={() =>
             onDelete(
-              { subject, predicate, defaultValue },
+              { subject, predicate, key: inputData.name, defaultValue },
               null,
               onDeleteExpression
             )
