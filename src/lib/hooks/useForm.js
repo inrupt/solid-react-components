@@ -5,6 +5,7 @@ import { shexParentLinkOnDropDowns } from "@utils";
 
 export const useForm = (
   documentUri: String,
+  onUpdateShapeExpression: Function,
   fileShex: String,
   shapeName: String
 ) => {
@@ -39,7 +40,6 @@ export const useForm = (
 
   const createLink = async field => {
     const { subject, parentPredicate } = field;
-    console.log(field, 'fields');
     let isNew = true;
     for await (let item of ldflex[documentUri][parentPredicate])
       if (item.value === subject) isNew = false;
@@ -59,12 +59,14 @@ export const useForm = (
     const expressions = shexj.expression.expressions;
 
     try{
-      for (let expression of expressions){
-        const value = await ldflex[subject][expression.predicate];
-        if(value)
-         await ldflex[subject][expression.predicate].delete();
+      if (!shexj._formFocus.unsaved) {
+        for (let expression of expressions) {
+          const value = await ldflex[subject][expression.predicate];
+          if (value)
+            await ldflex[subject][expression.predicate].delete();
+        }
+        await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
       }
-      await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
       cb(subject);
     }catch(e){
       throw e;
@@ -84,8 +86,9 @@ export const useForm = (
         const newPredicate = (parent && parent.predicate) || predicate;
         const newSubject = (expression._formFocus && expression._formFocus.parentSubject) || subject;
         const newValue = (expression._formFocus && expression._formFocus.value) || defaultValue;
-
-        await ldflex[newSubject][newPredicate].delete(newValue);
+        if (!expression.unsaved) {
+          await ldflex[newSubject][newPredicate].delete(newValue);
+        }
         cb(newValue);
       }
       console.log("Succesfully deleted");
@@ -128,6 +131,8 @@ export const useForm = (
           default:
             break;
         }
+
+        onUpdateShapeExpression({ name: formValues[key].name, value: formValues[key].value,  unsaved: null});
       }
       successCallback();
     } catch (error) {

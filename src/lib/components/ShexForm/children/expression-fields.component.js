@@ -24,7 +24,7 @@ type FieldsProps = {
 
 const allowNewFields = (data: Object) => {
   const totalData = data._formValues.length;
-  
+
   if ((!data.min && !data.max) || (data.min > 0 && data.max > totalData) || (data.max === -1)) {
     return true;
   }
@@ -101,7 +101,6 @@ const Field = ({
   const defaultValue = fieldData._formFocus.value;
   const annotation = findAnnotation("layoutprefix", data.annotations);
   const hasPrefix = annotation && annotation.object.value;
-
   const onMouseEnter = () => setHover(true);
 
   const onMouseLeave = () => setHover(false);
@@ -148,7 +147,7 @@ const Field = ({
           show={hover}
           onClick={() =>
             onDelete(
-              { subject, predicate, defaultValue },
+              { subject, predicate, defaultValue, unsaved: fieldData._formFocus.unsaved },
               null,
               onDeleteExpression
             )

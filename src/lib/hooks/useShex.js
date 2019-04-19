@@ -137,6 +137,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                                 value: idLink,
                                 name: unique(),
                                 parentSubject,
+                                unsaved: true
                             },
                         }
                     ]
@@ -201,6 +202,62 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     return {
                         ...expression,
                         _formValues: [..._formValues],
+                    }
+                }
+            });
+        }
+
+        return formData;
+    }
+
+    const onUpdateShapeExpression = (attr: Object) => {
+        const { formData, shexJ } = shexData;
+        const updatedFormData = updateShapeExpression(formData, attr);
+
+        if (updatedFormData) {
+            setShexData({shexJ, formData: {...formData, expression: {expressions: updatedFormData}}});
+        }
+    }
+
+    const updateShapeExpression = (formData: Object, attr: Object) => {
+        if (formData) {
+            return formData.expression.expressions.map(expression => {
+                if (isLink(expression.valueExpr)) {
+                    const _formValues = expression._formValues.map(childExpression => {
+                        if (attr.name && childExpression._formFocus.name === attr.name) {
+                            return  {
+                                ...childExpression,
+                            ...childExpression._formFocus,
+                            ...attr
+                            }
+                        }
+                        return childExpression;
+
+                    });
+
+                    return {
+                        ...expression,
+                        _formValues: _formValues
+                    };
+
+                } else {
+
+                    const _formValues = expression._formValues.map(childExpression => {
+                        if (attr.name && childExpression._formFocus.name === attr.name) {
+                            return {
+                                ...childExpression,
+                                _formFocus: {
+                                    ...childExpression._formFocus,
+                                    ...attr
+                                }
+                            }
+                        }
+                        return childExpression;
+                    });
+
+                    return {
+                        ...expression,
+                        _formValues: _formValues,
                     }
                 }
             });
@@ -330,6 +387,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
     return {
         shexData,
         addNewExpression,
-        onDeleteExpression
+        onDeleteExpression,
+        onUpdateShapeExpression
     };
 };

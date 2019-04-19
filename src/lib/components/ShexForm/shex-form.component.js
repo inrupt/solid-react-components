@@ -74,6 +74,7 @@ const ShexForm = ({
   onChange,
   onDelete,
   onDeleteExpression,
+  onUpdateShapeExpression,
   formValues,
   addNewExpression
 }: ShexFormProps) => {
@@ -153,10 +154,12 @@ const Form = ({
   errorCallback,
   addNewExpression,
   onDeleteExpression,
+  onUpdateShapeExpression,
   documentUri
 }) => {
   const { onSubmit, onChange, onDelete, onReset, formValues } = useForm(
-    documentUri
+    documentUri,
+      onUpdateShapeExpression
   );
   return (
     <FormComponent onSubmit={e => onSubmit(e, successCallback, errorCallback)}>
@@ -165,6 +168,7 @@ const Form = ({
         onChange={onChange}
         onDelete={onDelete}
         onDeleteExpression={onDeleteExpression}
+        onUpdateShapeExpression={onUpdateShapeExpression}
         shexj={shexj}
         addNewExpression={addNewExpression}
       />
