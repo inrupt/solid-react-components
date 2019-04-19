@@ -81,6 +81,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                             ...exp.valueExpr,
                             _formFocus: {
                                 value: '',
+                                unsaved: true,
                                 parentSubject: idLink || documentUri,
                                 name: unique()
                             },
@@ -136,7 +137,8 @@ export const useShex = (fileShex: String, documentUri: String) => {
                             _formFocus: {
                                 value: idLink,
                                 name: unique(),
-                                parentSubject,
+                                unsaved: true,
+                                parentSubject
                             },
                         }
                     ]
@@ -163,14 +165,28 @@ export const useShex = (fileShex: String, documentUri: String) => {
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
     }
 
-    const onDeleteExpression = (key: String) => {
+    const onUpdateShexJ = (key: String, action: String, data: ?Object) => {
         const { formData, shexJ } = shexData;
-        const newFormData = updateShexJ(formData, 'filter', { key });
+        const newFormData = updateShexJ(formData, action, { key, data });
 
         if (newFormData) {
             setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
         }
     }
+
+    const updateRemove = (expression, action, options) => {
+        if (action === 'filter') {
+            return null;
+        }
+        return {
+            ...expression,
+            _formFocus: {
+                ...expression._formFocus,
+                ...options.data
+            }
+        };
+    }
+
     /*
      * Recursive Function to update values into ShexJ object
      * action allowed delete and update
@@ -182,7 +198,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     const _formValues = expression._formValues[action](childExpression => {
 
                         if (childExpression._formFocus.name === options.key) {
-                            return null;
+                            return updateRemove(childExpression, action, options);
                         }
 
                         const linkExpression = updateShexJ(childExpression, action, options);
@@ -210,7 +226,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
                     const _formValues = expression._formValues[action](childExpression => {
                         if (childExpression._formFocus.name === options.key) {
-                            return null;
+                            return updateRemove(childExpression, action, options);
                         }
                         return childExpression;
                     });
@@ -347,6 +363,6 @@ export const useShex = (fileShex: String, documentUri: String) => {
     return {
         shexData,
         addNewExpression,
-        onDeleteExpression
+        onUpdateShexJ
     };
 };

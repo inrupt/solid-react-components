@@ -73,10 +73,9 @@ const ShexForm = ({
   parent = null,
   onChange,
   onDelete,
-  onDeleteExpression,
+  onUpdateShexJ,
   formValues,
-  addNewExpression,
-  linkName
+  addNewExpression
 }: ShexFormProps) => {
   const { expression } = shexj;
 
@@ -85,9 +84,7 @@ const ShexForm = ({
       {parent && (
         <DeleteButton
           type="button"
-          onClick={() =>
-            onDelete(shexj, parent, onDeleteExpression)
-          }
+          onClick={() => onDelete(shexj, parent, onUpdateShexJ)}
         >
           X
         </DeleteButton>
@@ -107,7 +104,7 @@ const ShexForm = ({
                     shexj={shexj}
                     onChange={onChange}
                     onDelete={onDelete}
-                    onDeleteExpression={onDeleteExpression}
+                    onUpdateShexJ={onUpdateShexJ}
                     formValues={formValues}
                     addNewExpression={addNewExpression}
                     parent={expression}
@@ -130,7 +127,7 @@ const ShexForm = ({
                 key={i}
                 onChange={onChange}
                 onDelete={onDelete}
-                onDeleteExpression={onDeleteExpression}
+                onDeleteExpression={onUpdateShexJ}
                 formValues={formValues}
                 addNewExpression={addNewExpression}
                 parent={parent}
@@ -155,7 +152,7 @@ const Form = ({
   successCallback,
   errorCallback,
   addNewExpression,
-  onDeleteExpression,
+  onUpdateShexJ,
   documentUri
 }) => {
   const { onSubmit, onChange, onDelete, onReset, formValues } = useForm(
@@ -167,7 +164,7 @@ const Form = ({
         formValues={formValues}
         onChange={onChange}
         onDelete={onDelete}
-        onDeleteExpression={onDeleteExpression}
+        onUpdateShexJ={onUpdateShexJ}
         shexj={shexj}
         addNewExpression={addNewExpression}
       />

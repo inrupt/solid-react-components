@@ -66,7 +66,7 @@ export const useForm = (
       }
       await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
 
-      cb(shexj._formFocus.name);
+      cb(shexj._formFocus.name, 'filter');
     }catch(e){
       throw e;
     }
@@ -90,7 +90,7 @@ export const useForm = (
 
         const keyTodelete = key || expression._formFocus.name;
 
-        cb(keyTodelete);
+        cb(keyTodelete, 'filter');
       }
       console.log("Succesfully deleted");
     } catch (e) {
