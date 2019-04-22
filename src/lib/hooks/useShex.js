@@ -54,7 +54,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
         value = fieldValue(annotations, valueEx);
       }
 
-      const saved = value !== '';
+      const saved = !(value === '');
 
       return subject
         ? { value, parentSubject: subject, name: unique(), saved }
