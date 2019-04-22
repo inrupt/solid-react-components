@@ -254,18 +254,23 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
         if (isLink(expression.valueExpr)) {
 
-            const updatedValue = value === '' ? createIdNode() : data[value];
+            let linkValue = value;
 
-            const childExpression = await fillFormData(
+            if (value === '') {
+
+                linkValue = createIdNode();
+            }
+            
+            const childExpression = await _fillFormData(
                 {
                     id: expression.valueExpr,
-                    linkValue: updatedValue,
+                    linkValue,
                     parentSubject:
                     expression.predicate,
                     annotations:
                     expression.annotations
                 },
-                updatedValue
+                data[value]
             );
             const dropDownValues = isDropDown( childExpression );
 
@@ -281,7 +286,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     ...dropDownValues,
                     _formFocus: getFormFocusObject(
                         currentSubject,
-                        updatedValue,
+                        linkValue,
                         expression.annotations),
                     expression: childExpression.expression
                 }]
@@ -308,7 +313,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
     }
 
 
-    const fillFormData = async (rootShape: Object, document: Object) => {
+    const _fillFormData = async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];
 
@@ -323,7 +328,6 @@ export const useShex = (fileShex: String, documentUri: String) => {
                 if (typeof document !== 'string') {
                     for await (let node of document[currentExpression.predicate]) {
                         const value = node.value;
-
                         newExpression = await _fillFormValues(rootShape, newExpression, value);
                     }
                 }
@@ -349,7 +353,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
         shapes = shexJ.shapes;
 
         if (shapes.length > 0) {
-            const formData = await fillFormData(
+            const formData = await _fillFormData(
                 { id: findRootShape(shexJ) },
                 podDocument
             );

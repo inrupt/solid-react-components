@@ -56,7 +56,7 @@
        // :key "region"
        // :label "Region"
        // :icon "flag" ;
-    vcard:country-name @<#vcard_country-name> ?
+    vcard:country-name @<#vcard_country-name> {1}
       // :key "country"
       // :label "Country"
       // :icon "flag" ;
