@@ -115,7 +115,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
     };
 
-    const updateShexJObject = (shexJ: Object, expression: Object, parentExpresion: Object) => {
+    const addShexJField = (shexJ: Object, expression: Object, parentExpresion: Object) => {
         let found = false;
 
 
@@ -125,6 +125,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                 const childExpresion = buildExpression(parentExpresion);
                 const idLink = parentExpresion && !expression.values ? createIdNode() :  '';
                 const parentSubject = findParentExpression(parentExpresion, expression);
+
                 found = true;
 
                 return {
@@ -148,7 +149,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     return {
                         ...exp,
                         expression: {
-                            expressions: updateShexJObject(exp._formValues, expression, parentExpresion)
+                            expressions: addShexJField(exp._formValues, expression, parentExpresion)
                         }
                     };
                 }
@@ -160,7 +161,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
     const addNewExpression = (expression: Object, parentExpresion: Object) => {
         const { formData, shexJ } = shexData;
 
-        const newFormData = updateShexJObject(formData, expression, parentExpresion);
+        const newFormData = addShexJField(formData, expression, parentExpresion);
 
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
     }
