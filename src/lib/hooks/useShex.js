@@ -33,7 +33,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
     const fieldValue = (annotations: Array<Object>, value: String) => {
         const hasPrefix = findAnnotation('layoutprefix', annotations);
-        if (hasPrefix) {
+        if (hasPrefix && typeof value == 'string') {
             return value.split(hasPrefix.object.value).pop();
         }
 
