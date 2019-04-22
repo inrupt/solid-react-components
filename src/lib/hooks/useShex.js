@@ -4,7 +4,6 @@ import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
 import { findAnnotation } from "@utils";
-// import {namedNode} from '@rdfjs/data-model';
 
 export const useShex = (fileShex: String, documentUri: String) => {
     const [shexData, setShexData] = useState({});
@@ -47,18 +46,17 @@ export const useShex = (fileShex: String, documentUri: String) => {
     const getFormFocusObject = (
       subject: String,
       valueEx: String,
-      annotations?: Array<Object>
+      annotations?: Array<Object>,
+      isNew: boolean,
     ) => {
       let value = valueEx;
       if (annotations) {
         value = fieldValue(annotations, valueEx);
       }
 
-      const saved = !(value === '');
-
       return subject
-        ? { value, parentSubject: subject, name: unique(), saved }
-        : { value, name: unique(), saved };
+        ? { value, parentSubject: subject, name: unique(), isNew }
+        : { value, name: unique(), isNew };
     };
 
     const isDropDown = (expression: Object) => {
@@ -252,6 +250,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
 
     const _fillFormValues =  async (shape: Object, expression: Object, value: String = '') => {
+        let isNew = value === '';
 
         if (isLink(expression.valueExpr)) {
 
@@ -289,7 +288,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     _formFocus: getFormFocusObject(
                         currentSubject,
                         linkValue,
-                        expression.annotations),
+                        expression.annotations, isNew),
                     expression: childExpression.expression
                 }]
             };
@@ -307,7 +306,8 @@ export const useShex = (fileShex: String, documentUri: String) => {
                         shape.linkValue ||
                         documentUri,
                         value,
-                        expression.annotations
+                        expression.annotations,
+                        isNew
                     )
                 }
             ]
