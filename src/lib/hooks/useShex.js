@@ -53,12 +53,12 @@ export const useShex = (fileShex: String, documentUri: String) => {
       if (annotations) {
         value = fieldValue(annotations, valueEx);
       }
-      
-      const unsaved = value === '';
+
+      const saved = value !== '';
 
       return subject
-        ? { value, parentSubject: subject, name: unique(), unsaved }
-        : { value, name: unique(), unsaved };
+        ? { value, parentSubject: subject, name: unique(), saved }
+        : { value, name: unique(), saved };
     };
 
     const isDropDown = (expression: Object) => {
@@ -129,7 +129,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                             ...exp.valueExpr,
                             _formFocus: {
                                 value: '',
-                                unsaved: true,
+                                saved: false,
                                 parentSubject: idLink || documentUri,
                                 name: unique()
                             },
@@ -174,7 +174,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                             _formFocus: {
                                 value: idLink,
                                 name: unique(),
-                                unsaved: true,
+                                saved: false,
                                 parentSubject
                             },
                         }
