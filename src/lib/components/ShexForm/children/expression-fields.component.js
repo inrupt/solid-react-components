@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { shexFormLabel, findAnnotation } from "@utils";
+import { shexFormLabel, findAnnotation, allowNewFields } from "@utils";
 import styled from "styled-components";
 const InputWrapper = styled.div`
   display: flex;
@@ -22,15 +22,7 @@ type FieldsProps = {
   data: Object
 };
 
-const allowNewFields = (data: Object) => {
-  const totalData = data._formValues.length;
 
-  if ((!data.min && !data.max) || (data.min > 0 && data.max > totalData) || (data.max === -1)) {
-    return true;
-  }
-
-  return false;
-};
 
 const ExpressionFields = (props: FieldsProps) => {
   const {

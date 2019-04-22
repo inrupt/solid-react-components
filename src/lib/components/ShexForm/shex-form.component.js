@@ -2,7 +2,7 @@ import React from "react";
 import { ExpressionFields, DropdownFields } from "./children";
 import styled from "styled-components";
 import { useForm } from "@hooks";
-import { shexFormLabel } from "@utils";
+import { shexFormLabel, allowNewFields } from "@utils";
 
 const Panel = styled.div`
   border: solid 1px red;
@@ -110,14 +110,14 @@ const ShexForm = ({
                     parent={expression}
                   />
                 ))}
-                <button
+                { allowNewFields(expression) && <button
                   onClick={() =>
                     addNewExpression(expression._formValues[0], expression)
                   }
                   type="button"
                 >
                   Add new {shexFormLabel(expression)}
-                </button>
+                </button>}
               </React.Fragment>
             );
           } else {

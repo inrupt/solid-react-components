@@ -260,7 +260,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
                 linkValue = createIdNode();
             }
-            
+
 
             const childExpression = await _fillFormData(
                 {

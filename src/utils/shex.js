@@ -30,8 +30,19 @@ const shexParentLinkOnDropDowns = (parent: Object, expression: Object) => {
     : null;
 };
 
+const allowNewFields = (data: Object) => {
+    const totalData = data._formValues.length;
+    
+    if ((!data.min && !data.max) || (data.min > 0 && data.max > totalData) || (data.max === -1)) {
+        return true;
+    }
+
+    return false;
+};
+
 export {
     shexFormLabel,
     findAnnotation,
-    shexParentLinkOnDropDowns
+    shexParentLinkOnDropDowns,
+    allowNewFields
 };
