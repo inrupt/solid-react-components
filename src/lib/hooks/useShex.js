@@ -53,10 +53,12 @@ export const useShex = (fileShex: String, documentUri: String) => {
       if (annotations) {
         value = fieldValue(annotations, valueEx);
       }
+      
+      const unsaved = value === '';
 
       return subject
-        ? { value, parentSubject: subject, name: unique() }
-        : { value, name: unique() };
+        ? { value, parentSubject: subject, name: unique(), unsaved }
+        : { value, name: unique(), unsaved };
     };
 
     const isDropDown = (expression: Object) => {
@@ -98,7 +100,6 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
     const addNewExpression = (expression: Object, parentExpresion: Object) => {
         const { formData, shexJ } = shexData;
-
         const newFormData = addShexJField(formData, expression, parentExpresion);
 
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});

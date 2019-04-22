@@ -27,7 +27,7 @@
       // :key "company"
       // :label "Company"
       // :icon "building" ;
-    vcard:hasAddress @<#vcard_street-address> ?
+    vcard:hasAddress @<#vcard_street-address>
       // :key "address"
       // :label "Address"
       // :icon "map-marker-alt" ;
@@ -56,7 +56,7 @@
        // :key "region"
        // :label "Region"
        // :icon "flag" ;
-    vcard:country-name @<#vcard_country-name> {1}
+    vcard:country-name @<#vcard_country-name>
       // :key "country"
       // :label "Country"
       // :icon "flag" ;

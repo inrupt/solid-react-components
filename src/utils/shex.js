@@ -32,7 +32,7 @@ const shexParentLinkOnDropDowns = (parent: Object, expression: Object) => {
 
 const allowNewFields = (data: Object) => {
     const totalData = data._formValues.length;
-    
+
     if ((!data.min && !data.max) || (data.min > 0 && data.max > totalData) || (data.max === -1)) {
         return true;
     }
