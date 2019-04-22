@@ -261,6 +261,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                 linkValue = createIdNode();
             }
             
+
             const childExpression = await _fillFormData(
                 {
                     id: expression.valueExpr,
@@ -270,7 +271,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     annotations:
                     expression.annotations
                 },
-                data[value]
+                value === '' ? '' : data[value]
             );
             const dropDownValues = isDropDown( childExpression );
 
