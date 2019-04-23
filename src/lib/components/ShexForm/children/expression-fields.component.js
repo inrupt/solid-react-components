@@ -93,7 +93,6 @@ const Field = ({
   const defaultValue = fieldData._formFocus.value;
   const annotation = findAnnotation("layoutprefix", data.annotations);
   const hasPrefix = annotation && annotation.object.value;
-
   const onMouseEnter = () => setHover(true);
 
   const onMouseLeave = () => setHover(false);
@@ -139,8 +138,7 @@ const Field = ({
           type="button"
           show={hover}
           onClick={() =>
-            onDelete(
-              { subject, predicate, key: inputData.name, defaultValue },
+            onDelete( {...fieldData, predicate},
               null,
               onDeleteExpression
             )

@@ -172,7 +172,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                             _formFocus: {
                                 value: idLink,
                                 name: unique(),
-                                saved: false,
+                                isNew: true,
                                 parentSubject
                             },
                         }
