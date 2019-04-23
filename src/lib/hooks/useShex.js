@@ -71,7 +71,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
         return id;
     }
 
-    const buildExpression = (parentExpresion: Object) => {
+    /* const buildExpression = (parentExpresion: Object) => {
         return parentExpresion ? { id: parentExpresion.valueExpr, type: parentExpresion.type } : null
     }
 
@@ -81,7 +81,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
         }
         return documentUri;
 
-    };
+    }; */
 
     const updateRemove = (expression, action, options) => {
         if (action === 'filter') {
@@ -100,104 +100,109 @@ export const useShex = (fileShex: String, documentUri: String) => {
         const { formData, shexJ } = shexData;
         const newFormData = addShexJField(formData, expression, parentExpresion);
 
+        console.log(newFormData);
+
         setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
     }
 
     const onUpdateShexJ = (key: String, action: String, data: ?Object) => {
         const { formData, shexJ } = shexData;
-        const newFormData = updateShexJ(formData, action, { key, data });
+        const newFormData = _updateShexJ(formData, action, { key, data });
 
         if (newFormData) {
             setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
         }
     }
 
+    const copyChildExpression = (expressions: Array<Object>, linkId: String) => {
+        return expressions.map(expression => {
+           if (expression.valueExpr) {
+               const childExpression =  copyChildExpression(expression._formValues, linkId);
 
-    const addLinkExpression = (currentShape, parent, idLink) => {
-        if (parent) {
-            const {shexJ: {shapes}} = shexData;
-            const shape = shapes.find(shape => shape.id.includes(parent.valueExpr));
-            let updatedExpressions = [];
+               return {
+                   ...expression,
+                   _formValues: childExpression
+               }
+           }
 
-            if (shape && shape.expression && shape.expression.expressions) {
-                updatedExpressions = shape.expression.expressions.map(exp => {
-                    return {
-                        ...exp,
-                        _formValues: [{
-                            ...exp.valueExpr,
-                            _formFocus: {
-                                value: '',
-                                saved: false,
-                                parentSubject: idLink || documentUri,
-                                name: unique()
-                            },
-                        }]
-                    };
-                });
-
-            }
-            return {
-                currentShape,
-                expression: { expressions: updatedExpressions},
-                ...isDropDown(currentShape),
-                _formFocus: {
-                    value: currentShape.predicate,
-                    parentSubject: currentShape.predicate || parent.predicate
-                }
-            }
-        }
-        return null;
-    }
-
-    const addShexJField = (shexJ: Object, expression: Object, parentExpresion: Object) => {
-        let found = false;
-
-
-        return shexJ.expression.expressions.map(exp => {
-            const currentPredicate = parentExpresion ? parentExpresion.predicate : expression.predicate;
-            if(exp.predicate === currentPredicate) {
-                const childExpresion = buildExpression(parentExpresion);
-                const idLink = parentExpresion && !expression.values ? createIdNode() :  '';
-                const parentSubject = findParentExpression(parentExpresion, expression);
-
-                found = true;
-
-                return {
-                    ...exp,
-                    _formValues: [
-                        ...exp._formValues,
-                        {
-                            ...childExpresion,
-                            ...addLinkExpression(expression, parentExpresion, idLink),
-                            _formFocus: {
-                                value: idLink,
-                                name: unique(),
-                                saved: false,
-                                parentSubject
-                            },
-                        }
-                    ]
-                };
-            } else if (!found) {
-                if ( exp._formValues.length > 0 && exp._formValues.expression) {
-                    return {
-                        ...exp,
-                        expression: {
-                            expressions: addShexJField(exp._formValues, expression, parentExpresion)
-                        }
-                    };
-                }
-            }
-            return exp;
+           return createField(expression, false, linkId);
         });
     }
+
+    const createField = (expression: Object, isLink: boolean = false) => {
+        const name = unique();
+        const value = isLink ? createIdNode() : '';
+        let childExpressions;
+
+        if (expression.expression && expression.expression.expressions) {
+            const { expression: { expressions }} = expression;
+
+            childExpressions = copyChildExpression(expressions, value);
+        }
+
+        return {
+            ...expression,
+            expression : { expressions: childExpressions },
+            _formFocus: {
+                ...expression._formFocus,
+                name,
+                isNew: true,
+                value
+            }
+        }
+    }
+
+
+    const addShexJField = (shexJ: Object, currentExpression: Object, parent: ?Object) => {
+      if (shexJ.expression) {
+          const { expression : { expressions }} = shexJ;
+
+          const newUpdated = expressions.map(expression => {
+              if (
+                expression &&
+                (expression.predicate ===
+                  currentExpression.predicate ||
+                  (parent &&
+                    expression.predicate === parent.predicate) ||
+                  expression.predicate === currentExpression.id)
+              ) {
+                return {
+                  ...expression,
+                  _formValues: [
+                    ...expression._formValues,
+                    createField(expression._formValues[0])
+                  ]
+                };
+              }
+
+              if (isLink(expression.valueExpr) || !expression.predicate) {
+                  const childExpressions = expression._formValues.map(childExpression => {
+                      const updatedExpressions = addShexJField(childExpression, currentExpression, parent);
+
+                      return {
+                          ...childExpression,
+                          expression: { expressions: updatedExpressions }
+                      }
+                  });
+
+                  return {
+                      ...expression,
+                      _formValues: childExpressions
+                  };
+              }
+
+              return expression;
+          });
+          return newUpdated;
+      }
+    };
 
 
     /*
      * Recursive Function to update values into ShexJ object
      * action allowed delete and update
      */
-    const updateShexJ = (rootShape: Object, action: String, options: Object) => {
+    const _updateShexJ = (rootShape: Object, action: String, options: Object) => {
         if (rootShape && rootShape.expression) {
             return rootShape.expression.expressions.map(expression => {
                 if (isLink(expression.valueExpr)) {
@@ -207,7 +212,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                             return updateRemove(childExpression, action, options);
                         }
 
-                        const linkExpression = updateShexJ(childExpression, action, options);
+                        const linkExpression = _updateShexJ(childExpression, action, options);
 
                         return {
                             ...childExpression,
@@ -327,7 +332,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     newExpression._formValues = [];
                 }
 
-                if (typeof document !== 'string') {
+                if (typeof document !== 'string' && documentUri) {
                     for await (let node of document[currentExpression.predicate]) {
                         const value = node.value;
                         newExpression = await _fillFormValues(rootShape, newExpression, value);
