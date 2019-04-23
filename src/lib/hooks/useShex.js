@@ -44,19 +44,19 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
 
     const getFormFocusObject = (
-      subject: String,
-      valueEx: String,
-      annotations?: Array<Object>,
-      isNew: boolean,
+        subject: String,
+        valueEx: String,
+        annotations?: Array<Object>,
+        isNew: boolean,
     ) => {
-      let value = valueEx;
-      if (annotations) {
-        value = fieldValue(annotations, valueEx);
-      }
+        let value = valueEx;
+        if (annotations) {
+            value = fieldValue(annotations, valueEx);
+        }
 
-      return subject
-        ? { value, parentSubject: subject, name: unique(), isNew }
-        : { value, name: unique(), isNew };
+        return subject
+            ? { value, parentSubject: subject, name: unique(), isNew }
+            : { value, name: unique(), isNew };
     };
 
     const isDropDown = (expression: Object) => {
@@ -116,16 +116,16 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
     const copyChildExpression = (expressions: Array<Object>, linkId: String) => {
         return expressions.map(expression => {
-           if (expression.valueExpr) {
-               const childExpression =  copyChildExpression(expression._formValues, linkId);
+            if (expression.valueExpr) {
+                const childExpression =  copyChildExpression(expression._formValues, linkId);
 
-               return {
-                   ...expression,
-                   _formValues: childExpression
-               }
-           }
+                return {
+                    ...expression,
+                    _formValues: childExpression
+                }
+            }
 
-           return createField(expression, false, linkId);
+            return createField(expression, false, linkId);
         });
     }
 
@@ -154,47 +154,47 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
 
     const addShexJField = (shexJ: Object, currentExpression: Object, parent: ?Object) => {
-      if (shexJ.expression) {
-          const { expression : { expressions }} = shexJ;
+        if (shexJ.expression) {
+            const { expression : { expressions }} = shexJ;
 
-          const newUpdated = expressions.map(expression => {
-              if (
-                expression &&
-                (expression.predicate ===
-                  currentExpression.predicate ||
-                  (parent &&
-                    expression.predicate === parent.predicate) ||
-                  expression.predicate === currentExpression.id)
-              ) {
-                return {
-                  ...expression,
-                  _formValues: [
-                    ...expression._formValues,
-                    createField(expression._formValues[0])
-                  ]
-                };
-              }
+            const newUpdated = expressions.map(expression => {
+                if (
+                    expression &&
+                    (expression.predicate ===
+                        currentExpression.predicate ||
+                        (parent &&
+                            expression.predicate === parent.predicate) ||
+                        expression.predicate === currentExpression.id)
+                ) {
+                    return {
+                        ...expression,
+                        _formValues: [
+                            ...expression._formValues,
+                            createField(expression._formValues[0])
+                        ]
+                    };
+                }
 
-              if (isLink(expression.valueExpr) || !expression.predicate) {
-                  const childExpressions = expression._formValues.map(childExpression => {
-                      const updatedExpressions = addShexJField(childExpression, currentExpression, parent);
+                if (isLink(expression.valueExpr) || !expression.predicate) {
+                    const childExpressions = expression._formValues.map(childExpression => {
+                        const updatedExpressions = addShexJField(childExpression, currentExpression, parent);
 
-                      return {
-                          ...childExpression,
-                          expression: { expressions: updatedExpressions }
-                      }
-                  });
+                        return {
+                            ...childExpression,
+                            expression: { expressions: updatedExpressions }
+                        }
+                    });
 
-                  return {
-                      ...expression,
-                      _formValues: childExpressions
-                  };
-              }
+                    return {
+                        ...expression,
+                        _formValues: childExpressions
+                    };
+                }
 
-              return expression;
-          });
-          return newUpdated;
-      }
+                return expression;
+            });
+            return newUpdated;
+        }
     };
 
 
@@ -285,17 +285,17 @@ export const useShex = (fileShex: String, documentUri: String) => {
             return  {
                 ...expression,
                 _formValues: [
-                ...expression._formValues,
-                {
-                    id: childExpression.id,
-                    type: childExpression.type,
-                    ...dropDownValues,
-                    _formFocus: getFormFocusObject(
-                        currentSubject,
-                        linkValue,
-                        expression.annotations, isNew),
-                    expression: childExpression.expression
-                }]
+                    ...expression._formValues,
+                    {
+                        id: childExpression.id,
+                        type: childExpression.type,
+                        ...dropDownValues,
+                        _formFocus: getFormFocusObject(
+                            currentSubject,
+                            linkValue,
+                            expression.annotations, isNew),
+                        expression: childExpression.expression
+                    }]
             };
 
 

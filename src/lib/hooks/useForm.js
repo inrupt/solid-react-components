@@ -53,45 +53,38 @@ export const useForm = (
   const setFieldValue = (value: String, prefix: ?String) =>
     prefix ? namedNode(`${prefix}${value}`) : value;
 
-  const deleteLink = async (shexj, parent,cb) => {
+  const deleteLink = async (shexj, parent, cb) => {
     const subject = shexj._formFocus.value;
     const { predicate: parentPredicate } = parent;
     const expressions = shexj.expression.expressions;
+    const { _formFocus } = shexj;
 
-    try{
-      for (let expression of expressions){
-        const value = await ldflex[subject][expression.predicate];
-        if(value)
-         await ldflex[subject][expression.predicate].delete();
+    try {
+      if (_formFocus && !_formFocus.isNew) {
+        for (let expression of expressions) {
+          const value = await ldflex[subject][expression.predicate];
+          if (value) await ldflex[subject][expression.predicate].delete();
+        }
+        await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
       }
-      await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
-
-      cb(shexj._formFocus.name, 'filter');
-    }catch(e){
+    } catch (e) {
       throw e;
     }
   };
 
-  const onDelete = async (expression, parent = false, cb) => {
+  const onDelete = async (shexj, parent = false, cb) => {
     try {
-      if (shexParentLinkOnDropDowns(parent, expression)) {
-        await deleteLink(expression, parent,cb);
-      } else {
-        const { subject, predicate, defaultValue, key } = expression;
-        /*
-        * We check if parent is a link shape and not link data id
-        * @TODO: we need to find a better way to do this
-         */
-        const newPredicate = (parent && parent.predicate) || predicate;
-        const newSubject = (expression._formFocus && expression._formFocus.parentSubject) || subject;
-        const newValue = (expression._formFocus && expression._formFocus.value) || defaultValue;
-
-        await ldflex[newSubject][newPredicate].delete(newValue);
-
-        const keyTodelete = key || expression._formFocus.name;
-
-        cb(keyTodelete, 'filter');
+      const { _formFocus } = shexj;
+      const { parentSubject, name, value } = _formFocus;
+      if (_formFocus && !_formFocus.isNew) {
+        if (shexParentLinkOnDropDowns(parent, shexj)) {
+          await deleteLink(shexj, parent);
+        } else {
+          const { predicate } = shexj;
+          await ldflex[parentSubject][predicate].delete(value);
+        }
       }
+      cb(name, "filter");
       console.log("Succesfully deleted");
     } catch (e) {
       console.error(e);
