@@ -59,6 +59,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
 
     const _getFormFocusObject = (
         subject: String,
+        parentPredicate,
         valueEx: String,
         annotations?: Array<Object>,
         isNew: boolean,
@@ -69,7 +70,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
         }
 
         return subject
-            ? { value, parentSubject: subject, name: unique(), isNew }
+            ? { value, parentSubject: subject, parentPredicate, name: unique(), isNew }
             : { value, name: unique(), isNew };
     };
 
@@ -238,8 +239,8 @@ export const useShex = (fileShex: String, documentUri: String) => {
                 {
                     id: expression.valueExpr,
                     linkValue,
-                    parentSubject:
-                    linkValue !== '' ? linkValue : expression.predicate,
+                    parentSubject: linkValue,
+                    parentPredicate: expression.predicate,
                     annotations:
                     expression.annotations
                 },
@@ -259,6 +260,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                         ...dropDownValues,
                         _formFocus: _getFormFocusObject(
                             currentSubject,
+                            expression.predicate,
                             linkValue,
                             expression.annotations, isNew),
                         expression: childExpression.expression
@@ -277,6 +279,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     _formFocus: _getFormFocusObject(
                         shape.linkValue ||
                         documentUri,
+                        shape.parentPredicate,
                         value,
                         expression.annotations,
                         isNew
