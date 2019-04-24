@@ -84,7 +84,7 @@ export const useForm = (
           await ldflex[parentSubject][predicate].delete(value);
         }
       }
-      cb(name, "filter");
+      cb(name, "delete");
       console.log("Succesfully deleted");
     } catch (e) {
       console.error(e);

@@ -73,9 +73,9 @@ const ShexForm = ({
   parent = null,
   onChange,
   onDelete,
-  onUpdateShexJ,
-  formValues,
-  addNewExpression
+  addNewShexField,
+  updateShexJ,
+  formValues
 }: ShexFormProps) => {
   const { expression } = shexj;
 
@@ -84,7 +84,7 @@ const ShexForm = ({
       {parent && (
         <DeleteButton
           type="button"
-          onClick={() => onDelete(shexj, parent, onUpdateShexJ)}
+          onClick={() => onDelete(shexj, parent, updateShexJ)}
         >
           X
         </DeleteButton>
@@ -100,37 +100,46 @@ const ShexForm = ({
                 <h4>{shexFormLabel(expression)}</h4>
                 {expression._formValues.map((shexj, i) => (
                   <ShexForm
-                    key={i}
-                    shexj={shexj}
-                    onChange={onChange}
-                    onDelete={onDelete}
-                    onUpdateShexJ={onUpdateShexJ}
-                    formValues={formValues}
-                    addNewExpression={addNewExpression}
-                    parent={expression}
+                    {...{
+                      key: i,
+                      parent: expression,
+                      shexj,
+                      onChange,
+                      onDelete,
+                      formValues,
+                      addNewShexField,
+                      updateShexJ
+                    }}
                   />
                 ))}
-                { allowNewFields(expression) && <button
-                  onClick={() =>
-                    addNewExpression(expression._formValues[0], expression)
-                  }
-                  type="button"
-                >
-                  Add new {shexFormLabel(expression)}
-                </button>}
+                {allowNewFields(expression) && (
+                  <button
+                    onClick={() =>
+                        addNewShexField(
+                        expression._formValues[0],
+                        expression
+                      )
+                    }
+                    type="button"
+                  >
+                    Add new {shexFormLabel(expression)}
+                  </button>
+                )}
               </React.Fragment>
             );
           } else {
             return (
               <ExpressionFields
-                data={expression}
-                key={i}
-                onChange={onChange}
-                onDelete={onDelete}
-                onDeleteExpression={onUpdateShexJ}
-                formValues={formValues}
-                addNewExpression={addNewExpression}
-                parent={parent}
+                {...{
+                  data: expression,
+                  key: i,
+                  onChange,
+                  onDelete,
+                  addNewShexField,
+                  updateShexJ,
+                  formValues,
+                  parent
+                }}
               />
             );
           }
@@ -151,22 +160,26 @@ const Form = ({
   shexj,
   successCallback,
   errorCallback,
-  addNewExpression,
-  onUpdateShexJ,
+  updateShexJ,
+  addNewShexField,
   documentUri
 }) => {
   const { onSubmit, onChange, onDelete, onReset, formValues } = useForm(
     documentUri
   );
   return (
-    <FormComponent onSubmit={e => onSubmit(e, successCallback, errorCallback)}>
+    <FormComponent
+      onSubmit={e => onSubmit(e, successCallback, errorCallback)}
+    >
       <ShexForm
-        formValues={formValues}
-        onChange={onChange}
-        onDelete={onDelete}
-        onUpdateShexJ={onUpdateShexJ}
-        shexj={shexj}
-        addNewExpression={addNewExpression}
+        {...{
+          formValues,
+          onChange,
+          onDelete,
+          addNewShexField,
+          updateShexJ,
+          shexj
+        }}
       />
       <button type="submit">Save</button>
       <button type="button" onClick={onReset}>
