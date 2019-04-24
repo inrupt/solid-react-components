@@ -124,55 +124,68 @@ export const useShex = (fileShex: String, documentUri: String) => {
         }
     }
 
+    /*
+     * Running into levels and find the object that we want to add, then copy one of them
+     * and update _formFocus with new value and name
+     * @params {Object} ShexJ Object
+     * @params {currentExpression}
+     * @params {parentExpresion}
+     */
+    const _addShexJField = ( shexJ: Object, currentExpression: Object, parent: ?Object) => {
+      let newExpressions = shexJ.expression.expressions;
 
-    const _addShexJField = (shexJ: Object, currentExpression: Object, parent: ?Object) => {
-        if (shexJ.expression) {
-            const { expression : { expressions }} = shexJ;
+      for (let i = 0; i < newExpressions.length; i++) {
+        if (
+          newExpressions[i] &&
+          (newExpressions[i].predicate === currentExpression.predicate ||
+            (parent && newExpressions[i].predicate === parent.predicate) ||
+            newExpressions[i].predicate === currentExpression.id)
+        ) {
+          newExpressions[i] = {
+            ...newExpressions[i],
+            _formValues: [
+              ...newExpressions[i]._formValues,
+              _createField(newExpressions[i]._formValues[0])
+            ]
+          };
 
-            const newUpdated = expressions.map(expression => {
-                if (
-                    expression &&
-                    (expression.predicate ===
-                        currentExpression.predicate ||
-                        (parent &&
-                            expression.predicate === parent.predicate) ||
-                        expression.predicate === currentExpression.id)
-                ) {
-                    return {
-                        ...expression,
-                        _formValues: [
-                            ...expression._formValues,
-                            _createField(expression._formValues[0])
-                        ]
-                    };
-                }
-
-                if (_isLink(expression.valueExpr) || !expression.predicate) {
-                    const childExpressions = expression._formValues.map(childExpression => {
-                        const updatedExpressions = _addShexJField(childExpression, currentExpression, parent);
-
-                        return {
-                            ...childExpression,
-                            expression: { expressions: updatedExpressions }
-                        }
-                    });
-
-                    return {
-                        ...expression,
-                        _formValues: childExpressions
-                    };
-                }
-
-                return expression;
-            });
-            return newUpdated;
+          break;
         }
+
+        if (
+          _isLink(newExpressions[i].valueExpr) ||
+          !newExpressions[i].predicate
+        ) {
+          for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
+            if (
+              newExpressions[i]._formValues[y].expression &&
+              newExpressions[i]._formValues[y].expression.expressions
+            ) {
+              const expressions = _addShexJField(
+                newExpressions[i]._formValues[y],
+                currentExpression,
+                parent
+              );
+
+              newExpressions[i]._formValues[
+                y
+              ].expression.expressions = expressions;
+              break;
+            }
+          }
+        }
+      }
+      return newExpressions;
     };
 
 
     /*
-     * Recursive Function to update values into ShexJ object
-     * action allowed delete and update
+     * Find into shexJ a _formValue (_formFocus) by name(unique id) then you can update _formFocus
+     * or delete a _formValues
+     * @params {Object} Shape
+     * @params {String} action, could be delete or update
+     * @params {Object} could be { key, data } where key is the _formFocus name( input name) and data
+     * is the attributes that you want to update on _formFocus.
     */
     const _updateShexJ = (shape: Object, action: String, options: Object) => {
         let newExpressions = shape.expression.expressions;
