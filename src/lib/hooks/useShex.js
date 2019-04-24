@@ -125,7 +125,8 @@ export const useShex = (fileShex: String, documentUri: String) => {
     }
 
     /*
-     * Running into levels and find the object that we want to add, then copy one of them
+     * Find into ShexJ same field then copy in the same expression and then update it with
+     * custom name and value
      * and update _formFocus with new value and name
      * @params {Object} ShexJ Object
      * @params {currentExpression}
