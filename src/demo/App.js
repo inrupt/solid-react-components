@@ -73,8 +73,8 @@ const App = () => {
             <input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
             <ShapeForm
                 {...{
-                documentUri: shexFormConfig.documentUri || webId,
-                shexUri: shexFormConfig.shexUri || "/shapes/userProfile.shex"
+                documentUri: 'https://jairocampos.solid.community/public/movies.ttl', /*shexFormConfig.documentUri || webId,*/
+                shexUri: 'https://jmartin.inrupt.net/public/shapes/movie.shex' /*shexFormConfig.shexUri || "/shapes/userProfile.shex"*/
                 }}
             />
       </ShexFormComponent> }

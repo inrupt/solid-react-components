@@ -239,7 +239,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                     id: expression.valueExpr,
                     linkValue,
                     parentSubject:
-                    expression.predicate,
+                    linkValue !== '' ? linkValue : expression.predicate,
                     annotations:
                     expression.annotations
                 },
