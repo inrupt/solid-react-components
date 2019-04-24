@@ -112,6 +112,7 @@ const Field = ({
           data-parent-predicate={
             parent && parent.predicate ? parent.predicate : null
           }
+          data-parent-subject={parent && parent._formValues[0]._formFocus.parentSubject}
         />
       ) : (
         <select

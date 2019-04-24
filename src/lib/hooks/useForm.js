@@ -24,7 +24,8 @@ export const useForm = (
         predicate: e.target.getAttribute("data-predicate"),
         subject: e.target.getAttribute("data-subject"),
         prefix: e.target.getAttribute("data-prefix"),
-        parentPredicate: e.target.getAttribute("data-parent-predicate")
+        parentPredicate: e.target.getAttribute("data-parent-predicate"),
+        parentSubject: e.target.getAttribute("data-parent-subject")
       }
     };
 
@@ -38,16 +39,26 @@ export const useForm = (
   };
 
   const createLink = async field => {
-    const { subject, parentPredicate } = field;
+    const { subject, parentPredicate, parentSubject } = field;
+    const id = `#${subject.split("#").pop()}`;
+    console.log(
+      "Parent Predicate",
+      parentPredicate,
+      "Parent Subject",
+      parentSubject,
+      "Subject",
+      subject
+    );
+    await ldflex[parentSubject][parentPredicate].add(namedNode(id));
 
-    let isNew = true;
+    /*let isNew = true;
     for await (let item of ldflex[documentUri][parentPredicate])
       if (item.value === subject) isNew = false;
     if (isNew) {
       let id = subject.split("#").pop();
       id = `#${id}`;
       await ldflex[documentUri][parentPredicate].add(namedNode(id));
-    }
+    }*/
   };
 
   const setFieldValue = (value: String, prefix: ?String) =>
@@ -93,7 +104,7 @@ export const useForm = (
 
   const onReset = () => setFormValues({});
 
-  const onSubmit = async (e, successCallback, errorCallback) => {
+  const onSubmit = async (e) => {
     try {
       e.preventDefault();
 
@@ -126,9 +137,8 @@ export const useForm = (
             break;
         }
       }
-      successCallback();
     } catch (error) {
-      errorCallback(error);
+      throw e;
     }
   };
 

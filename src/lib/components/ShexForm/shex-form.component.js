@@ -115,10 +115,7 @@ const ShexForm = ({
                 {allowNewFields(expression) && (
                   <button
                     onClick={() =>
-                        addNewShexField(
-                        expression._formValues[0],
-                        expression
-                      )
+                      addNewShexField(expression._formValues[0], expression)
                     }
                     type="button"
                   >
@@ -164,13 +161,31 @@ const Form = ({
   addNewShexField,
   documentUri
 }) => {
-  const { onSubmit, onChange, onDelete, onReset, formValues } = useForm(
+  const { onSubmit: submit, onChange, onDelete, onReset, formValues } = useForm(
     documentUri
   );
+
+  const update = async () => {
+    for await (const key of Object.keys(formValues)) {
+      updateShexJ(formValues[key].name, "update", {
+        isNew: false,
+        value: formValues[key].value
+      });
+    }
+  };
+
+  const onSubmit = e => {
+    try {
+      submit(e);
+      update();
+      successCallback();
+    } catch (e) {
+      errorCallback(e);
+    }
+  };
+
   return (
-    <FormComponent
-      onSubmit={e => onSubmit(e, successCallback, errorCallback)}
-    >
+    <FormComponent onSubmit={onSubmit}>
       <ShexForm
         {...{
           formValues,
