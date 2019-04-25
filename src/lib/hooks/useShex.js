@@ -134,7 +134,8 @@ export const useShex = (fileShex: String, documentUri: String) => {
                 const newExpr = exp._formValues.map(frm => {
                     return _createField(frm, false, { parentSubject: id });
                 });
-                return {...exp, _formValues: newExpr};
+                // Copied only one formValue.
+                return {...exp, _formValues: [newExpr[0]]};
             });
 
             newExpression = { expression: { expressions: updatedExp }};
