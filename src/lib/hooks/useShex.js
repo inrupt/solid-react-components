@@ -8,6 +8,7 @@ import { findAnnotation } from "@utils";
 export const useShex = (fileShex: String, documentUri: String) => {
     const [shexData, setShexData] = useState({});
     let shapes = [];
+    let seed = 1;
 
     const fetchShex = useCallback(async () => {
         const rootShex = await fetch(fileShex, {
@@ -80,9 +81,9 @@ export const useShex = (fileShex: String, documentUri: String) => {
         }
         return null;
     }
-
     const _createIdNode = () => {
-        const id = `${documentUri.split('#')[0]}#id${Date.parse (new Date ())}`;
+        const randomId = Date.parse (new Date ()) + (seed++);
+        const id = `${documentUri.split('#')[0]}#id${randomId}`;
         return id;
     }
 
