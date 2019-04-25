@@ -163,33 +163,49 @@ export const useShex = (fileShex: String, documentUri: String) => {
      * @params {currentExpression}
      * @params {parentExpresion}
      */
-    const _addShexJField = ( shexJ: Object, currentExpression: Object, parent: ?Object) => {
-        let newExpressions = shexJ.expression.expressions;
+    /*
 
-        for (let i = 0; i < newExpressions.length; i++) {
-            if (
-                newExpressions[i] &&
+
+    newExpressions[i] &&
                 (newExpressions[i].predicate === currentExpression.predicate ||
                     (parent && newExpressions[i].predicate === parent.predicate) ||
                     newExpressions[i].predicate === currentExpression.id)
-            ) {
-                newExpressions[i] = {
-                    ...newExpressions[i],
-                    _formValues: [
-                        ...newExpressions[i]._formValues,
-                        _createField(newExpressions[i]._formValues[0])
-                    ]
-                };
+     */
+    const _addShexJField = ( shexJ: Object, currentExpression: Object, parent: ?Object) => {
+        let newExpressions = shexJ.expression.expressions;
 
-                break;
+
+        for (let i = 0; i < newExpressions.length; i++) {
+            if (
+              !parent &&
+              (newExpressions[i].predicate === currentExpression.predicate ||
+                newExpressions[i].predicate === currentExpression.id)
+            ) {
+              newExpressions[i] = {
+                ...newExpressions[i],
+                _formValues: [
+                  ...newExpressions[i]._formValues,
+                  _createField(newExpressions[i]._formValues[0])
+                ]
+              };
+
+              break;
             }
 
-            if (
-                _isLink(newExpressions[i].valueExpr) ||
-                !newExpressions[i].predicate
-            ) {
+            if (_isLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
                 for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
-                    if (
+                    if (newExpressions[i]._formValues[y]._formFocus.value
+                        === currentExpression._formFocus.value) {
+                        newExpressions[i] = {
+                            ...newExpressions[i],
+                            _formValues: [
+                                ...newExpressions[i]._formValues,
+                                _createField(newExpressions[i]._formValues[0])
+                            ]
+                        };
+                        break;
+
+                    } else if (
                         newExpressions[i]._formValues[y].expression &&
                         newExpressions[i]._formValues[y].expression.expressions
                     ) {
@@ -199,10 +215,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                             parent
                         );
 
-                        newExpressions[i]._formValues[
-                            y
-                            ].expression.expressions = expressions;
-                        break;
+                        newExpressions[i]._formValues[y].expression.expressions = expressions;
                     }
                 }
             }
