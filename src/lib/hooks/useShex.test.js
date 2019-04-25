@@ -1,5 +1,6 @@
 import { useShex } from '@hooks';
-import { renderHook, cleanup } from 'react-hooks-testing-library';
+import { renderHook } from 'react-hooks-testing-library';
+import { cleanup } from 'react-testing-library';
 
 describe('useWebId', () => {
     let result;
@@ -8,8 +9,10 @@ describe('useWebId', () => {
     });
     afterAll( () => cleanup);
 
-    it('returns undefined when shexC is not loaded', () => {
+    it('returns object when shexC is not loaded', () => {
         expect(result.current.shexData).toEqual({});
+        expect(result.current.addNewShexField).toBeTruthy();
+        expect(result.current.updateShexJ).toBeTruthy();
     });
-
+    
 });
