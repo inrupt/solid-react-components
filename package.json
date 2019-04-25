@@ -14,6 +14,11 @@
     "prebuild:storybook": "npm run test:generate-output",
     "build:storybook": "build-storybook -c .storybook -o build/"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test:generate-output"
+    }
+  },
   "files": [
     "build",
     "CONTRIBUTING.md"
@@ -171,6 +176,7 @@
       "@styled-components": "<rootDir>/src/lib/styled-components/",
       "@utils": "<rootDir>/src/utils",
       "@entities": "<rootDir>/src/lib/entities",
+      "@hooks": "<rootDir>/src/lib/hooks",
       "@testSetup": "<rootDir>/src/test/setup",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },

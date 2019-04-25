@@ -1,7 +1,11 @@
 import React, { Fragment } from "react";
 import { shexFormLabel, shexParentLinkOnDropDowns } from "@utils";
 
-const DropdownFields = ({ shexj, onChange, formValues, parent }) => {
+type Props = {
+  formValues: Object
+};
+
+const DropdownFields = ({ shexj, onChange, formValues, parent }: Props) => {
   const { values, _formFocus } = shexj;
   const { name, parentSubject, value } = _formFocus;
   const inputValue = formValues[name]
