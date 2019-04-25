@@ -79,7 +79,7 @@ const ShexForm = ({
 }: ShexFormProps) => {
   const { expression } = shexj;
 
-  return expression.shexj ? (
+  return shexj ? (
     <Panel>
       {parent && (
         <DeleteButton
