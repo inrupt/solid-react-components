@@ -41,14 +41,6 @@ export const useForm = (
   const createLink = async field => {
     const { subject, parentPredicate, parentSubject } = field;
     const id = `#${subject.split("#").pop()}`;
-    console.log(
-      "Parent Predicate",
-      parentPredicate,
-      "Parent Subject",
-      parentSubject,
-      "Subject",
-      subject
-    );
     await ldflex[parentSubject][parentPredicate].add(namedNode(id));
 
     /*let isNew = true;
@@ -64,19 +56,17 @@ export const useForm = (
   const setFieldValue = (value: String, prefix: ?String) =>
     prefix ? namedNode(`${prefix}${value}`) : value;
 
-  const deleteLink = async (shexj, parent, cb) => {
-    const subject = shexj._formFocus.value;
-    const { predicate: parentPredicate } = parent;
+  const deleteLink = async (shexj) => {
+    const {parentSubject, value: subject, parentPredicate} = shexj._formFocus;
     const expressions = shexj.expression.expressions;
     const { _formFocus } = shexj;
-
     try {
       if (_formFocus && !_formFocus.isNew) {
         for (let expression of expressions) {
           const value = await ldflex[subject][expression.predicate];
           if (value) await ldflex[subject][expression.predicate].delete();
         }
-        await ldflex[documentUri][parentPredicate].delete(ldflex[subject]);
+        await ldflex[parentSubject][parentPredicate].delete(ldflex[subject]);
       }
     } catch (e) {
       throw e;
@@ -86,10 +76,10 @@ export const useForm = (
   const onDelete = async (shexj, parent = false, cb) => {
     try {
       const { _formFocus } = shexj;
-      const { parentSubject, name, value } = _formFocus;
-      if (_formFocus && !_formFocus.isNew) {
+      const { parentSubject, name, value, isNew } = _formFocus;
+      if (_formFocus && !isNew) {
         if (shexParentLinkOnDropDowns(parent, shexj)) {
-          await deleteLink(shexj, parent);
+          await deleteLink(shexj);
         } else {
           const { predicate } = shexj;
           await ldflex[parentSubject][predicate].delete(value);
