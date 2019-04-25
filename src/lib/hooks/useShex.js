@@ -102,7 +102,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
         });
     }
 
-    const _createField = (expression: Object, isLink: boolean = false) => {
+    /* const _createField = (expression: Object, isLink: boolean = false) => {
         const name = unique();
         const value = isLink ? _createIdNode() : '';
         let childExpressions;
@@ -123,7 +123,35 @@ export const useShex = (fileShex: String, documentUri: String) => {
                 value
             }
         }
-    }
+    }  */
+
+    const _createField = (expression: Object, isLink: boolean, parentSubject: Object) => {
+        const id = isLink || _createIdNode();
+        let newExpression;
+
+        if (expression.expression && expression.expression.expressions) {
+            const updatedExp = expression.expression.expressions.map(exp => {
+                const newExpr = exp._formValues.map(frm => {
+                    return _createField(frm, false, { parentSubject: id });
+                });
+                return {...exp, _formValues: newExpr};
+            });
+
+            newExpression = { expression: { expressions: updatedExp }};
+        }
+
+        return {
+          ...expression,
+            ...newExpression,
+          _formFocus: {
+            ...expression._formFocus,
+            ...parentSubject,
+            name: unique(),
+            value: newExpression ? id : '',
+            isNew: true
+          }
+        };
+    };
 
     /*
      * Find into ShexJ same field then copy in the same expression and then update it with
