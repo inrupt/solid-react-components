@@ -14,5 +14,5 @@ describe('useWebId', () => {
         expect(result.current.addNewShexField).toBeTruthy();
         expect(result.current.updateShexJ).toBeTruthy();
     });
-    
+
 });

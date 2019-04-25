@@ -288,7 +288,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
                         type: childExpression.type,
                         ...dropDownValues,
                         _formFocus: _getFormFocusObject(
-                            currentSubject,
+                            currentSubject || documentUri,
                             expression.predicate,
                             linkValue,
                             expression.annotations, isNew),
