@@ -3,10 +3,12 @@ import data from '@solid/query-ldflex';
 import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
+import auth from 'solid-auth-client';
 import { findAnnotation } from "@utils";
 
 export const useShex = (fileShex: String, documentUri: String, rootShape: String) => {
     const [shexData, setShexData] = useState({});
+    const [shexError, setShexError] = useState(null);
     let shapes = [];
     let seed = 1;
 
@@ -16,10 +18,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 'Content-Type': 'text/plain',
             },
         });
+
         const rootShexText = await rootShex.text();
 
         return rootShexText.toString();
     });
+
 
     const addNewShexField = (expression: Object, parentExpresion: Object) => {
         const { formData, shexJ } = shexData;
@@ -35,10 +39,55 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
     }
 
-    const _fetchDocument = async () => {
-        const document = await data[documentUri];
+    const _existDocument = async () => {
+        return await auth.fetch(documentUri, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
 
-        return document;
+    const _createDocument = async () => {
+      if (documentUri && documentUri !== "") {
+        const result = await _existDocument();
+
+        if (result.status === 404) {
+          return await auth.fetch(
+              documentUri,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/sparql-update"
+              },
+              body: ""
+            }
+          );
+        }
+
+        return false;
+      }
+    };
+
+    const onError = (error: Object) => {
+        setShexError(error);
+    }
+
+    const _fetchDocument = async () => {
+        if (documentUri && documentUri !== '') {
+            const result = await _existDocument();
+
+            if (result.status === 404) {
+                const result = await _createDocument();
+
+                if (result.status !== 200) {
+                    onError(result);
+                }
+            }
+
+            const document = await data[documentUri];
+
+            return document;
+        }
     };
 
     const _isLink = valueExpr => {
@@ -387,6 +436,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     return {
         shexData,
+        shexError,
         addNewShexField,
         updateShexJ
     };
