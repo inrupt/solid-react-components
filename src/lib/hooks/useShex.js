@@ -5,7 +5,7 @@ import shexCore from '@shexjs/core';
 import unique from 'unique-string';
 import { findAnnotation } from "@utils";
 
-export const useShex = (fileShex: String, documentUri: String) => {
+export const useShex = (fileShex: String, documentUri: String, rootShape: String) => {
     const [shexData, setShexData] = useState({});
     let shapes = [];
     let seed = 1;
@@ -54,7 +54,7 @@ export const useShex = (fileShex: String, documentUri: String) => {
         return value;
     };
     const _findRootShape = (shexJ: Object) => {
-        return shexJ.start.split('#').pop();
+        return rootShape || shexJ.start.split('#').pop();
     };
 
 

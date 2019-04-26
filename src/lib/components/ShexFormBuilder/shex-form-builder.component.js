@@ -3,15 +3,25 @@ import { FormComponent } from "./styled.component";
 import { ShexForm } from "@components";
 import { useForm, useShex } from "@hooks";
 
+type Props = {
+  errorCallback : () => void,
+  successCallback: () => void,
+  documentUri: String,
+  shexUri: String,
+  rootShape: String
+};
+
 const ShexFormBuilder = ({
   successCallback,
   errorCallback,
   documentUri,
-  shexUri
-}) => {
+  shexUri,
+  rootShape
+}: Props) => {
   const { shexData, addNewShexField, updateShexJ } = useShex(
     shexUri,
-    documentUri
+    documentUri,
+    rootShape
   );
   const { onSubmit: submit, onChange, onDelete, onReset, formValues } = useForm(
     documentUri
