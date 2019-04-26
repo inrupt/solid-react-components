@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
-import {ShapeForm} from "../ShapeForm/shape-form.component";
+import {ShexFormBuilder} from "@components";
 
 const Form = styled.form``;
 
@@ -47,7 +47,7 @@ const HandleShexForm = ({ webId }:Props) => {
                 <Input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
                 <Button type='submit'>Load Form</Button>
             </Form>
-            <ShapeForm {...{ ...podData }} />
+            <ShexFormBuilder {...{ ...podData }} />
         </div>
     );
 };

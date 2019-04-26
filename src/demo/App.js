@@ -3,7 +3,7 @@ import { useWebId } from "@solid/react";
 import styled from "styled-components";
 import SolidImg from "../assets/solid_logo.png";
 import { ProviderLogin, Uploader, ProfileUploader } from "../lib";
-import HandleShexForm from './components/HandleShexForm';
+import HandleShexForm from './components';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
