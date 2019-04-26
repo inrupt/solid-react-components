@@ -1,7 +1,7 @@
-import { 
-  withWebId, 
-  LogoutButton, 
-  Image, 
+import {
+  withWebId,
+  LogoutButton,
+  Image,
   LiveUpdate,
   useWebId,
   UpdateContext,
@@ -12,7 +12,8 @@ import {
   withAuthorization,
   Uploader,
   ProfileUploader,
-  ShexForm
+  ShexForm,
+  ShexFormBuilder
 } from "@components";
 
 export {
@@ -28,5 +29,6 @@ export {
   useWebId,
   UpdateContext,
   useLiveUpdate,
-  ShexForm
+  ShexForm,
+  ShexFormBuilder
 };
