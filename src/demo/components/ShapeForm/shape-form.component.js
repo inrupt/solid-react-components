@@ -14,6 +14,3 @@ export const ShapeForm = ({ shexUri, documentUri }) => {
         }} /> : null
     );
 }
-
-
-// BookDemo

@@ -3,7 +3,7 @@ import { useWebId } from "@solid/react";
 import styled from "styled-components";
 import SolidImg from "../assets/solid_logo.png";
 import { ProviderLogin, Uploader, ProfileUploader } from "../lib";
-import { ShapeForm } from "./components/ShapeForm/shape-form.component";
+import HandleShexForm from './components/HandleShexForm';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -26,11 +26,11 @@ const ShexFormComponent = styled.div`
     border-top: 1px solid black;
     
     input {
-        margin: 20px 0;
-        padding: 10px;
-        width: 100%
-        box-sizing: border-box;
-    }
+      margin: 20px 0;
+      padding: 10px;
+      width: 100%
+      box-sizing: border-box;
+   }
 `;
 
 const Header = props => {
@@ -43,11 +43,8 @@ const Header = props => {
 };
 
 const App = () => {
-  const [shexFormConfig, setShexFormConfig] = useState({});
   const webId = useWebId();
-  const onChangeInput = (e: Event) => {
-      setShexFormConfig({...shexFormConfig, [e.target.name]: e.target.value});
-  }
+
   return (
     <DemoWrapper>
       <Header />
@@ -68,20 +65,10 @@ const App = () => {
         }}
       />
         { webId && <ShexFormComponent>
-            <h2>Shex Form</h2>
-            <input placeholder={'Document Url'} name='documentUri' onChange={onChangeInput}/>
-            <input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
-            <ShapeForm
-                {...{
-                documentUri: 'https://jairocampos.solid.community/public/movies.ttl', /*shexFormConfig.documentUri || webId,*/
-                shexUri: 'https://jmartin.inrupt.net/public/shapes/movie.shex' /*shexFormConfig.shexUri || "/shapes/userProfile.shex"*/
-                }}
-            />
+            <HandleShexForm  {...{ webId }}/>
       </ShexFormComponent> }
     </DemoWrapper>
   );
 };
 
-//https://jairocampos.solid.community/public/book.ttl
-// https://jairocampos.solid.community/public/book.shex
 export default App;
