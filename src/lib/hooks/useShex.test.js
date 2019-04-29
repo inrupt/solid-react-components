@@ -6,7 +6,7 @@ const setup = () => {
     return renderHook(() => useShex());
 };
 
-describe('useWebId', () => {
+describe('useShex', () => {
 
     afterAll( () => cleanup);
 
