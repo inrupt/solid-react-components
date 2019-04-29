@@ -408,7 +408,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
 
-    const toShexJS = useCallback(async () => {
+    const toShexJForm = useCallback(async () => {
         const shexString = await fetchShex();
         const parser = shexParser.construct(window.location.href);
         const podDocument = await _fetchDocument();
@@ -426,7 +426,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
     useEffect(() => {
-        toShexJS();
+        toShexJForm();
     }, [fileShex, documentUri]);
 
     return {
