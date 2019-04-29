@@ -13,8 +13,7 @@
       // :icon "user";
     vcard:hasTelephone @<#vcard_has-telephone> ?
       // :label "Phone"
-      // :icon "phone"
-      // :prefix "tel:";
+      // :icon "phone";
     vcard:role xsd:string ?
       // :key "role"
       // :label "Role"
@@ -70,7 +69,8 @@
       a [vcard:Home vcard:Work] ?
       // :label "";
       vcard:value xsd:string ?
-      // :label "Phone";
+      // :label "Phone"
+      // :prefix "tel:";
     }
 
   <#vcard_country-name> [
