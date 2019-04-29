@@ -140,7 +140,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const _createIdNode = useCallback(() => {
         const randomId = Date.parse (new Date ()) + (seed++);
-        const id = `${documentUri.split('#')[0]}#id${randomId}`;
+        const doc = documentUri || 'https://example.org';
+        const id = `${doc.split('#')[0]}#id${randomId}`;
+
         return id;
     });
 
