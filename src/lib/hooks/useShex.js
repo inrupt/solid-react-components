@@ -25,6 +25,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             },
         });
 
+        if (rootShex.status !== 200) {
+            onError(rootShex);
+        }
+
         const rootShexText = await rootShex.text();
 
         return rootShexText.toString();
@@ -32,17 +36,25 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
 
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
-        const { formData, shexJ } = shexData;
-        const newFormData = _addShexJField(formData, expression, parentExpresion);
+        try {
+            const {formData, shexJ} = shexData;
+            const newFormData = _addShexJField(formData, expression, parentExpresion);
 
-        setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
+            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
+        } catch(error) {
+            onError(error);
+        }
     });
 
     const updateShexJ = useCallback((key: String, action: String, data: ?Object) => {
-        const { formData, shexJ } = shexData;
-        const newFormData = _updateShexJ(formData, action, { key, data });
+        try {
+            const {formData, shexJ} = shexData;
+            const newFormData = _updateShexJ(formData, action, {key, data});
 
-        setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
+            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
+        } catch(error) {
+            onError(error);
+        }
     });
 
     const _existDocument = useCallback(async () => {
@@ -110,7 +122,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
     const _findRootShape = useCallback((shexJ: ShexJ) => {
-        return rootShape || shexJ.start.split('#').pop();
+        try {
+            return rootShape || shexJ.start.split('#').pop();
+        } catch (error) {
+            onError(error);
+        }
     });
 
 
