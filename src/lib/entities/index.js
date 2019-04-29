@@ -20,3 +20,47 @@ export type SolidError = {
   statusText: String,
   code: number
 };
+
+
+export type Annotation = {
+  type: String,
+  predicate: String,
+  object: {}
+};
+
+export type FormFocus = {
+  value: String,
+  name: String,
+  parentSubject: ?String,
+  parentPredicate: ?String
+};
+
+export type FormValue = {
+  _formFocus: FormFocus
+};
+
+export type Expressions = {
+  annotations: ?Array<Annotation>,
+  predicate: String,
+  type: String,
+  valueExpr: any,
+  _formValues: ?Array<FormValue>
+};
+
+export type Expression = {
+  expressions: Array<Expressions>,
+  type: String
+};
+
+export type Shape = {
+  expression: ?Expression,
+  id: String,
+  type: String
+};
+
+export type ShexJ = {
+  "@context": String,
+  shapes: Array<Shape>,
+  start: ?String,
+  type: String
+};

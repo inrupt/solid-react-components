@@ -23,6 +23,8 @@ const ShexFormBuilder = ({
     documentUri,
     rootShape
   );
+
+  console.log(shexData);
   const { onSubmit: submit, onChange, onDelete, onReset, formValues } = useForm(
     documentUri
   );

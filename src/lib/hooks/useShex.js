@@ -5,6 +5,12 @@ import shexCore from '@shexjs/core';
 import unique from 'unique-string';
 import auth from 'solid-auth-client';
 import { findAnnotation } from "@utils";
+import { Expression, Annotation, ShexJ, Shape } from "@entities";
+
+type Options = {
+    key: String,
+    data: ?Object
+}
 
 export const useShex = (fileShex: String, documentUri: String, rootShape: String) => {
     const [shexData, setShexData] = useState({});
@@ -25,7 +31,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
 
-    const addNewShexField = useCallback((expression: Object, parentExpresion: Object) => {
+    const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
         const { formData, shexJ } = shexData;
         const newFormData = _addShexJField(formData, expression, parentExpresion);
 
@@ -94,7 +100,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return typeof valueExpr === 'string' || null;
     });
 
-    const _fieldValue = useCallback((annotations: Array<Object>, value: String) => {
+    const _fieldValue = useCallback((annotations: Array<Annotation>, value: String) => {
         const hasPrefix = findAnnotation('layoutprefix', annotations);
         if (hasPrefix && typeof value == 'string') {
             return value.split(hasPrefix.object.value).pop();
@@ -103,7 +109,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return value;
     });
 
-    const _findRootShape = useCallback((shexJ: Object) => {
+    const _findRootShape = useCallback((shexJ: ShexJ) => {
         return rootShape || shexJ.start.split('#').pop();
     });
 
@@ -125,7 +131,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
-    const _isDropDown = useCallback((expression: Object) => {
+    const _isDropDown = useCallback((expression: Expression) => {
         if (Array.isArray(expression.values)) {
             return { values: expression.values };
         }
@@ -139,7 +145,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
 
-    const _copyChildExpression = useCallback((expressions: Array<Object>, linkId: String) => {
+    const _copyChildExpression = useCallback((expressions: Array<Expression>, linkId: String) => {
         return expressions.map(expression => {
             if (expression.valueExpr) {
                 const childExpression =  _copyChildExpression(expression._formValues, linkId);
@@ -154,7 +160,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         });
     });
 
-    const _createField = useCallback((expression: Object, isLink: boolean, parentSubject: Object) => {
+    const _createField = useCallback((expression: Expression, isLink: boolean, parentSubject: Object) => {
         const id = isLink || _createIdNode();
         let newExpression;
 
@@ -191,7 +197,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
      * @params {currentExpression}
      * @params {parentExpresion}
      */
-    const _addShexJField = useCallback(( shexJ: Object, currentExpression: Object, parent: ?Object) => {
+    const _addShexJField = useCallback(( shexJ: ShexJ, currentExpression: Expression, parent: ?Object) => {
         let newExpressions = shexJ.expression.expressions;
 
 
@@ -252,7 +258,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
      * @params {Object} could be { key, data } where key is the _formFocus name( input name) and data
      * is the attributes that you want to update on _formFocus.
     */
-    const _updateShexJ = useCallback((shape: Object, action: String, options: Object) => {
+    const _updateShexJ = useCallback((shape: Shape, action: String, options: Options) => {
         let newExpressions = shape.expression.expressions;
 
         for (let i = 0; i < newExpressions.length; i++) {
@@ -285,7 +291,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
 
-    const _fillFormValues =  useCallback(async (shape: Object, expression: Object, value: String = '') => {
+    const _fillFormValues =  useCallback(async (shape: Shape, expression: Expression, value: String = '') => {
         let isNew = value === '';
 
         if (_isLink(expression.valueExpr)) {
