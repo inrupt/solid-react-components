@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import { FormComponent } from "./styled.component";
 import { ShexForm } from "@components";
 import { useForm, useShex } from "@hooks";
@@ -18,26 +18,30 @@ const ShexFormBuilder = ({
   shexUri,
   rootShape
 }: Props) => {
-  const { shexData, addNewShexField, updateShexJ } = useShex(
+  const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
     shexUri,
     documentUri,
     rootShape
   );
-  
-  const { onSubmit: submit, onChange, onDelete, onReset, formValues } = useForm(
+
+  const { onSubmit: submit, onChange, onDelete, onReset, formValues, formError } = useForm(
     documentUri
   );
 
-  const update = async () => {
+  if (shexError || formError) {
+    if (errorCallback) errorCallback(shexError || formError);
+  }
+
+  const update = useCallback(async () => {
     for await (const key of Object.keys(formValues)) {
       updateShexJ(formValues[key].name, "update", {
         isNew: false,
         value: formValues[key].value
       });
     }
-  };
+  });
 
-  const onSubmit = e => {
+  const onSubmit = useCallback(e => {
     try {
       submit(e);
       update();
@@ -45,7 +49,7 @@ const ShexFormBuilder = ({
     } catch (e) {
       errorCallback(e);
     }
-  };
+  });
 
   return (
     <FormComponent onSubmit={onSubmit}>
@@ -71,7 +75,7 @@ const ShexFormBuilder = ({
 
 ShexFormBuilder.defaultProps = {
   successCallback: () => console.log("Form submitted successfully"),
-  errorCallback: e => console.log("Error submitting form", e)
+  errorCallback: e => console.log("Error: ", e)
 };
 
 export default ShexFormBuilder;
