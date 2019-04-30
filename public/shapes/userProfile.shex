@@ -13,7 +13,7 @@
       // :icon "user";
     vcard:hasTelephone @<#vcard_has-telephone> ?
       // :label "Phone"
-      // :icon "phone"
+      // :icon "phone" ;
     vcard:role xsd:string ?
       // :key "role"
       // :label "Role"

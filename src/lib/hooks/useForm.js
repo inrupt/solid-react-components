@@ -6,7 +6,7 @@ import { ShexJ } from "@entities";
 
 export const useForm = (documentUri: String) => {
   const [formValues, setFormValues] = useState({});
-  const [formError, setFormError] = useState({});
+  const [formError, setFormError] = useState(null);
 
   const onChange = e => {
     const { value, name } = e.target;
