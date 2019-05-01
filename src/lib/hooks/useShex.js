@@ -439,6 +439,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     useEffect(() => {
         toShexJForm();
+
     }, [fileShex, documentUri]);
 
     return {

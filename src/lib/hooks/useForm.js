@@ -7,6 +7,7 @@ import { ShexJ } from "@entities";
 export const useForm = (documentUri: String) => {
   const [formValues, setFormValues] = useState({});
   const [formError, setFormError] = useState(null);
+  // const [formStatus, setFormStatus] = useState(false);
 
   const onChange = e => {
     const { value, name } = e.target;
@@ -23,10 +24,11 @@ export const useForm = (documentUri: String) => {
         subject: e.target.getAttribute('data-subject'),
         prefix: e.target.getAttribute('data-prefix'),
         parentPredicate: e.target.getAttribute('data-parent-predicate'),
-        parentSubject: e.target.getAttribute('data-parent-subject')
+        parentSubject: e.target.getAttribute('data-parent-subject'),
+        valueExpr: JSON.parse(e.target.getAttribute('data-valuexpr'))
       }
     };
-
+    console.log(onChange);
     setFormValues({ ...formValues, ...data });
   };
 
@@ -86,41 +88,140 @@ export const useForm = (documentUri: String) => {
     setFormError(error);
   };
 
+  const errorFieldFactory = (field: Object, error: String) => {
+    return {
+      ...field,
+      error
+    };
+  }
+
+  const _formStringValidation = (fieldValue: Object) => {
+    const { valueExpr } = fieldValue;
+
+    if (valueExpr.pattern) {
+      const regex = new RegExp(valueExpr.pattern);
+
+      if (!regex.test(fieldValue.value)) {
+        const message = 'Field value has wrong format';
+
+        return errorFieldFactory(fieldValue, message);
+      }
+
+      if (valueExpr.minlength || valueExpr.maxlength) {
+        if ((valueExpr.minlength && valueExpr.minlength > fieldValue.value.length) ||
+            ( valueExpr.maxlength && valueExpr.maxlength > fieldValue.value.length)) {
+          const message = `Error value should has more than ${valueExpr.minlength} or less than ${valueExpr.maxlength}`;
+
+          return errorFieldFactory(fieldValue, message);
+        }
+      }
+
+      if (valueExpr.length && valueExpr.length === fieldValue.value.length) {
+        const message = `Error Length should be equal than ${valueExpr.length}`;
+
+        return errorFieldFactory(fieldValue, message);
+      }
+    }
+    return {...fieldValue};
+  }
+
+  const _formNumberValidation = (fieldValue: Object) => {
+    const { valueExpr } = fieldValue;
+
+    if (valueExpr.mininclusive || valueExpr.maxinclusive) {
+      if ((valueExpr.mininclusive && valueExpr.mininclusive > fieldValue.value) ||
+          (valueExpr.maxinclusive && valueExpr.maxinclusive < fieldValue.value)) {
+        const message = `Error min and max number should be  ${valueExpr.mininclusive}, ${valueExpr.maxinclusive}`;
+
+        return errorFieldFactory(fieldValue, message);
+      }
+    }
+
+    if (valueExpr.mininclusive || valueExpr.maxinclusive) {
+      if ((valueExpr.minexclusive && valueExpr.minexclusive >= fieldValue.value) ||
+          (valueExpr.maxexclusive && valueExpr.maxexclusive <= fieldValue.value)) {
+        const message = `Error min and max value should be  ${valueExpr.minexclusive}, ${valueExpr.maxexclusive}`;
+
+        return errorFieldFactory(fieldValue, message);
+      }
+    }
+    return {...fieldValue};
+  }
+
+
+  const _formValidation = (formValues: Object) => {
+    const formValuesKeys = Object.keys(formValues);
+    let isValid = true;
+
+    const updatedFields = formValuesKeys.reduce((acc, field) => {
+      const currentField = formValues[field];
+      const {valueExpr} = currentField;
+
+      if (valueExpr.datatype.includes('string')) {
+        const updatedField = _formStringValidation(currentField);
+
+        if (updatedField.error) isValid = false;
+
+        return {...acc, [ field]: updatedField };
+      }
+
+      const updatedField =  _formNumberValidation(currentField);
+
+      if (updatedField.error) isValid = false;
+
+      return {...acc, [field]: updatedField };
+    }, []);
+
+
+    return { isValid, updatedFields };
+  }
+
+
   const onSubmit = async (e: Event) => {
     try {
-      if (!documentUri || documentUri === '') {
-        throw Error('Document Uri is required');
+      if (!documentUri || documentUri === "") {
+        throw Error("Document Uri is required");
       }
       e.preventDefault();
 
-      for await (const key of Object.keys(formValues)) {
-        const field = {
-          ...formValues[key],
-          value: _setFieldValue(formValues[key].value, formValues[key].prefix),
-          defaultValue: _setFieldValue(
-            formValues[key].defaultValue,
-            formValues[key].prefix
-          )
-        };
+      const { isValid, updatedFields } = _formValidation(formValues);
 
-        switch (field.action) {
-          case 'update':
-            await ldflex[field.subject][field.predicate].replace(
-              field.defaultValue,
-              field.value
-            );
-            break;
-          case 'create':
-            await _create(field);
-            break;
-          case 'delete':
-            await ldflex[field.subject][field.predicate].delete(
-              field.defaultValue
-            );
-            break;
-          default:
-            break;
+      if (isValid) {
+        for await (const key of Object.keys(formValues)) {
+
+          const field = {
+            ...formValues[key],
+            value: _setFieldValue(
+                formValues[key].value,
+                formValues[key].prefix
+            ),
+            defaultValue: _setFieldValue(
+                formValues[key].defaultValue,
+                formValues[key].prefix
+            )
+          };
+
+          switch (field.action) {
+            case "update":
+              await ldflex[field.subject][field.predicate].replace(
+                  field.defaultValue,
+                  field.value
+              );
+              break;
+            case "create":
+              await _create(field);
+              break;
+            case "delete":
+              await ldflex[field.subject][field.predicate].delete(
+                  field.defaultValue
+              );
+              break;
+            default:
+              break;
+          }
         }
+      } else {
+        setFormValues({...updatedFields});
       }
     } catch (error) {
       throw Error(error);
