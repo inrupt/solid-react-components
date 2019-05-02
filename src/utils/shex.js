@@ -14,9 +14,11 @@ const shexFormLabel = (data: Object) => {
   }
   const { predicate } = data;
 
-  return predicate.includes("#")
-    ? predicate.split("#")[1]
-    : predicate.split("/").pop();
+  if (predicate) {
+    return predicate.includes("#")
+        ? predicate.split("#")[1]
+        : predicate.split("/").pop();
+  }
 };
 
 const shexParentLinkOnDropDowns = (parent: Object, expression: Object) => {

@@ -179,6 +179,7 @@
       "@utils": "<rootDir>/src/utils",
       "@entities": "<rootDir>/src/lib/entities",
       "@hooks": "<rootDir>/src/lib/hooks",
+      "@contex": "<rootDir>/src/lib/context",
       "@testSetup": "<rootDir>/src/test/setup",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },

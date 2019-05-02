@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useWebId } from "@solid/react";
 import styled from "styled-components";
 import SolidImg from "../assets/solid_logo.png";

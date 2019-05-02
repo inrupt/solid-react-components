@@ -128,21 +128,23 @@ export const useForm = (documentUri: String) => {
   const _formNumberValidation = (fieldValue: Object) => {
     const { valueExpr } = fieldValue;
 
-    if (valueExpr.mininclusive || valueExpr.maxinclusive) {
-      if ((valueExpr.mininclusive && valueExpr.mininclusive > fieldValue.value) ||
-          (valueExpr.maxinclusive && valueExpr.maxinclusive < fieldValue.value)) {
-        const message = `Error min and max number should be  ${valueExpr.mininclusive}, ${valueExpr.maxinclusive}`;
+    if (valueExpr) {
+      if (valueExpr.mininclusive || valueExpr.maxinclusive) {
+        if ((valueExpr.mininclusive && valueExpr.mininclusive > fieldValue.value) ||
+            (valueExpr.maxinclusive && valueExpr.maxinclusive < fieldValue.value)) {
+          const message = `Error min and max number should be  ${valueExpr.mininclusive}, ${valueExpr.maxinclusive}`;
 
-        return errorFieldFactory(fieldValue, message);
+          return errorFieldFactory(fieldValue, message);
+        }
       }
-    }
 
-    if (valueExpr.mininclusive || valueExpr.maxinclusive) {
-      if ((valueExpr.minexclusive && valueExpr.minexclusive >= fieldValue.value) ||
-          (valueExpr.maxexclusive && valueExpr.maxexclusive <= fieldValue.value)) {
-        const message = `Error min and max value should be  ${valueExpr.minexclusive}, ${valueExpr.maxexclusive}`;
+      if (valueExpr.mininclusive || valueExpr.maxinclusive) {
+        if ((valueExpr.minexclusive && valueExpr.minexclusive >= fieldValue.value) ||
+            (valueExpr.maxexclusive && valueExpr.maxexclusive <= fieldValue.value)) {
+          const message = `Error min and max value should be  ${valueExpr.minexclusive}, ${valueExpr.maxexclusive}`;
 
-        return errorFieldFactory(fieldValue, message);
+          return errorFieldFactory(fieldValue, message);
+        }
       }
     }
     return {...fieldValue};
@@ -155,9 +157,9 @@ export const useForm = (documentUri: String) => {
 
     const updatedFields = formValuesKeys.reduce((acc, field) => {
       const currentField = formValues[field];
-      const {valueExpr} = currentField;
+      // const {valueExpr} = currentField;
 
-      if (valueExpr.datatype.includes('string')) {
+      if (currentField.valueExpr && currentField.valueExpr.datatype.includes('string')) {
         const updatedField = _formStringValidation(currentField);
 
         if (updatedField.error) isValid = false;

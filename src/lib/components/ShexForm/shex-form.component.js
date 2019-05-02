@@ -1,8 +1,9 @@
 import React from "react";
 import { ExpressionFields, DropdownFields } from "./children";
 import { shexFormLabel, allowNewFields } from "@utils";
-import { Panel, DeleteButton } from './styled.component';
-
+import { Panel } from "./styled.component";
+import { DeleteButton, AddButton } from "./children";
+// import { DropDownField } from "./children/DropDownField";
 
 type ShexFormProps = {
   shexj: Object,
@@ -23,18 +24,9 @@ const ShexForm = ({
   formValues
 }: ShexFormProps) => {
   const { expression } = shexj;
-
   return shexj ? (
     <Panel>
-      {parent && (
-        <DeleteButton
-          type="button"
-          onClick={() => onDelete(shexj, parent, updateShexJ)}
-        >
-          X
-        </DeleteButton>
-      )}
-
+      <DeleteButton {...{ parent, onDelete, shexj, updateShexJ }} />
       {expression &&
       expression.expressions &&
       expression.expressions.length > 0 ? (
@@ -57,16 +49,13 @@ const ShexForm = ({
                     }}
                   />
                 ))}
-                {allowNewFields(expression) && (
-                  <button
-                    onClick={() =>
-                      addNewShexField(expression._formValues[0], expression)
-                    }
-                    type="button"
-                  >
-                    Add new {shexFormLabel(expression)}
-                  </button>
-                )}
+                <AddButton
+                  {...{
+                    allowNewFields: allowNewFields(expression),
+                    defaultExpression: expression._formValues[0],
+                    addNewShexField,
+                  }}
+                />
               </React.Fragment>
             );
           } else {

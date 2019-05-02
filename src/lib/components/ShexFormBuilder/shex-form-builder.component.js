@@ -2,13 +2,15 @@ import React, {useCallback} from "react";
 import { FormComponent } from "./styled.component";
 import { ShexForm } from "@components";
 import { useForm, useShex } from "@hooks";
+import { ThemeShex } from "@context";
 
 type Props = {
   errorCallback : () => void,
   successCallback: () => void,
   documentUri: String,
   shexUri: String,
-  rootShape: String
+  rootShape: String,
+  theme: Object
 };
 
 const ShexFormBuilder = ({
@@ -16,7 +18,8 @@ const ShexFormBuilder = ({
   errorCallback,
   documentUri,
   shexUri,
-  rootShape
+  rootShape,
+    theme
 }: Props) => {
   const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
     shexUri,
@@ -52,30 +55,38 @@ const ShexFormBuilder = ({
   });
 
   return (
-    <FormComponent onSubmit={onSubmit}>
-      {shexData.formData && (
-        <ShexForm
-          {...{
-            formValues,
-            onChange,
-            onDelete,
-            addNewShexField,
-            updateShexJ,
-            shexj: shexData.formData
-          }}
-        />
-      )}
-      <button type="submit">Save</button>
-      <button type="button" onClick={onReset}>
-        Reset
-      </button>
-    </FormComponent>
+    <ThemeShex.Provider value={theme}>
+      <FormComponent onSubmit={onSubmit} className={theme && theme.form}>
+        {shexData.formData && (
+          <ShexForm
+            {...{
+              formValues,
+              onChange,
+              onDelete,
+              addNewShexField,
+              updateShexJ,
+              shexj: shexData.formData
+            }}
+          />
+        )}
+        <button type="submit">Save</button>
+        <button type="button" onClick={onReset}>
+          Reset
+        </button>
+      </FormComponent>
+    </ThemeShex.Provider>
   );
 };
 
 ShexFormBuilder.defaultProps = {
   successCallback: () => console.log("Form submitted successfully"),
-  errorCallback: e => console.log("Error: ", e)
+  errorCallback: e => console.log("Error: ", e),
+  theme: {
+      input : 'solid-input-shex',
+      select: 'solid-input-shex solid-select-shex',
+      deleteButton: 'solid-button-shex',
+      form: 'solid-shex-form'
+  }
 };
 
 export default ShexFormBuilder;
