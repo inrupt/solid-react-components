@@ -1,6 +1,7 @@
 import React from "react";
 import { ThemeShex } from "@context";
 import { DeleteButton } from "../";
+import { ErrorMessage, SelectWrapper, Select } from "./styled.component";
 
 export const DropDownField = ({
   inputData,
@@ -10,7 +11,6 @@ export const DropDownField = ({
   hasPrefix,
   parentPredicate,
   data,
-  error,
   parent,
   canDelete,
   updateShexJ,
@@ -19,8 +19,13 @@ export const DropDownField = ({
   return (
     <ThemeShex.Consumer>
       {theme => (
-        <div className={theme && theme.select}>
-          <select
+        <SelectWrapper
+          className={`${theme && theme.wrapperSelect} ${
+            inputData.error ? "error" : ""
+          }`}
+        >
+          <Select
+            className={theme && theme.select}
             value={inputData.value}
             name={inputData.name}
             onChange={onChange}
@@ -35,8 +40,12 @@ export const DropDownField = ({
                 {value.split("#")[1]}
               </option>
             ))}
-          </select>
-          {error && <p>{error}</p>}
+          </Select>
+          {inputData.error && (
+            <ErrorMessage className={theme && theme.inputError}>
+              {inputData.error}
+            </ErrorMessage>
+          )}
           <DeleteButton
             {...{
               onDelete,
@@ -47,7 +56,7 @@ export const DropDownField = ({
               fieldData
             }}
           />
-        </div>
+        </SelectWrapper>
       )}
     </ThemeShex.Consumer>
   );

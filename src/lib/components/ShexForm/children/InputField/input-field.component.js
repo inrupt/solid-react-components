@@ -1,6 +1,7 @@
 import React from "react";
 import { ThemeShex } from "@context";
 import { DeleteButton } from "../";
+import { ErrorMessage, InputWrapper, Input } from "./styled.component";
 
 export const InputField = ({
   valueExpr,
@@ -19,8 +20,13 @@ export const InputField = ({
   return (
     <ThemeShex.Consumer>
       {theme => (
-        <div className={theme && theme.input}>
-          <input
+        <InputWrapper
+          className={`${theme && theme.inputContainer} ${
+            inputData.error ? "error" : ""
+          }`}
+        >
+          <Input
+            className={theme && theme.input}
             type="text"
             value={inputData.value}
             name={inputData.name}
@@ -33,7 +39,11 @@ export const InputField = ({
             data-valuexpr={JSON.stringify(valueExpr)}
             data-parent-subject={parentSubject}
           />
-          {inputData.error && <p className={ theme && theme.inputError }>{inputData.error}</p>}
+          {inputData.error && (
+            <ErrorMessage className={theme && theme.inputError}>
+              {inputData.error}
+            </ErrorMessage>
+          )}
           <DeleteButton
             {...{
               onDelete,
@@ -44,7 +54,7 @@ export const InputField = ({
               fieldData
             }}
           />
-        </div>
+        </InputWrapper>
       )}
     </ThemeShex.Consumer>
   );
