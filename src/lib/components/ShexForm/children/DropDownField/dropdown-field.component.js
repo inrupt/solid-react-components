@@ -40,8 +40,9 @@ export const DropDownField = ({
           >
             {values.map(val => {
               const uVal = typeof val === 'string' ? val.split('#')[1] : val.value;
+              const selectValue = typeof val === 'string' ? val : val.value
 
-              return(<option value={uVal} key={unique()}>
+              return(<option value={selectValue} key={unique()}>
                 {uVal}
               </option>);
             })}

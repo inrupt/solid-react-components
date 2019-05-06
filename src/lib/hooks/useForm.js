@@ -34,7 +34,7 @@ export const useForm = (documentUri: String) => {
 
   const _create = async field => {
     const { subject, predicate, value } = field;
-    if (field.parentPredicate) await _createLink(field);
+    if (field.parentSubject) await _createLink(field);
     await ldflex[subject][predicate].add(value);
   };
 
