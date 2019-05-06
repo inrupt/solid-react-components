@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { shexFormLabel, allowNewFields } from "@utils";
+import { shexFormLabel, allowNewFields, canDelete } from "@utils";
 import { AddButton } from "./";
 import { Field } from "./";
 
@@ -20,11 +20,6 @@ const ExpressionFields = ({
 }: FieldsProps) => {
   const label = shexFormLabel(data);
 
-  const canDelete =
-    data.min === undefined || data.min === 1
-      ? data._formValues.length > 1
-      : true;
-
   return (
     <Fragment>
       <label>{label}</label>
@@ -42,7 +37,7 @@ const ExpressionFields = ({
                   onDelete,
                   updateShexJ,
                   parent,
-                  canDelete
+                  canDelete: canDelete(data)
                 }}
               />
             </li>

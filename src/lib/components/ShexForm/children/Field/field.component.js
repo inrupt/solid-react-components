@@ -48,14 +48,17 @@ export const Field = ({
       ) : (
         <DropDownField
           {...{
-            data,
-            inputData,
             fieldData,
             onChange,
             onDelete,
             predicate,
             hasPrefix,
-            parentPredicate
+            parentPredicate,
+            value: inputData.value,
+            defaultValue: fieldData._formFocus.value,
+            subject: fieldData._formFocus.parentSubject,
+            name: inputData.name,
+            values: data.valueExpr.values
           }}
         />
       )}

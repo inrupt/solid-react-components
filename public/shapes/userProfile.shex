@@ -9,7 +9,8 @@
   <#UserProfile> {
     vcard:fn xsd:string /^([^0-9]*)$/ MinLength 2  MaxLength 2 {1,2}
       // :key "name"
-      // :label "Name"
+      // :label "Name@es"
+      // :label "Nombre@en"
       // :icon "user";
     vcard:hasTelephone @<#vcard_has-telephone> ?
       // :label "Phone"

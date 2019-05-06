@@ -1,16 +1,21 @@
 import React from "react";
+import unique from 'unique-string';
 import { ThemeShex } from "@context";
 import { DeleteButton } from "../";
-import { ErrorMessage, SelectWrapper, Select } from "./styled.component";
+import { ErrorMessage, SelectWrapper } from "./styled.component";
 
 export const DropDownField = ({
-  inputData,
+  value,
+  values,
+  name,
+  error,
+  defaultValue,
+  subject,
   onChange,
   onDelete,
   predicate,
   hasPrefix,
   parentPredicate,
-  data,
   parent,
   canDelete,
   updateShexJ,
@@ -20,30 +25,30 @@ export const DropDownField = ({
     <ThemeShex.Consumer>
       {theme => (
         <SelectWrapper
-          className={`${theme && theme.wrapperSelect} ${
-            inputData.error ? "error" : ""
-          }`}
+          className={`${theme && theme.wrapperSelect} ${error ? "error" : ""}`}
         >
-          <Select
+          <select
             className={theme && theme.select}
-            value={inputData.value}
-            name={inputData.name}
+            value={value}
+            name={name}
             onChange={onChange}
             data-predicate={predicate}
-            data-subject={fieldData._formFocus.parentSubject}
-            data-default={fieldData._formFocus.value}
+            data-subject={subject}
+            data-default={defaultValue}
             data-prefix={hasPrefix}
             data-parent-predicate={parentPredicate}
           >
-            {data.valueExpr.values.map(value => (
-              <option value={value} key={value}>
-                {value.split("#")[1]}
-              </option>
-            ))}
-          </Select>
-          {inputData.error && (
+            {values.map(val => {
+              const uVal = typeof val === 'string' ? val.split('#')[1] : val.value;
+
+              return(<option value={uVal} key={unique()}>
+                {uVal}
+              </option>);
+            })}
+          </select>
+          {error && (
             <ErrorMessage className={theme && theme.inputError}>
-              {inputData.error}
+              {error}
             </ErrorMessage>
           )}
           <DeleteButton

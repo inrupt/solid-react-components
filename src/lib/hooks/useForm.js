@@ -72,7 +72,8 @@ export const useForm = (documentUri: String) => {
         if (shexParentLinkOnDropDowns(parent, shexj)) {
           await _deleteLink(shexj);
         } else {
-          const { predicate } = shexj;
+          const predicate = shexj.predicate || shexj._formFocus.parentPredicate;
+
           await ldflex[parentSubject][predicate].delete(value);
         }
       }

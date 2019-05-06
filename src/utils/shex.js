@@ -43,9 +43,12 @@ const allowNewFields = (data: Object) => {
   );
 };
 
+const canDelete = (data) => data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
+
 export {
   shexFormLabel,
   findAnnotation,
   shexParentLinkOnDropDowns,
-  allowNewFields
+  allowNewFields,
+  canDelete
 };

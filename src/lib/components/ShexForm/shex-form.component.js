@@ -1,9 +1,7 @@
 import React from "react";
-import { ExpressionFields, DropdownFields } from "./children";
-import { shexFormLabel, allowNewFields } from "@utils";
+import { shexFormLabel, allowNewFields, canDelete, shexParentLinkOnDropDowns } from "@utils";
 import { Panel } from "./styled.component";
-import { DeleteButton, AddButton } from "./children";
-// import { DropDownField } from "./children/DropDownField";
+import { DeleteButton, AddButton, DropDownField, ExpressionFields } from "./children";
 
 type ShexFormProps = {
   shexj: Object,
@@ -24,6 +22,7 @@ const ShexForm = ({
   formValues
 }: ShexFormProps) => {
   const { expression } = shexj;
+
   return shexj ? (
     <Panel>
       <DeleteButton {...{ parent, onDelete, shexj, updateShexJ }} />
@@ -53,7 +52,7 @@ const ShexForm = ({
                   {...{
                     allowNewFields: allowNewFields(expression),
                     defaultExpression: expression._formValues[0],
-                    addNewShexField,
+                    addNewShexField
                   }}
                 />
               </React.Fragment>
@@ -76,11 +75,23 @@ const ShexForm = ({
           }
         })
       ) : (
-        <DropdownFields
-          shexj={shexj}
-          onChange={onChange}
-          formValues={formValues}
-          parent={parent}
+        <DropDownField
+          {...{
+            values: shexj.values,
+            value: formValues[shexj._formFocus.name] ? formValues[shexj._formFocus.name].value : shexj._formFocus.value,
+            fieldData: formValues[shexj] ? formValues[shexj] : shexj,
+            defaultValue: shexj._formFocus.value,
+            subject: shexj._formFocus.parentSubject,
+            name: shexj._formFocus.name,
+            label: shexFormLabel(parent),
+            canDelete: canDelete(parent),
+            predicate: parent.predicate,
+            parentPredicate: shexParentLinkOnDropDowns(parent),
+            parentSubject: shexj._formFocus.parentSubject,
+            onChange,
+            onDelete,
+            updateShexJ,
+          }}
         />
       )}
     </Panel>

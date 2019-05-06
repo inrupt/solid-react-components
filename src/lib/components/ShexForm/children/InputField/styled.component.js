@@ -6,6 +6,7 @@ export const ErrorMessage = styled.p`
 `;
 
 export const InputWrapper = styled.div`
+  position: relative;
   &.error {
     margin-bottom: 0;
   }
