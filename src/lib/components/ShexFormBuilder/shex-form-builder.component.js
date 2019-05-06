@@ -7,6 +7,7 @@ import { ThemeShex } from "@context";
 type Props = {
   errorCallback : () => void,
   successCallback: () => void,
+  messageValidation: { error: Array<String>},
   documentUri: String,
   shexUri: String,
   rootShape: String,
@@ -19,7 +20,7 @@ const ShexFormBuilder = ({
   documentUri,
   shexUri,
   rootShape,
-    theme
+  theme
 }: Props) => {
   const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
     shexUri,
@@ -27,9 +28,14 @@ const ShexFormBuilder = ({
     rootShape
   );
 
-  const { onSubmit: submit, onChange, onDelete, onReset, formValues, formError } = useForm(
-    documentUri
-  );
+  const {
+    onSubmit: submit,
+    onChange,
+    onDelete,
+    onReset,
+    formValues,
+    formError
+  } = useForm(documentUri);
 
   if (shexError || formError) {
     if (errorCallback) errorCallback(shexError || formError);
