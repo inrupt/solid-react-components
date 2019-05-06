@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import { FormComponent } from "./styled.component";
 import { ShexForm } from "@components";
 import { useForm, useShex } from "@hooks";
-import { ThemeShex } from "@context";
+import { ThemeShex, Language } from "@context";
 
 type Props = {
   errorCallback : () => void,
@@ -11,7 +11,8 @@ type Props = {
   documentUri: String,
   shexUri: String,
   rootShape: String,
-  theme: Object
+  theme: Object,
+  language: String
 };
 
 const ShexFormBuilder = ({
@@ -20,7 +21,8 @@ const ShexFormBuilder = ({
   documentUri,
   shexUri,
   rootShape,
-  theme
+  theme,
+  language
 }: Props) => {
   const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
     shexUri,
@@ -62,24 +64,26 @@ const ShexFormBuilder = ({
 
   return (
     <ThemeShex.Provider value={theme}>
-      <FormComponent onSubmit={onSubmit} className={theme && theme.form}>
-        {shexData.formData && (
-          <ShexForm
-            {...{
-              formValues,
-              onChange,
-              onDelete,
-              addNewShexField,
-              updateShexJ,
-              shexj: shexData.formData
-            }}
-          />
-        )}
-        <button type="submit">Save</button>
-        <button type="button" onClick={onReset}>
-          Reset
-        </button>
-      </FormComponent>
+      <Language.Provider value={language}>
+        <FormComponent onSubmit={onSubmit} className={theme && theme.form}>
+          {shexData.formData && (
+            <ShexForm
+              {...{
+                formValues,
+                onChange,
+                onDelete,
+                addNewShexField,
+                updateShexJ,
+                shexj: shexData.formData
+              }}
+            />
+          )}
+          <button type="submit">Save</button>
+          <button type="button" onClick={onReset}>
+            Reset
+          </button>
+        </FormComponent>
+      </Language.Provider>
     </ThemeShex.Provider>
   );
 };

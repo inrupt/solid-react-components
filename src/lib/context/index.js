@@ -1,5 +1,7 @@
-import { ThemeShex } from "./themeShexForm";
+import { ThemeShex } from './themeShexForm';
+import { Language } from './language';
 
 export {
-  ThemeShex
+  ThemeShex,
+  Language
 };

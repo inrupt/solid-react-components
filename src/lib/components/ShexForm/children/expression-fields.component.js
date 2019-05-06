@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { shexFormLabel, allowNewFields, canDelete } from "@utils";
+import { Language } from "@context";
 import { AddButton } from "./";
 import { Field } from "./";
 
@@ -22,7 +23,9 @@ const ExpressionFields = ({
 
   return (
     <Fragment>
-      <label>{label}</label>
+      <Language.Consumer>
+        {language => <label>{shexFormLabel(data, language)}</label>}
+      </Language.Consumer>
       <ul>
         {data._formValues &&
           data._formValues.map((value, i) => (

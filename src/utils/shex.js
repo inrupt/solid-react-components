@@ -1,13 +1,18 @@
-const findAnnotation = (key: String, annotations: Object) => {
+const findAnnotation = (key: String, annotations: Object, language: ?String = 'es') => {
   if (annotations) {
-    return annotations.find(annotation => annotation.predicate.includes(key));
+    return annotations.find(
+      annotation =>
+        annotation.predicate.includes(key) &&
+        ((annotation.object.language &&
+          annotation.object.language.includes(language)) || (!annotation.object.language || !language))
+    );
   }
   return null;
 };
 
-const shexFormLabel = (data: Object) => {
+const shexFormLabel = (data: Object, language: ?String) => {
   if (data.annotations) {
-    const annotation = findAnnotation("label", data.annotations);
+    const annotation = findAnnotation("label", data.annotations, language);
     if (annotation) {
       return annotation.object.value;
     }
