@@ -224,6 +224,7 @@ module.exports = {
       '@entities': path.resolve(__dirname, '../src/lib/entities'),
       '@utils': path.resolve(__dirname, '../src/utils'),
       '@hooks': path.resolve(__dirname, '../src/lib/hooks'),
+      '@context': path.resolve(__dirname, '../src/lib/context'),
       '@testSetup': path.resolve(__dirname, '../src/test/setup')
     },
     plugins: [

@@ -202,7 +202,7 @@ export const useForm = (documentUri: String) => {
                 formValues[key].prefix
             )
           };
-
+          console.log(field);
           switch (field.action) {
             case "update":
               await ldflex[field.subject][field.predicate].replace(
