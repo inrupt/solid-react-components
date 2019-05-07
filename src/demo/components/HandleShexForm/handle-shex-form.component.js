@@ -37,10 +37,11 @@ const HandleShexForm = ({ webId }:Props) => {
 
         setPodData({ ...shexFormConfig });
     }
-
+    // By default addButton and deleteButton will be Add new and Delete
     const languageTheme = {
         language: 'en',
-        addButtonText: '+ Add new '
+        addButtonText: '+ Add new ',
+        deleteButton: 'Delete'
     };
 
     return(
