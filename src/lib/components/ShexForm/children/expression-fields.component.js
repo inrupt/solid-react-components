@@ -19,41 +19,44 @@ const ExpressionFields = ({
   updateShexJ,
   parent
 }: FieldsProps) => {
-  const label = shexFormLabel(data);
 
   return (
     <Fragment>
       <Language.Consumer>
-        {language => <label>{shexFormLabel(data, language)}</label>}
+        {({language}) => (
+          <Fragment>
+            <label>{shexFormLabel(data, language)}</label>
+            <ul>
+              {data._formValues &&
+                data._formValues.map((value, i) => (
+                  <li key={i}>
+                    <Field
+                      {...{
+                        data,
+                        fieldData: value,
+                        inputData:
+                          formValues[value._formFocus.name] || value._formFocus,
+                        onChange,
+                        onDelete,
+                        updateShexJ,
+                        parent,
+                        canDelete: canDelete(data)
+                      }}
+                    />
+                  </li>
+                ))}
+            </ul>
+            <AddButton
+              {...{
+                allowNewFields: allowNewFields(data) && !parent,
+                defaultExpression: data,
+                expression: parent,
+                addNewShexField
+              }}
+            />
+          </Fragment>
+        )}
       </Language.Consumer>
-      <ul>
-        {data._formValues &&
-          data._formValues.map((value, i) => (
-            <li key={i}>
-              <Field
-                {...{
-                  data,
-                  fieldData: value,
-                  inputData:
-                    formValues[value._formFocus.name] || value._formFocus,
-                  onChange,
-                  onDelete,
-                  updateShexJ,
-                  parent,
-                  canDelete: canDelete(data)
-                }}
-              />
-            </li>
-          ))}
-      </ul>
-      <AddButton
-        {...{
-          allowNewFields: allowNewFields(data) && !parent,
-          defaultExpression: data,
-          expression: parent,
-          addNewShexField
-        }}
-      />
     </Fragment>
   );
 };

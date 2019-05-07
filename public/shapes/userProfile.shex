@@ -6,6 +6,7 @@
 
   START=@<#UserProfile>
 
+
   <#UserProfile> {
     vcard:fn xsd:string /^([^0-9]*)$/ MinLength 2  MaxLength 2 {1,2}
       // :key "name"

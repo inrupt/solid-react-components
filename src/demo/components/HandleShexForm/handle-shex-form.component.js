@@ -38,6 +38,10 @@ const HandleShexForm = ({ webId }:Props) => {
         setPodData({ ...shexFormConfig });
     }
 
+    const languageTheme = {
+        language: 'en',
+        addButtonText: '+ Add new '
+    };
 
     return(
         <div>
@@ -47,7 +51,7 @@ const HandleShexForm = ({ webId }:Props) => {
                 <Input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
                 <Button type='submit'>Load Form</Button>
             </Form>
-            <ShexFormBuilder {...{ ...podData, language: 'es' }} />
+            <ShexFormBuilder {...{ ...podData, languageTheme}} />
         </div>
     );
 };

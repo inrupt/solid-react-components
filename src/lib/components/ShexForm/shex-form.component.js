@@ -1,5 +1,6 @@
 import React from "react";
 import { shexFormLabel, allowNewFields, canDelete, shexParentLinkOnDropDowns } from "@utils";
+import { Language } from "@context";
 import { Panel } from "./styled.component";
 import { DeleteButton, AddButton, DropDownField, ExpressionFields } from "./children";
 
@@ -33,7 +34,9 @@ const ShexForm = ({
           if (typeof expression.valueExpr === "string") {
             return (
               <React.Fragment key={i}>
-                <h4>{shexFormLabel(expression)}</h4>
+                <Language.Consumer>
+                  { ({language}) => (<h4>{shexFormLabel(expression, language)}</h4>) }
+                </Language.Consumer>
                 {expression._formValues.map((shexj, i) => (
                   <ShexForm
                     {...{
@@ -51,7 +54,7 @@ const ShexForm = ({
                 <AddButton
                   {...{
                     allowNewFields: allowNewFields(expression),
-                    defaultExpression: expression._formValues[0],
+                    defaultExpression: expression,
                     addNewShexField
                   }}
                 />

@@ -22,7 +22,7 @@ const ShexFormBuilder = ({
   shexUri,
   rootShape,
   theme,
-  language
+                           languageTheme
 }: Props) => {
   const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
     shexUri,
@@ -64,7 +64,7 @@ const ShexFormBuilder = ({
 
   return (
     <ThemeShex.Provider value={theme}>
-      <Language.Provider value={language}>
+      <Language.Provider value={languageTheme}>
         <FormComponent onSubmit={onSubmit} className={theme && theme.form}>
           {shexData.formData && (
             <ShexForm
@@ -74,7 +74,7 @@ const ShexFormBuilder = ({
                 onDelete,
                 addNewShexField,
                 updateShexJ,
-                shexj: shexData.formData
+                shexj: shexData.formData,
               }}
             />
           )}
