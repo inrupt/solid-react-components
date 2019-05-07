@@ -181,7 +181,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return id;
     });
 
-    
+
     const _copyChildExpression = useCallback((expressions: Array<Expression>, linkId: String) => {
         return expressions.map(expression => {
             if (expression.valueExpr) {
