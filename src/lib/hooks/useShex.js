@@ -18,6 +18,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     let shapes = [];
     let seed = 1;
 
+
+    /*
+     * Fetch ShexC file from internal or external sources
+     */
     const fetchShex = useCallback(async () => {
         const rootShex = await fetch(fileShex, {
             headers: {
@@ -90,6 +94,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         setShexError(error);
     });
 
+    /*
+     * Fetch .ttl file from POD, if document doesn't exists
+     * will create a new one.
+     */
     const _fetchDocument = useCallback(async () => {
         if (documentUri && documentUri !== '') {
             const result = await _existDocument();
@@ -121,6 +129,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return value;
     });
 
+    /*
+     * Find root shape from shexJ
+     */
     const _findRootShape = useCallback((shexJ: ShexJ) => {
         try {
             return rootShape || shexJ.start.split('#').pop();
@@ -129,7 +140,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
-
+    /*
+     * Create new object (_formFocus) with unique name, value
+     */
     const _getFormFocusObject = useCallback((
         subject: String,
         parentPredicate,
@@ -147,6 +160,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
+    /*
+     * Check if expression is an drop down when values comes.
+     */
     const _isDropDown = useCallback((expression: Expression) => {
         if (Array.isArray(expression.values)) {
             return { values: expression.values };
@@ -154,6 +170,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return null;
     });
 
+    /*
+     * Create a unique Node Id (Link)
+     */
     const _createIdNode = useCallback(() => {
         const randomId = Date.parse (new Date ()) + (seed++);
         const doc = documentUri || 'https://example.org';
@@ -162,7 +181,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return id;
     });
 
-
+    
     const _copyChildExpression = useCallback((expressions: Array<Expression>, linkId: String) => {
         return expressions.map(expression => {
             if (expression.valueExpr) {
