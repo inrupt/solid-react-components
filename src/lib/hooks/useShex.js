@@ -415,21 +415,42 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         };
     });
 
-
+    
     const _fillFormData = useCallback(async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];
 
         if (currentShape && currentShape.expression) {
-            for await (let currentExpression of currentShape.expression.expressions) {
-                let newExpression = {...currentExpression};
+            if (currentShape.expression.expressions) {
+                for await (let currentExpression of currentShape.expression.expressions) {
+                    let newExpression = {...currentExpression};
+
+                    if (!newExpression._formValues) {
+                        newExpression._formValues = [];
+                    }
+
+                    if (typeof document !== 'string' && documentUri) {
+                        for await (let node of document[currentExpression.predicate]) {
+                            const value = node.value;
+                            newExpression = await _fillFormValues(rootShape, newExpression, value);
+                        }
+                    }
+
+                    if (newExpression._formValues.length === 0) {
+                        newExpression = await _fillFormValues(rootShape, newExpression);
+                    }
+
+                    newExpressions = [...newExpressions, newExpression];
+                }
+            } else if(currentShape.expression.type) {
+                let newExpression = {...currentShape.expression};
 
                 if (!newExpression._formValues) {
                     newExpression._formValues = [];
                 }
 
                 if (typeof document !== 'string' && documentUri) {
-                    for await (let node of document[currentExpression.predicate]) {
+                    for await (let node of document[newExpression.predicate]) {
                         const value = node.value;
                         newExpression = await _fillFormValues(rootShape, newExpression, value);
                     }
