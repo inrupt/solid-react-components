@@ -8,7 +8,7 @@
 
 
   <#UserProfile> {
-    vcard:fn xsd:string MinLength 2  MaxLength 2 {1,2}
+    vcard:fn xsd:string ?
       // :key "name"
       // :label "Name"@en
       // :label "Nombre"@es
@@ -28,7 +28,7 @@
       // :key "company"
       // :label "Company"
       // :icon "building" ;
-    vcard:hasAddress @<#vcard_street-address> ?
+    vcard:hasAddress @<#vcard_street-address> *
       // :key "address"
       // :label "Address"
       // :icon "map-marker-alt" ;
