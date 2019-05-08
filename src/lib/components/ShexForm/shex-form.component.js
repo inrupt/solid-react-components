@@ -33,7 +33,7 @@ const ShexForm = ({
   formValues
 }: ShexFormProps) => {
   const { expression } = shexj;
-
+  
   return shexj ? (
     <ThemeShex.Consumer>
       {theme => (
@@ -108,7 +108,7 @@ const ShexForm = ({
               }
             })
           ) : (
-            <DropDownField
+              shexj._formFocus && <DropDownField
               {...{
                 values: shexj.values,
                 value: formValues[shexj._formFocus.name]

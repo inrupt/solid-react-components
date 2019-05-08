@@ -258,8 +258,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
                 if (_isLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
                     for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
-                        if (newExpressions[i]._formValues[y]._formFocus.value
-                            === currentExpression._formFocus.value) {
+                        if (currentExpression._formFocus &&
+                            newExpressions[i]._formValues[y]._formFocus.value === currentExpression._formFocus.value) {
 
                             newExpressions[i] = {
                                 ...newExpressions[i],
