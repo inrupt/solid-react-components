@@ -237,19 +237,19 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const _addShexJField = useCallback(( shexJ: ShexJ, currentExpression: Expression, parent: ?Object) => {
         try {
             let newExpressions = shexJ.expression.expressions;
-
-
+            
             for (let i = 0; i < newExpressions.length; i++) {
                 if (
                     !parent &&
                     (newExpressions[i].predicate === currentExpression.predicate ||
                         newExpressions[i].predicate === currentExpression.id)
                 ) {
+
                     newExpressions[i] = {
                         ...newExpressions[i],
                         _formValues: [
                             ...newExpressions[i]._formValues,
-                            _createField(newExpressions[i]._formValues[0])
+                            _createField(newExpressions[i]._formValueClone)
                         ]
                     };
 
@@ -260,11 +260,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
                         if (newExpressions[i]._formValues[y]._formFocus.value
                             === currentExpression._formFocus.value) {
+
                             newExpressions[i] = {
                                 ...newExpressions[i],
                                 _formValues: [
                                     ...newExpressions[i]._formValues,
-                                    _createField(newExpressions[i]._formValues[0])
+                                    _createField(newExpressions[i]._formValueClone)
                                 ]
                             };
                             break;
@@ -273,6 +274,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                             newExpressions[i]._formValues[y].expression &&
                             newExpressions[i]._formValues[y].expression.expressions
                         ) {
+
                             const expressions = _addShexJField(
                                 newExpressions[i]._formValues[y],
                                 currentExpression,
@@ -310,9 +312,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
                         if (action === 'delete') {
                             // If field is the last one will keep it but will update value and name
+                            newExpressions[i]._formValues.splice(y, y + 1);
                             if(newExpressions[i]._formValues.length > 1) {
-                                newExpressions[i]._formValues.splice(y, y);
-                            } else {
+
+                            } /* else {
                                 newExpressions[i]._formValues[0] = {
                                     ...newExpressions[i]._formValues[0],
                                     _formFocus: {
@@ -321,7 +324,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                                         name: unique()
                                     }
                                 }
-                            }
+                            } */
                         } else {
                             newExpressions[i]._formValues[y] = {
                                 ...newExpressions[i]._formValues[y],
@@ -375,43 +378,47 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             const dropDownValues = _isDropDown( childExpression );
 
             const currentSubject = dropDownValues ? shape.linkValue || documentUri : shape.parentSubject;
+            const _formValues = [
+                ...expression._formValues,
+                {
+                    id: childExpression.id,
+                    type: childExpression.type,
+                    ...dropDownValues,
+                    _formFocus: _getFormFocusObject(
+                        currentSubject || documentUri,
+                        expression.predicate,
+                        linkValue,
+                        expression.annotations, isNew),
+                    expression: childExpression.expression
+                }];
 
             return  {
                 ...expression,
-                _formValues: [
-                    ...expression._formValues,
-                    {
-                        id: childExpression.id,
-                        type: childExpression.type,
-                        ...dropDownValues,
-                        _formFocus: _getFormFocusObject(
-                            currentSubject || documentUri,
-                            expression.predicate,
-                            linkValue,
-                            expression.annotations, isNew),
-                        expression: childExpression.expression
-                    }]
+                _formValues: _formValues,
+                _formValueClone: _formValues[0]
             };
 
 
         }
+        const _formValues = [
+            ...expression._formValues,
+            {
+                ...expression.valueExpr,
+                _formFocus: _getFormFocusObject(
+                    shape.linkValue ||
+                    documentUri,
+                    shape.parentPredicate,
+                    value,
+                    expression.annotations,
+                    isNew
+                )
+            }
+        ];
 
         return  {
             ...expression,
-            _formValues: [
-                ...expression._formValues,
-                {
-                    ...expression.valueExpr,
-                    _formFocus: _getFormFocusObject(
-                        shape.linkValue ||
-                        documentUri,
-                        shape.parentPredicate,
-                        value,
-                        expression.annotations,
-                        isNew
-                    )
-                }
-            ]
+            _formValues: _formValues,
+            _formValueClone: _formValues[0]
         };
     });
 
