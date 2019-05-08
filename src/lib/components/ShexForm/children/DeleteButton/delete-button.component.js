@@ -10,6 +10,7 @@ const DeleteButtonWrapper = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  z-index: 1;
 `;
 
 export const DeleteButton = ({
