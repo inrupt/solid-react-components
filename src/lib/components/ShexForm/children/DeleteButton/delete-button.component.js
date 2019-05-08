@@ -13,15 +13,13 @@ const DeleteButtonWrapper = styled.button`
 `;
 
 export const DeleteButton = ({
-  isParent,
-  canDelete,
   onDelete,
   fieldData,
   predicate,
   updateShexJ,
-  text = "Delete"
+  text = "Remove"
 }) => {
-  return !isParent && canDelete ? (
+  return (
     <ThemeShex.Consumer>
       {theme => (
         <Language.Consumer>
@@ -39,5 +37,5 @@ export const DeleteButton = ({
         </Language.Consumer>
       )}
     </ThemeShex.Consumer>
-  ) : null;
+  );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import unique from 'unique-string';
+import unique from "unique-string";
 import { ThemeShex } from "@context";
 import { DeleteButton } from "../";
 import { ErrorMessage, SelectWrapper } from "./styled.component";
@@ -39,12 +39,15 @@ export const DropDownField = ({
             data-parent-predicate={parentPredicate}
           >
             {values.map(val => {
-              const uVal = typeof val === 'string' ? val.split('#')[1] : val.value;
-              const selectValue = typeof val === 'string' ? val : val.value
+              const uVal =
+                typeof val === "string" ? val.split("#")[1] : val.value;
+              const selectValue = typeof val === "string" ? val : val.value;
 
-              return(<option value={selectValue} key={unique()}>
-                {uVal}
-              </option>);
+              return (
+                <option value={selectValue} key={unique()}>
+                  {uVal}
+                </option>
+              );
             })}
           </select>
           {error && (
@@ -52,16 +55,18 @@ export const DropDownField = ({
               {error}
             </ErrorMessage>
           )}
-          <DeleteButton
-            {...{
-              onDelete,
-              isParent: parent,
-              canDelete,
-              predicate,
-              updateShexJ,
-              fieldData
-            }}
-          />
+          {!parent && canDelete && (
+            <DeleteButton
+              {...{
+                onDelete,
+                isParent: parent,
+                canDelete,
+                predicate,
+                updateShexJ,
+                fieldData
+              }}
+           />
+          )}
         </SelectWrapper>
       )}
     </ThemeShex.Consumer>

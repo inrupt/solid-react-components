@@ -22,7 +22,7 @@ export const InputField = ({
       {theme => (
         <InputWrapper
           className={`${theme && theme.inputContainer} ${
-              inputData && inputData.error ? "error" : ""
+            inputData && inputData.error ? "error" : ""
           }`}
         >
           <Input
@@ -39,21 +39,22 @@ export const InputField = ({
             data-valuexpr={JSON.stringify(valueExpr)}
             data-parent-subject={parentSubject}
           />
-          { inputData && inputData.error && (
+          {inputData && inputData.error && (
             <ErrorMessage className={theme && theme.inputError}>
               {inputData.error}
             </ErrorMessage>
           )}
-          <DeleteButton
-            {...{
-              onDelete,
-              isParent: parent,
-              canDelete,
-              predicate,
-              updateShexJ,
-              fieldData
-            }}
-          />
+          {!parent && canDelete && (
+            <DeleteButton
+              {...{
+                onDelete,
+                predicate,
+                updateShexJ,
+                fieldData
+              }}
+            />
+
+          )}
         </InputWrapper>
       )}
     </ThemeShex.Consumer>
