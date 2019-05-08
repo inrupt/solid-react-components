@@ -9,6 +9,7 @@ export const useForm = (documentUri: String) => {
   const [formValues, setFormValues] = useState({});
   const [formError, setFormError] = useState(null);
 
+
   const onChange = e => {
     const { value, name } = e.target;
     const defaultValue = e.target.getAttribute('data-default');
@@ -195,15 +196,23 @@ export const useForm = (documentUri: String) => {
 
       if (isValid) {
         for await (const key of Object.keys(formValues)) {
+          let value = formValues[key].value;
+          let defaultValue = formValues[key].defaultValue;
 
+          // @TODO: find a better way to see if value is a predicate.
+          if (value.includes('#')) {
+            value = namedNode(value);
+            defaultValue = namedNode(defaultValue);
+          }
+          
           const field = {
             ...formValues[key],
             value: _setFieldValue(
-                formValues[key].value,
+                value,
                 formValues[key].prefix
             ),
             defaultValue: _setFieldValue(
-                formValues[key].defaultValue,
+                defaultValue,
                 formValues[key].prefix
             )
           };
