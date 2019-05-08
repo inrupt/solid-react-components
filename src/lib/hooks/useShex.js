@@ -237,7 +237,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const _addShexJField = useCallback(( shexJ: ShexJ, currentExpression: Expression, parent: ?Object) => {
         try {
             let newExpressions = shexJ.expression.expressions;
-            
+
             for (let i = 0; i < newExpressions.length; i++) {
                 if (
                     !parent &&
