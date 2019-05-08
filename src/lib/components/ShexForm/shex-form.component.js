@@ -33,7 +33,7 @@ const ShexForm = ({
   formValues
 }: ShexFormProps) => {
   const { expression } = shexj;
-  
+
   return shexj ? (
     <ThemeShex.Consumer>
       {theme => (
