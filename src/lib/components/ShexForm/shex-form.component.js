@@ -46,10 +46,11 @@ const ShexForm = ({
             <DeleteButton
               {...{
                 onDelete,
-                shexj,
+                parent,
                 updateShexJ,
+                fieldData: shexj,
                 floating: true,
-                canDelete: true
+                canDelete: canDelete(parent)
               }}
             />
           )}

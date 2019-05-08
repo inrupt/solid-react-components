@@ -17,6 +17,7 @@ export const DeleteButton = ({
   fieldData,
   predicate,
   updateShexJ,
+  parent,
   text = "Remove"
 }) => {
   return (
@@ -28,7 +29,7 @@ export const DeleteButton = ({
               className={theme && theme.deleteButton}
               type="button"
               onClick={() =>
-                onDelete({ ...fieldData, predicate }, null, updateShexJ)
+                onDelete(predicate ? { ...fieldData, predicate } : fieldData, parent, updateShexJ)
               }
             >
               {deleteButton || text}

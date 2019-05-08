@@ -13,14 +13,14 @@
       // :label "Name"@en
       // :label "Nombre"@es
       // :icon "user";
-    vcard:hasTelephone @<#vcard_has-telephone> ?
+    vcard:hasTelephone @<#vcard_has-telephone> +
       // :label "Phone"
       // :icon "phone" ;
     vcard:role xsd:string ?
       // :key "role"
       // :label "Role"
       // :icon "user-astronaut" ;
-    vcard:hasEmail @<#vcard_has-email> ?
+    vcard:hasEmail @<#vcard_has-email> *
       // :key "email"
       // :label "Email"
       // :icon "envelope";
@@ -28,7 +28,7 @@
       // :key "company"
       // :label "Company"
       // :icon "building" ;
-    vcard:hasAddress @<#vcard_street-address>
+    vcard:hasAddress @<#vcard_street-address> *
       // :key "address"
       // :label "Address"
       // :icon "map-marker-alt" ;
