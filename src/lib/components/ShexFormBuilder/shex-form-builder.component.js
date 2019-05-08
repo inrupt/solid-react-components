@@ -1,13 +1,13 @@
-import React, {useCallback} from "react";
+import React, { useCallback } from "react";
 import { FormComponent } from "./styled.component";
 import { ShexForm } from "@components";
 import { useForm, useShex } from "@hooks";
 import { ThemeShex, Language } from "@context";
 
 type Props = {
-  errorCallback : () => void,
+  errorCallback: () => void,
   successCallback: () => void,
-  messageValidation: { error: Array<String>},
+  messageValidation: { error: Array<String> },
   documentUri: String,
   shexUri: String,
   rootShape: String,
@@ -22,7 +22,7 @@ const ShexFormBuilder = ({
   shexUri,
   rootShape,
   theme,
-                           languageTheme
+  languageTheme
 }: Props) => {
   const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
     shexUri,
@@ -74,7 +74,7 @@ const ShexFormBuilder = ({
                 onDelete,
                 addNewShexField,
                 updateShexJ,
-                shexj: shexData.formData,
+                shexj: shexData.formData
               }}
             />
           )}
@@ -92,10 +92,10 @@ ShexFormBuilder.defaultProps = {
   successCallback: () => console.log("Form submitted successfully"),
   errorCallback: e => console.log("Error: ", e),
   theme: {
-      input : 'solid-input-shex',
-      select: 'solid-input-shex solid-select-shex',
-      deleteButton: 'solid-button-shex',
-      form: 'solid-shex-form'
+    input: "solid-input-shex",
+    select: "solid-input-shex solid-select-shex",
+    deleteButton: "solid-button-shex",
+    form: "solid-shex-form"
   }
 };
 

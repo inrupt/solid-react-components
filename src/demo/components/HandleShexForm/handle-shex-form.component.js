@@ -41,7 +41,8 @@ const HandleShexForm = ({ webId }:Props) => {
     const languageTheme = {
         language: 'en',
         addButtonText: '+ Add new ',
-        deleteButton: 'Delete'
+        deleteButton: 'Delete',
+        dropdownDefaultText: '- Select -'
     };
 
     return(
