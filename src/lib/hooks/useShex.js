@@ -311,7 +311,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                         if (action === 'delete') {
                             // If field is the last one will keep it but will update value and name
                             if(newExpressions[i]._formValues.length > 1) {
-                                newExpressions[i]._formValues.splice(y, y + 1);
+                                newExpressions[i]._formValues.splice(y, y);
                             } else {
                                 newExpressions[i]._formValues[0] = {
                                     ...newExpressions[i]._formValues[0],
