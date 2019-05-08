@@ -415,7 +415,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         };
     });
 
-    
+
     const _fillFormData = useCallback(async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];

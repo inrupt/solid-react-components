@@ -111,22 +111,23 @@ export const useForm = (documentUri: String) => {
 
         return errorFieldFactory(fieldValue, message);
       }
+    }
 
-      if (valueExpr.minlength || valueExpr.maxlength) {
-        if ((valueExpr.minlength && valueExpr.minlength > fieldValue.value.length) ||
-            ( valueExpr.maxlength && valueExpr.maxlength > fieldValue.value.length)) {
-          const message = `Error: Value should be more than ${valueExpr.minlength} or less than ${valueExpr.maxlength}`;
-
-          return errorFieldFactory(fieldValue, message);
-        }
-      }
-
-      if (valueExpr.length && valueExpr.length === fieldValue.value.length) {
-        const message = `Error: Characters length should be equal than ${valueExpr.length}`;
+    if (valueExpr.minlength || valueExpr.maxlength) {
+      if ((valueExpr.minlength && valueExpr.minlength > fieldValue.value.length) ||
+          ( valueExpr.maxlength && valueExpr.maxlength > fieldValue.value.length)) {
+        const message = `Error: Value should be more than ${valueExpr.minlength} or less than ${valueExpr.maxlength}`;
 
         return errorFieldFactory(fieldValue, message);
       }
     }
+
+    if (valueExpr.length && valueExpr.length === fieldValue.value.length) {
+      const message = `Error: Characters length should be equal than ${valueExpr.length}`;
+
+      return errorFieldFactory(fieldValue, message);
+    }
+
     return {...fieldValue};
   }
 
