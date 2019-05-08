@@ -77,6 +77,10 @@ export const useForm = (documentUri: String) => {
           await ldflex[parentSubject][predicate].delete(value);
         }
       }
+      // Delete field from formValues object
+      const { [name]: omit, ...res } = formValues;
+      setFormValues(res);
+
       cb(name, 'delete');
     } catch (error) {
       onError(error);
