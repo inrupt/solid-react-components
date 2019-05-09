@@ -4,7 +4,7 @@ import { ThemeShex } from "@context";
 import { Language } from "@context";
 
 const DeleteButtonWrapper = styled.button`
-  position: absolute;
+  position: ${({ floating }) => (floating ? "absolute" : "relative")};
   right: 8px;
   color: red;
   border: none;
@@ -30,8 +30,13 @@ export const DeleteButton = ({
               className={theme && theme.deleteButton}
               type="button"
               onClick={() =>
-                onDelete(predicate ? { ...fieldData, predicate } : fieldData, parent, updateShexJ)
+                onDelete(
+                  predicate ? { ...fieldData, predicate } : fieldData,
+                  parent,
+                  updateShexJ
+                )
               }
+              floating={parent}
             >
               {deleteButton || text}
             </DeleteButtonWrapper>

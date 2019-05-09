@@ -1,6 +1,6 @@
 import React from "react";
 import { shexFormLabel } from "@utils";
-import { Language } from "@context";
+import { ThemeShex, Language } from "@context";
 
 export const AddButton = ({
   addNewShexField,
@@ -10,15 +10,21 @@ export const AddButton = ({
   text = "+ Add new"
 }) => {
   return (allowNewFields && (
-    <Language.Consumer>
-      {({ language, addButtonText }) => (
-        <button
-          onClick={() => addNewShexField(defaultExpression, expression)}
-          type="button"
-        >
-          {addButtonText || text} {shexFormLabel(defaultExpression, language)}
-        </button>
+    <ThemeShex.Consumer>
+      {theme => (
+        <Language.Consumer>
+          {({ language, addButtonText }) => (
+            <button
+              onClick={() => addNewShexField(defaultExpression, expression)}
+              type="button"
+              className={theme && theme.addButtonStyle}
+            >
+              {addButtonText || text}{" "}
+              {shexFormLabel(defaultExpression, language)}
+            </button>
+          )}
+        </Language.Consumer>
       )}
-    </Language.Consumer>
+    </ThemeShex.Consumer>
   ): null);
 };
