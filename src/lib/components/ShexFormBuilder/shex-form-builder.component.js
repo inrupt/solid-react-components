@@ -52,11 +52,12 @@ const ShexFormBuilder = ({
     }
   });
 
-  const onSubmit = useCallback(e => {
+  const onSubmit = useCallback(async (e) => {
     try {
-      submit(e);
-      update();
-      successCallback();
+      if(await submit(e)) {
+        update();
+        successCallback();
+      }
     } catch (e) {
       errorCallback(e);
     }

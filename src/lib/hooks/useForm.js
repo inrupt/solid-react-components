@@ -88,7 +88,9 @@ export const useForm = (documentUri: String) => {
     }
   };
 
-  const onReset = () => setFormValues({});
+  const onReset = () => {
+    setFormValues({});
+  }
 
   const onError = error => {
     setFormError(error);
@@ -234,9 +236,11 @@ export const useForm = (documentUri: String) => {
             default:
               break;
           }
+          return true;
         }
       } else {
         setFormValues({...updatedFields});
+        return false;
       }
     } catch (error) {
       throw Error(error);
