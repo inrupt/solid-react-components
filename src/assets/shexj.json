@@ -1,0 +1,523 @@
+{
+  "id": "https://localhost:3000/profile#UserProfile",
+  "type": "Shape",
+  "expression": {
+    "expressions": [
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#fn",
+        "valueExpr": {
+          "type": "NodeConstraint",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string"
+        },
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "name" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Name" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "user" }
+          }
+        ],
+        "_formValues": [
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Jairo 2" }
+          },
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Jairo Campos" }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#phone",
+        "valueExpr": {
+          "type": "NodeConstraint",
+          "nodeKind": "iri",
+          "pattern": "^tel:\\+?[0-9.-]"
+        },
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "phone" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Phone" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "phone" }
+          }
+        ],
+        "_formValues": [
+          {
+            "type": "NodeConstraint",
+            "nodeKind": "iri",
+            "pattern": "^tel:\\+?[0-9.-]",
+            "_formFocus": { "value": "70124238" }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#role",
+        "valueExpr": {
+          "type": "NodeConstraint",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string"
+        },
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "role" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Role" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "user-astronaut" }
+          }
+        ],
+        "_formValues": [
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Senior Full Stack Developer" }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
+        "valueExpr": "https://localhost:3000/profile#vcard_value",
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "email" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Email" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "envelope" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutnodeBlank",
+            "object": { "value": "vcard:value" }
+          }
+        ],
+        "_formValues": [
+          {
+            "id": "https://localhost:3000/profile#vcard_value",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jairocampos.solid.community/profile/card#id1554390400000"
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": [
+                      "http://www.w3.org/2006/vcard/ns#Home",
+                      "http://www.w3.org/2006/vcard/ns#Work"
+                    ]
+                  },
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "values": [
+                        "http://www.w3.org/2006/vcard/ns#Home",
+                        "http://www.w3.org/2006/vcard/ns#Work"
+                      ],
+                      "_formFocus": {
+                        "value": "http://www.w3.org/2006/vcard/ns#Work"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#value",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "mailto:jairo.campos@janeirodigital.com"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "https://localhost:3000/profile#vcard_value",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jairocampos.solid.community/profile/card#id1554478551830"
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": [
+                      "http://www.w3.org/2006/vcard/ns#Home",
+                      "http://www.w3.org/2006/vcard/ns#Work"
+                    ]
+                  },
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "values": [
+                        "http://www.w3.org/2006/vcard/ns#Home",
+                        "http://www.w3.org/2006/vcard/ns#Work"
+                      ],
+                      "_formFocus": {
+                        "value": "http://www.w3.org/2006/vcard/ns#Home"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#value",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "mailto:jairocamposv@gmail.com" }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#organization-name",
+        "valueExpr": {
+          "type": "NodeConstraint",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string"
+        },
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "company" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Company" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "building" }
+          }
+        ],
+        "_formValues": [
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": { "value": "Janeiro Digital 2" }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+        "valueExpr": "https://localhost:3000/profile#vcard_street-address",
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "address" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Address" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "map-marker-alt" }
+          }
+        ],
+        "_formValues": [
+          {
+            "id": "https://localhost:3000/profile#vcard_street-address",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jairocampos.solid.community/profile/card#id1551123212000"
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": ["http://www.w3.org/2006/vcard/ns#StreetAddress"]
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#street-address",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "Santa Barbara" }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#locality",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#region",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#country-name",
+                  "valueExpr": "https://localhost:3000/profile#vcard_country-name",
+                  "formFocus": {
+                    "value": "...id#124123123"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "id": "https://localhost:3000/profile#vcard_country-name",
+                      "type": "NodeConstraint",
+                      "_formFocus": { "value": "Costa Rica" },
+                      "expression": { "expressions": [] }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#postal-code",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "506" }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "https://localhost:3000/profile#vcard_street-address",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jairocampos.solid.community/profile/card#id1554495127135"
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": ["http://www.w3.org/2006/vcard/ns#StreetAddress"]
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#street-address",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "San Jose" }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#locality",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#region",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#country-name",
+                  "valueExpr": "https://localhost:3000/profile#vcard_country-name",
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "id": "https://localhost:3000/profile#vcard_country-name",
+                      "type": "NodeConstraint",
+                      "_formFocus": { "value": "CR" },
+                      "expression": { "expressions": [] }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#postal-code",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": { "value": "123" }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
