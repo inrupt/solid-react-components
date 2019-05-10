@@ -163,9 +163,9 @@ We currently re-expose withWebId and LogoutButton so you can use the basic compo
 
 ### ShexFormBuilder
 
-**Note**: This is an early preview build of a work-in-progress component and subject to large-scale changesin future releases.
+**Note**: This is an early preview build of a work-in-progress component and subject to large-scale changes in future releases.
 
-This component allows you to create a fully functional form, complete with submit, cancel, and validation rules, from a [Shex](http://shex.io/shex-primer/index.html) Shape.
+This component allows you to create a fully functional form, complete with submit, cancel, and validation rules, from a [ShEx](http://shex.io/shex-primer/index.html) Shape.
 
 
 Usage:
@@ -192,4 +192,5 @@ Theme object:
 | deleteButton       | string   | solid-button-shex                     | Custom class name for the delete button
 | form               | string   | solid-shex-form                       | Custom class name for the form
 
-
+##### Shapes
+A set of example shapes can be found [here](https://shexshapes.inrupt.net/public/), which show various ShEx shapes. 
