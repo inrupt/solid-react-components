@@ -26,7 +26,7 @@ type Props = {
 const HandleShexForm = ({ webId }:Props) => {
 
     const [shexFormConfig, setShexFormConfig] = useState({});
-    const [podData, setPodData] = useState({ documentUri: webId, shexUri: '/shapes/userProfile.shex' });
+    const [podData, setPodData] = useState({ documentUri: webId, shexUri: 'https://shexshapes.inrupt.net/public/userprofile.shex' });
 
     const onChangeInput = (e: Event) => {
         setShexFormConfig({...shexFormConfig, [e.target.name]: e.target.value});
