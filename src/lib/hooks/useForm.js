@@ -195,9 +195,9 @@ export const useForm = (documentUri: String) => {
       e.preventDefault();
 
       const { isValid, updatedFields } = _formValidation(formValues);
-
-      if (isValid) {
-        for await (const key of Object.keys(formValues)) {
+      const keys = Object.keys(formValues);
+      if (isValid && keys.length > 0) {
+        for await (const key of keys) {
           let value = formValues[key].value;
           let defaultValue = formValues[key].defaultValue;
 
@@ -236,8 +236,8 @@ export const useForm = (documentUri: String) => {
             default:
               break;
           }
-          return true;
         }
+        return true;
       } else {
         setFormValues({...updatedFields});
         return false;
