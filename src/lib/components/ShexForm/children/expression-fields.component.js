@@ -16,14 +16,13 @@ const ExpressionFields = ({
   onDelete,
   formValues,
   addNewShexField,
-  updateShexJ,
-  parent
+  parent,
+  parentName
 }: FieldsProps) => {
-
   return (
     <Fragment>
       <Language.Consumer>
-        {({language}) => (
+        {({ language }) => (
           <Fragment>
             <label>{shexFormLabel(data, language)}</label>
             <ul>
@@ -38,8 +37,8 @@ const ExpressionFields = ({
                           formValues[value._formFocus.name] || value._formFocus,
                         onChange,
                         onDelete,
-                        updateShexJ,
                         parent,
+                        parentName,
                         canDelete: canDelete(data)
                       }}
                     />

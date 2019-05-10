@@ -17,7 +17,6 @@ export const DeleteButton = ({
   onDelete,
   fieldData,
   predicate,
-  updateShexJ,
   parent,
   text = "Remove"
 }) => {
@@ -32,8 +31,7 @@ export const DeleteButton = ({
               onClick={() =>
                 onDelete(
                   predicate ? { ...fieldData, predicate } : fieldData,
-                  parent,
-                  updateShexJ
+                  parent
                 )
               }
               floating={parent}
