@@ -19,7 +19,6 @@ export const InputField = ({
   onDelete,
   parent,
   canDelete,
-  updateShexJ,
   fieldData
 }) => {
   return (
@@ -44,13 +43,13 @@ export const InputField = ({
               data-parent-predicate={parentPredicate}
               data-valuexpr={JSON.stringify(valueExpr)}
               data-parent-subject={parentSubject}
+              data-parent-name={parent && parent._formFocus ? parent._formFocus.name : null }
             />
             {!parent && canDelete && (
               <DeleteButton
                 {...{
                   onDelete,
                   predicate,
-                  updateShexJ,
                   fieldData
                 }}
               />

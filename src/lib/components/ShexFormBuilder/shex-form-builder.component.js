@@ -32,8 +32,8 @@ const ShexFormBuilder = ({
 
   const {
     onSubmit: submit,
+    onDelete: deleteFn,
     onChange,
-    onDelete,
     onReset,
     formValues,
     formError
@@ -43,18 +43,42 @@ const ShexFormBuilder = ({
     if (errorCallback) errorCallback(shexError || formError);
   }
 
-  const update = useCallback(async () => {
+  const update = useCallback(async (shexj: ShexJ, parent: any = false) => {
+    let parents = [];
     for await (const key of Object.keys(formValues)) {
-      updateShexJ(formValues[key].name, "update", {
+      const { name, parentName } = formValues[key];
+      parents =
+        parentName && !parents.includes(parentName)
+          ? [...parents, formValues[key].parentName]
+          : parents;
+      updateShexJ(name, "update", {
         isNew: false,
         value: formValues[key].value
       });
     }
+
+    for await (parent of parents) {
+      updateShexJ(parent, "update", {
+        isNew: false
+      });
+    }
   });
 
-  const onSubmit = useCallback(async (e) => {
+  const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
-      if(await submit(e)) {
+      const deleted = await deleteFn(shexj, parent);
+      if (deleted) {
+        updateShexJ(deleted, "delete");
+        successCallback();
+      }
+    } catch (e) {
+      errorCallback(e);
+    }
+  });
+
+  const onSubmit = useCallback(async e => {
+    try {
+      if (await submit(e)) {
         update();
         successCallback();
       }
@@ -90,7 +114,7 @@ const ShexFormBuilder = ({
 };
 
 ShexFormBuilder.defaultProps = {
-  successCallback: () => console.log("Form submitted successfully"),
+  successCallback: () => console.log("Submitted successfully"),
   errorCallback: e => console.log("Error: ", e),
   theme: {
     input: "solid-input-shex",

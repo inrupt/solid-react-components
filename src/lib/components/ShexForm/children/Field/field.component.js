@@ -14,7 +14,6 @@ export const Field = ({
   inputData,
   onChange,
   onDelete,
-  updateShexJ,
   canDelete,
   parent
 }: FieldProps) => {
@@ -23,7 +22,7 @@ export const Field = ({
   const annotation = findAnnotation("layoutprefix", data.annotations);
   const hasPrefix = annotation && annotation.object.value;
   const parentPredicate = parent && parent.predicate ? parent.predicate : null;
-  const parentSubject = parent && parent._formValues[0]._formFocus.parentSubject;
+  const parentSubject = parent && parent._formFocus.parentSubject;
 
   return (
     <React.Fragment>
@@ -39,7 +38,6 @@ export const Field = ({
             parent,
             parentPredicate,
             parentSubject,
-            updateShexJ,
             canDelete,
             onDelete,
             valueExpr: data.valueExpr,
