@@ -9,12 +9,30 @@ const setup = (props) => {
     return (<ShexFormBuilder {...props} />);
 };
 
-describe('Shex ShapeForm Component', () => {
-    const component = setup();
-    const { container, rerender } = render(component);
 
-    it('should renders without crashing', () => {
+const defaultProps = {
+    documentUri: '',
+    shexUri:
+        'https://jpablo.solid.community/public/shapes/profile.shex',
+    successCallback: jest.fn(),
+    errorCallback: jest.fn(),
+}
+describe('Shex ShapeForm Component', () => {
+    const component = setup(defaultProps);
+    const { container, getByText } = render(component);
+
+    it('should render without crashing', () => {
         expect(container).toBeTruthy();
+    });
+
+    it('should render a submit button', () => {
+        const text = getByText('Save');
+        expect(text).toBeTruthy();
+    });
+
+    it('should render a reset button', () => {
+        const text = getByText('Reset');
+        expect(text).toBeTruthy();
     });
 
 });
