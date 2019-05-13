@@ -31,6 +31,7 @@ export const Panel = styled.div`
     border: 1px solid hsl(0, 0%, 80%);
     cursor: pointer;
     padding: 10px 30px;
+    top: 0;
   }
 `;
 

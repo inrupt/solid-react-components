@@ -26,7 +26,7 @@ type Props = {
 const HandleShexForm = ({ webId }:Props) => {
 
     const [shexFormConfig, setShexFormConfig] = useState({});
-    const [podData, setPodData] = useState({ documentUri: webId, shexUri: '/shapes/userProfile.shex' });
+    const [podData, setPodData] = useState({ documentUri: webId, shexUri: 'https://shexshapes.inrupt.net/public/userprofile.shex' });
 
     const onChangeInput = (e: Event) => {
         setShexFormConfig({...shexFormConfig, [e.target.name]: e.target.value});
@@ -37,7 +37,13 @@ const HandleShexForm = ({ webId }:Props) => {
 
         setPodData({ ...shexFormConfig });
     }
-
+    // By default addButton and deleteButton will be Add new and Delete
+    const languageTheme = {
+        language: 'en',
+        addButtonText: '+ Add new ',
+        deleteButton: 'Delete',
+        dropdownDefaultText: '- Select -'
+    };
 
     return(
         <div>
@@ -47,7 +53,7 @@ const HandleShexForm = ({ webId }:Props) => {
                 <Input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
                 <Button type='submit'>Load Form</Button>
             </Form>
-            <ShexFormBuilder {...{ ...podData }} />
+            <ShexFormBuilder {...{ ...podData, languageTheme}} />
         </div>
     );
 };

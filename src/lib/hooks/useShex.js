@@ -18,12 +18,20 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     let shapes = [];
     let seed = 1;
 
+
+    /*
+     * Fetch ShexC file from internal or external sources
+     */
     const fetchShex = useCallback(async () => {
         const rootShex = await fetch(fileShex, {
             headers: {
                 'Content-Type': 'text/plain',
             },
         });
+
+        if (rootShex.status !== 200) {
+            onError(rootShex);
+        }
 
         const rootShexText = await rootShex.text();
 
@@ -32,17 +40,25 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
 
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
-        const { formData, shexJ } = shexData;
-        const newFormData = _addShexJField(formData, expression, parentExpresion);
+        try {
+            const {formData, shexJ} = shexData;
+            const newFormData = _addShexJField(formData, expression, parentExpresion);
 
-        setShexData({ shexJ, formData: {...formData, expression: { expressions: newFormData }}});
+            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
+        } catch(error) {
+            onError(error);
+        }
     });
 
     const updateShexJ = useCallback((key: String, action: String, data: ?Object) => {
-        const { formData, shexJ } = shexData;
-        const newFormData = _updateShexJ(formData, action, { key, data });
+        try {
+            const {formData, shexJ} = shexData;
+            const newFormData = _updateShexJ(formData, action, {key, data});
 
-        setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
+            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
+        } catch(error) {
+            onError(error);
+        }
     });
 
     const _existDocument = useCallback(async () => {
@@ -78,6 +94,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         setShexError(error);
     });
 
+    /*
+     * Fetch .ttl file from POD, if document doesn't exists
+     * will create a new one.
+     */
     const _fetchDocument = useCallback(async () => {
         if (documentUri && documentUri !== '') {
             const result = await _existDocument();
@@ -109,11 +129,20 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return value;
     });
 
+    /*
+     * Find root shape from shexJ
+     */
     const _findRootShape = useCallback((shexJ: ShexJ) => {
-        return rootShape || shexJ.start.split('#').pop();
+        try {
+            return rootShape || shexJ.start.split('#').pop();
+        } catch (error) {
+            onError(error);
+        }
     });
 
-
+    /*
+     * Create new object (_formFocus) with unique name, value
+     */
     const _getFormFocusObject = useCallback((
         subject: String,
         parentPredicate,
@@ -131,6 +160,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
+    /*
+     * Check if expression is an drop down when values comes.
+     */
     const _isDropDown = useCallback((expression: Expression) => {
         if (Array.isArray(expression.values)) {
             return { values: expression.values };
@@ -138,9 +170,14 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return null;
     });
 
+    /*
+     * Create a unique Node Id (Link)
+     */
     const _createIdNode = useCallback(() => {
         const randomId = Date.parse (new Date ()) + (seed++);
-        const id = `${documentUri.split('#')[0]}#id${randomId}`;
+        const doc = documentUri || 'https://example.org';
+        const id = `${doc.split('#')[0]}#id${randomId}`;
+
         return id;
     });
 
@@ -198,55 +235,61 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
      * @params {parentExpresion}
      */
     const _addShexJField = useCallback(( shexJ: ShexJ, currentExpression: Expression, parent: ?Object) => {
-        let newExpressions = shexJ.expression.expressions;
+        try {
+            let newExpressions = shexJ.expression.expressions;
 
+            for (let i = 0; i < newExpressions.length; i++) {
+                if (
+                    !parent &&
+                    (newExpressions[i].predicate === currentExpression.predicate ||
+                        newExpressions[i].predicate === currentExpression.id)
+                ) {
 
-        for (let i = 0; i < newExpressions.length; i++) {
-            if (
-              !parent &&
-              (newExpressions[i].predicate === currentExpression.predicate ||
-                newExpressions[i].predicate === currentExpression.id)
-            ) {
-              newExpressions[i] = {
-                ...newExpressions[i],
-                _formValues: [
-                  ...newExpressions[i]._formValues,
-                  _createField(newExpressions[i]._formValues[0])
-                ]
-              };
+                    newExpressions[i] = {
+                        ...newExpressions[i],
+                        _formValues: [
+                            ...newExpressions[i]._formValues,
+                            _createField(newExpressions[i]._formValueClone)
+                        ]
+                    };
 
-              break;
-            }
+                    break;
+                }
 
-            if (_isLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
-                for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
-                    if (newExpressions[i]._formValues[y]._formFocus.value
-                        === currentExpression._formFocus.value) {
-                        newExpressions[i] = {
-                            ...newExpressions[i],
-                            _formValues: [
-                                ...newExpressions[i]._formValues,
-                                _createField(newExpressions[i]._formValues[0])
-                            ]
-                        };
-                        break;
+                if (_isLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
+                    for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
+                        if (currentExpression._formFocus &&
+                            newExpressions[i]._formValues[y]._formFocus.value === currentExpression._formFocus.value) {
 
-                    } else if (
-                        newExpressions[i]._formValues[y].expression &&
-                        newExpressions[i]._formValues[y].expression.expressions
-                    ) {
-                        const expressions = _addShexJField(
-                            newExpressions[i]._formValues[y],
-                            currentExpression,
-                            parent
-                        );
+                            newExpressions[i] = {
+                                ...newExpressions[i],
+                                _formValues: [
+                                    ...newExpressions[i]._formValues,
+                                    _createField(newExpressions[i]._formValueClone)
+                                ]
+                            };
+                            break;
 
-                        newExpressions[i]._formValues[y].expression.expressions = expressions;
+                        } else if (
+                            newExpressions[i]._formValues[y].expression &&
+                            newExpressions[i]._formValues[y].expression.expressions
+                        ) {
+
+                            const expressions = _addShexJField(
+                                newExpressions[i]._formValues[y],
+                                currentExpression,
+                                parent
+                            );
+
+                            newExpressions[i]._formValues[y].expression.expressions = expressions;
+                        }
                     }
                 }
             }
+            return newExpressions;
+        } catch (error) {
+            onError(error);
         }
-        return newExpressions;
     });
 
 
@@ -259,35 +302,42 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
      * is the attributes that you want to update on _formFocus.
     */
     const _updateShexJ = useCallback((shape: Shape, action: String, options: Options) => {
-        let newExpressions = shape.expression.expressions;
+        try {
+            let newExpressions = shape.expression.expressions;
 
-        for (let i = 0; i < newExpressions.length; i++) {
-            for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
+            for (let i = 0; i < newExpressions.length; i++) {
+                for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
 
-                if (newExpressions[i]._formValues[y]._formFocus.name === options.key) {
+                    if (newExpressions[i]._formValues[y]._formFocus.name === options.key) {
+                        if (action === 'delete') {
+                            // If field is the last one will keep it but will update value and name
+                            let toIndex = newExpressions[i]._formValues.length === 1 ? 1 : 0;
 
-                    if (action === 'delete') {
-                        newExpressions[i]._formValues.splice(y, y + 1);
-                    } else  {
-                        newExpressions[i]._formValues[y] = {
-                            ...newExpressions[i]._formValues[y],
-                            _formFocus: {
-                                ...newExpressions[i]._formValues[y]._formFocus,
-                                ...options.data
-                            }
-                        };
+                            newExpressions[i]._formValues.splice(y, y + toIndex);
+
+                        } else {
+                            newExpressions[i]._formValues[y] = {
+                                ...newExpressions[i]._formValues[y],
+                                _formFocus: {
+                                    ...newExpressions[i]._formValues[y]._formFocus,
+                                    ...options.data
+                                }
+                            };
+                        }
+                        break;
                     }
-                    break;
-                }
 
-                if (newExpressions[i]._formValues[y].expression && newExpressions[i]._formValues[y].expression.expressions) {
-                    const expressions =_updateShexJ(newExpressions[i]._formValues[y], action, options);
+                    if (newExpressions[i]._formValues[y].expression && newExpressions[i]._formValues[y].expression.expressions) {
+                        const expressions = _updateShexJ(newExpressions[i]._formValues[y], action, options);
 
-                    newExpressions[i]._formValues[y].expression.expressions = expressions;
+                        newExpressions[i]._formValues[y].expression.expressions = expressions;
+                    }
                 }
             }
+            return newExpressions;
+        } catch (error) {
+            onError(error);
         }
-        return newExpressions;
     });
 
 
@@ -318,43 +368,47 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             const dropDownValues = _isDropDown( childExpression );
 
             const currentSubject = dropDownValues ? shape.linkValue || documentUri : shape.parentSubject;
+            const _formValues = [
+                ...expression._formValues,
+                {
+                    id: childExpression.id,
+                    type: childExpression.type,
+                    ...dropDownValues,
+                    _formFocus: _getFormFocusObject(
+                        currentSubject || documentUri,
+                        expression.predicate,
+                        linkValue,
+                        expression.annotations, isNew),
+                    expression: childExpression.expression
+                }];
 
             return  {
                 ...expression,
-                _formValues: [
-                    ...expression._formValues,
-                    {
-                        id: childExpression.id,
-                        type: childExpression.type,
-                        ...dropDownValues,
-                        _formFocus: _getFormFocusObject(
-                            currentSubject || documentUri,
-                            expression.predicate,
-                            linkValue,
-                            expression.annotations, isNew),
-                        expression: childExpression.expression
-                    }]
+                _formValues: _formValues,
+                _formValueClone: _formValues[0]
             };
 
 
         }
+        const _formValues = [
+            ...expression._formValues,
+            {
+                ...expression.valueExpr,
+                _formFocus: _getFormFocusObject(
+                    shape.linkValue ||
+                    documentUri,
+                    shape.parentPredicate,
+                    value,
+                    expression.annotations,
+                    isNew
+                )
+            }
+        ];
 
         return  {
             ...expression,
-            _formValues: [
-                ...expression._formValues,
-                {
-                    ...expression.valueExpr,
-                    _formFocus: _getFormFocusObject(
-                        shape.linkValue ||
-                        documentUri,
-                        shape.parentPredicate,
-                        value,
-                        expression.annotations,
-                        isNew
-                    )
-                }
-            ]
+            _formValues: _formValues,
+            _formValueClone: _formValues[0]
         };
     });
 
@@ -364,15 +418,36 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         let newExpressions = [];
 
         if (currentShape && currentShape.expression) {
-            for await (let currentExpression of currentShape.expression.expressions) {
-                let newExpression = {...currentExpression};
+            if (currentShape.expression.expressions) {
+                for await (let currentExpression of currentShape.expression.expressions) {
+                    let newExpression = {...currentExpression};
+
+                    if (!newExpression._formValues) {
+                        newExpression._formValues = [];
+                    }
+
+                    if (typeof document !== 'string' && documentUri) {
+                        for await (let node of document[currentExpression.predicate]) {
+                            const value = node.value;
+                            newExpression = await _fillFormValues(rootShape, newExpression, value);
+                        }
+                    }
+
+                    if (newExpression._formValues.length === 0) {
+                        newExpression = await _fillFormValues(rootShape, newExpression);
+                    }
+
+                    newExpressions = [...newExpressions, newExpression];
+                }
+            } else if(currentShape.expression.type) {
+                let newExpression = {...currentShape.expression};
 
                 if (!newExpression._formValues) {
                     newExpression._formValues = [];
                 }
 
                 if (typeof document !== 'string' && documentUri) {
-                    for await (let node of document[currentExpression.predicate]) {
+                    for await (let node of document[newExpression.predicate]) {
                         const value = node.value;
                         newExpression = await _fillFormValues(rootShape, newExpression, value);
                     }
@@ -390,25 +465,30 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
 
-    const toShexJS = useCallback(async () => {
-        const shexString = await fetchShex();
-        const parser = shexParser.construct(window.location.href);
-        const podDocument = await _fetchDocument();
-        const shexJ = shexCore.Util.AStoShExJ(parser.parse(shexString));
+    const toShexJForm = useCallback(async () => {
+        try {
+            const shexString = await fetchShex();
+            const parser = shexParser.construct(window.location.href);
+            const podDocument = await _fetchDocument();
+            const shexJ = shexCore.Util.AStoShExJ(parser.parse(shexString));
 
-        shapes = shexJ.shapes;
+            shapes = shexJ.shapes;
 
-        if (shapes.length > 0) {
-            const formData = await _fillFormData(
-                { id: _findRootShape(shexJ) },
-                podDocument
-            );
-            setShexData({ shexJ, formData });
+            if (shapes.length > 0) {
+                const formData = await _fillFormData(
+                    {id: _findRootShape(shexJ)},
+                    podDocument
+                );
+                setShexData({shexJ, formData});
+            }
+        } catch (error) {
+            onError(error);
         }
     });
 
     useEffect(() => {
-        toShexJS();
+        toShexJForm();
+
     }, [fileShex, documentUri]);
 
     return {

@@ -222,9 +222,9 @@ module.exports = {
       '@styled-components': path.resolve(__dirname, '../src/lib/styled-components'),
       '@components': path.resolve(__dirname, '../src/lib/components'),
       '@entities': path.resolve(__dirname, '../src/lib/entities'),
-      '@utils': path.resolve(__dirname, '../src/utils'),
+      '@utils': path.resolve(__dirname, '../src/lib/utils'),
       '@hooks': path.resolve(__dirname, '../src/lib/hooks'),
-      '@testSetup': path.resolve(__dirname, '../src/test/setup')
+      '@context': path.resolve(__dirname, '../src/lib/context')
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding

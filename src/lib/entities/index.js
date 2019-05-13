@@ -1,18 +1,18 @@
 export type Provider = {
   description: String,
-	image: String,
-	label: String,
-	value: String
+  image: String,
+  label: String,
+  value: String
 };
 
 export type SelectOptions = {
-	label: string,
-	value: string
+  label: string,
+  value: string
 };
 
 export type UploadedFiles = {
   uri: String,
-	name: String
+  name: String
 };
 
 export type SolidError = {
@@ -20,7 +20,6 @@ export type SolidError = {
   statusText: String,
   code: number
 };
-
 
 export type Annotation = {
   type: String,
@@ -49,7 +48,8 @@ export type Expressions = {
 
 export type Expression = {
   expressions: Array<Expressions>,
-  type: String
+  type: String,
+  _formFocus: ?FormFocus
 };
 
 export type Shape = {
@@ -62,5 +62,6 @@ export type ShexJ = {
   "@context": String,
   shapes: Array<Shape>,
   start: ?String,
-  type: String
+  type: String,
+  expression: ?Expression
 };
