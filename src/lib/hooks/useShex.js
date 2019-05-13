@@ -309,22 +309,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
 
                     if (newExpressions[i]._formValues[y]._formFocus.name === options.key) {
-
                         if (action === 'delete') {
                             // If field is the last one will keep it but will update value and name
-                            newExpressions[i]._formValues.splice(y, y + 1);
-                            if(newExpressions[i]._formValues.length > 1) {
+                            let toIndex = newExpressions[i]._formValues.length === 1 ? 1 : 0;
 
-                            } /* else {
-                                newExpressions[i]._formValues[0] = {
-                                    ...newExpressions[i]._formValues[0],
-                                    _formFocus: {
-                                        ...newExpressions[i]._formValues[0]._formFocus,
-                                        value: '',
-                                        name: unique()
-                                    }
-                                }
-                            } */
+                            newExpressions[i]._formValues.splice(y, y + toIndex);
+
                         } else {
                             newExpressions[i]._formValues[y] = {
                                 ...newExpressions[i]._formValues[y],

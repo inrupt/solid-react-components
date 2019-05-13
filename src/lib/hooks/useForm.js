@@ -68,7 +68,6 @@ export const useForm = (documentUri: String) => {
 
   const onDelete = async (shexj: ShexJ, parent: any = false) => {
     try {
-      let deleted = null;
       const { _formFocus } = shexj;
       const { parentSubject, name, value, isNew } = _formFocus;
       if (_formFocus && !isNew) {
@@ -79,12 +78,11 @@ export const useForm = (documentUri: String) => {
 
           await ldflex[parentSubject][predicate].delete(value);
         }
-        deleted = name;
       }
       // Delete field from formValues object
       const { [name]: omit, ...res } = formValues;
       setFormValues(res);
-      return deleted;
+      return name;
     } catch (error) {
       onError(error);
     }
@@ -208,7 +206,7 @@ export const useForm = (documentUri: String) => {
             value = namedNode(value);
             defaultValue = namedNode(defaultValue);
           }
-          
+
           const field = {
             ...formValues[key],
             value: _setFieldValue(

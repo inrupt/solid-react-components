@@ -67,7 +67,7 @@ const ShexFormBuilder = ({
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);
-      if (deleted) {
+      if (!formError) {
         updateShexJ(deleted, "delete");
         successCallback();
       }
