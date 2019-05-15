@@ -30,7 +30,7 @@ export const useForm = (documentUri: String) => {
         parentName: e.target.getAttribute('data-parent-name')
       }
     };
-
+    onError(null);
     setFormValues({ ...formValues, ...data });
   };
 
