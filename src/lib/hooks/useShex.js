@@ -310,10 +310,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
                     if (newExpressions[i]._formValues[y]._formFocus.name === options.key) {
                         if (action === 'delete') {
-                            // If field is the last one will keep it but will update value and name
-                            let toIndex = newExpressions[i]._formValues.length === 1 ? 1 : 0;
+                            const _formValues = newExpressions[i]._formValues;
+                            const currentFieldName = newExpressions[i]._formValues[y]._formFocus.name;
 
-                            newExpressions[i]._formValues.splice(y, y + toIndex);
+                            newExpressions[i]._formValues = _formValues.filter(val => val._formFocus.name !== currentFieldName);
 
                         } else {
                             newExpressions[i]._formValues[y] = {
