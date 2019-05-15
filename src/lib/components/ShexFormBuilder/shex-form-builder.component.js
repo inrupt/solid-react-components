@@ -70,6 +70,8 @@ const ShexFormBuilder = ({
       if (!formError) {
         updateShexJ(deleted, "delete");
         successCallback();
+      } else {
+        errorCallback();
       }
     } catch (e) {
       errorCallback(e);

@@ -189,6 +189,7 @@ export const useForm = (documentUri: String) => {
 
   const onSubmit = async (e: Event) => {
     try {
+      onError(null);
       if (!documentUri || documentUri === "") {
         throw Error("Document Uri is required");
       }
@@ -241,10 +242,12 @@ export const useForm = (documentUri: String) => {
         return true;
       } else {
         setFormValues({...updatedFields});
-        return false;
+        if (keys.length !== 0) {
+          onError('Please ensure all values are in a proper format.');
+        }
       }
     } catch (error) {
-      throw Error(error);
+      onError(error);
     }
   };
 
