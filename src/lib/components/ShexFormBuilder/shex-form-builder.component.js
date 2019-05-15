@@ -12,7 +12,7 @@ type Props = {
   shexUri: String,
   rootShape: String,
   theme: Object,
-  language: String
+  languageTheme: Object
 };
 
 const ShexFormBuilder = ({
@@ -70,6 +70,8 @@ const ShexFormBuilder = ({
       if (!formError) {
         updateShexJ(deleted, "delete");
         successCallback();
+      } else {
+        errorCallback();
       }
     } catch (e) {
       errorCallback(e);
@@ -86,7 +88,6 @@ const ShexFormBuilder = ({
       errorCallback(e);
     }
   });
-
   return (
     <ThemeShex.Provider value={theme}>
       <Language.Provider value={languageTheme}>
@@ -103,9 +104,9 @@ const ShexFormBuilder = ({
               }}
             />
           )}
-          <button type="submit">Save</button>
+          <button type="submit">{languageTheme.saveBtn}</button>
           <button type="button" onClick={onReset}>
-            Reset
+            {languageTheme.resetBtn}
           </button>
         </FormComponent>
       </Language.Provider>
@@ -121,6 +122,14 @@ ShexFormBuilder.defaultProps = {
     select: "solid-input-shex solid-select-shex",
     deleteButton: "solid-button-shex",
     form: "solid-shex-form"
+  },
+  languageTheme: {
+    language: "en",
+    saveBtn: "Save",
+    resetBtn: "Reset",
+    addButtonText: "+ Add new ",
+    deleteButton: "Delete",
+    dropdownDefaultText: "- Select -"
   }
 };
 
