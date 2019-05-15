@@ -40,9 +40,11 @@ const HandleShexForm = ({ webId }:Props) => {
     // By default addButton and deleteButton will be Add new and Delete
     const languageTheme = {
         language: 'en',
-        addButtonText: '+ Add new ',
-        deleteButton: 'Delete',
-        dropdownDefaultText: '- Select -'
+        saveBtn: "Save",
+        resetBtn: "Reset",
+        addButtonText: "+ Add new ",
+        deleteButton: "Delete",
+        dropdownDefaultText: "- Select -"
     };
 
     return(
