@@ -103,9 +103,9 @@ const ShexFormBuilder = ({
               }}
             />
           )}
-          <button type="submit">Save</button>
+          <button type="submit">{languageTheme.saveBtn}</button>
           <button type="button" onClick={onReset}>
-            Reset
+          {languageTheme.resetBtn}
           </button>
         </FormComponent>
       </Language.Provider>
