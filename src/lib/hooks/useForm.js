@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ldflex from "@solid/query-ldflex";
 import { namedNode } from "@rdfjs/data-model";
-import { shexParentLinkOnDropDowns } from "@utils";
+import { shexParentLinkOnDropDowns, SolidError } from "@utils";
 import { ShexJ } from "@entities";
 
 
@@ -237,13 +237,16 @@ export const useForm = (documentUri: String) => {
       } else {
         setFormValues({...updatedFields});
         if (keys.length !== 0) {
-          const error = { status: 422, message: 'Please ensure all values are in a proper format.'};
-
-          throw error;
+          throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 422);
         }
       }
     } catch (error) {
-      return error;
+      let solidError = error;
+
+      if (!error.status && !error.code ) {
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
+      }
+      return solidError;
     }
   };
 

@@ -4,7 +4,7 @@ import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
 import auth from 'solid-auth-client';
-import { findAnnotation } from "@utils";
+import { findAnnotation, SolidError } from "@utils";
 import { Expression, Annotation, ShexJ, Shape } from "@entities";
 
 type Options = {
@@ -482,7 +482,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
             const parser = shexParser.construct(window.location.href);
             const podDocument = await _fetchDocument();
-
             if (!podDocument.subject && podDocument.status !== 200) {
                 throw shexString;
             }
@@ -498,8 +497,14 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 setShexData({shexJ, formData});
             }
         } catch (error) {
-            errorCallback(error);
-            onError(error);
+            let solidError = error;
+
+            if (!error.status || !error.code) {
+
+                solidError = new SolidError(solidError.message, 'Ldflex Error', 500);
+            }
+            errorCallback(solidError);
+            onError(solidError);
         }
     });
 
