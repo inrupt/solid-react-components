@@ -64,9 +64,8 @@ const ShexFormBuilder = ({
     try {
       const deleted = await deleteFn(shexj, parent);
 
-      if (deleted.code && deleted.code === 200) {
+      if ((deleted.code && deleted.code === 200) || (deleted.status && deleted.status === 200)) {
         updateShexJ(deleted.fieldName, "delete");
-
         return successCallback(deleted.message);
       }
 
@@ -119,7 +118,7 @@ const ShexFormBuilder = ({
 
 ShexFormBuilder.defaultProps = {
   successCallback: () => console.log("Submitted successfully"),
-  errorCallback: e => console.log("Error: ", e.code),
+  errorCallback: e => console.log("Status: ", e.status),
   theme: {
     input: "solid-input-shex",
     select: "solid-input-shex solid-select-shex",
