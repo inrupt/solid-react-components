@@ -499,9 +499,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         } catch (error) {
             let solidError = error;
 
-            if (!error.status || !error.code) {
+            if (!error.status && !error.code) {
 
-                solidError = new SolidError(solidError.message, 'Ldflex Error', 500);
+                solidError = new SolidError(solidError.message, 'Ldflex Error', 523);
             }
             errorCallback(solidError);
             onError(solidError);

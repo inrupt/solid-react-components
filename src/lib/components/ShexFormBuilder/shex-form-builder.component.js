@@ -118,7 +118,7 @@ const ShexFormBuilder = ({
 
 ShexFormBuilder.defaultProps = {
   successCallback: () => console.log("Submitted successfully"),
-  errorCallback: e => console.log("Error: ", e.message),
+  errorCallback: e => console.log("Error: ", e.code),
   theme: {
     input: "solid-input-shex",
     select: "solid-input-shex solid-select-shex",

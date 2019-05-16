@@ -82,7 +82,12 @@ export const useForm = (documentUri: String) => {
 
       return { status: 200, message: 'Form submitted successfully', fieldName: name};
     } catch (error) {
-      return error;
+      let solidError = error;
+
+      if (!error.status && !error.code ) {
+        solidError = new SolidError(error.message, 'Ldflex Error', 522);
+      }
+      return solidError;
     }
   };
 
@@ -244,7 +249,7 @@ export const useForm = (documentUri: String) => {
       let solidError = error;
 
       if (!error.status && !error.code ) {
-        solidError = new SolidError(error.message, 'Ldflex Error', 500);
+        solidError = new SolidError(error.message, 'Ldflex Error', 521);
       }
       return solidError;
     }
