@@ -7,8 +7,6 @@ import { ShexJ } from "@entities";
 
 export const useForm = (documentUri: String) => {
   const [formValues, setFormValues] = useState({});
-  const [formError, setFormError] = useState(null);
-
 
   const onChange = e => {
     const { value, name } = e.target;
@@ -30,7 +28,6 @@ export const useForm = (documentUri: String) => {
         parentName: e.target.getAttribute('data-parent-name')
       }
     };
-    onError(null);
     setFormValues({ ...formValues, ...data });
   };
 
@@ -82,19 +79,16 @@ export const useForm = (documentUri: String) => {
       // Delete field from formValues object
       const { [name]: omit, ...res } = formValues;
       setFormValues(res);
-      return name;
+
+      return { status: 200, message: 'Form submitted successfully', fieldName: name};
     } catch (error) {
-      onError(error);
+      return error;
     }
   };
 
   const onReset = () => {
     setFormValues({});
   }
-
-  const onError = error => {
-    setFormError(error);
-  };
 
   const errorFieldFactory = (field: Object, error: String) => {
     return {
@@ -189,7 +183,6 @@ export const useForm = (documentUri: String) => {
 
   const onSubmit = async (e: Event) => {
     try {
-      onError(null);
       if (!documentUri || documentUri === "") {
         throw Error("Document Uri is required");
       }
@@ -239,17 +232,20 @@ export const useForm = (documentUri: String) => {
           }
         }
         setFormValues({});
-        return true;
+
+        return { status: 200, message: 'Form submitted successfully'};
       } else {
         setFormValues({...updatedFields});
         if (keys.length !== 0) {
-          onError('Please ensure all values are in a proper format.');
+          const error = { status: 422, message: 'Please ensure all values are in a proper format.'};
+
+          throw error;
         }
       }
     } catch (error) {
-      onError(error);
+      return error;
     }
   };
 
-  return { formValues, onChange, onSubmit, onReset, onDelete, formError };
+  return { formValues, onChange, onSubmit, onReset, onDelete };
 };
