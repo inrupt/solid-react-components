@@ -501,7 +501,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
             if (!error.status && !error.code) {
 
-                solidError = new SolidError(solidError.message, 'Ldflex Error', 523);
+                solidError = new SolidError(solidError.message, 'Ldflex Error', 500);
             }
             errorCallback(solidError);
             onError(solidError);

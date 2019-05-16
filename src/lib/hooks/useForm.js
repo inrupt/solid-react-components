@@ -85,7 +85,7 @@ export const useForm = (documentUri: String) => {
       let solidError = error;
 
       if (!error.status && !error.code ) {
-        solidError = new SolidError(error.message, 'Ldflex Error', 522);
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
       }
       return solidError;
     }
@@ -249,7 +249,7 @@ export const useForm = (documentUri: String) => {
       let solidError = error;
 
       if (!error.status && !error.code ) {
-        solidError = new SolidError(error.message, 'Ldflex Error', 521);
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
       }
       return solidError;
     }
