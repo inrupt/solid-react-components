@@ -79,7 +79,7 @@ const ShexFormBuilder = ({
   const onSubmit = useCallback(async e => {
     try {
       const result = await submit(e);
-      console.log(result, 'result');
+      
       if ((result.status && result.status === 200)  || (result.code && result.code === 200)) {
         update();
         return successCallback(result);
