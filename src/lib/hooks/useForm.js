@@ -242,7 +242,7 @@ export const useForm = (documentUri: String) => {
       } else {
         setFormValues({...updatedFields});
         if (keys.length !== 0) {
-          throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 422);
+          throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
         }
       }
     } catch (error) {
