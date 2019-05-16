@@ -4,7 +4,7 @@ import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
 import auth from 'solid-auth-client';
-import { findAnnotation } from "@utils";
+import { findAnnotation, SolidError } from "@utils";
 import { Expression, Annotation, ShexJ, Shape } from "@entities";
 
 type Options = {
@@ -12,7 +12,7 @@ type Options = {
     data: ?Object
 }
 
-export const useShex = (fileShex: String, documentUri: String, rootShape: String) => {
+export const useShex = (fileShex: String, documentUri: String, rootShape: String, errorCallback: ?() => void) => {
     const [shexData, setShexData] = useState({});
     const [shexError, setShexError] = useState(null);
     let shapes = [];
@@ -23,19 +23,23 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
      * Fetch ShexC file from internal or external sources
      */
     const fetchShex = useCallback(async () => {
-        const rootShex = await fetch(fileShex, {
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-        });
+        try {
+            const rootShex = await fetch(fileShex, {
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+            });
 
-        if (rootShex.status !== 200) {
-            onError(rootShex);
+            if (rootShex.status !== 200) {
+                throw rootShex;
+            }
+
+            const rootShexText = await rootShex.text();
+
+            return rootShexText.toString();
+        } catch (error) {
+            return error;
         }
-
-        const rootShexText = await rootShex.text();
-
-        return rootShexText.toString();
     });
 
 
@@ -99,20 +103,24 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
      * will create a new one.
      */
     const _fetchDocument = useCallback(async () => {
-        if (documentUri && documentUri !== '') {
-            const result = await _existDocument();
+        try {
+            if (documentUri && documentUri !== '') {
+                const result = await _existDocument();
 
-            if (result.status === 404) {
-                const result = await _createDocument();
+                if (result.status === 404) {
+                    const result = await _createDocument();
 
-                if (result.status !== 200) {
-                    onError(result);
+                    if (result.status !== 200) {
+                        throw result;
+                    }
                 }
+
+                const document = await data[documentUri];
+
+                return document;
             }
-
-            const document = await data[documentUri];
-
-            return document;
+        } catch (error) {
+            return error;
         }
     });
 
@@ -468,8 +476,15 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const toShexJForm = useCallback(async () => {
         try {
             const shexString = await fetchShex();
+
+            if (shexString.status && shexString.status !== 200) {
+                throw shexString;
+            }
             const parser = shexParser.construct(window.location.href);
             const podDocument = await _fetchDocument();
+            if (!podDocument.subject && podDocument.status !== 200) {
+                throw shexString;
+            }
             const shexJ = shexCore.Util.AStoShExJ(parser.parse(shexString));
 
             shapes = shexJ.shapes;
@@ -482,7 +497,14 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 setShexData({shexJ, formData});
             }
         } catch (error) {
-            onError(error);
+            let solidError = error;
+
+            if (!error.status && !error.code) {
+
+                solidError = new SolidError(solidError.message, 'Ldflex Error', 500);
+            }
+            errorCallback(solidError);
+            onError(solidError);
         }
     });
 

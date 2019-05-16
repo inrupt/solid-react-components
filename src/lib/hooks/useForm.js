@@ -1,14 +1,12 @@
 import { useState } from "react";
 import ldflex from "@solid/query-ldflex";
 import { namedNode } from "@rdfjs/data-model";
-import { shexParentLinkOnDropDowns } from "@utils";
+import { shexParentLinkOnDropDowns, SolidError } from "@utils";
 import { ShexJ } from "@entities";
 
 
 export const useForm = (documentUri: String) => {
   const [formValues, setFormValues] = useState({});
-  const [formError, setFormError] = useState(null);
-
 
   const onChange = e => {
     const { value, name } = e.target;
@@ -30,7 +28,6 @@ export const useForm = (documentUri: String) => {
         parentName: e.target.getAttribute('data-parent-name')
       }
     };
-    onError(null);
     setFormValues({ ...formValues, ...data });
   };
 
@@ -82,19 +79,21 @@ export const useForm = (documentUri: String) => {
       // Delete field from formValues object
       const { [name]: omit, ...res } = formValues;
       setFormValues(res);
-      return name;
+
+      return { status: 200, message: 'Form submitted successfully', fieldName: name};
     } catch (error) {
-      onError(error);
+      let solidError = error;
+
+      if (!error.status && !error.code ) {
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
+      }
+      return solidError;
     }
   };
 
   const onReset = () => {
     setFormValues({});
   }
-
-  const onError = error => {
-    setFormError(error);
-  };
 
   const errorFieldFactory = (field: Object, error: String) => {
     return {
@@ -189,7 +188,6 @@ export const useForm = (documentUri: String) => {
 
   const onSubmit = async (e: Event) => {
     try {
-      onError(null);
       if (!documentUri || documentUri === "") {
         throw Error("Document Uri is required");
       }
@@ -239,17 +237,23 @@ export const useForm = (documentUri: String) => {
           }
         }
         setFormValues({});
-        return true;
+
+        return { code: 200, message: 'Form submitted successfully'};
       } else {
         setFormValues({...updatedFields});
         if (keys.length !== 0) {
-          onError('Please ensure all values are in a proper format.');
+          throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
         }
       }
     } catch (error) {
-      onError(error);
+      let solidError = error;
+
+      if (!error.status && !error.code ) {
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
+      }
+      return solidError;
     }
   };
 
-  return { formValues, onChange, onSubmit, onReset, onDelete, formError };
+  return { formValues, onChange, onSubmit, onReset, onDelete };
 };
