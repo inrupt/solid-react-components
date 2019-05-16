@@ -50,7 +50,9 @@ module.exports = {
       '@components': path.resolve(__dirname, '../src/lib/components'),
       '@entities': path.resolve(__dirname, '../src/lib/entities'),
       '@utils': path.resolve(__dirname, '../src/lib/utils'),
-      '@testSetup': path.resolve(__dirname, '../src/test/setup')
+      '@testSetup': path.resolve(__dirname, '../src/test/setup'),
+      '@hooks': path.resolve(__dirname, '../src/lib/hooks'),
+      '@context': path.resolve(__dirname, '../src/lib/context')
     }
   },
   plugins: [
