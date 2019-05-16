@@ -24,10 +24,11 @@ const ShexFormBuilder = ({
   theme,
   languageTheme
 }: Props) => {
-  const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
+  const { shexData, addNewShexField, updateShexJ } = useShex(
     shexUri,
     documentUri,
-    rootShape
+    rootShape,
+    errorCallback
   );
 
   const {
@@ -35,13 +36,8 @@ const ShexFormBuilder = ({
     onDelete: deleteFn,
     onChange,
     onReset,
-    formValues,
-    formError
+    formValues
   } = useForm(documentUri);
-
-  if (shexError || formError) {
-    if (errorCallback) errorCallback(shexError || formError);
-  }
 
   const update = useCallback(async (shexj: ShexJ, parent: any = false) => {
     let parents = [];
@@ -67,12 +63,14 @@ const ShexFormBuilder = ({
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);
-      if (!formError) {
-        updateShexJ(deleted, "delete");
-        successCallback();
-      } else {
-        errorCallback();
+
+      if (deleted.status && deleted.status === 200) {
+        updateShexJ(deleted.fieldName, "delete");
+
+        return successCallback(deleted.message);
       }
+
+      throw deleted;
     } catch (e) {
       errorCallback(e);
     }
@@ -80,14 +78,18 @@ const ShexFormBuilder = ({
 
   const onSubmit = useCallback(async e => {
     try {
-      if (await submit(e)) {
+      const result = await submit(e);
+      if (result.status && result.status === 200) {
         update();
-        successCallback();
+        return successCallback(result.message);
       }
+
+      throw result;
     } catch (e) {
       errorCallback(e);
     }
   });
+
   return (
     <ThemeShex.Provider value={theme}>
       <Language.Provider value={languageTheme}>
