@@ -24,10 +24,11 @@ const ShexFormBuilder = ({
   theme,
   languageTheme
 }: Props) => {
-  const { shexData, addNewShexField, updateShexJ, shexError } = useShex(
+  const { shexData, addNewShexField, updateShexJ } = useShex(
     shexUri,
     documentUri,
-    rootShape
+    rootShape,
+    errorCallback
   );
 
   const {
@@ -37,10 +38,6 @@ const ShexFormBuilder = ({
     onReset,
     formValues
   } = useForm(documentUri);
-
-  if (shexError) {
-    if (errorCallback) errorCallback(shexError);
-  }
 
   const update = useCallback(async (shexj: ShexJ, parent: any = false) => {
     let parents = [];
@@ -92,6 +89,7 @@ const ShexFormBuilder = ({
       errorCallback(e);
     }
   });
+
   return (
     <ThemeShex.Provider value={theme}>
       <Language.Provider value={languageTheme}>
