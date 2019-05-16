@@ -238,7 +238,7 @@ export const useForm = (documentUri: String) => {
         }
         setFormValues({});
 
-        return { status: 200, message: 'Form submitted successfully'};
+        return { code: 200, message: 'Form submitted successfully'};
       } else {
         setFormValues({...updatedFields});
         if (keys.length !== 0) {
