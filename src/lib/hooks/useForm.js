@@ -82,7 +82,12 @@ export const useForm = (documentUri: String) => {
 
       return { status: 200, message: 'Form submitted successfully', fieldName: name};
     } catch (error) {
-      return error;
+      let solidError = error;
+
+      if (!error.status && !error.code ) {
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
+      }
+      return solidError;
     }
   };
 
@@ -233,11 +238,11 @@ export const useForm = (documentUri: String) => {
         }
         setFormValues({});
 
-        return { status: 200, message: 'Form submitted successfully'};
+        return { code: 200, message: 'Form submitted successfully'};
       } else {
         setFormValues({...updatedFields});
         if (keys.length !== 0) {
-          throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 422);
+          throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
         }
       }
     } catch (error) {

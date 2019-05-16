@@ -79,9 +79,10 @@ const ShexFormBuilder = ({
   const onSubmit = useCallback(async e => {
     try {
       const result = await submit(e);
-      if (result.code && result.code === 200) {
+
+      if ((result.status && result.status === 200)  || (result.code && result.code === 200)) {
         update();
-        return successCallback(result.message);
+        return successCallback(result);
       }
 
       throw result;
@@ -118,7 +119,7 @@ const ShexFormBuilder = ({
 
 ShexFormBuilder.defaultProps = {
   successCallback: () => console.log("Submitted successfully"),
-  errorCallback: e => console.log("Error: ", e.message),
+  errorCallback: e => console.log("Error: ", e.code),
   theme: {
     input: "solid-input-shex",
     select: "solid-input-shex solid-select-shex",
