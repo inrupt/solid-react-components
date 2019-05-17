@@ -44,6 +44,7 @@ export const InputField = ({
               data-valuexpr={JSON.stringify(valueExpr)}
               data-parent-subject={parentSubject}
               data-parent-name={parent && parent._formFocus ? parent._formFocus.name : null }
+              onBlur={() => console.log('hello') }
             />
             {!parent && canDelete && (
               <DeleteButton

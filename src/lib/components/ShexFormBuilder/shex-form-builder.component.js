@@ -36,7 +36,8 @@ const ShexFormBuilder = ({
     onDelete: deleteFn,
     onChange,
     onReset,
-    formValues
+    formValues,
+    saveForm
   } = useForm(documentUri);
 
   const update = useCallback(async (shexj: ShexJ, parent: any = false) => {

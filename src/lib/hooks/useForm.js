@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ldflex from "@solid/query-ldflex";
 import { namedNode } from "@rdfjs/data-model";
-import { shexParentLinkOnDropDowns, SolidError } from "@utils";
+import { shexParentLinkOnDropDowns, SolidError,solidResponse } from "@utils";
 import { ShexJ } from "@entities";
 
 
@@ -186,6 +186,55 @@ export const useForm = (documentUri: String) => {
   }
 
 
+  const saveForm = async (key: String) => {
+    try {
+      let value = formValues[key].value;
+      let defaultValue = formValues[key].defaultValue;
+
+      // @TODO: find a better way to see if value is a predicate.
+      if (value.includes('#')) {
+        value = namedNode(value);
+        defaultValue = namedNode(defaultValue);
+      }
+
+      const field = {
+        ...formValues[key],
+        value: _setFieldValue(
+            value,
+            formValues[key].prefix
+        ),
+        defaultValue: _setFieldValue(
+            defaultValue,
+            formValues[key].prefix
+        )
+      };
+      switch (field.action) {
+        case "update":
+          await ldflex[field.subject][field.predicate].replace(
+              field.defaultValue,
+              field.value
+          );
+          break;
+        case "create":
+          await _create(field);
+          break;
+        case "delete":
+          await ldflex[field.subject][field.predicate].delete(
+              field.defaultValue
+          );
+          break;
+        default:
+          break;
+      }
+
+      return solidResponse(200, 'Form submitted successfully');
+
+    } catch (error) {
+      return error;
+    }
+  };
+
+
   const onSubmit = async (e: Event) => {
     try {
       if (!documentUri || documentUri === "") {
@@ -195,56 +244,27 @@ export const useForm = (documentUri: String) => {
 
       const { isValid, updatedFields } = _formValidation(formValues);
       const keys = Object.keys(formValues);
+
       if (isValid && keys.length > 0) {
         for await (const key of keys) {
-          let value = formValues[key].value;
-          let defaultValue = formValues[key].defaultValue;
+            const result = await saveForm(key);
 
-          // @TODO: find a better way to see if value is a predicate.
-          if (value.includes('#')) {
-            value = namedNode(value);
-            defaultValue = namedNode(defaultValue);
-          }
-
-          const field = {
-            ...formValues[key],
-            value: _setFieldValue(
-                value,
-                formValues[key].prefix
-            ),
-            defaultValue: _setFieldValue(
-                defaultValue,
-                formValues[key].prefix
-            )
-          };
-          switch (field.action) {
-            case "update":
-              await ldflex[field.subject][field.predicate].replace(
-                  field.defaultValue,
-                  field.value
-              );
-              break;
-            case "create":
-              await _create(field);
-              break;
-            case "delete":
-              await ldflex[field.subject][field.predicate].delete(
-                  field.defaultValue
-              );
-              break;
-            default:
-              break;
-          }
+            if (result.code !== 200) {
+              throw new SolidError(result.message, 'Error saving on Pod');
+            }
         }
         setFormValues({});
 
-        return { code: 200, message: 'Form submitted successfully'};
+        return solidResponse(200, 'Form submitted successfully');
+
       } else {
         setFormValues({...updatedFields});
+
         if (keys.length !== 0) {
           throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
         }
       }
+
     } catch (error) {
       let solidError = error;
 
@@ -255,5 +275,5 @@ export const useForm = (documentUri: String) => {
     }
   };
 
-  return { formValues, onChange, onSubmit, onReset, onDelete };
+  return { formValues, onChange, onSubmit, onReset, onDelete, saveForm };
 };
