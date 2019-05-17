@@ -3,8 +3,7 @@ import data from '@solid/query-ldflex';
 import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
-import auth from 'solid-auth-client';
-import { findAnnotation, SolidError } from "@utils";
+import { findAnnotation, SolidError, fetchLdflexDocument, fetchSchema } from "@utils";
 import { Expression, Annotation, ShexJ, Shape } from "@entities";
 
 type Options = {
@@ -17,30 +16,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const [shexError, setShexError] = useState(null);
     let shapes = [];
     let seed = 1;
-
-
-    /*
-     * Fetch ShexC file from internal or external sources
-     */
-    const fetchShex = useCallback(async () => {
-        try {
-            const rootShex = await fetch(fileShex, {
-                headers: {
-                    'Content-Type': 'text/plain',
-                },
-            });
-
-            if (rootShex.status !== 200) {
-                throw rootShex;
-            }
-
-            const rootShexText = await rootShex.text();
-
-            return rootShexText.toString();
-        } catch (error) {
-            return error;
-        }
-    });
 
 
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
@@ -65,63 +40,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
-    const _existDocument = useCallback(async () => {
-        return await auth.fetch(documentUri, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    });
-
-    const _createDocument = useCallback(async () => {
-      if (documentUri && documentUri !== "") {
-        const result = await _existDocument();
-
-        if (result.status === 404) {
-          return await auth.fetch(
-              documentUri,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/sparql-update"
-              },
-              body: ""
-            }
-          );
-        }
-
-        return false;
-      }
-    });
 
     const onError = useCallback((error: Object) => {
         setShexError(error);
-    });
-
-    /*
-     * Fetch .ttl file from POD, if document doesn't exists
-     * will create a new one.
-     */
-    const _fetchDocument = useCallback(async () => {
-        try {
-            if (documentUri && documentUri !== '') {
-                const result = await _existDocument();
-
-                if (result.status === 404) {
-                    const result = await _createDocument();
-
-                    if (result.status !== 200) {
-                        throw result;
-                    }
-                }
-
-                const document = await data[documentUri];
-
-                return document;
-            }
-        } catch (error) {
-            return error;
-        }
     });
 
     const _isLink = useCallback(valueExpr => {
@@ -475,16 +396,18 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const toShexJForm = useCallback(async () => {
         try {
-            const shexString = await fetchShex();
+            const parser = shexParser.construct(window.location.href);
+            const shexString = await fetchSchema(fileShex);
+            const podDocument = await fetchLdflexDocument(documentUri);
 
             if (shexString.status && shexString.status !== 200) {
                 throw shexString;
             }
-            const parser = shexParser.construct(window.location.href);
-            const podDocument = await _fetchDocument();
+
             if (!podDocument.subject && podDocument.status !== 200) {
-                throw shexString;
+                throw podDocument;
             }
+
             const shexJ = shexCore.Util.AStoShExJ(parser.parse(shexString));
 
             shapes = shexJ.shapes;
