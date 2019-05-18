@@ -514,7 +514,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             const { [name]: omit, ...res } = formValues;
             setFormValues(res);
 
-            return { status: 200, message: 'Form submitted successfully', fieldName: name};
+            // Delete expression from ShexJ
+            updateShexJ(name, "delete");
+
+            return solidResponse(200,'Form submitted successfully');
         } catch (error) {
             let solidError = error;
 

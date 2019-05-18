@@ -41,7 +41,6 @@ const ShexFormBuilder = ({
       const deleted = await deleteFn(shexj, parent);
 
       if ((deleted.code && deleted.code === 200) || (deleted.status && deleted.status === 200)) {
-        updateShexJ(deleted.fieldName, "delete");
         return successCallback(deleted.message);
       }
 
