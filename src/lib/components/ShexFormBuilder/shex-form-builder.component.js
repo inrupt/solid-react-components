@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { FormComponent } from "./styled.component";
 import { ShexForm } from "@components";
-import { useForm, useShex } from "@hooks";
+import {  useShex } from "@hooks";
 import { ThemeShex, Language } from "@context";
 
 type Props = {
@@ -24,42 +24,17 @@ const ShexFormBuilder = ({
   theme,
   languageTheme
 }: Props) => {
-  const { shexData, addNewShexField, updateShexJ } = useShex(
-    shexUri,
-    documentUri,
-    rootShape,
-    errorCallback
-  );
 
   const {
+    shexData,
+    addNewShexField,
+    updateShexJ,
     onSubmit: submit,
     onDelete: deleteFn,
     onChange,
     onReset,
-    formValues,
-    saveForm
-  } = useForm(documentUri);
-
-  const update = useCallback(async (shexj: ShexJ, parent: any = false) => {
-    let parents = [];
-    for await (const key of Object.keys(formValues)) {
-      const { name, parentName } = formValues[key];
-      parents =
-        parentName && !parents.includes(parentName)
-          ? [...parents, formValues[key].parentName]
-          : parents;
-      updateShexJ(name, "update", {
-        isNew: false,
-        value: formValues[key].value
-      });
-    }
-
-    for await (parent of parents) {
-      updateShexJ(parent, "update", {
-        isNew: false
-      });
-    }
-  });
+    formValues
+  } = useShex(shexUri, documentUri, rootShape, errorCallback);
 
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
@@ -81,7 +56,6 @@ const ShexFormBuilder = ({
       const result = await submit(e);
 
       if ((result.status && result.status === 200)  || (result.code && result.code === 200)) {
-        update();
         return successCallback(result);
       }
 
