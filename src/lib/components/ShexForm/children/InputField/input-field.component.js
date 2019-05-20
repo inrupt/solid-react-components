@@ -33,7 +33,7 @@ export const InputField = ({
 
   return (
     <ShexConfig.Consumer>
-      {({ theme, config: { onChange, onSubmitSave } }) => (
+      {({ theme, config: { onChange, onSubmitSave, autoSaveMode } }) => (
         <Fragment>
           <InputGroup>
             <Input
@@ -44,7 +44,7 @@ export const InputField = ({
               onChange={onChange}
               data-obj={JSON.stringify(dataObj)}
               onBlur={() =>
-                isValueChanged(currentValue, defaultValue) &&
+                  autoSaveMode && isValueChanged(currentValue, defaultValue) &&
                 onSubmitSave(inputName, "autoSave")
               }
             />

@@ -23,9 +23,9 @@ const ShexFormBuilder = ({
   shexUri,
   rootShape,
   theme,
-  languageTheme
+  languageTheme,
+  autoSaveMode
 }: Props) => {
-
   const {
     shexData,
     addNewShexField,
@@ -36,13 +36,16 @@ const ShexFormBuilder = ({
     onReset,
     formValues,
     saveForm
-  } = useShex(shexUri, documentUri, rootShape, errorCallback);
+  } = useShex(shexUri, documentUri, rootShape, errorCallback, successCallback);
 
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);
 
-      if ((deleted.code && deleted.code === 200) || (deleted.status && deleted.status === 200)) {
+      if (
+        (deleted.code && deleted.code === 200) ||
+        (deleted.status && deleted.status === 200)
+      ) {
         return successCallback(deleted.message);
       }
 
@@ -62,7 +65,10 @@ const ShexFormBuilder = ({
         result = await onSubmit(e);
       }
 
-      if ((result.status && result.status === 200)  || (result.code && result.code === 200)) {
+      if (
+        (result.status && result.status === 200) ||
+        (result.code && result.code === 200)
+      ) {
         return successCallback(result);
       }
 
@@ -72,7 +78,6 @@ const ShexFormBuilder = ({
     }
   });
 
-
   const config = {
     theme,
     languageTheme,
@@ -81,7 +86,8 @@ const ShexFormBuilder = ({
       onChange,
       updateShexJ,
       addNewShexField,
-      onSubmitSave
+      onSubmitSave,
+      autoSaveMode
     }
   };
   return (
@@ -98,10 +104,14 @@ const ShexFormBuilder = ({
             }}
           />
         )}
-        <button type="submit">{languageTheme.saveBtn}</button>
-        <button type="button" onClick={onReset}>
-          {languageTheme.resetBtn}
-        </button>
+        { !autoSaveMode && (
+          <React.Fragment>
+            <button type="submit">{languageTheme.saveBtn}</button>
+            <button type="button" onClick={onReset}>
+              {languageTheme.resetBtn}
+            </button>
+          </React.Fragment>
+        )}
       </FormComponent>
     </ShexConfig.Provider>
   );
