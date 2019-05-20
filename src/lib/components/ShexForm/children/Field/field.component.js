@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { findAnnotation, shexFormLabel } from "@utils";
 import { ShexConfig } from "@context";
 import { InputField, DropDownField } from "../";
+import { InputWrapper, Label } from "../../styled.component";
 
 type FieldProps = {
   data: Object,
@@ -23,10 +24,13 @@ export const Field = ({
   const parentSubject = parent && parent._formFocus.parentSubject;
   return (
     <ShexConfig.Consumer>
-      {({ languageTheme: { language } }) => (
-        <Fragment>
-          <label>{shexFormLabel(data, language)}</label>
-
+      {({ theme, languageTheme: { language } }) => (
+        <InputWrapper
+          className={`${theme && theme.inputContainer ? theme.inputContainer : ''} ${
+            inputData && inputData.error ? "error" : ""
+          }`.trim()}
+        >
+          <Label>{shexFormLabel(data, language)}</Label>
           {inputType === "text" ? (
             <InputField
               {...{
@@ -60,7 +64,7 @@ export const Field = ({
               }}
             />
           )}
-        </Fragment>
+        </InputWrapper>
       )}
     </ShexConfig.Consumer>
   );

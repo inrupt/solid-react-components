@@ -1,13 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { ShexConfig } from "@context";
-import { isValueChanged } from '@utils';
+import { isValueChanged } from "@utils";
 import { DeleteButton } from "../";
-import {
-  ErrorMessage,
-  InputWrapper,
-  Input,
-  InputGroup
-} from "./styled.component";
+import { ErrorMessage, Input, InputGroup } from "../../styled.component";
 
 export const InputField = ({
   type = "text",
@@ -25,14 +20,21 @@ export const InputField = ({
   const defaultValue = fieldData && fieldData._formFocus.value;
   const currentValue = inputData && inputData.value;
 
+  const dataObj = {
+    predicate,
+    defaultValue,
+    parentPredicate,
+    parentSubject,
+    valueExpr,
+    prefix:hasPrefix,
+    subject : fieldData && fieldData._formFocus.parentSubject,
+    parentName : parent && parent._formFocus ? parent._formFocus.name : null
+  }
+
   return (
     <ShexConfig.Consumer>
       {({ theme, config: { onChange, onSubmitSave } }) => (
-        <InputWrapper
-          className={`${theme && theme.inputContainer} ${
-            inputData && inputData.error ? "error" : ""
-          }`}
-        >
+        <Fragment>
           <InputGroup>
             <Input
               className={theme && theme.input}
@@ -40,16 +42,7 @@ export const InputField = ({
               value={currentValue}
               name={inputName}
               onChange={onChange}
-              data-predicate={predicate}
-              data-subject={fieldData && fieldData._formFocus.parentSubject}
-              data-default={defaultValue}
-              data-prefix={hasPrefix}
-              data-parent-predicate={parentPredicate}
-              data-valuexpr={JSON.stringify(valueExpr)}
-              data-parent-subject={parentSubject}
-              data-parent-name={
-                parent && parent._formFocus ? parent._formFocus.name : null
-              }
+              data-obj={JSON.stringify(dataObj)}
               onBlur={() =>
                 isValueChanged(currentValue, defaultValue) &&
                 onSubmitSave(inputName, "autoSave")
@@ -69,7 +62,7 @@ export const InputField = ({
               {inputData.error}
             </ErrorMessage>
           )}
-        </InputWrapper>
+        </Fragment>
       )}
     </ShexConfig.Consumer>
   );

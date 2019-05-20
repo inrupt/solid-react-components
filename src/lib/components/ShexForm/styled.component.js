@@ -46,3 +46,31 @@ export const DeleteButton = styled.button`
   cursor: pointer;
   z-index: 100;
 `;
+
+
+export const ErrorMessage = styled.p`
+  margin: 0;
+  color: red;
+  display: block;
+`;
+
+export const InputWrapper = styled.div`
+  position: relative;
+  &.error {
+    margin-bottom: 0;
+  }
+`;
+
+export const Input = styled.input`
+  .error & {
+    margin-bottom: 5px;
+  }
+`;
+
+export const InputGroup = styled.div`
+  display: flex;
+`;
+
+
+export const Label = styled.label`
+`
