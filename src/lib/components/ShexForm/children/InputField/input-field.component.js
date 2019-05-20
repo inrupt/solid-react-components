@@ -27,7 +27,7 @@ export const InputField = ({
 
   return (
     <ShexConfig.Consumer>
-      {({ theme, config: { onChange, onSubmitSave } }) => (
+      {({ theme, config: { onChange, onSubmitSave, autoSaveMode } }) => (
         <InputWrapper
           className={`${theme && theme.inputContainer} ${
             inputData && inputData.error ? "error" : ""
@@ -51,7 +51,7 @@ export const InputField = ({
                 parent && parent._formFocus ? parent._formFocus.name : null
               }
               onBlur={() =>
-                isValueChanged(currentValue, defaultValue) &&
+                  autoSaveMode && isValueChanged(currentValue, defaultValue) &&
                 onSubmitSave(inputName, "autoSave")
               }
             />

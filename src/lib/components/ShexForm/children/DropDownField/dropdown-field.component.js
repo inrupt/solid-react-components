@@ -25,7 +25,7 @@ export const DropDownField = ({
       {({
         theme,
         languageTheme,
-        config: { onChange, onDelete, onSubmitSave }
+        config: { onChange, onDelete, onSubmitSave, autoSaveMode }
       }) => (
         <SelectWrapper
           className={`${theme && theme.wrapperSelect} ${error ? "error" : ""}`}
@@ -36,7 +36,7 @@ export const DropDownField = ({
             name={name}
             onChange={ onChange }
             onBlur={() =>
-                isValueChanged(value, defaultValue) &&
+                autoSaveMode && isValueChanged(value, defaultValue) &&
                 onSubmitSave(name, "autoSave")
             }
             data-predicate={predicate}
