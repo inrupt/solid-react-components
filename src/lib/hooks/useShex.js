@@ -447,19 +447,15 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const defaultValue = e.target.getAttribute('data-default');
         const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
 
+        const dataObj = JSON.parse(e.target.getAttribute('data-obj'));
+
         const data = {
             [e.target.name]: {
                 value,
                 name,
                 action,
                 defaultValue,
-                predicate: e.target.getAttribute('data-predicate'),
-                subject: e.target.getAttribute('data-subject'),
-                prefix: e.target.getAttribute('data-prefix'),
-                parentPredicate: e.target.getAttribute('data-parent-predicate'),
-                parentSubject: e.target.getAttribute('data-parent-subject'),
-                valueExpr: JSON.parse(e.target.getAttribute('data-valuexpr')),
-                parentName: e.target.getAttribute('data-parent-name')
+                ...dataObj
             }
         };
         setFormValues({ ...formValues, ...data });
