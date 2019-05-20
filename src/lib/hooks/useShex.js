@@ -442,7 +442,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
-    const onChange = e => {
+    const onChange = (e: Event) => {
         const { value, name } = e.target;
         const defaultValue = e.target.getAttribute('data-default');
         const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
@@ -653,6 +653,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         onSubmit,
         onDelete,
         onChange,
-        saveForm
+        saveForm,
+        onReset
     };
 };
