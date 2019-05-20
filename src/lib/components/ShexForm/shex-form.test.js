@@ -1,24 +1,25 @@
 import React from "react";
 import { render, cleanup } from "react-testing-library";
 import ShexForm from "./shex-form.component";
+import { ShexConfig } from "@context";
 import "jest-dom/extend-expect";
 
 afterAll(cleanup);
 
 const setup = (shex, parent, formValues) => {
-  const onDeleteMock = jest.fn();
-  const onChangeMock = jest.fn();
-  const addNewExpressionMock = jest.fn();
-  const updateShexjMock = jest.fn();
+  const config = {
+    theme: {},
+    languageTheme: {},
+    config: {}
+  };
+
   return (
-    <ShexForm
-    shexj={shexj}
-    onChange={onChangeMock}
-    onDelete={onDeleteMock}
-    addNewExpression={addNewExpressionMock}
-    updateShexj={updateShexjMock}
-    formValues={{}}
-  />
+    <ShexConfig.Provider value={config}>
+      <ShexForm
+        shexj={shexj}
+        formValues={{}}
+      />
+    </ShexConfig.Provider>
   );
 };
 
@@ -53,27 +54,25 @@ const shexj = {
 };
 
 describe("Shex ShapeForm Component", () => {
- const component = setup(shexj,null,{});
- const { container, getByText, getByValue, getAllByText } = render(component);
+  const component = setup(shexj, null, {});
+  const { container, getByText, getByValue, getAllByText } = render(component);
 
   it("should renders without crashing", () => {
     expect(container).toBeTruthy();
   });
 
   it("it should have 'fn' as label", () => {
-    const deleteButtons = getByText('fn');
+    const deleteButtons = getByText("fn");
     expect(deleteButtons).toBeTruthy();
-  })
+  });
 
   it("it should have an input", () => {
-    const input = getByValue('Jane');
+    const input = getByValue("Jane");
     expect(input).toBeTruthy();
-  })
+  });
 
   it("it should have a '+ Add' button", () => {
-    const input = getAllByText('+ Add new fn');
+    const input = getAllByText("+ Add new fn");
     expect(input).toBeTruthy();
-  })
-
-  
+  });
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeShex } from "@context";
+import { ShexConfig } from "@context";
 import { DeleteButton } from "../";
 import {
   ErrorMessage,
@@ -15,15 +15,13 @@ export const InputField = ({
   hasPrefix,
   parentPredicate,
   parentSubject,
-  onChange,
-  onDelete,
   parent,
   canDelete,
   fieldData
 }) => {
   return (
-    <ThemeShex.Consumer>
-      {theme => (
+    <ShexConfig.Consumer>
+      {({ theme, config: { onChange } }) => (
         <InputWrapper
           className={`${theme && theme.inputContainer} ${
             inputData && inputData.error ? "error" : ""
@@ -43,12 +41,13 @@ export const InputField = ({
               data-parent-predicate={parentPredicate}
               data-valuexpr={JSON.stringify(valueExpr)}
               data-parent-subject={parentSubject}
-              data-parent-name={parent && parent._formFocus ? parent._formFocus.name : null }
+              data-parent-name={
+                parent && parent._formFocus ? parent._formFocus.name : null
+              }
             />
             {!parent && canDelete && (
               <DeleteButton
                 {...{
-                  onDelete,
                   predicate,
                   fieldData
                 }}
@@ -62,6 +61,6 @@ export const InputField = ({
           )}
         </InputWrapper>
       )}
-    </ThemeShex.Consumer>
+    </ShexConfig.Consumer>
   );
 };
