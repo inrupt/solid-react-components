@@ -4,16 +4,13 @@ import { InputField, DropDownField } from "../";
 
 type FieldProps = {
   data: Object,
-  inputData: Object,
-  onChange: (e: Event) => {}
+  inputData: Object
 };
 
 export const Field = ({
   data,
   fieldData,
   inputData,
-  onChange,
-  onDelete,
   canDelete,
   parent
 }: FieldProps) => {
@@ -32,14 +29,12 @@ export const Field = ({
             type: "text",
             fieldData,
             inputData,
-            onChange,
             predicate,
             hasPrefix,
             parent,
             parentPredicate,
             parentSubject,
             canDelete,
-            onDelete,
             valueExpr: data.valueExpr,
             error: data.error
           }}
@@ -48,9 +43,7 @@ export const Field = ({
         <DropDownField
           {...{
             fieldData,
-            onChange,
             canDelete,
-            onDelete,
             predicate,
             hasPrefix,
             parent,

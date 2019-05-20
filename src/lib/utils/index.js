@@ -4,7 +4,8 @@ import {
   findAnnotation,
   shexParentLinkOnDropDowns,
   allowNewFields,
-  canDelete
+  canDelete,
+  isValueChanged
 } from './shex';
 import { solidResponse } from './statusMessage';
 import {
@@ -27,5 +28,6 @@ export {
   existDocument,
   createDocument,
   fetchLdflexDocument,
-    ShexFormValidator
+  ShexFormValidator,
+  isValueChanged
 };

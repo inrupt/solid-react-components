@@ -2,7 +2,8 @@ import React, { useCallback } from "react";
 import { FormComponent } from "./styled.component";
 import { ShexForm } from "@components";
 import {  useShex } from "@hooks";
-import { ThemeShex, Language } from "@context";
+import { ShexConfig } from "@context";
+
 
 type Props = {
   errorCallback: () => void,
@@ -29,11 +30,12 @@ const ShexFormBuilder = ({
     shexData,
     addNewShexField,
     updateShexJ,
-    onSubmit: submit,
+    onSubmit,
     onDelete: deleteFn,
     onChange,
     onReset,
-    formValues
+    formValues,
+    saveForm
   } = useShex(shexUri, documentUri, rootShape, errorCallback);
 
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
@@ -50,9 +52,15 @@ const ShexFormBuilder = ({
     }
   });
 
-  const onSubmit = useCallback(async e => {
+  const onSubmitSave = useCallback(async (e, type: ?String) => {
     try {
-      const result = await submit(e);
+      let result;
+
+      if (type) {
+        result = await saveForm(e);
+      } else {
+        result = await onSubmit(e);
+      }
 
       if ((result.status && result.status === 200)  || (result.code && result.code === 200)) {
         return successCallback(result);
@@ -64,29 +72,38 @@ const ShexFormBuilder = ({
     }
   });
 
+
+  const config = {
+    theme,
+    languageTheme,
+    config: {
+      onDelete,
+      onChange,
+      updateShexJ,
+      addNewShexField,
+      onSubmitSave
+    }
+  };
   return (
-    <ThemeShex.Provider value={theme}>
-      <Language.Provider value={languageTheme}>
-        <FormComponent onSubmit={onSubmit} className={theme && theme.form}>
-          {shexData.formData && (
-            <ShexForm
-              {...{
-                formValues,
-                onChange,
-                onDelete,
-                addNewShexField,
-                updateShexJ,
-                shexj: shexData.formData
-              }}
-            />
-          )}
-          <button type="submit">{languageTheme.saveBtn}</button>
-          <button type="button" onClick={onReset}>
-            {languageTheme.resetBtn}
-          </button>
-        </FormComponent>
-      </Language.Provider>
-    </ThemeShex.Provider>
+    <ShexConfig.Provider value={config}>
+      <FormComponent onSubmit={onSubmitSave} className={theme && theme.form}>
+        {shexData.formData && (
+          <ShexForm
+            {...{
+              formValues,
+              onChange,
+              onDelete,
+              addNewShexField,
+              shexj: shexData.formData
+            }}
+          />
+        )}
+        <button type="submit">{languageTheme.saveBtn}</button>
+        <button type="button" onClick={onReset}>
+          {languageTheme.resetBtn}
+        </button>
+      </FormComponent>
+    </ShexConfig.Provider>
   );
 };
 

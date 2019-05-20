@@ -1,60 +1,64 @@
-import React from 'react';
-import { Language } from '@context';
-import { cleanup, render } from 'react-testing-library';
-import { AddButton } from './add-button.component';
-import 'jest-dom/extend-expect';
+import React from "react";
+import { ShexConfig } from "@context";
+import { cleanup, render } from "react-testing-library";
+import { AddButton } from "./add-button.component";
+import "jest-dom/extend-expect";
 
 afterAll(cleanup);
 
-const languageTheme = {
-  language: 'en',
-  addButtonText: '+ Add new '
+const config = {
+  languageTheme: {
+    language: "en",
+    addButtonText: "+ Add new "
+  },
+  theme: {},
+  config: {}
 };
 
 const defaultExpression = {
   annotations: []
 };
 
-const setup = (props, languageTheme) => {
+const setup = (props, config) => {
   return (
-    <Language.Provider value={languageTheme}>
+    <ShexConfig.Provider value={config}>
       <AddButton {...props} />
-    </Language.Provider>
+    </ShexConfig.Provider>
   );
 };
 
-describe('Shex ShapeForm Component', () => {
+describe("Shex ShapeForm Component", () => {
   const component = setup(
     { allowNewFields: true, defaultExpression },
-    languageTheme
+    config
   );
   const { container, rerender } = render(component);
 
-  it('should renders without crashing', () => {
+  it("should renders without crashing", () => {
     expect(container).toBeTruthy();
   });
 
-  it('should renders language version', () => {
+  it("should renders language version", () => {
     const languageTheme = {
-      language: 'es',
-      addButtonText: '+ Agregar '
+      language: "es",
+      addButtonText: "+ Agregar "
     };
     const component = setup(
       { allowNewFields: true, defaultExpression },
-      languageTheme
+      {...config, languageTheme}
     );
 
     rerender(component);
-    expect(container).toHaveTextContent('+ Agregar');
+    expect(container).toHaveTextContent("+ Agregar");
   });
 
-  it('should not renders if allowNewField is false', () => {
+  it("should not renders if allowNewField is false", () => {
     const component = setup(
       { allowNewFields: false, defaultExpression },
-      languageTheme
+      config
     );
     rerender(component);
 
-    expect(container).toHaveTextContent('');
+    expect(container).toHaveTextContent("");
   });
 });

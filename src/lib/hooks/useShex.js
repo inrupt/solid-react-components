@@ -652,6 +652,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         formValues,
         onSubmit,
         onDelete,
-        onChange
+        onChange,
+        saveForm
     };
 };
