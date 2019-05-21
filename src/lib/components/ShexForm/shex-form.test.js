@@ -10,7 +10,9 @@ const setup = (shex, parent, formValues) => {
   const config = {
     theme: {},
     languageTheme: {},
-    config: {}
+    config: {
+      onChange: jest.fn()
+    }
   };
 
   return (
