@@ -1,9 +1,16 @@
 import { useShex } from '@hooks';
 import { renderHook } from 'react-hooks-testing-library';
 import { cleanup } from 'react-testing-library';
+import { act } from 'react-dom/test-utils';
 
 const setup = () => {
-    return renderHook(() => useShex(null, null, null, { errorCallback: jest.fn() }));
+    let component;
+
+    act( () => {
+        component = renderHook(() => useShex(null, null, null, { errorCallback: '' }));
+    });
+
+    return component;
 };
 
 describe('useShex', () => {

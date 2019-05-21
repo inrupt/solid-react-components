@@ -1,6 +1,7 @@
 import React from 'react';
 import { cleanup, render } from 'react-testing-library';
 import ShexFormBuilder  from './shex-form-builder.component';
+import { act } from 'react-dom/test-utils';
 import 'jest-dom/extend-expect';
 
 afterAll(cleanup);
@@ -10,16 +11,24 @@ const setup = (props) => {
 };
 
 
+
 const defaultProps = {
     documentUri: '',
     shexUri:
         'https://jpablo.solid.community/public/shapes/profile.shex',
-    successCallback: jest.fn(),
-    errorCallback: jest.fn(),
+    successCallback: null,
+    errorCallback: null,
 }
 describe('Shex ShapeForm Component', () => {
-    const component = setup(defaultProps);
-    const { container, getByText } = render(component);
+    let container;
+    let getByText;
+
+    act(() => {
+        const component = setup(defaultProps);
+        const options = render(component);
+        container = options.container;
+        getByText = options.getByText;
+    })
 
     it('should render without crashing', () => {
         expect(container).toBeTruthy();
