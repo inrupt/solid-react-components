@@ -3,7 +3,7 @@ import { renderHook } from 'react-hooks-testing-library';
 import { cleanup } from 'react-testing-library';
 
 const setup = () => {
-    return renderHook(() => useShex());
+    return renderHook(() => useShex(null, null, null, { errorCallback: jest.fn() }));
 };
 
 describe('useShex', () => {
