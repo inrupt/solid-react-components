@@ -1,6 +1,7 @@
 import React from "react";
 import unique from "unique-string";
 import { ShexConfig } from "@context";
+import { isValueChanged } from '@utils';
 import { DeleteButton } from "../";
 import { ErrorMessage, SelectWrapper } from "./styled.component";
 
@@ -18,12 +19,13 @@ export const DropDownField = ({
   canDelete,
   fieldData
 }) => {
+
   return (
     <ShexConfig.Consumer>
       {({
         theme,
         languageTheme,
-        config: { onChange, onDelete, updateShexJ }
+        config: { onChange, onDelete, onSubmitSave, autoSaveMode }
       }) => (
         <SelectWrapper
           className={`${theme && theme.wrapperSelect} ${error ? "error" : ""}`}
@@ -32,7 +34,11 @@ export const DropDownField = ({
             className={theme && theme.select}
             value={value}
             name={name}
-            onChange={onChange}
+            onChange={ onChange }
+            onBlur={() =>
+                autoSaveMode && isValueChanged(value, defaultValue) &&
+                onSubmitSave(name, "autoSave")
+            }
             data-predicate={predicate}
             data-subject={subject}
             data-default={defaultValue}

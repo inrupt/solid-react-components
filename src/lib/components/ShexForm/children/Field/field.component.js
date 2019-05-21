@@ -1,5 +1,6 @@
-import React from "react";
-import { findAnnotation } from "@utils";
+import React, { Fragment } from "react";
+import { findAnnotation, shexFormLabel } from "@utils";
+import { ShexConfig } from "@context";
 import { InputField, DropDownField } from "../";
 
 type FieldProps = {
@@ -20,42 +21,47 @@ export const Field = ({
   const hasPrefix = annotation && annotation.object.value;
   const parentPredicate = parent && parent.predicate ? parent.predicate : null;
   const parentSubject = parent && parent._formFocus.parentSubject;
-
   return (
-    <React.Fragment>
-      {inputType === "text" ? (
-        <InputField
-          {...{
-            type: "text",
-            fieldData,
-            inputData,
-            predicate,
-            hasPrefix,
-            parent,
-            parentPredicate,
-            parentSubject,
-            canDelete,
-            valueExpr: data.valueExpr,
-            error: data.error
-          }}
-        />
-      ) : (
-        <DropDownField
-          {...{
-            fieldData,
-            canDelete,
-            predicate,
-            hasPrefix,
-            parent,
-            parentPredicate,
-            value: inputData.value,
-            defaultValue: fieldData._formFocus.value,
-            subject: fieldData._formFocus.parentSubject,
-            name: inputData.name,
-            values: data.valueExpr.values
-          }}
-        />
+    <ShexConfig.Consumer>
+      {({ languageTheme: { language } }) => (
+        <Fragment>
+          <label>{shexFormLabel(data, language)}</label>
+
+          {inputType === "text" ? (
+            <InputField
+              {...{
+                type: "text",
+                fieldData,
+                inputData,
+                predicate,
+                hasPrefix,
+                parent,
+                parentPredicate,
+                parentSubject,
+                canDelete,
+                valueExpr: data.valueExpr,
+                error: data.error
+              }}
+            />
+          ) : (
+            <DropDownField
+              {...{
+                fieldData,
+                canDelete,
+                predicate,
+                hasPrefix,
+                parent,
+                parentPredicate,
+                value: inputData.value,
+                defaultValue: fieldData._formFocus.value,
+                subject: fieldData._formFocus.parentSubject,
+                name: inputData.name,
+                values: data.valueExpr.values
+              }}
+            />
+          )}
+        </Fragment>
       )}
-    </React.Fragment>
+    </ShexConfig.Consumer>
   );
 };

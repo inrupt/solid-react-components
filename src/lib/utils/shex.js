@@ -48,6 +48,10 @@ const allowNewFields = (data: Object) => {
   );
 };
 
+const isValueChanged = (value, defaultValue) => {
+  return value !== defaultValue;
+};
+
 const canDelete = (data) => data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
 
 export {
@@ -55,5 +59,6 @@ export {
   findAnnotation,
   shexParentLinkOnDropDowns,
   allowNewFields,
-  canDelete
+  canDelete,
+  isValueChanged
 };
