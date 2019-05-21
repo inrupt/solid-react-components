@@ -21,7 +21,8 @@ type Options = {
     data: ?Object
 }
 
-export const useShex = (fileShex: String, documentUri: String, rootShape: String, errorCallback: ?() => void) => {
+export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
+    const { errorCallback, timestamp } = options;
     const [shexData, setShexData] = useState({});
     const [shexError, setShexError] = useState(null);
     const [formValues, setFormValues] = useState({});
@@ -638,7 +639,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     useEffect(() => {
         toShexJForm();
 
-    }, [fileShex, documentUri]);
+    }, [fileShex, documentUri, timestamp]);
 
     return {
         shexData,
