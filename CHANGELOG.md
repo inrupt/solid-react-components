@@ -1,5 +1,16 @@
 # Solid React Components Library
 
+## 0.4.0 ( May 22, 2019 )
+
+### Added
+* New component: ShexFormBuilder
+    * Builds a form from a ShEx shape
+    * Supports:
+        * Textbox
+        * Select
+    * Validates form data onSubmit against the ShEx shape requirements
+    * View [Readme](https://github.com/inrupt/solid-react-components#ShExFormBuilder) for usage details
+
 ## 0.3.2 ( April 3, 2019 )
 
 ### Fixed
