@@ -1,7 +1,7 @@
-import { 
-  withWebId, 
-  LogoutButton, 
-  Image, 
+import {
+  withWebId,
+  LogoutButton,
+  Image,
   LiveUpdate,
   useWebId,
   UpdateContext,
@@ -11,7 +11,9 @@ import {
   PrivateRoute,
   withAuthorization,
   Uploader,
-  ProfileUploader
+  ProfileUploader,
+  ShexForm,
+  ShexFormBuilder
 } from "@components";
 
 export {
@@ -26,5 +28,7 @@ export {
   LiveUpdate,
   useWebId,
   UpdateContext,
-  useLiveUpdate
+  useLiveUpdate,
+  ShexForm,
+  ShexFormBuilder
 };

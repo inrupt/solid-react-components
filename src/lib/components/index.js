@@ -4,6 +4,8 @@ import PrivateRoute from './PrivateRoute';
 import withAuthorization from './withAuthorization';
 import Uploader from './Uploader';
 import ProfileUploader from './ProfileUploader';
+import ShexForm from './ShexForm';
+import ShexFormBuilder from './ShexFormBuilder';
 
 export {
   ProviderSelect,
@@ -11,5 +13,7 @@ export {
   PrivateRoute,
   withAuthorization,
   Uploader,
-  ProfileUploader
+  ProfileUploader,
+  ShexForm,
+  ShexFormBuilder
 };

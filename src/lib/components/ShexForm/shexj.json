@@ -1,0 +1,618 @@
+{
+  "type": "Shape",
+  "expression": {
+    "expressions": [
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#fn",
+        "valueExpr": {
+          "type": "NodeConstraint",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string"
+        },
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "name" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Name" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "user" }
+          }
+        ],
+        "_formValues": [
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": {
+              "value": "Pablo ",
+              "parentSubject": "https://jpablo.solid.community/profile/card#me",
+              "name": "7bb3baa7ecef1191a73e55a118b5b01a",
+              "isNew": false
+            }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#hasTelephone",
+        "valueExpr": "http://localhost:3000/#vcard_has-telephone",
+        "min": 0,
+
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Phone" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "phone" }
+          }
+        ],
+        "_formValues": [
+          {
+            "id": "http://localhost:3000/#vcard_has-telephone",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jpablo.solid.community/profile/card#id1555962442000",
+              "parentSubject": "https://jpablo.solid.community/profile/card#me",
+              "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasTelephone",
+              "name": "a430618f246fee70cd4cd9a10cab082b",
+              "isNew": false
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": [
+                      "http://www.w3.org/2006/vcard/ns#Home",
+                      "http://www.w3.org/2006/vcard/ns#Work"
+                    ]
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "values": [
+                        "http://www.w3.org/2006/vcard/ns#Home",
+                        "http://www.w3.org/2006/vcard/ns#Work"
+                      ],
+                      "_formFocus": {
+                        "value": "",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1555962442000",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasTelephone",
+                        "name": "912c5c32b1a0649805c1689ff222c9f0",
+                        "isNew": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#value",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Phone" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutprefix",
+                      "object": { "value": "tel:" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "85737512312",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1555962442000",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasTelephone",
+                        "name": "c45cdef94e9687e5f022c4f9c9688854",
+                        "isNew": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#role",
+        "valueExpr": {
+          "type": "NodeConstraint",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string"
+        },
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "role" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Role" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "user-astronaut" }
+          }
+        ],
+        "_formValues": [
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": {
+              "value": "",
+              "parentSubject": "https://jpablo.solid.community/profile/card#me",
+              "name": "0a4c4a7c9872235c1ba1d174a28526a1",
+              "isNew": true
+            }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
+        "valueExpr": "http://localhost:3000/#vcard_has-email",
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "email" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Email" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "envelope" }
+          }
+        ],
+        "_formValues": [
+          {
+            "id": "http://localhost:3000/#vcard_has-email",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jpablo.solid.community/profile/card#id1556035459000",
+              "parentSubject": "https://jpablo.solid.community/profile/card#me",
+              "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
+              "name": "640e405977e9cead86a8ab76b0c5b1b3",
+              "isNew": false
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": [
+                      "http://www.w3.org/2006/vcard/ns#Home",
+                      "http://www.w3.org/2006/vcard/ns#Work"
+                    ]
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "values": [
+                        "http://www.w3.org/2006/vcard/ns#Home",
+                        "http://www.w3.org/2006/vcard/ns#Work"
+                      ],
+                      "_formFocus": {
+                        "value": "",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556035459000",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
+                        "name": "41e047bae2b1389b781f6f48e811fa1f",
+                        "isNew": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#value",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Email" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutprefix",
+                      "object": { "value": "mailto:" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "jose.rdrz.rojas@gmail.com",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556035459000",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasEmail",
+                        "name": "4dc13560b3a492d40f6e1197893904a4",
+                        "isNew": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#organization-name",
+        "valueExpr": {
+          "type": "NodeConstraint",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string"
+        },
+        "min": 0,
+        "max": 1,
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "company" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Company" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "building" }
+          }
+        ],
+        "_formValues": [
+          {
+            "type": "NodeConstraint",
+            "datatype": "http://www.w3.org/2001/XMLSchema#string",
+            "_formFocus": {
+              "value": "",
+              "parentSubject": "https://jpablo.solid.community/profile/card#me",
+              "name": "8918200cb9e838b53173d91ae3bc7b63",
+              "isNew": true
+            }
+          }
+        ]
+      },
+      {
+        "type": "TripleConstraint",
+        "predicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+        "valueExpr": "http://localhost:3000/#vcard_street-address",
+        "annotations": [
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutkey",
+            "object": { "value": "address" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layoutlabel",
+            "object": { "value": "Address" }
+          },
+          {
+            "type": "Annotation",
+            "predicate": "http://janeirodigital.com/ns#layouticon",
+            "object": { "value": "map-marker-alt" }
+          }
+        ],
+        "_formValues": [
+          {
+            "id": "http://localhost:3000/#vcard_street-address",
+            "type": "Shape",
+            "_formFocus": {
+              "value": "https://jpablo.solid.community/profile/card#id1556561095001",
+              "parentSubject": "https://jpablo.solid.community/profile/card#me",
+              "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+              "name": "92a9d4e03b1f15a9cd01f8a8d3907859",
+              "isNew": true
+            },
+            "expression": {
+              "expressions": [
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "values": ["http://www.w3.org/2006/vcard/ns#StreetAddress"]
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "values": [
+                        "http://www.w3.org/2006/vcard/ns#StreetAddress"
+                      ],
+                      "_formFocus": {
+                        "value": "",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556561095001",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+                        "name": "7e12e50e48a24a8bb3a85d96416d2a5c",
+                        "isNew": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#street-address",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "street-address" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Street Address" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556561095001",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+                        "name": "11e449d323ae0d2931930162590895c0",
+                        "isNew": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#locality",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "locality" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Locality" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556561095001",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+                        "name": "d71c142a8614fc981a87ed55c5b858c1",
+                        "isNew": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#region",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "region" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Region" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556561095001",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+                        "name": "794753c502bdc3b4d19f4854b8223051",
+                        "isNew": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#country-name",
+                  "valueExpr": "http://localhost:3000/#vcard_country-name",
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Country" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "id": "http://localhost:3000/#vcard_country-name",
+                      "type": "NodeConstraint",
+                      "values": [
+                        { "value": "Afghanistan" },
+                        { "value": "Belgium" },
+                        { "value": "Costa Rica" },
+                        { "value": "France" },
+                        { "value": "日本" },
+                        { "value": "United Kingdom" },
+                        { "value": "United States" },
+                        { "value": "Zimbabwe" }
+                      ],
+                      "_formFocus": {
+                        "value": "https://jpablo.solid.community/profile/card#id1556561095002",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556561095001",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#country-name",
+                        "name": "77d21f70bdab59ec168225a3c7799432",
+                        "isNew": true
+                      },
+                      "expression": { "expressions": [] }
+                    }
+                  ]
+                },
+                {
+                  "type": "TripleConstraint",
+                  "predicate": "http://www.w3.org/2006/vcard/ns#postal-code",
+                  "valueExpr": {
+                    "type": "NodeConstraint",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                  },
+                  "annotations": [
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutkey",
+                      "object": { "value": "postal-code" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layoutlabel",
+                      "object": { "value": "Postal Code" }
+                    },
+                    {
+                      "type": "Annotation",
+                      "predicate": "http://janeirodigital.com/ns#layouticon",
+                      "object": { "value": "flag" }
+                    }
+                  ],
+                  "_formValues": [
+                    {
+                      "type": "NodeConstraint",
+                      "datatype": "http://www.w3.org/2001/XMLSchema#string",
+                      "_formFocus": {
+                        "value": "",
+                        "parentSubject": "https://jpablo.solid.community/profile/card#id1556561095001",
+                        "parentPredicate": "http://www.w3.org/2006/vcard/ns#hasAddress",
+                        "name": "c0f93cbab3c9097697677888d5812318",
+                        "isNew": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "id": "http://localhost:3000/#UserProfile"
+}
