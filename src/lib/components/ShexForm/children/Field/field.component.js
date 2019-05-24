@@ -26,7 +26,6 @@ export const Field = ({
       {({ languageTheme: { language } }) => (
         <Fragment>
           <label>{shexFormLabel(data, language)}</label>
-
           {inputType === "text" ? (
             <InputField
               {...{

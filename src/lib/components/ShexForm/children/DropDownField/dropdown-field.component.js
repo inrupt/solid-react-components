@@ -49,7 +49,7 @@ export const DropDownField = ({
               {(languageTheme && languageTheme.dropdownDefaultText) ||
                 "-- Select an option --"}
             </option>
-            {values.map(val => {
+            {values && values.map(val => {
               const uVal =
                 typeof val === "string" ? val.split("#")[1] : val.value;
               const selectValue = typeof val === "string" ? val : val.value;

@@ -89,7 +89,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         parentPredicate,
         valueEx: String,
         annotations?: Array<Object>,
-        isNew: boolean,
+        isNew: boolean
     ) => {
         let value = valueEx;
         if (annotations) {
@@ -232,6 +232,146 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             onError(error);
         }
     });
+
+    /* const findExpression = (shexFormJ: Array<Object>, predicate: String, callback: () => void) => {
+        let updatedShexFormJ = shexFormJ;
+
+        if (shexFormJ.predicate === predicate) {
+            return callback(shexFormJ);
+        }
+
+        if (shexFormJ.expression && shexFormJ.expression.expressions) {
+            let updatedExpression = [];
+
+            for (let expression of shexFormJ.expression.expressions) {
+                let newExpression = {};
+
+                if (expression.predicate === predicate) {
+                    newExpression = callback(expression);
+
+                    updatedExpression = [...updatedExpression, newExpression];
+                } else {
+                    updatedExpression = findExpression(expression, predicate, callback);
+                }
+            }
+
+            updatedShexFormJ = {
+                ...shexFormJ,
+                expression: { expressions: [...shexFormJ.expression.expressions, updatedExpression]}
+            };
+        }
+
+        return updatedShexFormJ;
+    }; */
+
+
+    const mapExpFormValues = async (rootExpression, callback, linkUri) => {
+        let updatedExpressions = [];
+        if (rootExpression && rootExpression.expressions) {
+           for await (let expression of rootExpression.expressions) {
+               let updatedFormValues = []; //expression._formValues;
+               let index = 0;
+              // console.log(expression.predicate, 'predicate');
+               for await (let node of ldflex[linkUri || documentUri][expression.predicate]) {
+                   if (updatedFormValues[index]) {
+                       updatedFormValues[index] = callback(
+                           expression._formValues[index],
+                           updatedExpressions,
+                           node.value
+                       );
+                   } else {
+                       updatedFormValues = [...updatedFormValues, callback(
+                           expression._formValues[index] || {...expression._formValueClone, name: unique()},
+                           updatedExpressions,
+                           node.value
+                       )];
+                   }
+
+                   /* updatedFormValues = [...updatedFormValues, callback(
+                       expression._formValues[index] || {...expression._formValueClone, name: unique()},
+                       updatedExpressions,
+                       node.value
+                   )]; */
+
+
+                   if (updatedFormValues[index].expression) {
+                       updatedFormValues[index] = {
+                           ...updatedFormValues[index],
+                           expression: {
+                               expressions : await mapExpFormValues(updatedFormValues[index].expression,
+                                   callback, updatedFormValues[index]._formFocus.value)
+                           }
+                       };
+
+                   }
+
+                    index++;
+               }
+               console.log(expression,'new');
+               updatedExpressions = [...updatedExpressions, {
+                   ...expression,
+                   _formValues: updatedFormValues
+               }];
+
+           }
+        }
+
+        return updatedExpressions;
+    };
+
+    const mapExpression = async (shexFormJ: Array<Object>, callback: () => void) => {
+        let updatedShexFormJ = {};
+
+        if (shexFormJ.predicate) {
+            if (callback) {
+                updatedShexFormJ = callback(shexFormJ);
+            } else {
+                return shexFormJ;
+            }
+        }
+        if (shexFormJ.expression && shexFormJ.expression.expressions) {
+            let updatedExpression = [];
+            for await (let expression of shexFormJ.expression.expressions) {
+                updatedExpression = [...updatedExpression, await mapExpression(expression.expression, callback)];
+            }
+            updatedShexFormJ = {
+                ...shexFormJ,
+                expression: { expressions: updatedExpression}
+            };
+        }
+
+        return updatedShexFormJ;
+    };
+
+    const expressionChanged = (name: Object, value: any) => {
+        if (formValues.length > 0) {
+            if (formValues[name].defaultValue !== formValues[name].value) {
+                formValues[name].defaultValue = value;
+            } else {
+                formValues[name].defaultValue = value;
+                formValues[name].value = value;
+            }
+        }
+
+       return formValues;
+    };
+
+    const updatesListener = async () => {
+        const { formData, shexJ } = shexData;
+        const updatedFormData = await mapExpFormValues(formData.expression, (_formValue, _formValues, value) => {
+            return {
+                ..._formValue,
+                _formFocus: {
+                    ..._formValue._formFocus,
+                    name: unique(),
+                    value
+                }
+            }
+        });
+        setShexData({ shexJ, formData: {...formData, expression: { expressions: updatedFormData } }});
+        // setFormValues(updatedFormValues);
+    }
+
 
 
     /*
@@ -429,8 +569,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     {id: _findRootShape(shexJ)},
                     podDocument
                 );
+
                 setShexData({shexJ, formData});
             }
+
         } catch (error) {
             let solidError = error;
 
@@ -447,7 +589,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const { value, name } = e.target;
         const defaultValue = e.target.getAttribute('data-default');
         const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
-
         const data = {
             [e.target.name]: {
                 value,
@@ -641,6 +782,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     }
 
     useEffect(() => {
+       if (!timestamp) {
+           // toShexJForm();
+       } else {
+           //updatesListener();
+       }
+        // updatesListener();
         toShexJForm();
 
     }, [fileShex, documentUri, timestamp]);
