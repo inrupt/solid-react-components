@@ -233,65 +233,21 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
-    /* const findExpression = (shexFormJ: Array<Object>, predicate: String, callback: () => void) => {
-        let updatedShexFormJ = shexFormJ;
-
-        if (shexFormJ.predicate === predicate) {
-            return callback(shexFormJ);
-        }
-
-        if (shexFormJ.expression && shexFormJ.expression.expressions) {
-            let updatedExpression = [];
-
-            for (let expression of shexFormJ.expression.expressions) {
-                let newExpression = {};
-
-                if (expression.predicate === predicate) {
-                    newExpression = callback(expression);
-
-                    updatedExpression = [...updatedExpression, newExpression];
-                } else {
-                    updatedExpression = findExpression(expression, predicate, callback);
-                }
-            }
-
-            updatedShexFormJ = {
-                ...shexFormJ,
-                expression: { expressions: [...shexFormJ.expression.expressions, updatedExpression]}
-            };
-        }
-
-        return updatedShexFormJ;
-    }; */
-
 
     const mapExpFormValues = async (rootExpression, callback, linkUri) => {
         let updatedExpressions = [];
+
         if (rootExpression && rootExpression.expressions) {
            for await (let expression of rootExpression.expressions) {
-               let updatedFormValues = []; //expression._formValues;
+               let updatedFormValues = [];
                let index = 0;
-              // console.log(expression.predicate, 'predicate');
-               for await (let node of ldflex[linkUri || documentUri][expression.predicate]) {
-                   if (updatedFormValues[index]) {
-                       updatedFormValues[index] = callback(
-                           expression._formValues[index],
-                           updatedExpressions,
-                           node.value
-                       );
-                   } else {
-                       updatedFormValues = [...updatedFormValues, callback(
-                           expression._formValues[index] || {...expression._formValueClone, name: unique()},
-                           updatedExpressions,
-                           node.value
-                       )];
-                   }
 
-                   /* updatedFormValues = [...updatedFormValues, callback(
-                       expression._formValues[index] || {...expression._formValueClone, name: unique()},
+               for await (let node of ldflex[linkUri || documentUri][expression.predicate]) {
+                   updatedFormValues = [...updatedFormValues, callback(
+                       expression._formValues[index] || {...expression._formValueClone},
                        updatedExpressions,
                        node.value
-                   )]; */
+                   )];
 
 
                    if (updatedFormValues[index].expression) {
@@ -307,7 +263,15 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
                     index++;
                }
-               console.log(expression,'new');
+
+               if (updatedFormValues.length === 0) {
+                   updatedFormValues = [...updatedFormValues, callback(
+                       expression._formValues[index] || {...expression._formValueClone},
+                       updatedExpressions,
+                       ''
+                   )];
+               }
+
                updatedExpressions = [...updatedExpressions, {
                    ...expression,
                    _formValues: updatedFormValues
@@ -344,12 +308,15 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     };
 
     const expressionChanged = (name: Object, value: any) => {
-        if (formValues.length > 0) {
-            if (formValues[name].defaultValue !== formValues[name].value) {
-                formValues[name].defaultValue = value;
-            } else {
-                formValues[name].defaultValue = value;
-                formValues[name].value = value;
+        if (Object.keys(formValues).length > 0) {
+            if (formValues[name]) {
+                if (formValues[name].defaultValue !== formValues[name].value) {
+                    formValues[name].defaultValue = value;
+                    formValues[name].error = `Field value has been update to: ${value}`;
+                } else {
+                    formValues[name].defaultValue = value;
+                    formValues[name].value = value;
+                }
             }
         }
 
@@ -358,20 +325,26 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const updatesListener = async () => {
         const { formData, shexJ } = shexData;
+        let updatedFormValue = {};
+
         const updatedFormData = await mapExpFormValues(formData.expression, (_formValue, _formValues, value) => {
-            return {
+            updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
+
+            const expression = {
                 ..._formValue,
                 _formFocus: {
                     ..._formValue._formFocus,
-                    name: unique(),
-                    value
+                    value,
+                    error: updatedFormValue.error || null
                 }
             }
-        });
-        setShexData({ shexJ, formData: {...formData, expression: { expressions: updatedFormData } }});
-        // setFormValues(updatedFormValues);
-    }
 
+            return expression;
+        });
+
+        setShexData({ shexJ, formData: {...formData, expression: { expressions: updatedFormData } }});
+        setFormValues(updatedFormValue);
+    }
 
 
     /*
@@ -783,12 +756,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     useEffect(() => {
        if (!timestamp) {
-           // toShexJForm();
+           toShexJForm();
        } else {
-           //updatesListener();
+           updatesListener();
        }
         // updatesListener();
-        toShexJForm();
+        //toShexJForm();
 
     }, [fileShex, documentUri, timestamp]);
 

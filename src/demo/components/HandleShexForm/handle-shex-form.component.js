@@ -55,7 +55,7 @@ const HandleShexForm = ({ webId }:Props) => {
                 <Input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
                 <Button type='submit'>Load Form</Button>
             </Form>
-            <ShexFormBuilder {...{ ...podData, languageTheme, autoSaveMode : true }} />
+            <ShexFormBuilder {...{ ...podData, languageTheme, autoSaveMode : false }} />
         </div>
     );
 };
