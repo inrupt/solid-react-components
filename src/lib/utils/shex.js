@@ -103,7 +103,6 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
     return updatedExpressions;
 };
 
-
 const canDelete = (data) => data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
 
 const isExpressionLink = valueExpr => {
