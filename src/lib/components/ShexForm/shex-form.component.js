@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  shexFormLabel,
-  allowNewFields,
-  canDelete,
-  shexParentLinkOnDropDowns
-} from "@utils";
+import { shexUtil } from "@utils";
 import { ShexConfig } from "@context";
 import { Panel } from "./styled.component";
 import {
@@ -32,13 +27,13 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
             theme ? (parent ? theme.shexPanel : theme.shexRoot) : ""
           }`}
         >
-          {parent && canDelete(parent) && (
+          {parent && shexUtil.canDelete(parent) && (
             <DeleteButton
               {...{
                 parent,
                 fieldData: shexj,
                 floating: true,
-                canDelete: canDelete(parent)
+                canDelete: shexUtil.canDelete(parent)
               }}
             />
           )}
@@ -50,7 +45,7 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                 if (typeof expression.valueExpr === "string") {
                   return (
                     <React.Fragment key={i}>
-                      <h4>{shexFormLabel(expression, language)}</h4>
+                      <h4>{shexUtil.formLabel(expression, language)}</h4>
                       {expression._formValues.map((shexj, i) => (
                         <ShexForm
                           {...{
@@ -66,7 +61,7 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                       ))}
                       <AddButton
                         {...{
-                          allowNewFields: allowNewFields(expression),
+                          allowNewFields: shexUtil.allowNewFields(expression),
                           defaultExpression: expression
                         }}
                       />
@@ -99,11 +94,11 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                     defaultValue: shexj._formFocus.value,
                     subject: shexj._formFocus.parentSubject,
                     name: shexj._formFocus.name,
-                    label: shexFormLabel(parent),
-                    canDelete: canDelete(parent),
+                    label: shexUtil.formLabel(parent),
+                    canDelete: shexUtil.canDelete(parent),
                     predicate: parent.predicate,
                     parent,
-                    parentPredicate: shexParentLinkOnDropDowns(parent),
+                    parentPredicate: shexUtil.parentLinkOnDropDowns(parent),
                     parentSubject: shexj._formFocus.parentSubject
                   }}
                 />

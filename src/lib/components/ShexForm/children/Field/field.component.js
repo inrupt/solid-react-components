@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { findAnnotation, shexFormLabel } from "@utils";
+import { shexUtil } from "@utils";
 import { ShexConfig } from "@context";
 import { InputField, DropDownField } from "../";
 
@@ -17,7 +17,7 @@ export const Field = ({
 }: FieldProps) => {
   const inputType = data.valueExpr.values ? "select" : "text";
   const predicate = data.predicate;
-  const annotation = findAnnotation("layoutprefix", data.annotations);
+  const annotation = shexUtil.findAnnotation("layoutprefix", data.annotations);
   const hasPrefix = annotation && annotation.object.value;
   const parentPredicate = parent && parent.predicate ? parent.predicate : null;
   const parentSubject = parent && parent._formFocus.parentSubject;
@@ -25,7 +25,7 @@ export const Field = ({
     <ShexConfig.Consumer>
       {({ languageTheme: { language } }) => (
         <Fragment>
-          <label>{shexFormLabel(data, language)}</label>
+          <label>{shexUtil.formLabel(data, language)}</label>
           {inputType === "text" ? (
             <InputField
               {...{

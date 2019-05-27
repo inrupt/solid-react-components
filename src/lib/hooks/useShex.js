@@ -1,20 +1,18 @@
-import { useCallback, useState, useEffect } from 'react';
-import data from '@solid/query-ldflex';
-import shexParser from '@shexjs/parser';
-import shexCore from '@shexjs/core';
-import unique from 'unique-string';
+import { useCallback, useState, useEffect } from "react";
+import shexParser from "@shexjs/parser";
+import shexCore from "@shexjs/core";
+import unique from "unique-string";
 import ldflex from "@solid/query-ldflex";
 import { namedNode } from "@rdfjs/data-model";
+import { Expression, Annotation, ShexJ, Shape } from "@entities";
 import {
-  findAnnotation,
   SolidError,
   fetchLdflexDocument,
   fetchSchema,
-  shexParentLinkOnDropDowns,
   solidResponse,
-  ShexFormValidator
+  ShexFormValidator,
+  shexUtil
 } from "@utils";
-import { Expression, Annotation, ShexJ, Shape } from "@entities";
 
 type Options = {
     key: String,
@@ -57,12 +55,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         setShexError(error);
     });
 
-    const _isLink = useCallback(valueExpr => {
-        return typeof valueExpr === 'string' || null;
-    });
-
     const _fieldValue = useCallback((annotations: Array<Annotation>, value: String) => {
-        const hasPrefix = findAnnotation('layoutprefix', annotations);
+        const hasPrefix = shexUtil.findAnnotation('layoutprefix', annotations);
         if (hasPrefix && typeof value == 'string') {
             return value.split(hasPrefix.object.value).pop();
         }
@@ -101,27 +95,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
-    /*
-     * Check if expression is an drop down when values comes.
-     */
-    const _isDropDown = useCallback((expression: Expression) => {
-        if (Array.isArray(expression.values)) {
-            return { values: expression.values };
-        }
-        return null;
-    });
-
-    /*
-     * Create a unique Node Id (Link)
-     */
-    const _createIdNode = useCallback(() => {
-        const randomId = Date.parse (new Date ()) + (seed++);
-        const doc = documentUri || 'https://example.org';
-        const id = `${doc.split('#')[0]}#id${randomId}`;
-
-        return id;
-    });
-
 
     const _copyChildExpression = useCallback((expressions: Array<Expression>, linkId: String) => {
         return expressions.map(expression => {
@@ -139,7 +112,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
     const _createField = useCallback((expression: Expression, isLink: boolean, parentSubject: Object) => {
-        const id = isLink || _createIdNode();
+        const id = isLink || shexUtil.createIdNode(seed);
         let newExpression;
 
         if (expression.expression && expression.expression.expressions) {
@@ -197,7 +170,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     break;
                 }
 
-                if (_isLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
+                if (shexUtil.isExpressionLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
                     for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
                         if (currentExpression._formFocus &&
                             newExpressions[i]._formValues[y]._formFocus.value === currentExpression._formFocus.value) {
@@ -233,80 +206,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
-
-    const mapExpFormValues = async (rootExpression, callback, linkUri) => {
-        let updatedExpressions = [];
-
-        if (rootExpression && rootExpression.expressions) {
-           for await (let expression of rootExpression.expressions) {
-               let updatedFormValues = [];
-               let index = 0;
-
-               for await (let node of ldflex[linkUri || documentUri][expression.predicate]) {
-                   updatedFormValues = [...updatedFormValues, callback(
-                       expression._formValues[index] || {...expression._formValueClone},
-                       updatedExpressions,
-                       node.value
-                   )];
-
-
-                   if (updatedFormValues[index].expression) {
-                       updatedFormValues[index] = {
-                           ...updatedFormValues[index],
-                           expression: {
-                               expressions : await mapExpFormValues(updatedFormValues[index].expression,
-                                   callback, updatedFormValues[index]._formFocus.value)
-                           }
-                       };
-
-                   }
-
-                    index++;
-               }
-
-               if (updatedFormValues.length === 0) {
-                   updatedFormValues = [...updatedFormValues, callback(
-                       expression._formValues[index] || {...expression._formValueClone},
-                       updatedExpressions,
-                       ''
-                   )];
-               }
-
-               updatedExpressions = [...updatedExpressions, {
-                   ...expression,
-                   _formValues: updatedFormValues
-               }];
-
-           }
-        }
-
-        return updatedExpressions;
-    };
-
-    const mapExpression = async (shexFormJ: Array<Object>, callback: () => void) => {
-        let updatedShexFormJ = {};
-
-        if (shexFormJ.predicate) {
-            if (callback) {
-                updatedShexFormJ = callback(shexFormJ);
-            } else {
-                return shexFormJ;
-            }
-        }
-        if (shexFormJ.expression && shexFormJ.expression.expressions) {
-            let updatedExpression = [];
-            for await (let expression of shexFormJ.expression.expressions) {
-                updatedExpression = [...updatedExpression, await mapExpression(expression.expression, callback)];
-            }
-            updatedShexFormJ = {
-                ...shexFormJ,
-                expression: { expressions: updatedExpression}
-            };
-        }
-
-        return updatedShexFormJ;
-    };
-
     const expressionChanged = (name: Object, value: any) => {
         if (Object.keys(formValues).length > 0) {
             if (formValues[name]) {
@@ -327,7 +226,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const { formData, shexJ } = shexData;
         let updatedFormValue = {};
 
-        const updatedFormData = await mapExpFormValues(formData.expression, (_formValue, _formValues, value) => {
+        const updatedFormData = await shexUtil.mapExpFormValues(formData.expression, (_formValue, _formValues, value) => {
             updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
 
             const expression = {
@@ -398,15 +297,14 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const _fillFormValues =  useCallback(async (shape: Shape, expression: Expression, value: String = '') => {
         let isNew = value === '';
 
-        if (_isLink(expression.valueExpr)) {
+        if (shexUtil.isExpressionLink(expression.valueExpr)) {
 
             let linkValue = value;
 
             if (value === '') {
 
-                linkValue = _createIdNode();
+                linkValue = shexUtil.createIdNode(seed);
             }
-
 
             const childExpression = await _fillFormData(
                 {
@@ -417,9 +315,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     annotations:
                     expression.annotations
                 },
-                value === '' ? '' : data[value]
+                value === '' ? '' : ldflex[value]
             );
-            const dropDownValues = _isDropDown( childExpression );
+            const dropDownValues = shexUtil.isExpressionDropDown( childExpression );
 
             const currentSubject = dropDownValues ? shape.linkValue || documentUri : shape.parentSubject;
             const _formValues = [
@@ -617,7 +515,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             const { _formFocus } = shexj;
             const { parentSubject, name, value, isNew } = _formFocus;
             if (_formFocus && !isNew) {
-                if (shexParentLinkOnDropDowns(parent, shexj)) {
+                if (shexUtil.shexParentLinkOnDropDowns(parent, shexj)) {
                     await _deleteLink(shexj);
                 } else {
                     const predicate = shexj.predicate || shexj._formFocus.parentPredicate;
@@ -760,9 +658,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
        } else {
            updatesListener();
        }
-        // updatesListener();
-        //toShexJForm();
-
     }, [fileShex, documentUri, timestamp]);
 
     return {

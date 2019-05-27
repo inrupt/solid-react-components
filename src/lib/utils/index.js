@@ -1,12 +1,5 @@
 import SolidError from './error';
-import {
-  shexFormLabel,
-  findAnnotation,
-  shexParentLinkOnDropDowns,
-  allowNewFields,
-  canDelete,
-  isValueChanged
-} from './shex';
+import * as shexUtil from './shex';
 import { solidResponse } from './statusMessage';
 import {
   fetchSchema,
@@ -17,17 +10,12 @@ import {
 import { ShexFormValidator } from './shexFormValidator';
 
 export {
+  shexUtil,
   SolidError,
-  shexFormLabel,
-  findAnnotation,
-  shexParentLinkOnDropDowns,
-  allowNewFields,
-  canDelete,
   solidResponse,
   fetchSchema,
   existDocument,
   createDocument,
   fetchLdflexDocument,
-  ShexFormValidator,
-  isValueChanged
+  ShexFormValidator
 };

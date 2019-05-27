@@ -1,7 +1,7 @@
 import React from "react";
 import unique from "unique-string";
 import { ShexConfig } from "@context";
-import { isValueChanged } from '@utils';
+import { shexUtil } from '@utils';
 import { DeleteButton } from "../";
 import { ErrorMessage, SelectWrapper } from "./styled.component";
 
@@ -36,7 +36,7 @@ export const DropDownField = ({
             name={name}
             onChange={ onChange }
             onBlur={() =>
-                autoSaveMode && isValueChanged(value, defaultValue) &&
+                autoSaveMode && shexUtil.isValueChanged(value, defaultValue) &&
                 onSubmitSave(name, "autoSave")
             }
             data-predicate={predicate}

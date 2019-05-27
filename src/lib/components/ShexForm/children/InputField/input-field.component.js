@@ -1,6 +1,6 @@
 import React from "react";
 import { ShexConfig } from "@context";
-import { isValueChanged } from '@utils';
+import { shexUtil } from '@utils';
 import { DeleteButton } from "../";
 import {
   ErrorMessage,
@@ -51,7 +51,7 @@ export const InputField = ({
                 parent && parent._formFocus ? parent._formFocus.name : null
               }
               onBlur={() =>
-                  autoSaveMode && isValueChanged(currentValue, defaultValue) &&
+                  autoSaveMode && shexUtil.isValueChanged(currentValue, defaultValue) &&
                 onSubmitSave(inputName, "autoSave")
               }
             />

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { allowNewFields, canDelete } from "@utils";
+import { shexUtil }  from "@utils";
 import { AddButton } from "./";
 import { Field } from "./";
 
@@ -23,7 +23,7 @@ const ExpressionFields = ({ data, formValues, parent }: FieldsProps) => {
                   inputData:
                     formValues[value._formFocus.name] || value._formFocus,
                   parent,
-                  canDelete: canDelete(data)
+                  canDelete: shexUtil.canDelete(data)
                 }}
               />
             </li>
@@ -31,7 +31,7 @@ const ExpressionFields = ({ data, formValues, parent }: FieldsProps) => {
       </ul>
       <AddButton
         {...{
-          allowNewFields: allowNewFields(data) && !parent,
+          allowNewFields: shexUtil.allowNewFields(data) && !parent,
           defaultExpression: data,
           expression: parent
         }}

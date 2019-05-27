@@ -1,5 +1,5 @@
 import React from "react";
-import { shexFormLabel } from "@utils";
+import { shexUtil } from "@utils";
 import { ShexConfig } from "@context";
 
 export const AddButton = ({
@@ -20,7 +20,7 @@ export const AddButton = ({
           type="button"
           className={theme && theme.addButtonStyle}
         >
-          {addButtonText || text} {shexFormLabel(defaultExpression, language)}
+          {addButtonText || text} {shexUtil.formLabel(defaultExpression, language)}
         </button>
       )}
     </ShexConfig.Consumer>
