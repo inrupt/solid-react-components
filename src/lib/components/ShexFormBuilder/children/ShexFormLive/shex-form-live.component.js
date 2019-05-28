@@ -36,13 +36,12 @@ const ShexFormLive = ({
     onDelete: deleteFn,
     onChange,
     onReset,
-    formValues,
     saveForm
   } = useShex(shexUri, documentUri, rootShape, {
     errorCallback,
     timestamp: updates && updates.timestamp
   });
-
+  
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);
@@ -102,7 +101,7 @@ const ShexFormLive = ({
         {shexData.formData && (
           <ShexForm
             {...{
-              formValues,
+              formValues: shexData.formValues,
               onChange,
               onDelete,
               addNewShexField,

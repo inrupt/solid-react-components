@@ -19,15 +19,14 @@ type Options = {
     data: ?Object
 }
 
+let ownerUpdate = false;
 
 export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
     const { errorCallback, timestamp } = options;
     const [shexData, setShexData] = useState({});
     const [shexError, setShexError] = useState(null);
-    const [formValues, setFormValues] = useState({});
     let shapes = [];
     let seed = 1;
-    let ownerUpdate = false;
 
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
         const { formData, shexJ } = shexData;
@@ -47,9 +46,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
 
     const updateShexJ = useCallback((options: Options, action: String) => {
-        const { formData, shexJ } = shexData;
+        const { formData, shexJ, formValues } = shexData;
         const newFormData =  shexUtil.mapFormValues(formData, formValue => {
             if (options.parent && formValue._formFocus.name === options.parent.key) {
+
                 return {
                     ...formValue,
                     _formFocus: {
@@ -75,7 +75,24 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             return formValue;
         });
 
-        setShexData({shexJ, formData: { ...formData, expression: {expressions: newFormData} }});
+        if (action === 'delete' || options.onSave) {
+            if (formValues) {
+                // Delete field from formValues object
+                const { [options.key]: omit, ...res } = formValues;
+
+                return setShexData({ shexJ, formValues: res, formData: {
+                    ...formData, expression: {
+                        expressions: newFormData
+                    }
+                }});
+            }
+        }
+
+        return setShexData({ shexJ, formValues, formData: {
+            ...formData, expression: {
+                expressions: newFormData
+            }
+        }});
     });
 
 
@@ -144,7 +161,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
     const expressionChanged = (name: Object, value: any) => {
-        if (Object.keys(formValues).length > 0) {
+        const { formValues } = shexData;
+
+        if (formValues && Object.keys(formValues).length > 0) {
             if (formValues[name]) {
                 if (formValues[name].value.trim() !== value.trim()) {
                     formValues[name].defaultValue = value;
@@ -164,24 +183,30 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const { formData, shexJ } = shexData;
         let updatedFormValue = {};
 
-        const updatedFormData = await shexUtil.mapExpFormValues(formData.expression, (_formValue, _formValues, value) => {
-            updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
 
-            const expression = {
-                ..._formValue,
-                _formFocus: {
-                    ..._formValue._formFocus,
-                    value,
-                    error: updatedFormValue.error || null
+            const updatedFormData = await shexUtil.mapExpFormValues(formData.expression, (_formValue, _formValues, value) => {
+                updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
+
+                const expression = {
+                    ..._formValue,
+                    _formFocus: {
+                        ..._formValue._formFocus,
+                        value,
+                        error: updatedFormValue.error || null
+                    }
                 }
-            }
 
-            return expression;
-        }, documentUri);
+                return expression;
+            }, documentUri);
 
-        ownerUpdate = false;
-        setShexData({ shexJ, formData: {...formData, expression: { expressions: updatedFormData } }});
-        setFormValues(updatedFormValue);
+            setShexData({
+                shexJ,
+                formValues: updatedFormValue,
+                formData: {...formData, expression: {
+                    expressions: updatedFormData}
+                }
+            });
+
     }
 
     const _fillFormValues =  useCallback(async (shape: Shape, expression: Expression, value: String = '') => {
@@ -331,7 +356,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     podDocument
                 );
 
-                setShexData({shexJ, formData});
+                setShexData({shexJ, formValues: {}, formData});
             }
 
         } catch (error) {
@@ -352,7 +377,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
         const data = {
             [e.target.name]: {
-                value: value.trim(),
+                value,
                 name,
                 action,
                 defaultValue,
@@ -365,7 +390,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 parentName: e.target.getAttribute('data-parent-name')
             }
         };
-        setFormValues({ ...formValues, ...data });
+        setShexData({...shexData, formValues: { ...shexData.formValues, ...data} })
     };
 
     const _create = async field => {
@@ -402,6 +427,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const onDelete = async (shexj: ShexJ, parent: any = false) => {
         try {
+            ownerUpdate = true;
+
             const { _formFocus } = shexj;
             const { parentSubject, name, value, isNew } = _formFocus;
             if (_formFocus && !isNew) {
@@ -413,9 +440,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     await ldflex[parentSubject][predicate].delete(value);
                 }
             }
-            // Delete field from formValues object
-            const { [name]: omit, ...res } = formValues;
-            setFormValues(res);
+
+            // ownerUpdate = false;
 
             // Delete expression from ShexJ
             updateShexJ({ key: name}, "delete");
@@ -432,13 +458,16 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     };
 
     const onReset = () => {
-        setFormValues({});
+        setShexData({...shexData, formValues: {}});
     }
 
     const saveForm = async (key: String) => {
         try {
-            let value = formValues[key].value;
-            let defaultValue = formValues[key].defaultValue;
+            ownerUpdate = true;
+
+            const { formValues } = shexData;
+            let value = shexData.formValues[key].value;
+            let defaultValue = shexData.formValues[key].defaultValue;
 
             // @TODO: find a better way to see if value is a predicate.
             if (value.includes('#')) {
@@ -476,10 +505,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     break;
             }
 
+
             // If save field was successful we update expression and parentExpression.
             updateExpression(key, value);
-
-            ownerUpdate = true;
 
             return solidResponse(200, 'Form submitted successfully');
 
@@ -495,9 +523,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 throw Error("Document Uri is required");
             }
             e.preventDefault();
-            const validator = new ShexFormValidator(formValues);
+            const validator = new ShexFormValidator(shexData.formValues);
             const { isValid, updatedFields } = validator.validate();
-            const keys = Object.keys(formValues);
+            const keys = Object.keys(shexData.formValues);
 
             if (isValid && keys.length > 0) {
 
@@ -509,12 +537,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     }
                 }
 
-                setFormValues({});
-
                 return solidResponse(200, 'Form submitted successfully');
 
             } else {
-                setFormValues({...updatedFields});
+                setShexData({...shexData, formValues: updatedFields});
 
                 if (keys.length !== 0) {
                     throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
@@ -532,8 +558,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     };
 
     const updateExpression = (key: String, value: Any) => {
-        const { parentName } = formValues[key];
-       
+        const { parentName } = shexData.formValues[key];
+
         updateShexJ({ key, data: {
             isNew: false,
             value
@@ -541,12 +567,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             key: parentName, data: {
                 isNew: false
             }
-        }}, "update");
-
-        // Delete field from formValues object
-        const { [key]: omit, ...res } = formValues;
-
-        setFormValues(res);
+        }, onSave: true}, "update");
     }
 
     useEffect(() => {
@@ -556,7 +577,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
            updatesListener();
        }
 
-        ownerUpdate = false;
+       ownerUpdate = false;
     }, [fileShex, documentUri, timestamp]);
 
     return {
@@ -564,7 +585,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         shexError,
         addNewShexField,
         updateShexJ,
-        formValues,
         onSubmit,
         onDelete,
         onChange,

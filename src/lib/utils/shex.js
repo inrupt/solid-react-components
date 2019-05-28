@@ -126,9 +126,8 @@ const mapFormValues = (shape: Shape, callBack: String) => {
                 newFormValue = callBack(newFormValue, expression);
 
                 if (newFormValue && newFormValue.expression && newFormValue.expression.expressions) {
-                    const expressions = mapFormValues(formValue, callBack);
-
-                    newFormValue = {...formValue, expression: { expressions }}
+                    const expressions = mapFormValues(newFormValue, callBack);
+                    newFormValue = {...newFormValue, expression: { expressions }}
                 }
 
                 newFormValues = newFormValue ? Array.isArray(newFormValue)

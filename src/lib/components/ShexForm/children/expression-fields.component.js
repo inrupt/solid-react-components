@@ -21,7 +21,7 @@ const ExpressionFields = ({ data, formValues, parent }: FieldsProps) => {
                   data,
                   fieldData: value,
                   inputData:
-                    formValues[value._formFocus.name] || value._formFocus,
+                      formValues && formValues[value._formFocus.name] || value._formFocus,
                   parent,
                   canDelete: shexUtil.canDelete(data)
                 }}
