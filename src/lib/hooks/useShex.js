@@ -4,7 +4,7 @@ import shexCore from "@shexjs/core";
 import unique from "unique-string";
 import ldflex from "@solid/query-ldflex";
 import { namedNode } from "@rdfjs/data-model";
-import { Expression, Annotation, ShexJ, Shape } from "@entities";
+import { Expression, ShexJ, Shape } from "@entities";
 import {
   SolidError,
   fetchLdflexDocument,
@@ -19,6 +19,7 @@ type Options = {
     data: ?Object
 }
 
+
 export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
     const { errorCallback, timestamp } = options;
     const [shexData, setShexData] = useState({});
@@ -26,42 +27,60 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const [formValues, setFormValues] = useState({});
     let shapes = [];
     let seed = 1;
-
+    let ownerUpdate = false;
 
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
-        try {
-            const {formData, shexJ} = shexData;
-            const newFormData = _addShexJField(formData, expression, parentExpresion);
+        const { formData, shexJ } = shexData;
+        const newFormData =  shexUtil.mapFormValues(formData, (formValue, currentExpression) => {
+            const {_formValues } = expression;
 
-            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
-        } catch(error) {
-            onError(error);
-        }
+            if (_formValues[_formValues.length - 1]._formFocus.name === formValue._formFocus.name) {
+                if (!parentExpresion && expression.predicate === currentExpression.predicate) {
+                    return [formValue, _createField(expression._formValueClone)];
+                }
+            }
+            return formValue;
+        });
+
+        setShexData({shexJ, formData: { ...formData, expression: {expressions: newFormData }}});
     });
 
-    const updateShexJ = useCallback((key: String, action: String, data: ?Object) => {
-        try {
-            const {formData, shexJ} = shexData;
-            const newFormData = _updateShexJ(formData, action, {key, data});
 
-            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
-        } catch(error) {
-            onError(error);
-        }
+    const updateShexJ = useCallback((options: Options, action: String) => {
+        const { formData, shexJ } = shexData;
+        const newFormData =  shexUtil.mapFormValues(formData, formValue => {
+            if (options.parent && formValue._formFocus.name === options.parent.key) {
+                return {
+                    ...formValue,
+                    _formFocus: {
+                        ...formValue._formFocus,
+                        ...options.parent.data
+                    }
+                };
+            }
+
+            if (formValue._formFocus.name === options.key) {
+                if (action === 'delete') {
+                    return null;
+                } else {
+                    return {
+                        ...formValue,
+                        _formFocus: {
+                            ...formValue._formFocus,
+                            ...options.data
+                        }
+                    };
+                }
+            }
+            return formValue;
+        });
+
+        setShexData({shexJ, formData: { ...formData, expression: {expressions: newFormData} }});
     });
 
 
     const onError = useCallback((error: Object) => {
         setShexError(error);
-    });
-
-    const _fieldValue = useCallback((annotations: Array<Annotation>, value: String) => {
-        const hasPrefix = shexUtil.findAnnotation('layoutprefix', annotations);
-        if (hasPrefix && typeof value == 'string') {
-            return value.split(hasPrefix.object.value).pop();
-        }
-
-        return value;
     });
 
     /*
@@ -87,7 +106,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     ) => {
         let value = valueEx;
         if (annotations) {
-            value = _fieldValue(annotations, valueEx);
+            value = shexUtil.renderFieldValue(annotations, valueEx);
         }
 
         return subject
@@ -95,24 +114,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
-
-    const _copyChildExpression = useCallback((expressions: Array<Expression>, linkId: String) => {
-        return expressions.map(expression => {
-            if (expression.valueExpr) {
-                const childExpression =  _copyChildExpression(expression._formValues, linkId);
-
-                return {
-                    ...expression,
-                    _formValues: childExpression
-                }
-            }
-
-            return _createField(expression, false, linkId);
-        });
-    });
-
     const _createField = useCallback((expression: Expression, isLink: boolean, parentSubject: Object) => {
-        const id = isLink || shexUtil.createIdNode(seed);
+        const id = isLink || shexUtil.createIdNode(documentUri, seed);
         let newExpression;
 
         if (expression.expression && expression.expression.expressions) {
@@ -140,81 +143,16 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         };
     });
 
-    /*
-     * Find into ShexJ same field then copy in the same expression and then update it with
-     * custom name and value
-     * and update _formFocus with new value and name
-     * @params {Object} ShexJ Object
-     * @params {currentExpression}
-     * @params {parentExpresion}
-     */
-    const _addShexJField = useCallback(( shexJ: ShexJ, currentExpression: Expression, parent: ?Object) => {
-        try {
-            let newExpressions = shexJ.expression.expressions;
-
-            for (let i = 0; i < newExpressions.length; i++) {
-                if (
-                    !parent &&
-                    (newExpressions[i].predicate === currentExpression.predicate ||
-                        newExpressions[i].predicate === currentExpression.id)
-                ) {
-
-                    newExpressions[i] = {
-                        ...newExpressions[i],
-                        _formValues: [
-                            ...newExpressions[i]._formValues,
-                            _createField(newExpressions[i]._formValueClone)
-                        ]
-                    };
-
-                    break;
-                }
-
-                if (shexUtil.isExpressionLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
-                    for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
-                        if (currentExpression._formFocus &&
-                            newExpressions[i]._formValues[y]._formFocus.value === currentExpression._formFocus.value) {
-
-                            newExpressions[i] = {
-                                ...newExpressions[i],
-                                _formValues: [
-                                    ...newExpressions[i]._formValues,
-                                    _createField(newExpressions[i]._formValueClone)
-                                ]
-                            };
-                            break;
-
-                        } else if (
-                            newExpressions[i]._formValues[y].expression &&
-                            newExpressions[i]._formValues[y].expression.expressions
-                        ) {
-
-                            const expressions = _addShexJField(
-                                newExpressions[i]._formValues[y],
-                                currentExpression,
-                                parent
-                            );
-
-                            newExpressions[i]._formValues[y].expression.expressions = expressions;
-                        }
-                    }
-                }
-            }
-            return newExpressions;
-        } catch (error) {
-            onError(error);
-        }
-    });
-
     const expressionChanged = (name: Object, value: any) => {
         if (Object.keys(formValues).length > 0) {
             if (formValues[name]) {
-                if (formValues[name].defaultValue !== formValues[name].value) {
+                if (formValues[name].value.trim() !== value.trim()) {
                     formValues[name].defaultValue = value;
                     formValues[name].error = `Field value has been update to: ${value}`;
                 } else {
                     formValues[name].defaultValue = value;
                     formValues[name].value = value;
+                    formValues[name].error = null;
                 }
             }
         }
@@ -239,60 +177,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
 
             return expression;
-        });
+        }, documentUri);
 
+        ownerUpdate = false;
         setShexData({ shexJ, formData: {...formData, expression: { expressions: updatedFormData } }});
         setFormValues(updatedFormValue);
     }
-
-
-    /*
-     * Find into shexJ a _formValue (_formFocus) by name(unique id) then you can update _formFocus
-     * or delete a _formValues
-     * @params {Object} Shape
-     * @params {String} action, could be delete or update
-     * @params {Object} could be { key, data } where key is the _formFocus name( input name) and data
-     * is the attributes that you want to update on _formFocus.
-    */
-    const _updateShexJ = useCallback((shape: Shape, action: String, options: Options) => {
-        try {
-            let newExpressions = shape.expression.expressions;
-
-            for (let i = 0; i < newExpressions.length; i++) {
-                for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
-
-                    if (newExpressions[i]._formValues[y]._formFocus.name === options.key) {
-                        if (action === 'delete') {
-                            const _formValues = newExpressions[i]._formValues;
-                            const currentFieldName = newExpressions[i]._formValues[y]._formFocus.name;
-
-                            newExpressions[i]._formValues = _formValues.filter(val => val._formFocus.name !== currentFieldName);
-
-                        } else {
-                            newExpressions[i]._formValues[y] = {
-                                ...newExpressions[i]._formValues[y],
-                                _formFocus: {
-                                    ...newExpressions[i]._formValues[y]._formFocus,
-                                    ...options.data
-                                }
-                            };
-                        }
-                        break;
-                    }
-
-                    if (newExpressions[i]._formValues[y].expression && newExpressions[i]._formValues[y].expression.expressions) {
-                        const expressions = _updateShexJ(newExpressions[i]._formValues[y], action, options);
-
-                        newExpressions[i]._formValues[y].expression.expressions = expressions;
-                    }
-                }
-            }
-            return newExpressions;
-        } catch (error) {
-            onError(error);
-        }
-    });
-
 
     const _fillFormValues =  useCallback(async (shape: Shape, expression: Expression, value: String = '') => {
         let isNew = value === '';
@@ -303,7 +193,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
             if (value === '') {
 
-                linkValue = shexUtil.createIdNode(seed);
+                linkValue = shexUtil.createIdNode(documentUri, seed);
             }
 
             const childExpression = await _fillFormData(
@@ -462,7 +352,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
         const data = {
             [e.target.name]: {
-                value,
+                value: value.trim(),
                 name,
                 action,
                 defaultValue,
@@ -515,7 +405,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             const { _formFocus } = shexj;
             const { parentSubject, name, value, isNew } = _formFocus;
             if (_formFocus && !isNew) {
-                if (shexUtil.shexParentLinkOnDropDowns(parent, shexj)) {
+                if (shexUtil.parentLinkOnDropDowns(parent, shexj)) {
                     await _deleteLink(shexj);
                 } else {
                     const predicate = shexj.predicate || shexj._formFocus.parentPredicate;
@@ -528,7 +418,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             setFormValues(res);
 
             // Delete expression from ShexJ
-            updateShexJ(name, "delete");
+            updateShexJ({ key: name}, "delete");
 
             return solidResponse(200,'Form submitted successfully');
         } catch (error) {
@@ -587,7 +477,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
 
             // If save field was successful we update expression and parentExpression.
-            updateExpression(key);
+            updateExpression(key, value);
+
+            ownerUpdate = true;
 
             return solidResponse(200, 'Form submitted successfully');
 
@@ -639,25 +531,32 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     };
 
-    const updateExpression = (key: String) => {
-        const { name, parentName } = formValues[key];
-
-        updateShexJ(name, "update", {
+    const updateExpression = (key: String, value: Any) => {
+        const { parentName } = formValues[key];
+       
+        updateShexJ({ key, data: {
             isNew: false,
-            value: formValues[key].value
-        });
+            value
+        }, parent: {
+            key: parentName, data: {
+                isNew: false
+            }
+        }}, "update");
 
-        updateShexJ(parentName, "update", {
-            isNew: false
-        });
+        // Delete field from formValues object
+        const { [key]: omit, ...res } = formValues;
+
+        setFormValues(res);
     }
 
     useEffect(() => {
        if (!timestamp) {
            toShexJForm();
-       } else {
+       } else if (!ownerUpdate) {
            updatesListener();
        }
+
+        ownerUpdate = false;
     }, [fileShex, documentUri, timestamp]);
 
     return {

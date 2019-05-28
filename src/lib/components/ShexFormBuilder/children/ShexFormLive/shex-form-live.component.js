@@ -43,8 +43,6 @@ const ShexFormLive = ({
     timestamp: updates && updates.timestamp
   });
 
-  console.log(shexData, formValues);
-
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);

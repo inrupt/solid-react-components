@@ -54,6 +54,11 @@ const isValueChanged = (value, defaultValue) => {
   return value !== defaultValue;
 };
 
+/*
+ * Map into _formValues and check which field was updated from POD
+ * @params {Object} rootExpression
+ * @params {Function} callBack using to make any action on formValues
+*/
 const mapExpFormValues = async (rootExpression, callback, linkUri) => {
     let updatedExpressions = [];
 
@@ -66,7 +71,7 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
                 updatedFormValues = [...updatedFormValues, callback(
                     expression._formValues[index] || {...expression._formValueClone},
                     updatedExpressions,
-                    node.value
+                    renderFieldValue(expression.annotations, node.value)
                 )];
 
 
@@ -103,10 +108,55 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
     return updatedExpressions;
 };
 
+/*
+ * Map into all shexJ _formValues objects
+ * @params {Object} Shape
+ * @params {Function} callBack using to make any action on formValues
+*/
+const mapFormValues = (shape: Shape, callBack: String) => {
+    try {
+        let newExpressions = [];
+
+        for (let expression of shape.expression.expressions) {
+            let newFormValues = [];
+
+            for (let formValue of expression._formValues) {
+                let newFormValue = {...formValue};
+
+                newFormValue = callBack(newFormValue, expression);
+
+                if (newFormValue && newFormValue.expression && newFormValue.expression.expressions) {
+                    const expressions = mapFormValues(formValue, callBack);
+
+                    newFormValue = {...formValue, expression: { expressions }}
+                }
+
+                newFormValues = newFormValue ? Array.isArray(newFormValue)
+                    ? [...newFormValues, ...newFormValue]
+                    : [...newFormValues, newFormValue]
+                  : newFormValues;
+            }
+
+            newExpressions = [...newExpressions, {...expression, _formValues: newFormValues}]
+        }
+        return newExpressions;
+    } catch (error) {
+        return error;
+    }
+};
+
 const canDelete = (data) => data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
 
 const isExpressionLink = valueExpr => {
     return typeof valueExpr === 'string' || null;
+};
+
+const renderFieldValue = (annotations: Array<Annotation>, value: String) => {
+    const hasPrefix = findAnnotation('layoutprefix', annotations);
+    if (hasPrefix && typeof value == 'string') {
+        return value.split(hasPrefix.object.value).pop();
+    }
+    return value;
 };
 
 /*
@@ -140,5 +190,7 @@ export {
   mapExpFormValues,
   isExpressionLink,
   isExpressionDropDown,
-  createIdNode
+  createIdNode,
+    mapFormValues,
+    renderFieldValue
 };

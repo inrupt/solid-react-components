@@ -27,7 +27,7 @@ const ShexFormBuilder = ({
 
   const subscribeUri = documentUri && documentUri !== '' ? documentUri.replace(/#.*/, '') : '';
 
-  return (
+  return subscribeUri && (
     <LiveUpdate subscribe={subscribeUri}>
       <ShexFormLive {...{
         successCallback,
