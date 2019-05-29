@@ -467,6 +467,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
             const { formValues } = shexData;
             let value = shexData.formValues[key].value;
+            let originalValue = value;
             let defaultValue = shexData.formValues[key].defaultValue;
 
             // @TODO: find a better way to see if value is a predicate.
@@ -507,7 +508,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
 
             // If save field was successful we update expression and parentExpression.
-            updateExpression(key, value);
+            updateExpression(key, originalValue);
 
             return solidResponse(200, 'Form submitted successfully');
 
