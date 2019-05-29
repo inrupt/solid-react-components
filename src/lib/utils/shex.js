@@ -119,11 +119,12 @@ const mapFormValues = (shape: Shape, callBack: String) => {
 
         for (let expression of shape.expression.expressions) {
             let newFormValues = [];
+            let formValuesindex = 0;
 
             for (let formValue of expression._formValues) {
                 let newFormValue = {...formValue};
 
-                newFormValue = callBack(newFormValue, expression);
+                newFormValue = callBack(newFormValue, expression, formValuesindex);
 
                 if (newFormValue && newFormValue.expression && newFormValue.expression.expressions) {
                     const expressions = mapFormValues(newFormValue, callBack);
@@ -134,6 +135,8 @@ const mapFormValues = (shape: Shape, callBack: String) => {
                     ? [...newFormValues, ...newFormValue]
                     : [...newFormValues, newFormValue]
                   : newFormValues;
+
+                formValuesindex++;
             }
 
             newExpressions = [...newExpressions, {...expression, _formValues: newFormValues}]

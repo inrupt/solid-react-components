@@ -30,10 +30,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
         const { formData, shexJ } = shexData;
-        const newFormData =  shexUtil.mapFormValues(formData, (formValue, currentExpression) => {
+        const newFormData =  shexUtil.mapFormValues(formData, (formValue, currentExpression, index) => {
             const {_formValues } = expression;
-
-            if (_formValues[_formValues.length - 1]._formFocus.name === formValue._formFocus.name) {
+            if (_formValues.length -1 === index) {
                 if (!parentExpresion && expression.predicate === currentExpression.predicate) {
                     return [formValue, _createField(expression._formValueClone)];
                 }
