@@ -191,7 +191,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                         ..._formValue._formFocus,
                         value,
                         name: unique(),
-                        error: updatedFormValue.error || null
+                        error: updatedFormValue && updatedFormValue.error || null
                     }
                 }
 
