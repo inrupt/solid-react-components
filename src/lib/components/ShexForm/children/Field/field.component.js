@@ -55,7 +55,8 @@ export const Field = ({
                 defaultValue: fieldData._formFocus.value,
                 subject: fieldData._formFocus.parentSubject,
                 name: inputData.name,
-                values: data.valueExpr.values
+                values: data.valueExpr.values,
+                error: inputData.error
               }}
             />
           )}

@@ -66,8 +66,8 @@ export class ShexFormValidator {
         return {...field};
     }
 
-    validate = () => {
-        const formValuesKeys = Object.keys(this.fields);
+    validate = (field: Object) => {
+        const formValuesKeys = Object.keys(field || this.fields);
         let isValid = true;
 
         const updatedFields = formValuesKeys.reduce((acc, field) => {

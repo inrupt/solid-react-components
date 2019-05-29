@@ -179,6 +179,14 @@ const createIdNode = (documentUri: String, seed: number) => {
     return id;
 };
 
+const cleanValue = (value: String) => {
+    if (value.includes('#')) {
+        return value.split('#').pop();
+    }
+
+    return value;
+}
+
 export {
   formLabel,
   findAnnotation,
@@ -191,5 +199,6 @@ export {
   isExpressionDropDown,
   createIdNode,
     mapFormValues,
-    renderFieldValue
+    renderFieldValue,
+    cleanValue
 };

@@ -162,12 +162,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const expressionChanged = (name: Object, value: any) => {
         const { formValues } = shexData;
-
         if (formValues && Object.keys(formValues).length > 0) {
             if (formValues[name]) {
                 if (formValues[name].value.trim() !== value.trim()) {
                     formValues[name].defaultValue = value;
-                    formValues[name].error = `Field value has been update to: ${value}`;
+                    formValues[name].error = `Field value has been update to: ${shexUtil.cleanValue(value)}`;
                 } else {
                     formValues[name].defaultValue = value;
                     formValues[name].value = value;
@@ -461,56 +460,70 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         setShexData({...shexData, formValues: {}});
     }
 
-    const saveForm = async (key: String) => {
+    const saveForm = async (key: String, autoSave: ?boolean) => {
         try {
             ownerUpdate = true;
-
             const { formValues } = shexData;
-            let value = shexData.formValues[key].value;
+            let value = formValues[key].value;
+            let defaultValue = formValues[key].defaultValue;
             let originalValue = value;
-            let defaultValue = shexData.formValues[key].defaultValue;
+            let validate;
 
-            // @TODO: find a better way to see if value is a predicate.
-            if (value.includes('#')) {
-                value = namedNode(value);
-                defaultValue = namedNode(defaultValue);
+            if (autoSave) {
+                const validator = new ShexFormValidator(formValues);
+                validate = validator.validate();
             }
+            const keys = Object.keys(formValues);
 
-            const field = {
-                ...formValues[key],
-                value: _setFieldValue(
-                    value,
-                    formValues[key].prefix
-                ),
-                defaultValue: _setFieldValue(
-                    defaultValue,
-                    formValues[key].prefix
-                )
-            };
-            switch (field.action) {
-                case "update":
-                    await ldflex[field.subject][field.predicate].replace(
-                        field.defaultValue,
-                        field.value
-                    );
-                    break;
-                case "create":
-                    await _create(field);
-                    break;
-                case "delete":
-                    await ldflex[field.subject][field.predicate].delete(
-                        field.defaultValue
-                    );
-                    break;
-                default:
-                    break;
+            if ((validate.isValid && keys.length > 0) || !autoSave) {
+                // @TODO: find a better way to see if value is a predicate.
+                if (value.includes('#')) {
+                    value = namedNode(value);
+                    defaultValue = namedNode(defaultValue);
+                }
+
+                const field = {
+                    ...formValues[key],
+                    value: _setFieldValue(
+                        value,
+                        formValues[key].prefix
+                    ),
+                    defaultValue: _setFieldValue(
+                        defaultValue,
+                        formValues[key].prefix
+                    )
+                };
+                switch (field.action) {
+                    case "update":
+                        await ldflex[field.subject][field.predicate].replace(
+                            field.defaultValue,
+                            field.value
+                        );
+                        break;
+                    case "create":
+                        await _create(field);
+                        break;
+                    case "delete":
+                        await ldflex[field.subject][field.predicate].delete(
+                            field.defaultValue
+                        );
+                        break;
+                    default:
+                        break;
+                }
+
+
+                // If save field was successful we update expression and parentExpression.
+                updateExpression(key, originalValue);
+
+                return solidResponse(200, 'Form submitted successfully');
+            } else {
+                setShexData({...shexData, formValues: validate.updatedFields});
+
+                if (keys.length !== 0) {
+                    throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
+                }
             }
-
-
-            // If save field was successful we update expression and parentExpression.
-            updateExpression(key, originalValue);
-
-            return solidResponse(200, 'Form submitted successfully');
 
         } catch (error) {
             return error;

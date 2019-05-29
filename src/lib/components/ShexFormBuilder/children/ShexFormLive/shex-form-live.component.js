@@ -35,6 +35,7 @@ const ShexFormLive = ({
     onSubmit,
     onDelete: deleteFn,
     onChange,
+    onChangeSelect,
     onReset,
     saveForm
   } = useShex(shexUri, documentUri, rootShape, {
@@ -64,7 +65,7 @@ const ShexFormLive = ({
       let result;
 
       if (type) {
-        result = await saveForm(e);
+        result = await saveForm(e, autoSaveMode);
       } else {
         result = await onSubmit(e);
       }
@@ -91,7 +92,8 @@ const ShexFormLive = ({
       updateShexJ,
       addNewShexField,
       onSubmitSave,
-      autoSaveMode
+      autoSaveMode,
+      onChangeSelect
     }
   };
 

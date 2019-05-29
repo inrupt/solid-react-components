@@ -99,7 +99,10 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                     predicate: parent.predicate,
                     parent,
                     parentPredicate: shexUtil.parentLinkOnDropDowns(parent),
-                    parentSubject: shexj._formFocus.parentSubject
+                    parentSubject: shexj._formFocus.parentSubject,
+                    error: formValues[shexj._formFocus.name]
+                        ? formValues[shexj._formFocus.name].error
+                        : null
                   }}
                 />
               )}
