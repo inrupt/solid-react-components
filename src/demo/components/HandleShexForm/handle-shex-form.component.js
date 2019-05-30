@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import styled from "styled-components";
-import {ShexFormBuilder} from "@components";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { ShexFormBuilder } from '@components';
 
 const Form = styled.form``;
 
@@ -39,21 +39,21 @@ const HandleShexForm = ({ webId }:Props) => {
     }
     // By default addButton and deleteButton will be Add new and Delete
     const languageTheme = {
-        language: 'en',
-        saveBtn: "Save",
-        resetBtn: "Reset",
-        addButtonText: "+ Add new ",
-        deleteButton: "Delete",
-        dropdownDefaultText: "- Select -"
+      language: 'en',
+      saveBtn: 'Save',
+      resetBtn: 'Reset',
+      addButtonText: '+ Add new ',
+      deleteButton: 'Delete',
+      dropdownDefaultText: '- Select -'
     };
 
     return(
         <div>
             <h2>Shex Form</h2>
             <Form onSubmit={onSubmit}>
-                <Input placeholder={'Document Url'} name='documentUri' onChange={onChangeInput}/>
-                <Input placeholder={'ShexC Url'} name='shexUri' onChange={onChangeInput}/>
-                <Button type='submit'>Load Form</Button>
+                <Input placeholder={'Document Url'} name="documentUri" onChange={onChangeInput}/>
+                <Input placeholder={'ShexC Url'} name="shexUri" onChange={onChangeInput}/>
+                <Button type="submit">Load Form</Button>
             </Form>
             <ShexFormBuilder {...{ ...podData, languageTheme, autoSaveMode : true }} />
         </div>

@@ -1,4 +1,4 @@
-import React  from "react";
+import React from 'react';
 import { ShexFormLive } from './children/ShexFormLive';
 import { LiveUpdate } from '@solid/react';
 
@@ -44,21 +44,21 @@ const ShexFormBuilder = ({
 };
 
 ShexFormBuilder.defaultProps = {
-  successCallback: () => console.log("Submitted successfully"),
-  errorCallback: e => console.log("Status: ", e.status || e.code),
+  successCallback: () => console.log('Submitted successfully'),
+  errorCallback: e => console.log('Status: ', e.status || e.code),
   theme: {
-    input: "solid-input-shex",
-    select: "solid-input-shex solid-select-shex",
-    deleteButton: "solid-button-shex",
-    form: "solid-shex-form"
+    input: 'solid-input-shex',
+    select: 'solid-input-shex solid-select-shex',
+    deleteButton: 'solid-button-shex',
+    form: 'solid-shex-form'
   },
   languageTheme: {
-    language: "en",
-    saveBtn: "Save",
-    resetBtn: "Reset",
-    addButtonText: "+ Add new ",
-    deleteButton: "Delete",
-    dropdownDefaultText: "- Select -"
+    language: 'en',
+    saveBtn: 'Save',
+    resetBtn: 'Reset',
+    addButtonText: '+ Add new ',
+    deleteButton: 'Delete',
+    dropdownDefaultText: '- Select -'
   }
 };
 

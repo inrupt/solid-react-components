@@ -211,5 +211,5 @@ export {
   mapFormValues,
   renderFieldValue,
   cleanValue,
-    setFieldValue
+  setFieldValue
 };

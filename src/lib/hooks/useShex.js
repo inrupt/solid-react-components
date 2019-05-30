@@ -4,7 +4,7 @@ import shexCore from '@shexjs/core';
 import unique from 'unique-string';
 import ldflex from '@solid/query-ldflex';
 import { namedNode } from '@rdfjs/data-model';
-import { Expression, ShexJ, Shape } from '@entities';
+import { Expression, ShexJ, Shape, Annotation } from '@entities';
 import {
   SolidError,
   fetchLdflexDocument,
@@ -24,10 +24,15 @@ let ownerUpdate = true;
 export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
     const { errorCallback, timestamp } = options;
     const [shexData, setShexData] = useState({});
-    const [shexError, setShexError] = useState(null);
     let shapes = [];
     let seed = 1;
 
+    /**
+     * Add a new field into form using mapFormValues(recursive function) function from shex utils
+     * @param { Expression } expression shexJ object
+     * @param { Expression } parentExpression parent ShexJ object
+     *
+     */
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
         const { formData, shexJ } = shexData;
         const newFormData =  shexUtil.mapFormValues(formData, (formValue, currentExpression, index) => {
@@ -43,7 +48,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         setShexData({shexJ, formData: { ...formData, expression: {expressions: newFormData }}});
     });
 
-
+    /**
+     * Update, Delete a field into ShexJ object using mapFormValues(recursive function) function from shex utils
+     * @param { Options } options custom options like key or name of the field
+     * @param { String } action to delete or update
+     *
+     */
     const updateShexJ = useCallback((options: Options, action: String) => {
         const { formData, shexJ, formValues } = shexData;
         const newFormData =  shexUtil.mapFormValues(formData, formValue => {
@@ -95,29 +105,32 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
 
-    const onError = useCallback((error: Object) => {
-        setShexError(error);
-    });
-
-    /*
-     * Find root shape from shexJ
+    /**
+     * Find the root shape from shexJ object
+     * @param {ShexJ} shexJ object
      */
     const _findRootShape = useCallback((shexJ: ShexJ) => {
         try {
             return rootShape || shexJ.start.split('#').pop();
         } catch (error) {
-            onError(error);
+            return error;
         }
     });
 
-    /*
-     * Create new object (_formFocus) with unique name, value
+    /**
+     * Create new object (_formFocus) with unique name, value etc. This is using into _FormValues
+     * @param {String} subject the Node of the subject
+     * @param {String} parentPredicate the parent NamedNode of the predicate
+     * @param {String} valueEx the type of the Node
+     * @param {Array} annotations comments, notes, explanations, or other types of external
+     * remarks that can be attached to a Web document or to a selected part of a document
+     * @param {boolean} isNew flag to check if field is not saved on POD yet
      */
-    const _getFormFocusObject = useCallback((
+    const _createFormFocus = useCallback((
         subject: String,
         parentPredicate,
         valueEx: String,
-        annotations?: Array<Object>,
+        annotations?: Array<Annotation>,
         isNew: boolean
     ) => {
         let value = valueEx;
@@ -130,22 +143,31 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
+    /**
+     * Create new Field(expression with formValues and formFocus) if this is a link
+     * will create a unique link id to point into document and will update children expression values
+     * with new unique name and empty value(this is recursive).
+     *
+     * @param { Expression } expression shexJ object
+     * @param { boolen } isLink to deep or not into children expressions.
+     * @param { Object } parentSubject the Node of the subject
+     */
     const _createField = useCallback((expression: Expression, isLink: boolean, parentSubject: Object) => {
         const id = isLink || shexUtil.createIdNode(documentUri, seed);
         let newExpression;
-
+        /** if this expression is a link to other expression shape will deep into children expression */
         if (expression.expression && expression.expression.expressions) {
             const updatedExp = expression.expression.expressions.map(exp => {
                 const newExpr = exp._formValues.map(frm => {
                     return _createField(frm, false, { parentSubject: id });
                 });
-                // Copied only one formValue.
+                /** Return an expression with new name and empty value in _formValues */
                 return {...exp, _formValues: [newExpr[0]]};
             });
 
             newExpression = { expression: { expressions: updatedExp }};
         }
-
+        /** Return a new expression */
         return {
             ...expression,
             ...newExpression,
@@ -159,7 +181,14 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         };
     });
 
-    const expressionChanged = useCallback((name: Object, value: any) => {
+    /**
+     * Check if a specific expression was updated or not, if was updated we add an warning message
+     * to show user that field value was updated and also we update defaultValue to avoid 409 errors
+     *
+     * @param { String } name field name that we want to check if was udpated or not;
+     * @param { any } value new field value from POD;
+     */
+    const expressionChanged = useCallback((name: String, value: any) => {
         const { formValues } = shexData;
         if (formValues && Object.keys(formValues).length > 0) {
             if (formValues[name]) {
@@ -177,9 +206,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
        return formValues;
     });
 
-    /*
-     * Listener updates from POD document, show error message if field value
-     * was updated on POD, this is recursive function
+    /**
+     * Listener updates from POD document, if updates come from POD(websockets)
+     * will run shexJ object and updates new field values
      */
     const updatesListener = useCallback(async () => {
         const { formData, shexJ } = shexData;
@@ -219,6 +248,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     });
 
+    /**
+     * Fill _formValues attribute from expression into shexJ object
+     * @param {Shape} shape an shexJ object from shex.
+     * @param {Expression} expression object that has predicate, subject and object
+     */
     const _fillFormValues =  useCallback(async (shape: Shape, expression: Expression, value: String = '') => {
         let isNew = value === '';
 
@@ -251,7 +285,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     id: childExpression.id,
                     type: childExpression.type,
                     ...dropDownValues,
-                    _formFocus: _getFormFocusObject(
+                    _formFocus: _createFormFocus(
                         currentSubject || documentUri,
                         expression.predicate,
                         linkValue,
@@ -271,7 +305,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             ...expression._formValues,
             {
                 ...expression.valueExpr,
-                _formFocus: _getFormFocusObject(
+                _formFocus: _createFormFocus(
                     shape.linkValue ||
                     documentUri,
                     shape.parentPredicate,
@@ -289,7 +323,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         };
     });
 
-
+    /**
+     * Add _formValues Array into each expressions from ShexJ object.
+     * @param {Object} rootShape object that has the id of the shape that we want to render
+     * @param {Object} ldflex function to save data into PODS
+     */
     const _fillFormData = useCallback(async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];
@@ -341,7 +379,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return newShape;
     });
 
-
+    /**
+     * init function to convert ShexJ object to ShexJForm (with _formValues and _formFocus objects)
+     */
     const toShexJForm = useCallback(async () => {
         try {
             const parser = shexParser.construct(window.location.href);
@@ -377,10 +417,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 solidError = new SolidError(solidError.message, 'Ldflex Error', 500);
             }
             errorCallback(solidError);
-            onError(solidError);
         }
     });
-
+    /**
+     * Update formValues object with new user field data
+     * @param { Event } e event input
+     */
     const onChange = useCallback((e: Event) => {
         const { value, name } = e.target;
         const defaultValue = e.target.getAttribute('data-default');
@@ -403,20 +445,30 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         setShexData({...shexData, formValues: { ...shexData.formValues, ...data} })
     });
 
+    /**
+     * Create new Node into POD
+     */
     const _create = useCallback(async field => {
         const { subject, predicate, value } = field;
         if (field.parentSubject) await _createLink(field);
         await ldflex[subject][predicate].add(value);
     });
 
-    const _createLink = useCallback(async field => {
+    /**
+     * Create a new Link Node on POD
+     * @param { Object } field _formFocus expression
+     */
+    const _createLink = useCallback(async (field: Object) => {
         const { subject, parentPredicate, parentSubject } = field;
         const id = `#${subject.split('#').pop()}`;
         await ldflex[parentSubject][parentPredicate].add(namedNode(id));
     });
 
-
-    const _deleteLink = useCallback(async shexj => {
+    /**
+     * Delete a new Line Node on POD
+     * @param { ShexJ } shexJ object from Shex
+     */
+    const _deleteLink = useCallback(async (shexj: ShexJ) => {
         const { parentSubject, value: subject, parentPredicate } = shexj._formFocus;
         const expressions = shexj.expression.expressions;
         const { _formFocus } = shexj;
@@ -433,6 +485,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
+    /**
+     *
+      * Delete Nodes(fields) on POD
+     * @param { ShexJ } shexJ object from Shex
+     */
     const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
         try {
             ownerUpdate = true;
@@ -463,10 +520,20 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
+    /**
+     *
+     * Reset formValues object
+     */
     const onReset = useCallback(() => {
         setShexData({...shexData, formValues: {}});
     });
 
+    /**
+     *
+     * Save fields on POD
+     * @param {String} key or name of the field that will be save it on POD
+     * @param {boolean} autoSave flag to validate field or not before save it on POD
+     */
     const saveForm = useCallback(async (key: String, autoSave: ?boolean) => {
         try {
             ownerUpdate = true;
@@ -537,7 +604,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
-
+    /**
+     *
+     * Save all fields on submit(no autoSave)
+     * @param {Event} e
+     */
     const onSubmit = useCallback(async (e: Event) => {
         try {
             if (!documentUri || documentUri === '') {
@@ -578,6 +649,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
+    /**
+     *
+     * Update shexJ expressions when user save field on POD
+     * @param {String} key or name of the field(expression)
+     * @param { any } value for expression
+     */
     const updateExpression = useCallback((key: String, value: Any) => {
         const { parentName } = shexData.formValues[key];
 
@@ -602,7 +679,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     return {
         shexData,
-        shexError,
         addNewShexField,
         updateShexJ,
         onSubmit,

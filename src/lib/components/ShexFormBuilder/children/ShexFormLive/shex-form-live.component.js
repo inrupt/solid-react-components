@@ -1,10 +1,10 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 import { useLiveUpdate } from '@solid/react';
-import { ShexForm } from "@components";
-import { useShex } from "@hooks";
-import { ShexConfig } from "@context";
+import { ShexForm } from '@components';
+import { useShex } from '@hooks';
+import { ShexConfig } from '@context';
 
-import { FormComponent } from "./styled.component";
+import { FormComponent } from './styled.component';
 
 type Props = {
   errorCallback: () => void,
