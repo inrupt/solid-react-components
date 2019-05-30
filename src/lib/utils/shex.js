@@ -94,7 +94,8 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
                 updatedFormValues = [...updatedFormValues, callback(
                     expression._formValues[index] || {...expression._formValueClone},
                     updatedExpressions,
-                    ''
+                    '',
+                    linkUri
                 )];
             }
 

@@ -185,7 +185,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const updatedFormData = await shexUtil.mapExpFormValues(
             formData.expression, (_formValue, _formValues, value, parentUri) => {
                 updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
-
                 const expression = {
                     ..._formValue,
                     _formFocus: {
