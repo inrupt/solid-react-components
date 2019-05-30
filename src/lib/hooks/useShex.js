@@ -159,7 +159,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         };
     });
 
-    const expressionChanged = (name: Object, value: any) => {
+    const expressionChanged = useCallback((name: Object, value: any) => {
         const { formValues } = shexData;
         if (formValues && Object.keys(formValues).length > 0) {
             if (formValues[name]) {
@@ -175,13 +175,13 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
 
        return formValues;
-    };
+    });
 
     /*
      * Listener updates from POD document, show error message if field value
      * was updated on POD, this is recursive function
      */
-    const updatesListener = async () => {
+    const updatesListener = useCallback(async () => {
         const { formData, shexJ } = shexData;
         let updatedFormValue = {};
 
@@ -217,7 +217,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             ownerUpdate = false;
         }
 
-    }
+    });
 
     const _fillFormValues =  useCallback(async (shape: Shape, expression: Expression, value: String = '') => {
         let isNew = value === '';
@@ -381,7 +381,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         }
     });
 
-    const onChange = (e: Event) => {
+    const onChange = useCallback((e: Event) => {
         const { value, name } = e.target;
         const defaultValue = e.target.getAttribute('data-default');
         const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
@@ -401,24 +401,22 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
         };
         setShexData({...shexData, formValues: { ...shexData.formValues, ...data} })
-    };
+    });
 
-    const _create = async field => {
+    const _create = useCallback(async field => {
         const { subject, predicate, value } = field;
         if (field.parentSubject) await _createLink(field);
         await ldflex[subject][predicate].add(value);
-    };
+    });
 
-    const _createLink = async field => {
+    const _createLink = useCallback(async field => {
         const { subject, parentPredicate, parentSubject } = field;
         const id = `#${subject.split('#').pop()}`;
         await ldflex[parentSubject][parentPredicate].add(namedNode(id));
-    };
+    });
 
-    const _setFieldValue = (value: String, prefix: ?String) =>
-        prefix ? namedNode(`${prefix}${value}`) : value;
 
-    const _deleteLink = async shexj => {
+    const _deleteLink = useCallback(async shexj => {
         const { parentSubject, value: subject, parentPredicate } = shexj._formFocus;
         const expressions = shexj.expression.expressions;
         const { _formFocus } = shexj;
@@ -433,9 +431,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         } catch (e) {
             throw e;
         }
-    };
+    });
 
-    const onDelete = async (shexj: ShexJ, parent: any = false) => {
+    const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
         try {
             ownerUpdate = true;
 
@@ -463,13 +461,13 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
             return solidError;
         }
-    };
+    });
 
-    const onReset = () => {
+    const onReset = useCallback(() => {
         setShexData({...shexData, formValues: {}});
-    }
+    });
 
-    const saveForm = async (key: String, autoSave: ?boolean) => {
+    const saveForm = useCallback(async (key: String, autoSave: ?boolean) => {
         try {
             ownerUpdate = true;
 
@@ -494,11 +492,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
                 const field = {
                     ...formValues[key],
-                    value: _setFieldValue(
+                    value: shexUtil.setFieldValue(
                         value,
                         formValues[key].prefix
                     ),
-                    defaultValue: _setFieldValue(
+                    defaultValue: shexUtil.setFieldValue(
                         defaultValue,
                         formValues[key].prefix
                     )
@@ -537,10 +535,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         } catch (error) {
             return error;
         }
-    };
+    });
 
 
-    const onSubmit = async (e: Event) => {
+    const onSubmit = useCallback(async (e: Event) => {
         try {
             if (!documentUri || documentUri === '') {
                 throw Error('Document Uri is required');
@@ -578,9 +576,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
             return solidError;
         }
-    };
+    });
 
-    const updateExpression = (key: String, value: Any) => {
+    const updateExpression = useCallback((key: String, value: Any) => {
         const { parentName } = shexData.formValues[key];
 
         updateShexJ({ key, data: {
@@ -591,7 +589,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 isNew: false
             }
         }, onSave: true}, 'update');
-    }
+    });
 
     useEffect(() => {
        if (!timestamp) {

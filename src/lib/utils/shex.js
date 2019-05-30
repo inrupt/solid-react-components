@@ -1,4 +1,5 @@
 import ldflex from '@solid/query-ldflex';
+import { namedNode } from '@rdfjs/data-model';
 
 const findAnnotation = (key: String, annotations: Object, language: ?String = 'es') => {
   if (annotations) {
@@ -193,6 +194,9 @@ const cleanValue = (value: String) => {
     return value;
 }
 
+const setFieldValue = (value: String, prefix: ?String) =>
+    prefix ? namedNode(`${prefix}${value}`) : value;
+
 export {
   formLabel,
   findAnnotation,
@@ -204,7 +208,8 @@ export {
   isExpressionLink,
   isExpressionDropDown,
   createIdNode,
-    mapFormValues,
-    renderFieldValue,
-    cleanValue
+  mapFormValues,
+  renderFieldValue,
+  cleanValue,
+    setFieldValue
 };
