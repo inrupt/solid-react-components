@@ -1,4 +1,4 @@
-import ldflex from "@solid/query-ldflex";
+import ldflex from '@solid/query-ldflex';
 
 const findAnnotation = (key: String, annotations: Object, language: ?String = 'es') => {
   if (annotations) {
@@ -14,7 +14,7 @@ const findAnnotation = (key: String, annotations: Object, language: ?String = 'e
 
 const formLabel = (data: Object, language: ?String) => {
   if (data.annotations) {
-    const annotation = findAnnotation("label", data.annotations, language);
+    const annotation = findAnnotation('label', data.annotations, language);
     if (annotation) {
       return annotation.object.value;
     }
@@ -22,9 +22,9 @@ const formLabel = (data: Object, language: ?String) => {
   const { predicate } = data;
 
   if (predicate) {
-    return predicate.includes("#")
-        ? predicate.split("#")[1]
-        : predicate.split("/").pop();
+    return predicate.includes('#')
+        ? predicate.split('#')[1]
+        : predicate.split('/').pop();
   }
 };
 

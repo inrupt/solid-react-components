@@ -1,10 +1,10 @@
-import { useCallback, useState, useEffect } from "react";
-import shexParser from "@shexjs/parser";
-import shexCore from "@shexjs/core";
-import unique from "unique-string";
-import ldflex from "@solid/query-ldflex";
-import { namedNode } from "@rdfjs/data-model";
-import { Expression, ShexJ, Shape } from "@entities";
+import { useCallback, useState, useEffect } from 'react';
+import shexParser from '@shexjs/parser';
+import shexCore from '@shexjs/core';
+import unique from 'unique-string';
+import ldflex from '@solid/query-ldflex';
+import { namedNode } from '@rdfjs/data-model';
+import { Expression, ShexJ, Shape } from '@entities';
 import {
   SolidError,
   fetchLdflexDocument,
@@ -12,7 +12,7 @@ import {
   solidResponse,
   ShexFormValidator,
   shexUtil
-} from "@utils";
+} from '@utils';
 
 type Options = {
     key: String,
@@ -411,7 +411,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const _createLink = async field => {
         const { subject, parentPredicate, parentSubject } = field;
-        const id = `#${subject.split("#").pop()}`;
+        const id = `#${subject.split('#').pop()}`;
         await ldflex[parentSubject][parentPredicate].add(namedNode(id));
     };
 
@@ -452,7 +452,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
 
             // Delete expression from ShexJ
-            updateShexJ({ key: name}, "delete");
+            updateShexJ({ key: name}, 'delete');
 
             return solidResponse(200,'Form submitted successfully');
         } catch (error) {
@@ -504,16 +504,16 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     )
                 };
                 switch (field.action) {
-                    case "update":
+                    case 'update':
                         await ldflex[field.subject][field.predicate].replace(
                             field.defaultValue,
                             field.value
                         );
                         break;
-                    case "create":
+                    case 'create':
                         await _create(field);
                         break;
-                    case "delete":
+                    case 'delete':
                         await ldflex[field.subject][field.predicate].delete(
                             field.defaultValue
                         );
@@ -542,8 +542,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
 
     const onSubmit = async (e: Event) => {
         try {
-            if (!documentUri || documentUri === "") {
-                throw Error("Document Uri is required");
+            if (!documentUri || documentUri === '') {
+                throw Error('Document Uri is required');
             }
             e.preventDefault();
             const validator = new ShexFormValidator(shexData.formValues);
@@ -590,7 +590,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             key: parentName, data: {
                 isNew: false
             }
-        }, onSave: true}, "update");
+        }, onSave: true}, 'update');
     }
 
     useEffect(() => {
