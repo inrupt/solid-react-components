@@ -71,7 +71,8 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
                 updatedFormValues = [...updatedFormValues, callback(
                     expression._formValues[index] || {...expression._formValueClone},
                     updatedExpressions,
-                    renderFieldValue(expression.annotations, node.value)
+                    renderFieldValue(expression.annotations, node.value),
+                    linkUri
                 )];
 
 

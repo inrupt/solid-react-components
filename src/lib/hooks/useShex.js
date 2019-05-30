@@ -182,13 +182,16 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         let updatedFormValue = {};
 
 
-            const updatedFormData = await shexUtil.mapExpFormValues(formData.expression, (_formValue, _formValues, value) => {
+        const updatedFormData = await shexUtil.mapExpFormValues(
+            formData.expression, (_formValue, _formValues, value, parentUri) => {
                 updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
 
                 const expression = {
                     ..._formValue,
                     _formFocus: {
                         ..._formValue._formFocus,
+                        isNew: false,
+                        parentSubject: parentUri,
                         value,
                         name: unique(),
                         error: updatedFormValue && updatedFormValue.error || null
@@ -198,13 +201,13 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 return expression;
             }, documentUri);
 
-            setShexData({
-                shexJ,
-                formValues: updatedFormValue,
-                formData: {...formData, expression: {
-                    expressions: updatedFormData}
-                }
-            });
+        setShexData({
+            shexJ,
+            formValues: updatedFormValue,
+            formData: {...formData, expression: {
+                expressions: updatedFormData}
+            }
+        });
 
     }
 
