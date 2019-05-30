@@ -63,6 +63,7 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
     let updatedExpressions = [];
 
     if (rootExpression && rootExpression.expressions) {
+
         for await (let expression of rootExpression.expressions) {
             let updatedFormValues = [];
             let index = 0;

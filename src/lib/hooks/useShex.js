@@ -19,7 +19,7 @@ type Options = {
     data: ?Object
 }
 
-let ownerUpdate = false;
+let ownerUpdate = true;
 
 export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
     const { errorCallback, timestamp } = options;
@@ -177,36 +177,45 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
        return formValues;
     };
 
+    /*
+     * Listener updates from POD document, show error message if field value
+     * was updated on POD, this is recursive function
+     */
     const updatesListener = async () => {
         const { formData, shexJ } = shexData;
         let updatedFormValue = {};
 
+        if (!ownerUpdate) {
+            const updatedFormData = await shexUtil.mapExpFormValues(
+                formData.expression, (_formValue, _formValues, value, parentUri) => {
+                    updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
+                    const expression = {
+                        ..._formValue,
+                        _formFocus: {
+                            ..._formValue._formFocus,
+                            isNew: false,
+                            parentSubject: parentUri,
+                            value,
+                            name: unique(),
+                            error: (updatedFormValue && updatedFormValue.error) || null
+                        }
+                    }
 
-        const updatedFormData = await shexUtil.mapExpFormValues(
-            formData.expression, (_formValue, _formValues, value, parentUri) => {
-                updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
-                const expression = {
-                    ..._formValue,
-                    _formFocus: {
-                        ..._formValue._formFocus,
-                        isNew: false,
-                        parentSubject: parentUri,
-                        value,
-                        name: unique(),
-                        error: updatedFormValue && updatedFormValue.error || null
+                    return expression;
+                }, documentUri);
+
+            setShexData({
+                shexJ,
+                formValues: updatedFormValue,
+                formData: {
+                    ...formData, expression: {
+                        expressions: updatedFormData
                     }
                 }
-
-                return expression;
-            }, documentUri);
-
-        setShexData({
-            shexJ,
-            formValues: updatedFormValue,
-            formData: {...formData, expression: {
-                expressions: updatedFormData}
-            }
-        });
+            });
+        } else {
+            ownerUpdate = false;
+        }
 
     }
 
@@ -442,8 +451,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 }
             }
 
-            // ownerUpdate = false;
-
             // Delete expression from ShexJ
             updateShexJ({ key: name}, "delete");
 
@@ -465,6 +472,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const saveForm = async (key: String, autoSave: ?boolean) => {
         try {
             ownerUpdate = true;
+
             const { formValues } = shexData;
             let value = formValues[key].value;
             let defaultValue = formValues[key].defaultValue;
@@ -513,7 +521,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     default:
                         break;
                 }
-
 
                 // If save field was successful we update expression and parentExpression.
                 updateExpression(key, originalValue);
@@ -589,11 +596,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     useEffect(() => {
        if (!timestamp) {
            toShexJForm();
-       } else if (!ownerUpdate) {
-           updatesListener();
        }
 
-       ownerUpdate = false;
+        updatesListener();
+
     }, [fileShex, documentUri, timestamp]);
 
     return {
