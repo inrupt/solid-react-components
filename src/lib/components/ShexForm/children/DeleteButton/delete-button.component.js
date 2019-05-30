@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ThemeShex } from "@context";
-import { Language } from "@context";
+import { ShexConfig } from "@context";
 
 const DeleteButtonWrapper = styled.button`
   position: ${({ floating }) => (floating ? "absolute" : "relative")};
@@ -14,33 +13,28 @@ const DeleteButtonWrapper = styled.button`
 `;
 
 export const DeleteButton = ({
-  onDelete,
   fieldData,
   predicate,
   parent,
   text = "Remove"
 }) => {
   return (
-    <ThemeShex.Consumer>
-      {theme => (
-        <Language.Consumer>
-          {({ deleteButton }) => (
-            <DeleteButtonWrapper
-              className={theme && theme.deleteButton}
-              type="button"
-              onClick={() =>
-                onDelete(
-                  predicate ? { ...fieldData, predicate } : fieldData,
-                  parent
-                )
-              }
-              floating={parent}
-            >
-              {deleteButton || text}
-            </DeleteButtonWrapper>
-          )}
-        </Language.Consumer>
+    <ShexConfig.Consumer>
+      {({ theme, languageTheme: { deleteButton }, config: { onDelete } }) => (
+        <DeleteButtonWrapper
+          className={theme && theme.deleteButton}
+          type="button"
+          onClick={() =>
+            onDelete(
+              predicate ? { ...fieldData, predicate } : fieldData,
+              parent
+            )
+          }
+          floating={parent}
+        >
+          {deleteButton || text}
+        </DeleteButtonWrapper>
       )}
-    </ThemeShex.Consumer>
+    </ShexConfig.Consumer>
   );
 };

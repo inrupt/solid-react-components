@@ -1,3 +1,13 @@
+import ldflex from '@solid/query-ldflex';
+import { namedNode } from '@rdfjs/data-model';
+
+/**
+ * Return annotations from ShexJ
+ * @param key
+ * @param annotations
+ * @param language
+ * @returns {null| Annotations}
+ */
 const findAnnotation = (key: String, annotations: Object, language: ?String = 'es') => {
   if (annotations) {
     return annotations.find(
@@ -10,9 +20,15 @@ const findAnnotation = (key: String, annotations: Object, language: ?String = 'e
   return null;
 };
 
-const shexFormLabel = (data: Object, language: ?String) => {
+/**
+ * Return label name from shex annotations or predicate
+ * @param data
+ * @param language
+ * @returns {string}
+ */
+const formLabel = (data: Object, language: ?String) => {
   if (data.annotations) {
-    const annotation = findAnnotation("label", data.annotations, language);
+    const annotation = findAnnotation('label', data.annotations, language);
     if (annotation) {
       return annotation.object.value;
     }
@@ -20,13 +36,19 @@ const shexFormLabel = (data: Object, language: ?String) => {
   const { predicate } = data;
 
   if (predicate) {
-    return predicate.includes("#")
-        ? predicate.split("#")[1]
-        : predicate.split("/").pop();
+    return predicate.includes('#')
+        ? predicate.split('#')[1]
+        : predicate.split('/').pop();
   }
 };
 
-const shexParentLinkOnDropDowns = (parent: Object, expression: Object) => {
+/**
+ * return predicate if expressions is a dropdown
+ * @param parent
+ * @param expression
+ * @returns {null || parentPredicate}
+ */
+const parentLinkOnDropDowns = (parent: Object, expression: Object) => {
   return (parent &&
     parent.predicate &&
     parent.expression &&
@@ -38,6 +60,11 @@ const shexParentLinkOnDropDowns = (parent: Object, expression: Object) => {
     : null;
 };
 
+/**
+ * Allow or not new fields according to shex
+ * @param data
+ * @returns {boolean}
+ */
 const allowNewFields = (data: Object) => {
   const totalData = data._formValues.length;
 
@@ -48,12 +75,187 @@ const allowNewFields = (data: Object) => {
   );
 };
 
+/**
+ * check if field value was updated
+ * @param value
+ * @param defaultValue
+ * @returns {boolean}
+ */
+const isValueChanged = (value, defaultValue) => {
+  return value !== defaultValue;
+};
+
+/**
+ * Map into _formValues and check which field was updated from POD
+ * @params {Object} rootExpression
+ * @params {Function} callBack using to make any action on formValues
+*/
+const mapExpFormValues = async (rootExpression, callback, linkUri) => {
+    let updatedExpressions = [];
+
+    if (rootExpression && rootExpression.expressions) {
+
+        for await (let expression of rootExpression.expressions) {
+            let updatedFormValues = [];
+            let index = 0;
+
+            for await (let node of ldflex[linkUri][expression.predicate]) {
+                updatedFormValues = [...updatedFormValues, callback(
+                    expression._formValues[index] || {...expression._formValueClone},
+                    updatedExpressions,
+                    renderFieldValue(expression.annotations, node.value),
+                    linkUri
+                )];
+
+
+                if (updatedFormValues[index].expression) {
+                    updatedFormValues[index] = {
+                        ...updatedFormValues[index],
+                        expression: {
+                            expressions : await mapExpFormValues(updatedFormValues[index].expression,
+                                callback, updatedFormValues[index]._formFocus.value)
+                        }
+                    };
+
+                }
+
+                index++;
+            }
+
+            if (updatedFormValues.length === 0) {
+                updatedFormValues = [...updatedFormValues, callback(
+                    expression._formValues[index] || {...expression._formValueClone},
+                    updatedExpressions,
+                    '',
+                    linkUri
+                )];
+            }
+
+            updatedExpressions = [...updatedExpressions, {
+                ...expression,
+                _formValues: updatedFormValues
+            }];
+
+        }
+    }
+
+    return updatedExpressions;
+};
+
+/**
+ * Map into all shexJ _formValues objects
+ * @params {Object} Shape
+ * @params {Function} callBack using to make any action on formValues
+*/
+const mapFormValues = (shape: Shape, callBack: String) => {
+    try {
+        let newExpressions = [];
+
+        for (let expression of shape.expression.expressions) {
+            let newFormValues = [];
+            let formValuesindex = 0;
+
+            for (let formValue of expression._formValues) {
+                let newFormValue = {...formValue};
+
+                newFormValue = callBack(newFormValue, expression, formValuesindex);
+
+                if (newFormValue && newFormValue.expression && newFormValue.expression.expressions) {
+                    const expressions = mapFormValues(newFormValue, callBack);
+                    newFormValue = {...newFormValue, expression: { expressions }}
+                }
+
+                newFormValues = newFormValue ? Array.isArray(newFormValue)
+                    ? [...newFormValues, ...newFormValue]
+                    : [...newFormValues, newFormValue]
+                  : newFormValues;
+
+                formValuesindex++;
+            }
+
+            newExpressions = [...newExpressions, {...expression, _formValues: newFormValues}]
+        }
+        return newExpressions;
+    } catch (error) {
+        return error;
+    }
+};
+
 const canDelete = (data) => data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
 
+const isExpressionLink = valueExpr => {
+    return typeof valueExpr === 'string' || null;
+};
+
+const renderFieldValue = (annotations: Array<Annotation>, value: String) => {
+    const hasPrefix = findAnnotation('layoutprefix', annotations);
+    if (hasPrefix && typeof value == 'string') {
+        return value.split(hasPrefix.object.value).pop();
+    }
+    return value;
+};
+
+/**
+ * Check if expression is an drop down when values comes.
+ * @param expression
+ * @returns {null|{values: *}}
+ */
+const isExpressionDropDown = (expression: Expression) => {
+    if (Array.isArray(expression.values)) {
+        return { values: expression.values };
+    }
+    return null;
+};
+
+/**
+ * Create a unique Node Id (Link)
+ * @param documentUri
+ * @param seed
+ * @returns {string}
+ */
+const createIdNode = (documentUri: String, seed: number) => {
+    const randomId = Date.parse (new Date ()) + (seed++);
+    const doc = documentUri || 'https://example.org';
+    const id = `${doc.split('#')[0]}#id${randomId}`;
+
+    return id;
+};
+
+/**
+ * Clean values when come like uri
+ * @param value
+ * @returns {String|string}
+ */
+const cleanValue = (value: String) => {
+    if (value.includes('#')) {
+        return value.split('#').pop();
+    }
+
+    return value;
+}
+
+/**
+ * Add field value prefix to send over POD
+ * @param value
+ * @param prefix
+ * @returns {any}
+ */
+const setFieldValue = (value: String, prefix: ?String) =>
+    prefix ? namedNode(`${prefix}${value}`) : value;
+
 export {
-  shexFormLabel,
+  formLabel,
   findAnnotation,
-  shexParentLinkOnDropDowns,
+  parentLinkOnDropDowns,
   allowNewFields,
-  canDelete
+  canDelete,
+  isValueChanged,
+  mapExpFormValues,
+  isExpressionLink,
+  isExpressionDropDown,
+  createIdNode,
+  mapFormValues,
+  renderFieldValue,
+  cleanValue,
+  setFieldValue
 };

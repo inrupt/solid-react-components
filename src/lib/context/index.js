@@ -1,7 +1,3 @@
-import { ThemeShex } from './themeShexForm';
-import { Language } from './language';
+import { ShexConfig } from "./shex.provider";
 
-export {
-  ThemeShex,
-  Language
-};
+export { ShexConfig };

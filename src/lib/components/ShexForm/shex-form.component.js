@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  shexFormLabel,
-  allowNewFields,
-  canDelete,
-  shexParentLinkOnDropDowns
-} from "@utils";
-import { Language, ThemeShex } from "@context";
+import { shexUtil } from "@utils";
+import { ShexConfig } from "@context";
 import { Panel } from "./styled.component";
 import {
   DeleteButton,
@@ -18,38 +13,27 @@ type ShexFormProps = {
   shexj: Object,
   parent: Object | null,
   formValues: Object,
-  onChange: Function,
-  onDelete: Function,
   addNewExpression: Function
 };
 
-const ShexForm = ({
-  shexj,
-  parent = null,
-  onChange,
-  onDelete,
-  addNewShexField,
-  updateShexJ,
-  formValues
-}: ShexFormProps) => {
+const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
   const { expression } = shexj;
 
   return shexj ? (
-    <ThemeShex.Consumer>
-      {theme => (
+    <ShexConfig.Consumer>
+      {({ theme, languageTheme: { language } }) => (
         <Panel
           className={`${
             theme ? (parent ? theme.shexPanel : theme.shexRoot) : ""
           }`}
         >
-          {parent && canDelete(parent) && (
+          {parent && shexUtil.canDelete(parent) && (
             <DeleteButton
               {...{
-                onDelete,
                 parent,
                 fieldData: shexj,
                 floating: true,
-                canDelete: canDelete(parent)
+                canDelete: shexUtil.canDelete(parent)
               }}
             />
           )}
@@ -61,30 +45,24 @@ const ShexForm = ({
                 if (typeof expression.valueExpr === "string") {
                   return (
                     <React.Fragment key={i}>
-                      <Language.Consumer>
-                        {({ language }) => (
-                          <h4>{shexFormLabel(expression, language)}</h4>
-                        )}
-                      </Language.Consumer>
+                      <h4>{shexUtil.formLabel(expression, language)}</h4>
                       {expression._formValues.map((shexj, i) => (
                         <ShexForm
                           {...{
                             key: i,
-                            parent: { ...expression, _formFocus: shexj._formFocus },
+                            parent: {
+                              ...expression,
+                              _formFocus: shexj._formFocus
+                            },
                             shexj,
-                            onChange,
-                            onDelete,
-                            formValues,
-                            addNewShexField,
-                            updateShexJ
+                            formValues
                           }}
                         />
                       ))}
                       <AddButton
                         {...{
-                          allowNewFields: allowNewFields(expression),
-                          defaultExpression: expression,
-                          addNewShexField
+                          allowNewFields: shexUtil.allowNewFields(expression),
+                          defaultExpression: expression
                         }}
                       />
                     </React.Fragment>
@@ -95,9 +73,6 @@ const ShexForm = ({
                       {...{
                         data: expression,
                         key: i,
-                        onChange,
-                        onDelete,
-                        addNewShexField,
                         formValues,
                         parent,
                         parentName: shexj._formFocus
@@ -119,21 +94,21 @@ const ShexForm = ({
                     defaultValue: shexj._formFocus.value,
                     subject: shexj._formFocus.parentSubject,
                     name: shexj._formFocus.name,
-                    label: shexFormLabel(parent),
-                    canDelete: canDelete(parent),
+                    label: shexUtil.formLabel(parent),
+                    canDelete: shexUtil.canDelete(parent),
                     predicate: parent.predicate,
                     parent,
-                    parentPredicate: shexParentLinkOnDropDowns(parent),
+                    parentPredicate: shexUtil.parentLinkOnDropDowns(parent),
                     parentSubject: shexj._formFocus.parentSubject,
-                    onChange,
-                    onDelete,
-                    updateShexJ
+                    error: formValues[shexj._formFocus.name]
+                        ? formValues[shexj._formFocus.name].error
+                        : null
                   }}
                 />
               )}
         </Panel>
       )}
-    </ThemeShex.Consumer>
+    </ShexConfig.Consumer>
   ) : null;
 };
 

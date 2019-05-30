@@ -1,61 +1,41 @@
 import React, { Fragment } from "react";
-import { shexFormLabel, allowNewFields, canDelete } from "@utils";
-import { Language } from "@context";
+import { shexUtil }  from "@utils";
 import { AddButton } from "./";
 import { Field } from "./";
 
 type FieldsProps = {
+  data: Object,
   formValues: Object,
-  onChange: Function,
-  data: Object
+  parent: Object
 };
 
-const ExpressionFields = ({
-  data,
-  onChange,
-  onDelete,
-  formValues,
-  addNewShexField,
-  parent,
-  parentName
-}: FieldsProps) => {
+const ExpressionFields = ({ data, formValues, parent }: FieldsProps) => {
   return (
     <Fragment>
-      <Language.Consumer>
-        {({ language }) => (
-          <Fragment>
-            <label>{shexFormLabel(data, language)}</label>
-            <ul>
-              {data._formValues &&
-                data._formValues.map((value, i) => (
-                  <li key={i}>
-                    <Field
-                      {...{
-                        data,
-                        fieldData: value,
-                        inputData:
-                          formValues[value._formFocus.name] || value._formFocus,
-                        onChange,
-                        onDelete,
-                        parent,
-                        parentName,
-                        canDelete: canDelete(data)
-                      }}
-                    />
-                  </li>
-                ))}
-            </ul>
-            <AddButton
-              {...{
-                allowNewFields: allowNewFields(data) && !parent,
-                defaultExpression: data,
-                expression: parent,
-                addNewShexField
-              }}
-            />
-          </Fragment>
-        )}
-      </Language.Consumer>
+      <ul>
+        {data._formValues &&
+          data._formValues.map((value, i) => (
+            <li key={i}>
+              <Field
+                {...{
+                  data,
+                  fieldData: value,
+                  inputData:
+                      (formValues && formValues[value._formFocus.name]) || value._formFocus,
+                  parent,
+                  canDelete: shexUtil.canDelete(data)
+                }}
+              />
+            </li>
+          ))}
+      </ul>
+      <AddButton
+        {...{
+          allowNewFields: shexUtil.allowNewFields(data) && !parent,
+          defaultExpression: data,
+          expression: parent
+        }}
+      />
     </Fragment>
   );
 };
