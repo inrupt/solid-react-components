@@ -1,6 +1,13 @@
 import ldflex from '@solid/query-ldflex';
 import { namedNode } from '@rdfjs/data-model';
 
+/**
+ * Return annotations from ShexJ
+ * @param key
+ * @param annotations
+ * @param language
+ * @returns {null| Annotations}
+ */
 const findAnnotation = (key: String, annotations: Object, language: ?String = 'es') => {
   if (annotations) {
     return annotations.find(
@@ -13,6 +20,12 @@ const findAnnotation = (key: String, annotations: Object, language: ?String = 'e
   return null;
 };
 
+/**
+ * Return label name from shex annotations or predicate
+ * @param data
+ * @param language
+ * @returns {string}
+ */
 const formLabel = (data: Object, language: ?String) => {
   if (data.annotations) {
     const annotation = findAnnotation('label', data.annotations, language);
@@ -29,6 +42,12 @@ const formLabel = (data: Object, language: ?String) => {
   }
 };
 
+/**
+ * return predicate if expressions is a dropdown
+ * @param parent
+ * @param expression
+ * @returns {null || parentPredicate}
+ */
 const parentLinkOnDropDowns = (parent: Object, expression: Object) => {
   return (parent &&
     parent.predicate &&
@@ -41,6 +60,11 @@ const parentLinkOnDropDowns = (parent: Object, expression: Object) => {
     : null;
 };
 
+/**
+ * Allow or not new fields according to shex
+ * @param data
+ * @returns {boolean}
+ */
 const allowNewFields = (data: Object) => {
   const totalData = data._formValues.length;
 
@@ -51,11 +75,17 @@ const allowNewFields = (data: Object) => {
   );
 };
 
+/**
+ * check if field value was updated
+ * @param value
+ * @param defaultValue
+ * @returns {boolean}
+ */
 const isValueChanged = (value, defaultValue) => {
   return value !== defaultValue;
 };
 
-/*
+/**
  * Map into _formValues and check which field was updated from POD
  * @params {Object} rootExpression
  * @params {Function} callBack using to make any action on formValues
@@ -112,7 +142,7 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
     return updatedExpressions;
 };
 
-/*
+/**
  * Map into all shexJ _formValues objects
  * @params {Object} Shape
  * @params {Function} callBack using to make any action on formValues
@@ -165,9 +195,11 @@ const renderFieldValue = (annotations: Array<Annotation>, value: String) => {
     return value;
 };
 
-/*
-     * Check if expression is an drop down when values comes.
-     */
+/**
+ * Check if expression is an drop down when values comes.
+ * @param expression
+ * @returns {null|{values: *}}
+ */
 const isExpressionDropDown = (expression: Expression) => {
     if (Array.isArray(expression.values)) {
         return { values: expression.values };
@@ -175,9 +207,12 @@ const isExpressionDropDown = (expression: Expression) => {
     return null;
 };
 
-/*
-   * Create a unique Node Id (Link)
-   */
+/**
+ * Create a unique Node Id (Link)
+ * @param documentUri
+ * @param seed
+ * @returns {string}
+ */
 const createIdNode = (documentUri: String, seed: number) => {
     const randomId = Date.parse (new Date ()) + (seed++);
     const doc = documentUri || 'https://example.org';
@@ -186,6 +221,11 @@ const createIdNode = (documentUri: String, seed: number) => {
     return id;
 };
 
+/**
+ * Clean values when come like uri
+ * @param value
+ * @returns {String|string}
+ */
 const cleanValue = (value: String) => {
     if (value.includes('#')) {
         return value.split('#').pop();
@@ -194,6 +234,12 @@ const cleanValue = (value: String) => {
     return value;
 }
 
+/**
+ * Add field value prefix to send over POD
+ * @param value
+ * @param prefix
+ * @returns {any}
+ */
 const setFieldValue = (value: String, prefix: ?String) =>
     prefix ? namedNode(`${prefix}${value}`) : value;
 
