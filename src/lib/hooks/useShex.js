@@ -19,7 +19,7 @@ type Options = {
     data: ?Object
 }
 
-let ownerUpdate = true;
+let ownerUpdate = false;
 
 export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
     const { errorCallback, timestamp } = options;
@@ -194,11 +194,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             if (formValues[name]) {
                 if (formValues[name].value.trim() !== value.trim()) {
                     formValues[name].defaultValue = value;
-                    formValues[name].error = `Field value has been update to: ${shexUtil.cleanValue(value)}`;
+                    formValues[name].warning = `Field value has been update to: ${shexUtil.cleanValue(value)}`;
                 } else {
                     formValues[name].defaultValue = value;
                     formValues[name].value = value;
-                    formValues[name].error = null;
+                    formValues[name].warning = null;
                 }
             }
         }
@@ -225,8 +225,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                             isNew: false,
                             parentSubject: parentUri,
                             value,
-                            name: unique(),
-                            error: (updatedFormValue && updatedFormValue.error) || null
+                            warning: (updatedFormValue && updatedFormValue.warning) || null
                         }
                     }
 
@@ -671,9 +670,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     useEffect(() => {
        if (!timestamp) {
            toShexJForm();
+       } else {
+           updatesListener();
        }
-
-        updatesListener();
 
     }, [fileShex, documentUri, timestamp]);
 

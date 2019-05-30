@@ -24,7 +24,6 @@ export const InputField = ({
   const inputName = inputData && inputData.name;
   const defaultValue = fieldData && fieldData._formFocus.value;
   const currentValue = inputData && inputData.value;
-
   return (
     <ShexConfig.Consumer>
       {({ theme, config: { onChange, onSubmitSave, autoSaveMode } }) => (
@@ -64,9 +63,9 @@ export const InputField = ({
               />
             )}
           </InputGroup>
-          {inputData && inputData.error && (
+          {inputData && (inputData.error || inputData.warning) && (
             <ErrorMessage className={theme && theme.inputError}>
-              {inputData.error}
+              {inputData.error || inputData.warning}
             </ErrorMessage>
           )}
         </InputWrapper>

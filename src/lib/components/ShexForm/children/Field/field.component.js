@@ -39,7 +39,7 @@ export const Field = ({
                 parentSubject,
                 canDelete,
                 valueExpr: data.valueExpr,
-                error: data.error
+                error: data.error || data.warning
               }}
             />
           ) : (
