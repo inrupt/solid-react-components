@@ -22,7 +22,7 @@ type Options = {
 let ownerUpdate = false;
 
 export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
-    const { errorCallback, timestamp } = options;
+    const { errorCallback, timestamp, languageTheme } = options;
     const [shexData, setShexData] = useState({});
     let shapes = [];
     let seed = 1;
@@ -157,7 +157,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             if (formValues[name]) {
                 if (formValues[name].value.trim() !== value.trim()) {
                     formValues[name].defaultValue = value;
-                    formValues[name].warning = `Field value has been update to: ${shexUtil.cleanValue(value)}`;
+                    formValues[name].warning = `${languageTheme.warningResolution} ${shexUtil.cleanValue(value)}`;
                 } else {
                     formValues[name].defaultValue = value;
                     formValues[name].value = value;
