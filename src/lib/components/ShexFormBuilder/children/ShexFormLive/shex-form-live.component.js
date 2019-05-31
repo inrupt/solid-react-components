@@ -42,7 +42,7 @@ const ShexFormLive = ({
     errorCallback,
     timestamp: updates && updates.timestamp
   });
-
+  
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);

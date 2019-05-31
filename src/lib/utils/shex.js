@@ -1,5 +1,6 @@
 import ldflex from '@solid/query-ldflex';
 import { namedNode } from '@rdfjs/data-model';
+import unique from "unique-string";
 
 /**
  * Return annotations from ShexJ
@@ -101,7 +102,7 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
 
             for await (let node of ldflex[linkUri][expression.predicate]) {
                 updatedFormValues = [...updatedFormValues, callback(
-                    expression._formValues[index] || {...expression._formValueClone},
+                    expression._formValues[index] || createField(expression._formValueClone, linkUri, {linkUri, seed: index}),
                     updatedExpressions,
                     renderFieldValue(expression.annotations, node.value),
                     linkUri
@@ -124,7 +125,7 @@ const mapExpFormValues = async (rootExpression, callback, linkUri) => {
 
             if (updatedFormValues.length === 0) {
                 updatedFormValues = [...updatedFormValues, callback(
-                    expression._formValues[index] || {...expression._formValueClone},
+                    expression._formValues[index] || createField(expression._formValueClone, linkUri, {linkUri, seed: index}),
                     updatedExpressions,
                     '',
                     linkUri
@@ -179,6 +180,45 @@ const mapFormValues = (shape: Shape, callBack: String) => {
     } catch (error) {
         return error;
     }
+};
+
+/**
+ * Create new Field(expression with formValues and formFocus) if this is a link
+ * will create a unique link id to point into document and will update children expression values
+ * with new unique name and empty value(this is recursive).
+ *
+ * @param { Expression } expression shexJ object
+ * @param { boolen } isLink to deep or not into children expressions.
+ * @param { Object } parentSubject the Node of the subject
+ */
+const createField = (expression: Expression, parentSubject: Object, settings: object) => {
+    let nodeValue = '';
+    let newExpression;
+    /** if this expression is a link to other expression shape will deep into children expression */
+    if (expression.expression && expression.expression.expressions) {
+        nodeValue = createIdNode(settings.documentUri, settings.seed);
+        const updatedExp = expression.expression.expressions.map(exp => {
+            const newExpr = exp._formValues.map(frm => {
+                return createField(frm, { parentSubject: nodeValue });
+            });
+            /** Return an expression with new name and empty value in _formValues */
+            return {...exp, _formValues: [newExpr[0]]};
+        });
+
+        newExpression = { expression: { expressions: updatedExp }};
+    }
+    /** Return a new expression */
+    return {
+        ...expression,
+        ...newExpression,
+        _formFocus: {
+            ...expression._formFocus,
+            ...parentSubject,
+            name: unique(),
+            value: nodeValue,
+            isNew: true
+        }
+    };
 };
 
 const canDelete = (data) => data.min === undefined || data.min === 1 ? data._formValues.length > 1 : true;
@@ -257,5 +297,6 @@ export {
   mapFormValues,
   renderFieldValue,
   cleanValue,
-  setFieldValue
+  setFieldValue,
+    createField
 };

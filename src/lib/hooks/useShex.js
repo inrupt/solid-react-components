@@ -39,7 +39,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             const {_formValues } = expression;
             if (_formValues.length -1 === index) {
                 if (!parentExpresion && expression.predicate === currentExpression.predicate) {
-                    return [formValue, _createField(expression._formValueClone)];
+                    return [formValue, shexUtil.createField(expression._formValueClone, documentUri, { documentUri, seed})];
                 }
             }
             return formValue;
@@ -143,43 +143,6 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
-    /**
-     * Create new Field(expression with formValues and formFocus) if this is a link
-     * will create a unique link id to point into document and will update children expression values
-     * with new unique name and empty value(this is recursive).
-     *
-     * @param { Expression } expression shexJ object
-     * @param { boolen } isLink to deep or not into children expressions.
-     * @param { Object } parentSubject the Node of the subject
-     */
-    const _createField = useCallback((expression: Expression, isLink: boolean, parentSubject: Object) => {
-        const id = isLink || shexUtil.createIdNode(documentUri, seed);
-        let newExpression;
-        /** if this expression is a link to other expression shape will deep into children expression */
-        if (expression.expression && expression.expression.expressions) {
-            const updatedExp = expression.expression.expressions.map(exp => {
-                const newExpr = exp._formValues.map(frm => {
-                    return _createField(frm, false, { parentSubject: id });
-                });
-                /** Return an expression with new name and empty value in _formValues */
-                return {...exp, _formValues: [newExpr[0]]};
-            });
-
-            newExpression = { expression: { expressions: updatedExp }};
-        }
-        /** Return a new expression */
-        return {
-            ...expression,
-            ...newExpression,
-            _formFocus: {
-                ...expression._formFocus,
-                ...parentSubject,
-                name: unique(),
-                value: newExpression ? id : '',
-                isNew: true
-            }
-        };
-    });
 
     /**
      * Check if a specific expression was updated or not, if was updated we add an warning message
