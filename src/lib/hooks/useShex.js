@@ -507,7 +507,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             let validate;
 
             if (autoSave) {
-                const validator = new ShexFormValidator(formValues);
+                const validator = new ShexFormValidator(formValues, languageTheme.formValidate);
                 validate = validator.validate();
             }
             const keys = Object.keys(formValues);
@@ -577,7 +577,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 throw Error('Document Uri is required');
             }
             e.preventDefault();
-            const validator = new ShexFormValidator(shexData.formValues);
+            const validator = new ShexFormValidator(shexData.formValues, languageTheme.formValidate);
             const { isValid, updatedFields } = validator.validate();
             const keys = Object.keys(shexData.formValues);
 
