@@ -40,9 +40,10 @@ const ShexFormLive = ({
     saveForm
   } = useShex(shexUri, documentUri, rootShape, {
     errorCallback,
-    timestamp: updates && updates.timestamp
+    timestamp: updates && updates.timestamp,
+    languageTheme,
   });
-  // console.log(shexData);
+
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);

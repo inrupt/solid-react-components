@@ -44,7 +44,8 @@ const HandleShexForm = ({ webId }:Props) => {
       resetBtn: 'Reset',
       addButtonText: '+ Add new ',
       deleteButton: 'Delete',
-      dropdownDefaultText: '- Select -'
+      dropdownDefaultText: '- Select -',
+      warningResolution: 'Field value has been updated to:'
     };
 
     return(
