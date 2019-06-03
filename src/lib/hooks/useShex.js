@@ -154,10 +154,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const expressionChanged = useCallback((name: String, value: any) => {
         const { formValues } = shexData;
         if (formValues && Object.keys(formValues).length > 0) {
+            const warningResultion = languageTheme.warningResolution || 'Field value has been updated to:';
+
             if (formValues[name]) {
                 if (formValues[name].value.trim() !== value.trim()) {
                     formValues[name].defaultValue = value;
-                    formValues[name].warning = `${languageTheme.warningResolution} ${shexUtil.cleanValue(value)}`;
+                    formValues[name].warning = `${warningResultion} ${shexUtil.cleanValue(value)}`;
                 } else {
                     formValues[name].defaultValue = value;
                     formValues[name].value = value;
@@ -390,21 +392,34 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         const defaultValue = e.target.getAttribute('data-default');
         const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
         const data = {
-            [e.target.name]: {
-                value,
-                name,
-                action,
-                defaultValue,
-                predicate: e.target.getAttribute('data-predicate'),
-                subject: e.target.getAttribute('data-subject'),
-                prefix: e.target.getAttribute('data-prefix'),
-                parentPredicate: e.target.getAttribute('data-parent-predicate'),
-                parentSubject: e.target.getAttribute('data-parent-subject'),
-                valueExpr: JSON.parse(e.target.getAttribute('data-valuexpr')),
-                parentName: e.target.getAttribute('data-parent-name')
-            }
+            value,
+            name,
+            action,
+            defaultValue,
+            predicate: e.target.getAttribute('data-predicate'),
+            subject: e.target.getAttribute('data-subject'),
+            prefix: e.target.getAttribute('data-prefix'),
+            parentPredicate: e.target.getAttribute('data-parent-predicate'),
+            parentSubject: e.target.getAttribute('data-parent-subject'),
+            valueExpr: JSON.parse(e.target.getAttribute('data-valuexpr')),
+            parentName: e.target.getAttribute('data-parent-name')
         };
-        setShexData({...shexData, formValues: { ...shexData.formValues, ...data} })
+        const currentValue = shexData.formValues[e.target.name];
+        /** keep warning message after onBlur */
+        const mergedData = {
+            [e.target.name]: {
+                warning: currentValue && currentValue.warning,
+                ...data,
+            },
+        };
+
+
+        setShexData({...shexData,
+            formValues: {
+                ...shexData.formValues,
+                ...mergedData
+            }
+        })
     });
 
     /**
@@ -512,7 +527,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
             const keys = Object.keys(formValues);
 
-            if ((validate.isValid && keys.length > 0) || !autoSave) {
+            if ((validate && validate.isValid && keys.length > 0) || !autoSave) {
                 // @TODO: find a better way to see if value is a predicate.
                 if (value.includes('#')) {
                     value = namedNode(value);
@@ -578,9 +593,8 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             }
             e.preventDefault();
             const validator = new ShexFormValidator(shexData.formValues, languageTheme.formValidate);
-            const { isValid, updatedFields } = validator.validate();
+            const { isValid, updatedFields} = validator.validate();
             const keys = Object.keys(shexData.formValues);
-
             if (isValid && keys.length > 0) {
 
                 for await (const key of keys) {
