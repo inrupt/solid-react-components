@@ -154,12 +154,12 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     const expressionChanged = useCallback((name: String, value: any) => {
         const { formValues } = shexData;
         if (formValues && Object.keys(formValues).length > 0) {
-            const warningResultion = languageTheme.warningResolution || 'Field value has been updated to:';
+            const warningResolution = languageTheme.warningResolution || 'Field value has been updated to:';
 
             if (formValues[name]) {
                 if (formValues[name].value.trim() !== value.trim()) {
                     formValues[name].defaultValue = value;
-                    formValues[name].warning = `${warningResultion} ${shexUtil.cleanValue(value)}`;
+                    formValues[name].warning = `${warningResolution} ${shexUtil.cleanValue(value)}`;
                 } else {
                     formValues[name].defaultValue = value;
                     formValues[name].value = value;
