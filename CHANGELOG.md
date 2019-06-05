@@ -1,5 +1,16 @@
 # Solid React Components Library
 
+## 0.4.1 ( June 5, 2019 )
+
+### Updated
+
+* ShexFormBuilder
+    * LiveUpdate added to ShexForm, so any changes to the form data outside of the current application will immediately be displayed in the form in real time
+    * Conflict Resolution added. If two users are editing the same field at the same time, incoming changes will be displayed to the second editor, to inform them that another change has occurred
+    * Form now autosaves. Triggered by the onBlur event, any changes to a field will be immediately and automatically saved, rather than relying on a button to save everything at once. This is an optional form state, and can be turned on or off
+    * New error messages added to handle new error events, such as conflicts
+    * Refactors to the ShexForm components to account for new functionality
+
 ## 0.4.0 ( May 22, 2019 )
 
 ### Added

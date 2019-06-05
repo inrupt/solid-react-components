@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeShex } from '@context';
+import { ShexConfig } from '@context';
 import { cleanup, render } from 'react-testing-library';
 import { DropDownField } from './dropdown-field.component';
 import 'jest-dom/extend-expect';
@@ -7,13 +7,13 @@ import 'jest-dom/extend-expect';
 afterAll(cleanup);
 
 
-const theme = {}
+const config = {theme: {}, languageTheme: {}, config: {}}
 
 const setup = (props) => {
     return (
-        <ThemeShex.Provider value={theme}>
+        <ShexConfig.Provider value={config}>
             <DropDownField {...props} />
-        </ThemeShex.Provider>
+        </ShexConfig.Provider>
     );
 };
 

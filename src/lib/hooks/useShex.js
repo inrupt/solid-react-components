@@ -1,166 +1,141 @@
 import { useCallback, useState, useEffect } from 'react';
-import data from '@solid/query-ldflex';
 import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
 import unique from 'unique-string';
-import auth from 'solid-auth-client';
-import { findAnnotation, SolidError } from "@utils";
-import { Expression, Annotation, ShexJ, Shape } from "@entities";
+import ldflex from '@solid/query-ldflex';
+import { namedNode } from '@rdfjs/data-model';
+import { Expression, ShexJ, Shape, Annotation } from '@entities';
+import {
+  SolidError,
+  fetchLdflexDocument,
+  fetchSchema,
+  solidResponse,
+  ShexFormValidator,
+  shexUtil
+} from '@utils';
 
 type Options = {
     key: String,
     data: ?Object
 }
 
-export const useShex = (fileShex: String, documentUri: String, rootShape: String, errorCallback: ?() => void) => {
+let ownerUpdate = false;
+
+export const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
+    const { errorCallback, timestamp, languageTheme } = options;
     const [shexData, setShexData] = useState({});
-    const [shexError, setShexError] = useState(null);
     let shapes = [];
     let seed = 1;
 
-
-    /*
-     * Fetch ShexC file from internal or external sources
+    /**
+     * Add a new field into form using mapFormValues(recursive function) function from shex utils
+     * @param { Expression } expression shexJ object
+     * @param { Expression } parentExpression parent ShexJ object
+     *
      */
-    const fetchShex = useCallback(async () => {
-        try {
-            const rootShex = await fetch(fileShex, {
-                headers: {
-                    'Content-Type': 'text/plain',
-                },
-            });
-
-            if (rootShex.status !== 200) {
-                throw rootShex;
-            }
-
-            const rootShexText = await rootShex.text();
-
-            return rootShexText.toString();
-        } catch (error) {
-            return error;
-        }
-    });
-
-
     const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
-        try {
-            const {formData, shexJ} = shexData;
-            const newFormData = _addShexJField(formData, expression, parentExpresion);
-
-            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
-        } catch(error) {
-            onError(error);
-        }
-    });
-
-    const updateShexJ = useCallback((key: String, action: String, data: ?Object) => {
-        try {
-            const {formData, shexJ} = shexData;
-            const newFormData = _updateShexJ(formData, action, {key, data});
-
-            setShexData({shexJ, formData: {...formData, expression: {expressions: newFormData}}});
-        } catch(error) {
-            onError(error);
-        }
-    });
-
-    const _existDocument = useCallback(async () => {
-        return await auth.fetch(documentUri, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    });
-
-    const _createDocument = useCallback(async () => {
-      if (documentUri && documentUri !== "") {
-        const result = await _existDocument();
-
-        if (result.status === 404) {
-          return await auth.fetch(
-              documentUri,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/sparql-update"
-              },
-              body: ""
-            }
-          );
-        }
-
-        return false;
-      }
-    });
-
-    const onError = useCallback((error: Object) => {
-        setShexError(error);
-    });
-
-    /*
-     * Fetch .ttl file from POD, if document doesn't exists
-     * will create a new one.
-     */
-    const _fetchDocument = useCallback(async () => {
-        try {
-            if (documentUri && documentUri !== '') {
-                const result = await _existDocument();
-
-                if (result.status === 404) {
-                    const result = await _createDocument();
-
-                    if (result.status !== 200) {
-                        throw result;
-                    }
+        const { formData, shexJ } = shexData;
+        const newFormData =  shexUtil.mapFormValues(formData, (formValue, currentExpression, index) => {
+            const {_formValues } = expression;
+            if (_formValues.length -1 === index) {
+                if (!parentExpresion && expression.predicate === currentExpression.predicate) {
+                    return [formValue, shexUtil.createField(expression._formValueClone, documentUri, { documentUri, seed})];
                 }
-
-                const document = await data[documentUri];
-
-                return document;
             }
-        } catch (error) {
-            return error;
+            return formValue;
+        });
+
+        setShexData({shexJ, formData: { ...formData, expression: {expressions: newFormData }}});
+    });
+
+    /**
+     * Update, Delete a field into ShexJ object using mapFormValues(recursive function) function from shex utils
+     * @param { Options } options custom options like key or name of the field
+     * @param { String } action to delete or update
+     *
+     */
+    const updateShexJ = useCallback((options: Options, action: String) => {
+        const { formData, shexJ, formValues } = shexData;
+        const newFormData =  shexUtil.mapFormValues(formData, formValue => {
+            if (options.parent && formValue._formFocus.name === options.parent.key) {
+
+                return {
+                    ...formValue,
+                    _formFocus: {
+                        ...formValue._formFocus,
+                        ...options.parent.data
+                    }
+                };
+            }
+
+            if (formValue._formFocus.name === options.key) {
+                if (action === 'delete') {
+                    return null;
+                } else {
+                    return {
+                        ...formValue,
+                        _formFocus: {
+                            ...formValue._formFocus,
+                            ...options.data
+                        }
+                    };
+                }
+            }
+            return formValue;
+        });
+
+        if (action === 'delete' || options.onSave) {
+            if (formValues) {
+                // Delete field from formValues object
+                const { [options.key]: omit, ...res } = formValues;
+
+                return setShexData({ shexJ, formValues: res, formData: {
+                    ...formData, expression: {
+                        expressions: newFormData
+                    }
+                }});
+            }
         }
+
+        return setShexData({ shexJ, formValues, formData: {
+            ...formData, expression: {
+                expressions: newFormData
+            }
+        }});
     });
 
-    const _isLink = useCallback(valueExpr => {
-        return typeof valueExpr === 'string' || null;
-    });
 
-    const _fieldValue = useCallback((annotations: Array<Annotation>, value: String) => {
-        const hasPrefix = findAnnotation('layoutprefix', annotations);
-        if (hasPrefix && typeof value == 'string') {
-            return value.split(hasPrefix.object.value).pop();
-        }
-
-        return value;
-    });
-
-    /*
-     * Find root shape from shexJ
+    /**
+     * Find the root shape from shexJ object
+     * @param {ShexJ} shexJ object
      */
     const _findRootShape = useCallback((shexJ: ShexJ) => {
         try {
             return rootShape || shexJ.start.split('#').pop();
         } catch (error) {
-            onError(error);
+            return error;
         }
     });
 
-    /*
-     * Create new object (_formFocus) with unique name, value
+    /**
+     * Create new object (_formFocus) with unique name, value etc. This is using into _FormValues
+     * @param {String} subject the Node of the subject
+     * @param {String} parentPredicate the parent NamedNode of the predicate
+     * @param {String} valueEx the type of the Node
+     * @param {Array} annotations comments, notes, explanations, or other types of external
+     * remarks that can be attached to a Web document or to a selected part of a document
+     * @param {boolean} isNew flag to check if field is not saved on POD yet
      */
-    const _getFormFocusObject = useCallback((
+    const _createFormFocus = useCallback((
         subject: String,
         parentPredicate,
         valueEx: String,
-        annotations?: Array<Object>,
-        isNew: boolean,
+        annotations?: Array<Annotation>,
+        isNew: boolean
     ) => {
         let value = valueEx;
         if (annotations) {
-            value = _fieldValue(annotations, valueEx);
+            value = shexUtil.renderFieldValue(annotations, valueEx);
         }
 
         return subject
@@ -168,199 +143,91 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             : { value, name: unique(), isNew };
     });
 
-    /*
-     * Check if expression is an drop down when values comes.
+
+    /**
+     * Check if a specific expression was updated or not, if was updated we add an warning message
+     * to show user that field value was updated and also we update defaultValue to avoid 409 errors
+     *
+     * @param { String } name field name that we want to check if was udpated or not;
+     * @param { any } value new field value from POD;
      */
-    const _isDropDown = useCallback((expression: Expression) => {
-        if (Array.isArray(expression.values)) {
-            return { values: expression.values };
-        }
-        return null;
-    });
+    const expressionChanged = useCallback((name: String, value: any) => {
+        const { formValues } = shexData;
+        if (formValues && Object.keys(formValues).length > 0) {
+            const warningResolution = languageTheme.warningResolution || 'Field value has been updated to:';
 
-    /*
-     * Create a unique Node Id (Link)
-     */
-    const _createIdNode = useCallback(() => {
-        const randomId = Date.parse (new Date ()) + (seed++);
-        const doc = documentUri || 'https://example.org';
-        const id = `${doc.split('#')[0]}#id${randomId}`;
-
-        return id;
-    });
-
-
-    const _copyChildExpression = useCallback((expressions: Array<Expression>, linkId: String) => {
-        return expressions.map(expression => {
-            if (expression.valueExpr) {
-                const childExpression =  _copyChildExpression(expression._formValues, linkId);
-
-                return {
-                    ...expression,
-                    _formValues: childExpression
+            if (formValues[name]) {
+                if (formValues[name].value.trim() !== value.trim()) {
+                    formValues[name].defaultValue = value;
+                    formValues[name].warning = `${warningResolution} ${shexUtil.cleanValue(value)}`;
+                } else {
+                    formValues[name].defaultValue = value;
+                    formValues[name].value = value;
+                    formValues[name].warning = null;
                 }
             }
+        }
 
-            return _createField(expression, false, linkId);
-        });
+       return formValues;
     });
 
-    const _createField = useCallback((expression: Expression, isLink: boolean, parentSubject: Object) => {
-        const id = isLink || _createIdNode();
-        let newExpression;
+    /**
+     * Listener updates from POD document, if updates come from POD(websockets)
+     * will run shexJ object and updates new field values
+     */
+    const updatesListener = useCallback(async () => {
+        const { formData, shexJ } = shexData;
+        let updatedFormValue = {};
 
-        if (expression.expression && expression.expression.expressions) {
-            const updatedExp = expression.expression.expressions.map(exp => {
-                const newExpr = exp._formValues.map(frm => {
-                    return _createField(frm, false, { parentSubject: id });
-                });
-                // Copied only one formValue.
-                return {...exp, _formValues: [newExpr[0]]};
+        if (!ownerUpdate) {
+            const updatedFormData = await shexUtil.mapExpFormValues(
+                formData.expression, (_formValue, _formValues, value, parentUri) => {
+                    updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
+                    const expression = {
+                        ..._formValue,
+                        _formFocus: {
+                            ..._formValue._formFocus,
+                            isNew: false,
+                            parentSubject: parentUri,
+                            value,
+                            warning: (updatedFormValue && updatedFormValue.warning) || null
+                        }
+                    }
+
+                    return expression;
+                }, documentUri);
+
+            setShexData({
+                shexJ,
+                formValues: updatedFormValue,
+                formData: {
+                    ...formData, expression: {
+                        expressions: updatedFormData
+                    }
+                }
             });
-
-            newExpression = { expression: { expressions: updatedExp }};
+        } else {
+            ownerUpdate = false;
         }
 
-        return {
-            ...expression,
-            ...newExpression,
-            _formFocus: {
-                ...expression._formFocus,
-                ...parentSubject,
-                name: unique(),
-                value: newExpression ? id : '',
-                isNew: true
-            }
-        };
     });
 
-    /*
-     * Find into ShexJ same field then copy in the same expression and then update it with
-     * custom name and value
-     * and update _formFocus with new value and name
-     * @params {Object} ShexJ Object
-     * @params {currentExpression}
-     * @params {parentExpresion}
+    /**
+     * Fill _formValues attribute from expression into shexJ object
+     * @param {Shape} shape an shexJ object from shex.
+     * @param {Expression} expression object that has predicate, subject and object
      */
-    const _addShexJField = useCallback(( shexJ: ShexJ, currentExpression: Expression, parent: ?Object) => {
-        try {
-            let newExpressions = shexJ.expression.expressions;
-
-            for (let i = 0; i < newExpressions.length; i++) {
-                if (
-                    !parent &&
-                    (newExpressions[i].predicate === currentExpression.predicate ||
-                        newExpressions[i].predicate === currentExpression.id)
-                ) {
-
-                    newExpressions[i] = {
-                        ...newExpressions[i],
-                        _formValues: [
-                            ...newExpressions[i]._formValues,
-                            _createField(newExpressions[i]._formValueClone)
-                        ]
-                    };
-
-                    break;
-                }
-
-                if (_isLink(newExpressions[i].valueExpr) || !newExpressions[i].predicate) {
-                    for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
-                        if (currentExpression._formFocus &&
-                            newExpressions[i]._formValues[y]._formFocus.value === currentExpression._formFocus.value) {
-
-                            newExpressions[i] = {
-                                ...newExpressions[i],
-                                _formValues: [
-                                    ...newExpressions[i]._formValues,
-                                    _createField(newExpressions[i]._formValueClone)
-                                ]
-                            };
-                            break;
-
-                        } else if (
-                            newExpressions[i]._formValues[y].expression &&
-                            newExpressions[i]._formValues[y].expression.expressions
-                        ) {
-
-                            const expressions = _addShexJField(
-                                newExpressions[i]._formValues[y],
-                                currentExpression,
-                                parent
-                            );
-
-                            newExpressions[i]._formValues[y].expression.expressions = expressions;
-                        }
-                    }
-                }
-            }
-            return newExpressions;
-        } catch (error) {
-            onError(error);
-        }
-    });
-
-
-    /*
-     * Find into shexJ a _formValue (_formFocus) by name(unique id) then you can update _formFocus
-     * or delete a _formValues
-     * @params {Object} Shape
-     * @params {String} action, could be delete or update
-     * @params {Object} could be { key, data } where key is the _formFocus name( input name) and data
-     * is the attributes that you want to update on _formFocus.
-    */
-    const _updateShexJ = useCallback((shape: Shape, action: String, options: Options) => {
-        try {
-            let newExpressions = shape.expression.expressions;
-
-            for (let i = 0; i < newExpressions.length; i++) {
-                for (let y = 0; y < newExpressions[i]._formValues.length; y++) {
-
-                    if (newExpressions[i]._formValues[y]._formFocus.name === options.key) {
-                        if (action === 'delete') {
-                            const _formValues = newExpressions[i]._formValues;
-                            const currentFieldName = newExpressions[i]._formValues[y]._formFocus.name;
-
-                            newExpressions[i]._formValues = _formValues.filter(val => val._formFocus.name !== currentFieldName);
-
-                        } else {
-                            newExpressions[i]._formValues[y] = {
-                                ...newExpressions[i]._formValues[y],
-                                _formFocus: {
-                                    ...newExpressions[i]._formValues[y]._formFocus,
-                                    ...options.data
-                                }
-                            };
-                        }
-                        break;
-                    }
-
-                    if (newExpressions[i]._formValues[y].expression && newExpressions[i]._formValues[y].expression.expressions) {
-                        const expressions = _updateShexJ(newExpressions[i]._formValues[y], action, options);
-
-                        newExpressions[i]._formValues[y].expression.expressions = expressions;
-                    }
-                }
-            }
-            return newExpressions;
-        } catch (error) {
-            onError(error);
-        }
-    });
-
-
     const _fillFormValues =  useCallback(async (shape: Shape, expression: Expression, value: String = '') => {
         let isNew = value === '';
 
-        if (_isLink(expression.valueExpr)) {
+        if (shexUtil.isExpressionLink(expression.valueExpr)) {
 
             let linkValue = value;
 
             if (value === '') {
 
-                linkValue = _createIdNode();
+                linkValue = shexUtil.createIdNode(documentUri, seed);
             }
-
 
             const childExpression = await _fillFormData(
                 {
@@ -371,9 +238,9 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     annotations:
                     expression.annotations
                 },
-                value === '' ? '' : data[value]
+                value === '' ? '' : ldflex[value]
             );
-            const dropDownValues = _isDropDown( childExpression );
+            const dropDownValues = shexUtil.isExpressionDropDown( childExpression );
 
             const currentSubject = dropDownValues ? shape.linkValue || documentUri : shape.parentSubject;
             const _formValues = [
@@ -382,7 +249,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     id: childExpression.id,
                     type: childExpression.type,
                     ...dropDownValues,
-                    _formFocus: _getFormFocusObject(
+                    _formFocus: _createFormFocus(
                         currentSubject || documentUri,
                         expression.predicate,
                         linkValue,
@@ -402,7 +269,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             ...expression._formValues,
             {
                 ...expression.valueExpr,
-                _formFocus: _getFormFocusObject(
+                _formFocus: _createFormFocus(
                     shape.linkValue ||
                     documentUri,
                     shape.parentPredicate,
@@ -420,7 +287,11 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         };
     });
 
-
+    /**
+     * Add _formValues Array into each expressions from ShexJ object.
+     * @param {Object} rootShape object that has the id of the shape that we want to render
+     * @param {Object} ldflex function to save data into PODS
+     */
     const _fillFormData = useCallback(async (rootShape: Object, document: Object) => {
         const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
         let newExpressions = [];
@@ -472,19 +343,23 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         return newShape;
     });
 
-
+    /**
+     * init function to convert ShexJ object to ShexJForm (with _formValues and _formFocus objects)
+     */
     const toShexJForm = useCallback(async () => {
         try {
-            const shexString = await fetchShex();
+            const parser = shexParser.construct(window.location.href);
+            const shexString = await fetchSchema(fileShex);
+            const podDocument = await fetchLdflexDocument(documentUri);
 
             if (shexString.status && shexString.status !== 200) {
                 throw shexString;
             }
-            const parser = shexParser.construct(window.location.href);
-            const podDocument = await _fetchDocument();
+
             if (!podDocument.subject && podDocument.status !== 200) {
-                throw shexString;
+                throw podDocument;
             }
+
             const shexJ = shexCore.Util.AStoShExJ(parser.parse(shexString));
 
             shapes = shexJ.shapes;
@@ -494,8 +369,10 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                     {id: _findRootShape(shexJ)},
                     podDocument
                 );
-                setShexData({shexJ, formData});
+
+                setShexData({shexJ, formValues: {}, formData});
             }
+
         } catch (error) {
             let solidError = error;
 
@@ -504,19 +381,286 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
                 solidError = new SolidError(solidError.message, 'Ldflex Error', 500);
             }
             errorCallback(solidError);
-            onError(solidError);
+        }
+    });
+    /**
+     * Update formValues object with new user field data
+     * @param { Event } e event input
+     */
+    const onChange = useCallback((e: Event) => {
+        const { value, name } = e.target;
+        const defaultValue = e.target.getAttribute('data-default');
+        const action = defaultValue === '' ? 'create' : value === '' ? 'delete' : 'update';
+        const data = {
+            value,
+            name,
+            action,
+            defaultValue,
+            predicate: e.target.getAttribute('data-predicate'),
+            subject: e.target.getAttribute('data-subject'),
+            prefix: e.target.getAttribute('data-prefix'),
+            parentPredicate: e.target.getAttribute('data-parent-predicate'),
+            parentSubject: e.target.getAttribute('data-parent-subject'),
+            valueExpr: JSON.parse(e.target.getAttribute('data-valuexpr')),
+            parentName: e.target.getAttribute('data-parent-name')
+        };
+        const currentValue = shexData.formValues[e.target.name];
+        /** keep warning message after onBlur */
+        const mergedData = {
+            [e.target.name]: {
+                warning: currentValue && currentValue.warning,
+                ...data,
+            },
+        };
+
+
+        setShexData({...shexData,
+            formValues: {
+                ...shexData.formValues,
+                ...mergedData
+            }
+        })
+    });
+
+    /**
+     * Create new Node into POD
+     */
+    const _create = useCallback(async field => {
+        const { subject, predicate, value } = field;
+        if (field.parentSubject) await _createLink(field);
+        await ldflex[subject][predicate].add(value);
+    });
+
+    /**
+     * Create a new Link Node on POD
+     * @param { Object } field _formFocus expression
+     */
+    const _createLink = useCallback(async (field: Object) => {
+        const { subject, parentPredicate, parentSubject } = field;
+        const id = `#${subject.split('#').pop()}`;
+        await ldflex[parentSubject][parentPredicate].add(namedNode(id));
+    });
+
+    /**
+     * Delete a new Line Node on POD
+     * @param { ShexJ } shexJ object from Shex
+     */
+    const _deleteLink = useCallback(async (shexj: ShexJ) => {
+        const { parentSubject, value: subject, parentPredicate } = shexj._formFocus;
+        const expressions = shexj.expression.expressions;
+        const { _formFocus } = shexj;
+        try {
+            if (_formFocus && !_formFocus.isNew) {
+                for (let expression of expressions) {
+                    const value = await ldflex[subject][expression.predicate];
+                    if (value) await ldflex[subject][expression.predicate].delete();
+                }
+                await ldflex[parentSubject][parentPredicate].delete(ldflex[subject]);
+            }
+        } catch (e) {
+            throw e;
         }
     });
 
-    useEffect(() => {
-        toShexJForm();
+    /**
+     *
+      * Delete Nodes(fields) on POD
+     * @param { ShexJ } shexJ object from Shex
+     */
+    const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
+        try {
+            ownerUpdate = true;
 
-    }, [fileShex, documentUri]);
+            const { _formFocus } = shexj;
+            const { parentSubject, name, value, isNew } = _formFocus;
+            if (_formFocus && !isNew) {
+                if (shexUtil.parentLinkOnDropDowns(parent, shexj)) {
+                    await _deleteLink(shexj);
+                } else {
+                    const predicate = shexj.predicate || shexj._formFocus.parentPredicate;
+
+                    await ldflex[parentSubject][predicate].delete(value);
+                }
+            }
+
+            // Delete expression from ShexJ
+            updateShexJ({ key: name}, 'delete');
+
+            return solidResponse(200,'Form submitted successfully');
+        } catch (error) {
+            let solidError = error;
+
+            if (!error.status && !error.code ) {
+                solidError = new SolidError(error.message, 'Ldflex Error', 500);
+            }
+            return solidError;
+        }
+    });
+
+    /**
+     *
+     * Reset formValues object
+     */
+    const onReset = useCallback(() => {
+        setShexData({...shexData, formValues: {}});
+    });
+
+    /**
+     *
+     * Save fields on POD
+     * @param {String} key or name of the field that will be save it on POD
+     * @param {boolean} autoSave flag to validate field or not before save it on POD
+     */
+    const saveForm = useCallback(async (key: String, autoSave: ?boolean) => {
+        try {
+            ownerUpdate = true;
+
+            const { formValues } = shexData;
+            let value = formValues[key].value;
+            let defaultValue = formValues[key].defaultValue;
+            let originalValue = value;
+            let validate;
+
+            if (autoSave) {
+                const validator = new ShexFormValidator(formValues, languageTheme.formValidate);
+                validate = validator.validate();
+            }
+            const keys = Object.keys(formValues);
+
+            if ((validate && validate.isValid && keys.length > 0) || !autoSave) {
+                // @TODO: find a better way to see if value is a predicate.
+                if (value.includes('#')) {
+                    value = namedNode(value);
+                    defaultValue = namedNode(defaultValue);
+                }
+
+                const field = {
+                    ...formValues[key],
+                    value: shexUtil.setFieldValue(
+                        value,
+                        formValues[key].prefix
+                    ),
+                    defaultValue: shexUtil.setFieldValue(
+                        defaultValue,
+                        formValues[key].prefix
+                    )
+                };
+                switch (field.action) {
+                    case 'update':
+                        await ldflex[field.subject][field.predicate].replace(
+                            field.defaultValue,
+                            field.value
+                        );
+                        break;
+                    case 'create':
+                        await _create(field);
+                        break;
+                    case 'delete':
+                        await ldflex[field.subject][field.predicate].delete(
+                            field.defaultValue
+                        );
+                        break;
+                    default:
+                        break;
+                }
+
+                // If save field was successful we update expression and parentExpression.
+                updateExpression(key, originalValue);
+
+                return solidResponse(200, 'Form submitted successfully');
+            } else {
+                setShexData({...shexData, formValues: validate.updatedFields});
+
+                if (keys.length !== 0) {
+                    throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
+                }
+            }
+
+        } catch (error) {
+            return error;
+        }
+    });
+
+    /**
+     *
+     * Save all fields on submit(no autoSave)
+     * @param {Event} e
+     */
+    const onSubmit = useCallback(async (e: Event) => {
+        try {
+            if (!documentUri || documentUri === '') {
+                throw Error('Document Uri is required');
+            }
+            e.preventDefault();
+            const validator = new ShexFormValidator(shexData.formValues, languageTheme.formValidate);
+            const { isValid, updatedFields} = validator.validate();
+            const keys = Object.keys(shexData.formValues);
+            if (isValid && keys.length > 0) {
+
+                for await (const key of keys) {
+                    const result = await saveForm(key);
+
+                    if (result.code !== 200) {
+                        throw new SolidError(result.message, 'Error saving on Pod');
+                    }
+                }
+
+                return solidResponse(200, 'Form submitted successfully');
+
+            } else {
+                setShexData({...shexData, formValues: updatedFields});
+
+                if (keys.length !== 0) {
+                    throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
+                }
+            }
+
+        } catch (error) {
+            let solidError = error;
+
+            if (!error.status && !error.code ) {
+                solidError = new SolidError(error.message, 'Ldflex Error', 500);
+            }
+            return solidError;
+        }
+    });
+
+    /**
+     *
+     * Update shexJ expressions when user save field on POD
+     * @param {String} key or name of the field(expression)
+     * @param { any } value for expression
+     */
+    const updateExpression = useCallback((key: String, value: Any) => {
+        const { parentName } = shexData.formValues[key];
+
+        updateShexJ({ key, data: {
+            isNew: false,
+            value
+        }, parent: {
+            key: parentName, data: {
+                isNew: false
+            }
+        }, onSave: true}, 'update');
+    });
+
+    useEffect(() => {
+       if (!timestamp) {
+           toShexJForm();
+       } else {
+           updatesListener();
+       }
+
+    }, [fileShex, documentUri, timestamp]);
 
     return {
         shexData,
-        shexError,
         addNewShexField,
-        updateShexJ
+        updateShexJ,
+        onSubmit,
+        onDelete,
+        onChange,
+        saveForm,
+        onReset
     };
 };
