@@ -204,10 +204,12 @@ In the future, labels will be generated more dynamically.
 | shexUri            | string   | null                                                      | Required. The URL to the ShEx shape to use to render the form.
 | rootShape          | string   | null                                                      | Optional. The shape in the shexUri file to begin parsing. If a START shape is defined in the shape, this is not necessary.
 | theme              | Object   | null                                                      | Optional. An object (defined below) allowing custom overrides to the look and feel of the form.
-| language           | string   | null                                                      | Optional. The language identifier to translate text. For example, 'en' or 'es'.
+| languageTheme      | Object   | null                                                      | Optional. An object (defined below) allowing customization of the text of the form. Can be used in combination with i18n in the parent app.
 | successCallback    | Function | Function that writes a success message to console         | Optional. Overrides the existing success callback and allows custom success functions.
 | errorCallback      | Function | Function that writes the error message to console         | Optional. Overrides the existing error callback function.
 | messageValidation  | Object   | null                                                      | An Object containing an array of error strings. The error strings will be used in most non-validation situations.
+| autoSaveMode       | Boolean  | false                                                     | Optional. Determines of the form will autosave or have a save/cancel button. Default is save/cancel button.
+
 
 Theme object:
 
@@ -217,6 +219,18 @@ Theme object:
 | select             | string   | solid-input-shex solid-select-shex    | Custom class name for select fields in the form.
 | deleteButton       | string   | solid-button-shex                     | Custom class name for the delete button.
 | form               | string   | solid-shex-form                       | Custom class name for the form.
+
+LanguageTheme object:
+
+| Key                   | Type      | Default                           | Description                           
+| --------------------- | ----------|---------------------------------- | -------------------------------------------------------
+| language              | string    | 'en'                              | String representing the language code to use for the translations
+| saveBtn               | string    | 'Save'                            | String representing the save button text
+| resetBtn              | string    | 'Reset'                           | String representing the reset button text
+| addButtonText         | string    | '+ Add new'                       | String representing the add new item button text
+| deleteButton          | string    | 'Delete'                          | String representing the delete button text
+| dropdownDefaultText   | string    | '- Select -'                      | String representing the default text for a dropdown menu
+
 
 ##### Shapes
 A set of example shapes can be found [here](https://shexshapes.inrupt.net/public/), which show various ShEx shapes. 
