@@ -404,7 +404,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             valueExpr: JSON.parse(e.target.getAttribute('data-valuexpr')),
             parentName: e.target.getAttribute('data-parent-name')
         };
-        const currentValue = shexData.formValues[e.target.name];
+        const currentValue = shexData.formValues && shexData.formValues[e.target.name];
         /** keep warning message after onBlur */
         const mergedData = {
             [e.target.name]: {
