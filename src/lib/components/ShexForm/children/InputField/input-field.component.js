@@ -1,6 +1,5 @@
 import React from "react";
 import { ShexConfig } from "@context";
-import { shexUtil } from '@utils';
 import { DeleteButton } from "../";
 import {
   ErrorMessage,
@@ -26,10 +25,13 @@ export const InputField = ({
   const currentValue = inputData && inputData.value;
   return (
     <ShexConfig.Consumer>
-      {({ theme, config: { onChange, onSubmitSave, autoSaveMode } }) => (
+      {({
+        theme,
+        config: { onChange, onSubmitSave, autoSaveMode, isValueChanged }
+      }) => (
         <InputWrapper
           className={`${theme && theme.inputContainer} ${
-            inputData && inputData.error ? "error" : ""
+            inputData && inputData.error ? 'error' : ''
           }`}
         >
           <InputGroup>
@@ -50,8 +52,9 @@ export const InputField = ({
                 parent && parent._formFocus ? parent._formFocus.name : null
               }
               onBlur={() =>
-                  autoSaveMode && shexUtil.isValueChanged(currentValue, defaultValue) &&
-                onSubmitSave(inputName, "autoSave")
+                autoSaveMode &&
+                isValueChanged(currentValue, defaultValue, inputName) &&
+                onSubmitSave(inputName, 'autoSave')
               }
             />
             {!parent && canDelete && (
