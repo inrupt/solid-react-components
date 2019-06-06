@@ -37,7 +37,8 @@ const ShexFormLive = ({
     onChange,
     onChangeSelect,
     onReset,
-    saveForm
+    saveForm,
+    isValueChanged
   } = useShex(shexUri, documentUri, rootShape, {
     errorCallback,
     timestamp: updates && updates.timestamp,
@@ -94,7 +95,8 @@ const ShexFormLive = ({
       addNewShexField,
       onSubmitSave,
       autoSaveMode,
-      onChangeSelect
+      onChangeSelect,
+      isValueChanged
     }
   };
 

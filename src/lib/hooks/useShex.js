@@ -405,6 +405,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
             parentName: e.target.getAttribute('data-parent-name')
         };
         const currentValue = shexData.formValues && shexData.formValues[e.target.name];
+
         /** keep warning message after onBlur */
         const mergedData = {
             [e.target.name]: {
@@ -626,6 +627,34 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     });
 
     /**
+     * check if field value was updated
+     * @param value
+     * @param defaultValue
+     * @returns {boolean}
+     */
+    const isValueChanged = (value, defaultValue, key) => {
+        /**
+         * if current value is same that defaultValue remove warning message.
+         * */
+        if (shexData && shexData.formValues[key] && shexData.formValues[key].warning) {
+            if (
+                value === defaultValue
+            ) {
+                const {formValues} = shexData;
+                formValues[key] = {
+                    ...formValues[key],
+                    value,
+                    warning: null
+                };
+
+                setShexData({...shexData, formValues});
+            }
+        }
+
+        return value !== defaultValue;
+    };
+
+    /**
      *
      * Update shexJ expressions when user save field on POD
      * @param {String} key or name of the field(expression)
@@ -656,6 +685,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
     return {
         shexData,
         addNewShexField,
+        isValueChanged,
         updateShexJ,
         onSubmit,
         onDelete,
