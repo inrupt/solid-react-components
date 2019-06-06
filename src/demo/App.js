@@ -58,8 +58,8 @@ const App = () => {
           onError: error => {
             console.log(error.statusText);
           },
-          onComplete: uploadedFiles => {
-            console.log(uploadedFiles);
+          onComplete: (recentlyUploadedFiles, uploadedFiles) => {
+            console.log(recentlyUploadedFiles, uploadedFiles);
           },
           render: props => <ProfileUploader {...{ ...props }} />
         }}

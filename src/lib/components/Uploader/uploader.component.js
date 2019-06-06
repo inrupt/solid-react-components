@@ -17,6 +17,7 @@ type Props = {
   onStart?: () => void
 };
 
+
 class Uploader extends Component<Props> {
   counter: number;
   positionFile: number;
@@ -25,7 +26,7 @@ class Uploader extends Component<Props> {
     super(props);
     this.state = {
       dragging: false,
-      files: [],
+      recentlyUploadedFiles: [],
       uploadedFiles: []
     };
     this.fileInput = React.createRef();
@@ -42,16 +43,12 @@ class Uploader extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
-    // When the 'files' prop changes, that means we have new files to upload.
-    if (this.state.files !== prevState.files && this.state.files.length > 0) {
-      this.upload();
-    }
     // We check if all files were uploaded, then fire the onComplete handler
     if (
       this.state.uploadedFiles.length > 0 &&
       prevState.uploadedFiles !== this.state.uploadedFiles
     ) {
-      this.onComplete(this.state.uploadedFiles);
+      this.onComplete(this.state.recentlyUploadedFiles, this.state.uploadedFiles);
     }
   }
   validateAcceptFiles = (accept: String, type: String) => {
@@ -60,9 +57,7 @@ class Uploader extends Component<Props> {
     return extensions.find(ext => extension(type.trim()) === ext);
   };
   removeFileOnError = (file: File) => {
-    const updatedFiles = this.state.files.filter(f => f.name !== file.name);
-
-    this.setState({ files: updatedFiles, inProgress: false });
+    this.setState({ inProgress: false });
   };
 
   renameFile = (file: Object, suffix: String) => {
@@ -76,15 +71,16 @@ class Uploader extends Component<Props> {
    * Upload files to Solid POD using fetch from solid-auth-client
    * @params{Object} options
    */
-  upload = async (options: Object) => {
+  upload = async (files) => {
     const { fileBase, onError, limitSize, accept, errorsText } = this.props;
-    const { files } = this.state;
+    let currentFiles = [];
 
     // We read each file and upload to POD using Base64
     for await (const file of files) {
       const reader = new FileReader();
       let suffix = false;
 
+      /*eslint no-loop-func: 0*/
       reader.onload = async f => {
         try {
           // Get image Base64 string
@@ -126,16 +122,18 @@ class Uploader extends Component<Props> {
           });
           // If everything is fine, we add new files into the uploadedFiles array
           if (response.ok) {
+            const currentFile = { uri: destinationUri, name: newFileName };
             const newUploadedFiles = [
               ...this.state.uploadedFiles,
-              { uri: destinationUri, name: newFileName }
+              currentFile
             ];
-            // Remove uploaded file from files state
-            const newFiles = this.state.files.filter(f => f.name !== file.name);
+
             // Add uploaded files to state and remove files uploaded
+            currentFiles = [...currentFiles, currentFile];
+
             return this.setState({
+              recentlyUploadedFiles: currentFiles,
               uploadedFiles: newUploadedFiles,
-              files: newFiles
             });
           }
           // If something went wrong, throw an error
@@ -152,10 +150,10 @@ class Uploader extends Component<Props> {
    * This will fire when all files have been uploaded
    * @params {Array<UpoadFiles>} uploadFiles
    */
-  onComplete = (uploadedFiles: Array<UploadedFiles>) => {
+  onComplete = (recentlyUploadedFiles: Array<UploadedFiles>, uploadedFiles: Array<UploadedFiles>) => {
     this.setState({ inProgress: false });
     if (this.props.onComplete) {
-      this.props.onComplete(uploadedFiles);
+      this.props.onComplete(recentlyUploadedFiles, uploadedFiles);
     }
   };
   onDragEnter = (event: React.DragEvent) => {
@@ -208,6 +206,8 @@ class Uploader extends Component<Props> {
 
     this.onStart();
     this.setState({ files });
+
+    this.upload(files);
   };
   onClickFile = () => {
     if (this.fileInput) {
@@ -229,7 +229,8 @@ class Uploader extends Component<Props> {
   onFileChanged = (event: React.onFileChanged) => {
     if (event.target.files && event.target.files[this.positionFile]) {
       this.onStart();
-      this.setState({ files: [...this.state.files, ...event.target.files] });
+
+      this.upload(event.target.files);
     }
   };
   overrideEvent = (event: React.DragEvent) => {
