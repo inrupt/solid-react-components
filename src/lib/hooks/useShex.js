@@ -636,7 +636,7 @@ export const useShex = (fileShex: String, documentUri: String, rootShape: String
         /**
          * if current value is equals to defaultValue remove warning message.
          * */
-        if (shexData && shexData.formValues[key] && shexData.formValues[key].warning) {
+        if (shexData && shexData.formValues && shexData.formValues[key] && shexData.formValues[key].warning) {
             if (
                 value === defaultValue
             ) {
