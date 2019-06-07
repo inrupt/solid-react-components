@@ -1,7 +1,9 @@
-import React from "react";
+import React from 'react';
 
-export const ShexConfig = React.createContext({
+const ShexConfig = React.createContext({
   theme: {},
   languageTheme: {},
   config: {}
 });
+
+export default ShexConfig;

@@ -1,7 +1,6 @@
-import React, { Fragment } from "react";
-import { shexUtil }  from "@utils";
-import { AddButton } from "./";
-import { Field } from "./";
+import React, { Fragment } from 'react';
+import { shexUtil } from '@utils';
+import { AddButton, Field } from '.';
 
 type FieldsProps = {
   data: Object,
@@ -14,14 +13,15 @@ const ExpressionFields = ({ data, formValues, parent }: FieldsProps) => {
     <Fragment>
       <ul>
         {data._formValues &&
-          data._formValues.map((value, i) => (
-            <li key={i}>
+          data._formValues.map(value => (
+            <li key={value}>
               <Field
                 {...{
                   data,
                   fieldData: value,
                   inputData:
-                      (formValues && formValues[value._formFocus.name]) || value._formFocus,
+                    (formValues && formValues[value._formFocus.name]) ||
+                    value._formFocus,
                   parent,
                   canDelete: shexUtil.canDelete(data)
                 }}

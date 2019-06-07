@@ -1,72 +1,68 @@
 import auth from 'solid-auth-client';
-import data from "@solid/query-ldflex";
+import data from '@solid/query-ldflex';
 
-export const fetchSchema = async (file) => {
-    try {
-        const schemaDocument = await auth.fetch(file, {
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-        });
+export const fetchSchema = async file => {
+  try {
+    const schemaDocument = await auth.fetch(file, {
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    });
 
-        if (schemaDocument.status !== 200) {
-            throw schemaDocument;
-        }
-
-        const documentText = await schemaDocument.text();
-
-        return documentText.toString();
-    } catch (error) {
-        return error;
+    if (schemaDocument.status !== 200) {
+      throw schemaDocument;
     }
+
+    const documentText = await schemaDocument.text();
+
+    return documentText.toString();
+  } catch (error) {
+    return error;
+  }
 };
 
-export const existDocument = async (documentUri) => {
-    return await auth.fetch(documentUri, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+export const existDocument = async documentUri => {
+  return auth.fetch(documentUri, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 };
 
 export const createDocument = async (documentUri, body = '') => {
-    const result = await existDocument();
+  const result = await existDocument();
 
-    if (result.status === 404) {
-        return await auth.fetch(
-            documentUri,
-            {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/sparql-update"
-                },
-                body
-            }
-        );
-    }
+  if (result.status === 404) {
+    return auth.fetch(documentUri, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/sparql-update'
+      },
+      body
+    });
+  }
 
-    return false;
+  return false;
 };
 
-export const fetchLdflexDocument = async (documentUri) => {
-    try {
-        if (documentUri && documentUri !== '') {
+export const fetchLdflexDocument = async documentUri => {
+  try {
+    if (documentUri && documentUri !== '') {
+      const result = await existDocument(documentUri);
 
-            const result = await existDocument(documentUri);
+      if (result.status === 404) {
+        const result = await this.createDocument(documentUri);
 
-            if (result.status === 404) {
-                const result = await this.createDocument(documentUri);
-
-                if (result.status !== 200) {
-                    throw result;
-                }
-            }
-
-            const document = await data[documentUri];
-
-            return document;
+        if (result.status !== 200) {
+          throw result;
         }
-    } catch (error) {
-        return error;
+      }
+
+      const document = await data[documentUri];
+
+      return document;
     }
+  } catch (error) {
+    return error;
+  }
 };

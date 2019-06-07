@@ -1,3 +1,3 @@
-import { InputField } from './input-field.component';
+import InputField from './input-field.component';
 
-export { InputField };
+export default InputField;

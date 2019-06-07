@@ -1,15 +1,15 @@
-import React from "react";
-import { ShexConfig } from "@context";
-import { DeleteButton } from "../";
+import React from 'react';
+import { ShexConfig } from '@context';
+import { DeleteButton } from '..';
 import {
   ErrorMessage,
   InputWrapper,
   Input,
   InputGroup
-} from "./styled.component";
+} from './styled.component';
 
-export const InputField = ({
-  type = "text",
+const InputField = ({
+  type = 'text',
   valueExpr,
   predicate,
   inputData,
@@ -76,3 +76,5 @@ export const InputField = ({
     </ShexConfig.Consumer>
   );
 };
+
+export default InputField;

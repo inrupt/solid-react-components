@@ -1,35 +1,34 @@
-import React, { Component } from "react";
-import { withWebId } from "@solid/react";
-import { Redirect, Route } from "react-router-dom";
+import React, { Component } from 'react';
+import { withWebId } from '@solid/react';
+import { Redirect, Route } from 'react-router-dom';
 
-import { Loader } from "./private-route.style";
+import { Loader } from './private-route.style';
 
 type Props = {
   webId?: String,
   redirect: String,
   component: Node,
-  loaderComponent: Node
+  loaderComponent?: Node
 };
 
 export class PrivateRoute extends Component<Props> {
   renderRouter = (): React.Element => {
-    const { webId, redirect, component: Component, ...rest } = this.props;
+    const { webId, redirect, component: RenderComponent, ...rest } = this.props;
     return webId ? (
-      <Route {...rest} component={Component} />
+      <Route {...rest} component={RenderComponent} />
     ) : (
       <Redirect to={redirect} />
     );
   };
 
   render() {
-    return this.props.webId === undefined
-      ? this.props.loaderComponent()
-      : this.renderRouter();
+    const { webId, loaderComponent } = this.props;
+    return webId === undefined ? loaderComponent() : this.renderRouter();
   }
 }
 
 PrivateRoute.defaultProps = {
-  redirect: "/login",
+  webId: null,
   loaderComponent: () => (
     <Loader className="auth-loader">We are validating your data...</Loader>
   )

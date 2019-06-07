@@ -1,13 +1,13 @@
-import React from "react";
-import { shexUtil } from "@utils";
-import { ShexConfig } from "@context";
-import { Panel } from "./styled.component";
+import React from 'react';
+import { shexUtil } from '@utils';
+import { ShexConfig } from '@context';
+import { Panel } from './styled.component';
 import {
   DeleteButton,
   AddButton,
   DropDownField,
   ExpressionFields
-} from "./children";
+} from './children';
 
 type ShexFormProps = {
   shexj: Object,
@@ -24,7 +24,8 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
       {({ theme, languageTheme: { language } }) => (
         <Panel
           className={`${
-            theme ? (parent ? theme.shexPanel : theme.shexRoot) : ""
+            // eslint-disable-next-line no-nested-ternary
+            theme ? (parent ? theme.shexPanel : theme.shexRoot) : ''
           }`}
         >
           {parent && shexUtil.canDelete(parent) && (
@@ -41,15 +42,15 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
           {expression &&
           expression.expressions &&
           expression.expressions.length > 0
-            ? expression.expressions.map((expression, i) => {
-                if (typeof expression.valueExpr === "string") {
+            ? expression.expressions.map(expression => {
+                if (typeof expression.valueExpr === 'string') {
                   return (
-                    <React.Fragment key={i}>
+                    <React.Fragment key={expression}>
                       <h4>{shexUtil.formLabel(expression, language)}</h4>
-                      {expression._formValues.map((shexj, i) => (
+                      {expression._formValues.map(shexj => (
                         <ShexForm
                           {...{
-                            key: i,
+                            key: shexj,
                             parent: {
                               ...expression,
                               _formFocus: shexj._formFocus
@@ -67,23 +68,23 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                       />
                     </React.Fragment>
                   );
-                } else {
-                  return (
-                    <ExpressionFields
-                      {...{
-                        data: expression,
-                        key: i,
-                        formValues,
-                        parent,
-                        parentName: shexj._formFocus
-                          ? shexj._formFocus.name
-                          : null
-                      }}
-                    />
-                  );
                 }
+                return (
+                  <ExpressionFields
+                    {...{
+                      data: expression,
+                      key: shexj,
+                      formValues,
+                      parent,
+                      parentName: shexj._formFocus
+                        ? shexj._formFocus.name
+                        : null
+                    }}
+                  />
+                );
               })
             : shexj._formFocus && (
+                // eslint-disable-next-line react/jsx-indent
                 <DropDownField
                   {...{
                     values: shexj.values,
@@ -101,8 +102,8 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                     parentPredicate: shexUtil.parentLinkOnDropDowns(parent),
                     parentSubject: shexj._formFocus.parentSubject,
                     error: formValues[shexj._formFocus.name]
-                        ? formValues[shexj._formFocus.name].error
-                        : null
+                      ? formValues[shexj._formFocus.name].error
+                      : null
                   }}
                 />
               )}

@@ -1,3 +1,3 @@
-import { DropDownField } from './dropdown-field.component';
+import DropDownField from './dropdown-field.component';
 
-export { DropDownField };
+export default DropDownField;

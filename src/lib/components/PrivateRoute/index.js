@@ -1,3 +1,3 @@
-import PrivateRoute from './private-route.component';
+import PrivateRouteWithWebId from './private-route.component';
 
-export default PrivateRoute;
+export default PrivateRouteWithWebId;
