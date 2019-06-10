@@ -10,13 +10,21 @@ afterAll(cleanup);
 describe('Private Route', () => {
   const defaultWeb = 'https://example.org/#me';
   const { container, rerender } = render(
-    <MemoryRouter>
-      <PrivateRoute webId={undefined} />
+    <MemoryRouter initialEntries={['/profile']}>
+      <PrivateRoute webId={undefined} redirect="test" />
     </MemoryRouter>
   );
 
-  it('should render loading when user is not logged', () => {
+  it('should render loading when user is not logged in', () => {
     expect(container).toHaveTextContent('We are validating your data...');
+  });
+
+  it('should not render loader when user is logged in', () => {
+    rerender(
+      <MemoryRouter initialEntries={['/profile']}>
+        <PrivateRoute webId={defaultWeb} redirect="/test" />
+      </MemoryRouter>
+    );
   });
 
   it('should not render loader when user is logged', () => {

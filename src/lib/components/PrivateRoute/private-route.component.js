@@ -5,8 +5,8 @@ import { Redirect, Route } from 'react-router-dom';
 import { Loader } from './private-route.style';
 
 type Props = {
-  webId?: String,
-  redirect: String,
+  webId: String | null,
+  redirect?: String,
   component: Node,
   loaderComponent?: Node
 };
@@ -23,12 +23,14 @@ export class PrivateRoute extends Component<Props> {
 
   render() {
     const { webId, loaderComponent } = this.props;
-    return webId === undefined ? loaderComponent() : this.renderRouter();
+    return webId === null || webId === undefined
+      ? loaderComponent()
+      : this.renderRouter();
   }
 }
 
 PrivateRoute.defaultProps = {
-  webId: null,
+  redirect: '/login',
   loaderComponent: () => (
     <Loader className="auth-loader">We are validating your data...</Loader>
   )

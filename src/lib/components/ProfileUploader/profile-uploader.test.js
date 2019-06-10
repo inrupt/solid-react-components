@@ -1,8 +1,7 @@
-import React from "react";
+import React from 'react';
 import { render, cleanup } from 'react-testing-library';
-import { ProfileUploader } from './profile-uploader.component';
+import ProfileUploader from './profile-uploader.component';
 import 'jest-dom/extend-expect';
-
 
 describe('should render without crashing', () => {
   const { container, rerender } = render(<ProfileUploader />);

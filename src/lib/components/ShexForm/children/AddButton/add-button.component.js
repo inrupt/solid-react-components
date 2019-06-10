@@ -20,8 +20,10 @@ const AddButton = ({
           type="button"
           className={theme && theme.addButtonStyle}
         >
-          {addButtonText || text}
-          {shexUtil.formLabel(defaultExpression, language)}
+          {`${addButtonText || text} ${shexUtil.formLabel(
+            defaultExpression,
+            language
+          )}`}
         </button>
       )}
     </ShexConfig.Consumer>
