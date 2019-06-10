@@ -6,7 +6,7 @@
     "prettier/prettier": [1],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle": [0],
-    "import/no-unresolved": [1],
+    "import/no-unresolved": [0],
     "no-unused-vars": [1],
     "react/prop-types": [1],
     "no-shadow": [0],
