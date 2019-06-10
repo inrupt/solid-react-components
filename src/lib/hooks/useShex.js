@@ -634,31 +634,29 @@ const useShex = (
           defaultValue = namedNode(defaultValue);
         }
 
-        const field = {
-          ...formValues[key],
-          value: shexUtil.setFieldValue(value, formValues[key].prefix),
-          defaultValue: shexUtil.setFieldValue(
-            defaultValue,
-            formValues[key].prefix
-          )
-        };
-        switch (field.action) {
-          case 'update':
-            await ldflex[field.subject][field.predicate].replace(
-              field.defaultValue,
-              field.value
-            );
-            break;
-          case 'create':
-            await _create(field);
-            break;
-          case 'delete':
-            await ldflex[field.subject][field.predicate].delete(
-              field.defaultValue
-            );
-            break;
-          default:
-            break;
+    /**
+     * check if field value was updated
+     * @param value
+     * @param defaultValue
+     * @returns {boolean}
+     */
+    const isValueChanged = (value, defaultValue, key) => {
+        /**
+         * if current value is equals to defaultValue remove warning message.
+         * */
+        if (shexData && shexData.formValues && shexData.formValues[key] && shexData.formValues[key].warning) {
+            if (
+                value === defaultValue
+            ) {
+                const {formValues} = shexData;
+                formValues[key] = {
+                    ...formValues[key],
+                    value,
+                    warning: null
+                };
+
+                setShexData({...shexData, formValues});
+            }
         }
 
         // If save field was successful we update expression and parentExpression.
