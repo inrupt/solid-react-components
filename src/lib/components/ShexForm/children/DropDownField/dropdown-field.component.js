@@ -38,7 +38,7 @@ const DropDownField = ({
             className={theme && theme.select}
             value={value}
             name={name}
-            autoComplete={'skip'}
+            autoComplete="skip"
             onChange={onChange}
             onBlur={() =>
               autoSaveMode &&

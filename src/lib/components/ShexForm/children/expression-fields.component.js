@@ -13,8 +13,9 @@ const ExpressionFields = ({ data, formValues, parent }: FieldsProps) => {
     <Fragment>
       <ul>
         {data._formValues &&
-          data._formValues.map(value => (
-            <li key={value}>
+          data._formValues.map((value, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <li key={i}>
               <Field
                 {...{
                   data,

@@ -38,7 +38,7 @@ const InputField = ({
             <Input
               className={theme && theme.input}
               type={type}
-              autoComplete={"skip"}
+              autoComplete="skip"
               value={currentValue}
               name={inputName}
               onChange={onChange}

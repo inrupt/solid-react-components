@@ -42,15 +42,16 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
           {expression &&
           expression.expressions &&
           expression.expressions.length > 0
-            ? expression.expressions.map(expression => {
+            ? expression.expressions.map((expression, i) => {
                 if (typeof expression.valueExpr === 'string') {
                   return (
-                    <React.Fragment key={expression}>
+                    // eslint-disable-next-line react/no-array-index-key
+                    <React.Fragment key={i}>
                       <h4>{shexUtil.formLabel(expression, language)}</h4>
-                      {expression._formValues.map(shexj => (
+                      {expression._formValues.map((shexj, i) => (
                         <ShexForm
                           {...{
-                            key: shexj,
+                            key: i,
                             parent: {
                               ...expression,
                               _formFocus: shexj._formFocus
@@ -73,7 +74,7 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                   <ExpressionFields
                     {...{
                       data: expression,
-                      key: shexj,
+                      key: i,
                       formValues,
                       parent,
                       parentName: shexj._formFocus

@@ -1,6 +1,3 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-shadow */
 import { useCallback, useState, useEffect } from 'react';
 import shexParser from '@shexjs/parser';
 import shexCore from '@shexjs/core';
@@ -32,7 +29,7 @@ const useShex = (
 ) => {
   const { errorCallback, timestamp, languageTheme } = options;
   const [shexData, setShexData] = useState({});
-  const shapes = [];
+  let shapes = [];
   const seed = 1;
 
   /**
@@ -428,7 +425,8 @@ const useShex = (
 
       const shexJ = shexCore.Util.AStoShExJ(parser.parse(shexString));
 
-      const { shapes } = shexJ;
+      // eslint-disable-next-line prefer-destructuring
+      shapes = shexJ.shapes;
 
       if (shapes.length > 0) {
         const formData = await _fillFormData(
@@ -519,7 +517,7 @@ const useShex = (
     const { _formFocus } = shexj;
     try {
       if (_formFocus && !_formFocus.isNew) {
-        for (const expression of expressions) {
+        for await (const expression of expressions) {
           const value = await ldflex[subject][expression.predicate];
           if (value) await ldflex[subject][expression.predicate].delete();
         }
@@ -607,7 +605,6 @@ const useShex = (
    * @param {String} key or name of the field that will be save it on POD
    * @param {boolean} autoSave flag to validate field or not before save it on POD
    */
-  // eslint-disable-next-line consistent-return
   const saveForm = useCallback(async (key: String, autoSave: ?boolean) => {
     try {
       ownerUpdate = true;
@@ -634,29 +631,31 @@ const useShex = (
           defaultValue = namedNode(defaultValue);
         }
 
-    /**
-     * check if field value was updated
-     * @param value
-     * @param defaultValue
-     * @returns {boolean}
-     */
-    const isValueChanged = (value, defaultValue, key) => {
-        /**
-         * if current value is equals to defaultValue remove warning message.
-         * */
-        if (shexData && shexData.formValues && shexData.formValues[key] && shexData.formValues[key].warning) {
-            if (
-                value === defaultValue
-            ) {
-                const {formValues} = shexData;
-                formValues[key] = {
-                    ...formValues[key],
-                    value,
-                    warning: null
-                };
-
-                setShexData({...shexData, formValues});
-            }
+        const field = {
+          ...formValues[key],
+          value: shexUtil.setFieldValue(value, formValues[key].prefix),
+          defaultValue: shexUtil.setFieldValue(
+            defaultValue,
+            formValues[key].prefix
+          )
+        };
+        switch (field.action) {
+          case 'update':
+            await ldflex[field.subject][field.predicate].replace(
+              field.defaultValue,
+              field.value
+            );
+            break;
+          case 'create':
+            await _create(field);
+            break;
+          case 'delete':
+            await ldflex[field.subject][field.predicate].delete(
+              field.defaultValue
+            );
+            break;
+          default:
+            break;
         }
 
         // If save field was successful we update expression and parentExpression.
@@ -683,7 +682,6 @@ const useShex = (
    * Save all fields on submit(no autoSave)
    * @param {Event} e
    */
-  // eslint-disable-next-line consistent-return
   const onSubmit = useCallback(async (e: Event) => {
     try {
       if (!documentUri || documentUri === '') {
@@ -738,6 +736,7 @@ const useShex = (
      * */
     if (
       shexData &&
+      shexData.formValues &&
       shexData.formValues[key] &&
       shexData.formValues[key].warning
     ) {
