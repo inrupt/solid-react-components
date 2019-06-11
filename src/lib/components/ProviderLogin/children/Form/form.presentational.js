@@ -1,12 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ProviderSelect } from '@components';
-import {
-  SolidInput,
-  SolidLinkButton,
-  SolidButton,
-  ErrorMessage
-} from '@styled-components';
+import { SolidInput, SolidLinkButton, SolidButton, ErrorMessage } from '@styled-components';
 
 const LoginFormWrapper = styled.div`
   button {
@@ -32,10 +27,7 @@ const LoginForm = props => {
     formButtonText
   } = props;
   return (
-    <LoginFormWrapper
-      className={`solid-provider-login-component ${className} ${error &&
-        'error'}`}
-    >
+    <LoginFormWrapper className={`solid-provider-login-component ${className} ${error && 'error'}`}>
       <form onSubmit={onSubmit}>
         {error && <ErrorMessage>{error.message}</ErrorMessage>}
         {!withWebId ? (

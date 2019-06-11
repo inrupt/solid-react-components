@@ -7,7 +7,5 @@ By wrapping your component definition with withWebId, the WebID property will au
 We re-expose this component from [@solid/react](https://github.com/solid/react-components) library.
 
 ```javascript
-const MyComponent = withWebId(props => (
-  <p>Hey user, your WebID is {props.webID}.</p>
-));
+const MyComponent = withWebId(props => <p>Hey user, your WebID is {props.webID}.</p>);
 ```

@@ -23,8 +23,7 @@ const ShexFormBuilder = ({
   languageTheme,
   autoSaveMode
 }: Props) => {
-  const subscribeUri =
-    documentUri && documentUri !== '' ? documentUri.replace(/#.*/, '') : '';
+  const subscribeUri = documentUri && documentUri !== '' ? documentUri.replace(/#.*/, '') : '';
 
   return (
     subscribeUri && (

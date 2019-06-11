@@ -10,17 +10,12 @@ import unique from 'unique-string';
  * @param language
  * @returns {null| Annotations}
  */
-const findAnnotation = (
-  key: String,
-  annotations: Object,
-  language: ?String = 'es'
-) => {
+const findAnnotation = (key: String, annotations: Object, language: ?String = 'es') => {
   if (annotations) {
     return annotations.find(
       annotation =>
         annotation.predicate.includes(key) &&
-        ((annotation.object.language &&
-          annotation.object.language.includes(language)) ||
+        ((annotation.object.language && annotation.object.language.includes(language)) ||
           (!annotation.object.language || !language))
     );
   }
@@ -57,10 +52,7 @@ const formLabel = (data: Object, language: ?String) => {
   const { predicate } = data;
 
   return (
-    predicate &&
-    (predicate.includes('#')
-      ? predicate.split('#')[1]
-      : predicate.split('/').pop())
+    predicate && (predicate.includes('#') ? predicate.split('#')[1] : predicate.split('/').pop())
   );
 };
 
@@ -73,11 +65,7 @@ const formLabel = (data: Object, language: ?String) => {
  * @param { boolen } isLink to deep or not into children expressions.
  * @param { Object } parentSubject the Node of the subject
  */
-const createField = (
-  expression: Expression,
-  parentSubject: Object,
-  settings: object
-) => {
+const createField = (expression: Expression, parentSubject: Object, settings: object) => {
   let nodeValue = '';
   let newExpression;
   /** if this expression is a link to other expression shape will deep into children expression */
@@ -126,9 +114,7 @@ const parentLinkOnDropDowns = (parent: Object, expression: Object) => {
     parent.predicate &&
     parent.expression &&
     parent.expression.expressions.legnth > 0) ||
-    (expression &&
-      expression.expression &&
-      expression.expression.expressions.length > 0)
+    (expression && expression.expression && expression.expression.expressions.length > 0)
     ? parent.predicate
     : null;
 };
@@ -245,11 +231,7 @@ const mapFormValues = (shape: Shape, callBack: String) => {
 
         newFormValue = callBack(newFormValue, expression, formValuesindex);
 
-        if (
-          newFormValue &&
-          newFormValue.expression &&
-          newFormValue.expression.expressions
-        ) {
+        if (newFormValue && newFormValue.expression && newFormValue.expression.expressions) {
           const expressions = mapFormValues(newFormValue, callBack);
           newFormValue = { ...newFormValue, expression: { expressions } };
         }
@@ -264,10 +246,7 @@ const mapFormValues = (shape: Shape, callBack: String) => {
         formValuesindex += 1;
       }
 
-      newExpressions = [
-        ...newExpressions,
-        { ...expression, _formValues: newFormValues }
-      ];
+      newExpressions = [...newExpressions, { ...expression, _formValues: newFormValues }];
     }
     return newExpressions;
   } catch (error) {

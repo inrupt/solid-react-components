@@ -50,10 +50,7 @@ const ShexFormLive = ({
     try {
       const deleted = await deleteFn(shexj, parent);
 
-      if (
-        (deleted.code && deleted.code !== 200) ||
-        (deleted.status && deleted.status !== 200)
-      ) {
+      if ((deleted.code && deleted.code !== 200) || (deleted.status && deleted.status !== 200)) {
         throw deleted;
       }
       return successCallback(deleted.message);
@@ -72,10 +69,7 @@ const ShexFormLive = ({
         result = await onSubmit(e);
       }
 
-      if (
-        (result.status && result.status !== 200) ||
-        (result.code && result.code !== 200)
-      ) {
+      if ((result.status && result.status !== 200) || (result.code && result.code !== 200)) {
         throw result;
       }
 

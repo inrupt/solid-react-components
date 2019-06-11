@@ -200,9 +200,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
-              ),
+              customize: require.resolve('babel-preset-react-app/webpack-overrides'),
 
               plugins: [
                 [
@@ -221,14 +219,8 @@ module.exports = {
                     root: paths.appSrc,
                     cwd: 'packagejson',
                     alias: {
-                      '@styled-components': path.resolve(
-                        paths.appLibSrc,
-                        './styled-components'
-                      ),
-                      '@components': path.resolve(
-                        paths.appLibSrc,
-                        './components'
-                      ),
+                      '@styled-components': path.resolve(paths.appLibSrc, './styled-components'),
+                      '@components': path.resolve(paths.appLibSrc, './components'),
                       '@entities': path.resolve(paths.appLibSrc, './entities'),
                       '@utils': path.resolve(paths.appLibSrc, './utils'),
                       '@hooks': path.resolve(paths.appLibSrc, './hooks'),
@@ -256,10 +248,7 @@ module.exports = {
               configFile: false,
               compact: false,
               presets: [
-                [
-                  require.resolve('babel-preset-react-app/dependencies'),
-                  { helpers: true }
-                ]
+                [require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]
               ],
               cacheDirectory: true,
               // Don't waste time on Gzipping the cache

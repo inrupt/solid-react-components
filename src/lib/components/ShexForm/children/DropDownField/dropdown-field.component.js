@@ -23,17 +23,9 @@ const DropDownField = ({
       {({
         theme,
         languageTheme,
-        config: {
-          onChange,
-          onDelete,
-          onSubmitSave,
-          autoSaveMode,
-          isValueChanged
-        }
+        config: { onChange, onDelete, onSubmitSave, autoSaveMode, isValueChanged }
       }) => (
-        <SelectWrapper
-          className={`${theme && theme.wrapperSelect} ${error ? 'error' : ''}`}
-        >
+        <SelectWrapper className={`${theme && theme.wrapperSelect} ${error ? 'error' : ''}`}>
           <select
             className={theme && theme.select}
             value={value}
@@ -52,13 +44,11 @@ const DropDownField = ({
             data-parent-predicate={parentPredicate}
           >
             <option>
-              {(languageTheme && languageTheme.dropdownDefaultText) ||
-                '-- Select an option --'}
+              {(languageTheme && languageTheme.dropdownDefaultText) || '-- Select an option --'}
             </option>
             {values &&
               values.map(val => {
-                const uVal =
-                  typeof val === 'string' ? val.split('#')[1] : val.value;
+                const uVal = typeof val === 'string' ? val.split('#')[1] : val.value;
                 const selectValue = typeof val === 'string' ? val : val.value;
 
                 return (
@@ -68,11 +58,7 @@ const DropDownField = ({
                 );
               })}
           </select>
-          {error && (
-            <ErrorMessage className={theme && theme.inputError}>
-              {error}
-            </ErrorMessage>
-          )}
+          {error && <ErrorMessage className={theme && theme.inputError}>{error}</ErrorMessage>}
           {!parent && canDelete && (
             <DeleteButton
               {...{
