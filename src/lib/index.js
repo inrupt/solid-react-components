@@ -5,7 +5,8 @@ import {
   LiveUpdate,
   useWebId,
   UpdateContext,
-  useLiveUpdate } from "@solid/react";
+  useLiveUpdate
+} from '@solid/react';
 import {
   ProviderLogin,
   PrivateRoute,
@@ -14,7 +15,7 @@ import {
   ProfileUploader,
   ShexForm,
   ShexFormBuilder
-} from "@components";
+} from '@components';
 
 export {
   ProviderLogin,

@@ -1,7 +1,6 @@
 import React from 'react';
-import { ShexFormLive } from './children/ShexFormLive';
 import { LiveUpdate } from '@solid/react';
-
+import ShexFormLive from './children/ShexFormLive';
 
 type Props = {
   errorCallback: () => void,
@@ -24,27 +23,33 @@ const ShexFormBuilder = ({
   languageTheme,
   autoSaveMode
 }: Props) => {
+  const subscribeUri =
+    documentUri && documentUri !== '' ? documentUri.replace(/#.*/, '') : '';
 
-  const subscribeUri = documentUri && documentUri !== '' ? documentUri.replace(/#.*/, '') : '';
-
-  return subscribeUri && (
-    <LiveUpdate subscribe={subscribeUri}>
-      <ShexFormLive {...{
-        successCallback,
-        errorCallback,
-        documentUri,
-        shexUri,
-        rootShape,
-        theme,
-        languageTheme,
-        autoSaveMode
-      }}/>
-    </LiveUpdate>
+  return (
+    subscribeUri && (
+      <LiveUpdate subscribe={subscribeUri}>
+        <ShexFormLive
+          {...{
+            successCallback,
+            errorCallback,
+            documentUri,
+            shexUri,
+            rootShape,
+            theme,
+            languageTheme,
+            autoSaveMode
+          }}
+        />
+      </LiveUpdate>
+    )
   );
 };
 
 ShexFormBuilder.defaultProps = {
+  // eslint-disable-next-line no-console
   successCallback: () => console.log('Submitted successfully'),
+  // eslint-disable-next-line no-console
   errorCallback: e => console.log('Status: ', e.status || e.code, e),
   theme: {
     input: 'solid-input-shex',

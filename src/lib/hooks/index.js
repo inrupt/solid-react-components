@@ -1,4 +1,3 @@
-import { useShex } from './useShex';
+import useShex from './useShex';
 
-
-export { useShex };
+export { useShex }; // eslint-disable-line import/prefer-default-export

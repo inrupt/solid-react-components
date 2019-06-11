@@ -1,23 +1,24 @@
-import React, { Fragment } from "react";
-import { shexUtil } from "@utils";
-import { ShexConfig } from "@context";
-import { InputField, DropDownField } from "../";
+/* eslint-disable jsx-a11y/label-has-for */
+import React, { Fragment } from 'react';
+import { shexUtil } from '@utils';
+import { ShexConfig } from '@context';
+import { InputField, DropDownField } from '..';
 
 type FieldProps = {
   data: Object,
   inputData: Object
 };
 
-export const Field = ({
+const Field = ({
   data,
   fieldData,
   inputData,
   canDelete,
   parent
 }: FieldProps) => {
-  const inputType = data.valueExpr.values ? "select" : "text";
-  const predicate = data.predicate;
-  const annotation = shexUtil.findAnnotation("layoutprefix", data.annotations);
+  const inputType = data.valueExpr.values ? 'select' : 'text';
+  const { predicate } = data;
+  const annotation = shexUtil.findAnnotation('layoutprefix', data.annotations);
   const hasPrefix = annotation && annotation.object.value;
   const parentPredicate = parent && parent.predicate ? parent.predicate : null;
   const parentSubject = parent && parent._formFocus.parentSubject;
@@ -25,11 +26,13 @@ export const Field = ({
     <ShexConfig.Consumer>
       {({ languageTheme: { language } }) => (
         <Fragment>
-          <label>{shexUtil.formLabel(data, language)}</label>
-          {inputType === "text" ? (
+          <label htmlFor={inputData.name}>
+            {shexUtil.formLabel(data, language)}
+          </label>
+          {inputType === 'text' ? (
             <InputField
               {...{
-                type: "text",
+                type: 'text',
                 fieldData,
                 inputData,
                 predicate,
@@ -39,7 +42,8 @@ export const Field = ({
                 parentSubject,
                 canDelete,
                 valueExpr: data.valueExpr,
-                error: data.error || data.warning
+                error: data.error || data.warning,
+                id: inputData.name
               }}
             />
           ) : (
@@ -56,7 +60,8 @@ export const Field = ({
                 subject: fieldData._formFocus.parentSubject,
                 name: inputData.name,
                 values: data.valueExpr.values,
-                error: inputData && inputData.error
+                error: inputData && inputData.error,
+                id: inputData.name
               }}
             />
           )}
@@ -65,3 +70,5 @@ export const Field = ({
     </ShexConfig.Consumer>
   );
 };
+
+export default Field;

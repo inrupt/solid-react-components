@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useCallback } from 'react';
 import { useLiveUpdate } from '@solid/react';
 import { ShexForm } from '@components';
@@ -42,7 +43,7 @@ const ShexFormLive = ({
   } = useShex(shexUri, documentUri, rootShape, {
     errorCallback,
     timestamp: updates && updates.timestamp,
-    languageTheme,
+    languageTheme
   });
 
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
@@ -50,13 +51,12 @@ const ShexFormLive = ({
       const deleted = await deleteFn(shexj, parent);
 
       if (
-        (deleted.code && deleted.code === 200) ||
-        (deleted.status && deleted.status === 200)
+        (deleted.code && deleted.code !== 200) ||
+        (deleted.status && deleted.status !== 200)
       ) {
-        return successCallback(deleted.message);
+        throw deleted;
       }
-
-      throw deleted;
+      return successCallback(deleted.message);
     } catch (e) {
       errorCallback(e);
     }
@@ -73,15 +73,15 @@ const ShexFormLive = ({
       }
 
       if (
-        (result.status && result.status === 200) ||
-        (result.code && result.code === 200)
+        (result.status && result.status !== 200) ||
+        (result.code && result.code !== 200)
       ) {
-        return successCallback(result);
+        throw result;
       }
 
-      throw result;
-    } catch (e) {
-      errorCallback(e);
+      return successCallback(result);
+    } catch (error) {
+      errorCallback(error);
     }
   });
 
@@ -126,8 +126,5 @@ const ShexFormLive = ({
     </ShexConfig.Provider>
   );
 };
-
-
-
 
 export default ShexFormLive;

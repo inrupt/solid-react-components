@@ -1,15 +1,15 @@
-import React from "react";
-import { ShexConfig } from "@context";
-import { DeleteButton } from "../";
+import React from 'react';
+import { ShexConfig } from '@context';
+import { DeleteButton } from '..';
 import {
   ErrorMessage,
   InputWrapper,
   Input,
   InputGroup
-} from "./styled.component";
+} from './styled.component';
 
-export const InputField = ({
-  type = "text",
+const InputField = ({
+  type = 'text',
   valueExpr,
   predicate,
   inputData,
@@ -38,7 +38,7 @@ export const InputField = ({
             <Input
               className={theme && theme.input}
               type={type}
-              autoComplete={"skip"}
+              autoComplete="skip"
               value={currentValue}
               name={inputName}
               onChange={onChange}
@@ -77,3 +77,5 @@ export const InputField = ({
     </ShexConfig.Consumer>
   );
 };
+
+export default InputField;

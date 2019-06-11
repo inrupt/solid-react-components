@@ -59,7 +59,7 @@ export type Shape = {
 };
 
 export type ShexJ = {
-  "@context": String,
+  '@context': String,
   shapes: Array<Shape>,
   start: ?String,
   type: String,

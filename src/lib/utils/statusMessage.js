@@ -1,3 +1,3 @@
-export function solidResponse (code, message, optionals) {
-    return { code, message, ...optionals};
+export default function solidResponse(code, message, optionals) {
+  return { code, message, ...optionals };
 }
