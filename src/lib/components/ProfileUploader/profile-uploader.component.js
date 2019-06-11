@@ -1,10 +1,6 @@
 import React from 'react';
 import { UploadedFiles } from '@entities';
-import {
-  ProfileWrapper,
-  ImgStyle,
-  ButtonStyle
-} from './profile-uploader.style';
+import { ProfileWrapper, ImgStyle, ButtonStyle } from './profile-uploader.style';
 
 /**
  * Basic Uploader UI Component Example
@@ -51,11 +47,7 @@ const ProfileUploader = (props: Props) => {
           data-testid="image-style"
         />
       )}
-      <ButtonStyle
-        type="button"
-        onClick={onClickFile}
-        data-testid="button-style"
-      >
+      <ButtonStyle type="button" onClick={onClickFile} data-testid="button-style">
         Upload File
       </ButtonStyle>
     </ProfileWrapper>
