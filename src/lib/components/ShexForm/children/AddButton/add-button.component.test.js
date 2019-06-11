@@ -50,10 +50,7 @@ describe('Shex ShapeForm Component', () => {
   });
 
   it('should not renders if allowNewField is false', () => {
-    const component = setup(
-      { allowNewFields: false, defaultExpression },
-      config
-    );
+    const component = setup({ allowNewFields: false, defaultExpression }, config);
     rerender(component);
 
     expect(container).toHaveTextContent('');

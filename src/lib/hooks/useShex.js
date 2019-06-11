@@ -21,12 +21,7 @@ type Options = {
 
 let ownerUpdate = false;
 
-const useShex = (
-  fileShex: String,
-  documentUri: String,
-  rootShape: String,
-  options: Object
-) => {
+const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
   const { errorCallback, timestamp, languageTheme } = options;
   const [shexData, setShexData] = useState({});
   let shapes = [];
@@ -38,37 +33,29 @@ const useShex = (
    * @param { Expression } parentExpression parent ShexJ object
    *
    */
-  const addNewShexField = useCallback(
-    (expression: Expression, parentExpresion: Expression) => {
-      const { formData, shexJ } = shexData;
-      const newFormData = shexUtil.mapFormValues(
-        formData,
-        (formValue, currentExpression, index) => {
-          const { _formValues } = expression;
-          if (_formValues.length - 1 === index) {
-            if (
-              !parentExpresion &&
-              expression.predicate === currentExpression.predicate
-            ) {
-              return [
-                formValue,
-                shexUtil.createField(expression._formValueClone, documentUri, {
-                  documentUri,
-                  seed
-                })
-              ];
-            }
-          }
-          return formValue;
+  const addNewShexField = useCallback((expression: Expression, parentExpresion: Expression) => {
+    const { formData, shexJ } = shexData;
+    const newFormData = shexUtil.mapFormValues(formData, (formValue, currentExpression, index) => {
+      const { _formValues } = expression;
+      if (_formValues.length - 1 === index) {
+        if (!parentExpresion && expression.predicate === currentExpression.predicate) {
+          return [
+            formValue,
+            shexUtil.createField(expression._formValueClone, documentUri, {
+              documentUri,
+              seed
+            })
+          ];
         }
-      );
+      }
+      return formValue;
+    });
 
-      setShexData({
-        shexJ,
-        formData: { ...formData, expression: { expressions: newFormData } }
-      });
-    }
-  );
+    setShexData({
+      shexJ,
+      formData: { ...formData, expression: { expressions: newFormData } }
+    });
+  });
 
   /**
    * Update, Delete a field into ShexJ object using mapFormValues(recursive function) function from shex utils
@@ -196,9 +183,7 @@ const useShex = (
       if (formValues[name]) {
         if (formValues[name].value.trim() !== value.trim()) {
           formValues[name].defaultValue = value;
-          formValues[
-            name
-          ].warning = `${warningResolution} ${shexUtil.cleanValue(value)}`;
+          formValues[name].warning = `${warningResolution} ${shexUtil.cleanValue(value)}`;
         } else {
           formValues[name].defaultValue = value;
           formValues[name].value = value;
@@ -222,10 +207,7 @@ const useShex = (
       const updatedFormData = await shexUtil.mapExpFormValues(
         formData.expression,
         (_formValue, _formValues, value, parentUri) => {
-          updatedFormValue = expressionChanged(
-            _formValue._formFocus.name,
-            value
-          );
+          updatedFormValue = expressionChanged(_formValue._formFocus.name, value);
           const expression = {
             ..._formValue,
             _formFocus: {
@@ -339,55 +321,23 @@ const useShex = (
    * @param {Object} rootShape object that has the id of the shape that we want to render
    * @param {Object} ldflex function to save data into PODS
    */
-  const _fillFormData = useCallback(
-    async (rootShape: Object, document: Object) => {
-      const currentShape = shapes.find(shape =>
-        shape.id.includes(rootShape.id)
-      );
-      let newExpressions = [];
+  const _fillFormData = useCallback(async (rootShape: Object, document: Object) => {
+    const currentShape = shapes.find(shape => shape.id.includes(rootShape.id));
+    let newExpressions = [];
 
-      if (currentShape && currentShape.expression) {
-        if (currentShape.expression.expressions) {
-          for await (const currentExpression of currentShape.expression
-            .expressions) {
-            let newExpression = { ...currentExpression };
-
-            if (!newExpression._formValues) {
-              newExpression._formValues = [];
-            }
-
-            if (typeof document !== 'string' && documentUri) {
-              for await (const node of document[currentExpression.predicate]) {
-                const { value } = node;
-                newExpression = await _fillFormValues(
-                  rootShape,
-                  newExpression,
-                  value
-                );
-              }
-            }
-
-            if (newExpression._formValues.length === 0) {
-              newExpression = await _fillFormValues(rootShape, newExpression);
-            }
-
-            newExpressions = [...newExpressions, newExpression];
-          }
-        } else if (currentShape.expression.type) {
-          let newExpression = { ...currentShape.expression };
+    if (currentShape && currentShape.expression) {
+      if (currentShape.expression.expressions) {
+        for await (const currentExpression of currentShape.expression.expressions) {
+          let newExpression = { ...currentExpression };
 
           if (!newExpression._formValues) {
             newExpression._formValues = [];
           }
 
           if (typeof document !== 'string' && documentUri) {
-            for await (const node of document[newExpression.predicate]) {
+            for await (const node of document[currentExpression.predicate]) {
               const { value } = node;
-              newExpression = await _fillFormValues(
-                rootShape,
-                newExpression,
-                value
-              );
+              newExpression = await _fillFormValues(rootShape, newExpression, value);
             }
           }
 
@@ -397,14 +347,33 @@ const useShex = (
 
           newExpressions = [...newExpressions, newExpression];
         }
+      } else if (currentShape.expression.type) {
+        let newExpression = { ...currentShape.expression };
+
+        if (!newExpression._formValues) {
+          newExpression._formValues = [];
+        }
+
+        if (typeof document !== 'string' && documentUri) {
+          for await (const node of document[newExpression.predicate]) {
+            const { value } = node;
+            newExpression = await _fillFormValues(rootShape, newExpression, value);
+          }
+        }
+
+        if (newExpression._formValues.length === 0) {
+          newExpression = await _fillFormValues(rootShape, newExpression);
+        }
+
+        newExpressions = [...newExpressions, newExpression];
       }
-      const newShape = {
-        ...currentShape,
-        expression: { expressions: newExpressions }
-      };
-      return newShape;
     }
-  );
+    const newShape = {
+      ...currentShape,
+      expression: { expressions: newExpressions }
+    };
+    return newShape;
+  });
 
   /**
    * init function to convert ShexJ object to ShexJForm (with _formValues and _formFocus objects)
@@ -429,10 +398,7 @@ const useShex = (
       shapes = shexJ.shapes;
 
       if (shapes.length > 0) {
-        const formData = await _fillFormData(
-          { id: _findRootShape(shexJ) },
-          podDocument
-        );
+        const formData = await _fillFormData({ id: _findRootShape(shexJ) }, podDocument);
 
         setShexData({ shexJ, formValues: {}, formData });
       }
@@ -468,8 +434,7 @@ const useShex = (
       valueExpr: JSON.parse(e.target.getAttribute('data-valuexpr')),
       parentName: e.target.getAttribute('data-parent-name')
     };
-    const currentValue =
-      shexData.formValues && shexData.formValues[e.target.name];
+    const currentValue = shexData.formValues && shexData.formValues[e.target.name];
 
     /** keep warning message after onBlur */
     const mergedData = {
@@ -616,10 +581,7 @@ const useShex = (
       let validate;
 
       if (autoSave) {
-        const validator = new ShexFormValidator(
-          formValues,
-          languageTheme.formValidate
-        );
+        const validator = new ShexFormValidator(formValues, languageTheme.formValidate);
         validate = validator.validate();
       }
       const keys = Object.keys(formValues);
@@ -634,25 +596,17 @@ const useShex = (
         const field = {
           ...formValues[key],
           value: shexUtil.setFieldValue(value, formValues[key].prefix),
-          defaultValue: shexUtil.setFieldValue(
-            defaultValue,
-            formValues[key].prefix
-          )
+          defaultValue: shexUtil.setFieldValue(defaultValue, formValues[key].prefix)
         };
         switch (field.action) {
           case 'update':
-            await ldflex[field.subject][field.predicate].replace(
-              field.defaultValue,
-              field.value
-            );
+            await ldflex[field.subject][field.predicate].replace(field.defaultValue, field.value);
             break;
           case 'create':
             await _create(field);
             break;
           case 'delete':
-            await ldflex[field.subject][field.predicate].delete(
-              field.defaultValue
-            );
+            await ldflex[field.subject][field.predicate].delete(field.defaultValue);
             break;
           default:
             break;
@@ -666,11 +620,7 @@ const useShex = (
       setShexData({ ...shexData, formValues: validate.updatedFields });
 
       if (keys.length !== 0) {
-        throw new SolidError(
-          'Please ensure all values are in a proper format.',
-          'ShexForm',
-          406
-        );
+        throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
       }
     } catch (error) {
       return error;
@@ -688,10 +638,7 @@ const useShex = (
         throw Error('Document Uri is required');
       }
       e.preventDefault();
-      const validator = new ShexFormValidator(
-        shexData.formValues,
-        languageTheme.formValidate
-      );
+      const validator = new ShexFormValidator(shexData.formValues, languageTheme.formValidate);
       const { isValid, updatedFields } = validator.validate();
       const keys = Object.keys(shexData.formValues);
       if (isValid && keys.length > 0) {
@@ -708,11 +655,7 @@ const useShex = (
       setShexData({ ...shexData, formValues: updatedFields });
 
       if (keys.length !== 0) {
-        throw new SolidError(
-          'Please ensure all values are in a proper format.',
-          'ShexForm',
-          406
-        );
+        throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
       }
     } catch (error) {
       let solidError = error;

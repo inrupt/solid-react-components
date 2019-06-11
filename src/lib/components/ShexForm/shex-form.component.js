@@ -2,12 +2,7 @@ import React from 'react';
 import { shexUtil } from '@utils';
 import { ShexConfig } from '@context';
 import { Panel } from './styled.component';
-import {
-  DeleteButton,
-  AddButton,
-  DropDownField,
-  ExpressionFields
-} from './children';
+import { DeleteButton, AddButton, DropDownField, ExpressionFields } from './children';
 
 type ShexFormProps = {
   shexj: Object,
@@ -39,9 +34,7 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
             />
           )}
 
-          {expression &&
-          expression.expressions &&
-          expression.expressions.length > 0
+          {expression && expression.expressions && expression.expressions.length > 0
             ? expression.expressions.map((expression, i) => {
                 if (typeof expression.valueExpr === 'string') {
                   return (
@@ -77,9 +70,7 @@ const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
                       key: i,
                       formValues,
                       parent,
-                      parentName: shexj._formFocus
-                        ? shexj._formFocus.name
-                        : null
+                      parentName: shexj._formFocus ? shexj._formFocus.name : null
                     }}
                   />
                 );

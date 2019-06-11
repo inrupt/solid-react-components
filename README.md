@@ -106,9 +106,7 @@ By wrapping your component definition with withWebId, the WebID property will au
 We re-expose this component from [@solid/react](https://github.com/solid/react-components) library.
 
 ```javascript
-const MyComponent = withWebId(props => (
-  <p>Hey user, your WebID is {props.webID}.</p>
-));
+const MyComponent = withWebId(props => <p>Hey user, your WebID is {props.webID}.</p>);
 ```
 
 ### withAuthorization
@@ -163,7 +161,6 @@ We currently re-expose withWebId and LogoutButton so you can use the basic compo
 
 ### ShExFormBuilder
 
-
 **Note**: This is an early preview build of a work-in-progress component and subject to large-scale changes in future releases.
 
 This component allows you to create a fully functional form, complete with submit, cancel, and validation rules, from a [ShEx](http://shex.io/shex-primer/index.html) Shape.
@@ -171,66 +168,70 @@ This component allows you to create a fully functional form, complete with submi
 #### Supported Field Types:
 
 ##### Textbox
+
 Textboxes are the default input type for each field in a shape. In future versions, there will be a way to determine if you want a textbox vs a textarea based on properties such as maxlength.
 
 ##### Select / Dropdown
+
 Dropdowns are displayed when the shape has a reference to another shape that is only a list of values. The values are displayed in the dropdown.
 
-
 #### Validation
+
 Validation is done using ShEx constraints. You can read more about these constraints on the [ShEx website](http://shex.io/). Examples include:
 
-* Required vs Optional fields.
-* Repeatable fields, and the min/max number of times they can be repeated.
-* Min and/or max length of strings.
-* Length of numbers, and min/max number values.
-* Regular expression patterns.
+- Required vs Optional fields.
+- Repeatable fields, and the min/max number of times they can be repeated.
+- Min and/or max length of strings.
+- Length of numbers, and min/max number values.
+- Regular expression patterns.
 
 #### Labels
+
 Currently, labels are assigned to a field by either:
 
-* Adding an rdfs:label annotation to the field in the ShEx shape (see [example shapes](https://shexshapes.inrupt.net/public/) for examples).
-* Parsing the name of the predicate assigned to that field.
+- Adding an rdfs:label annotation to the field in the ShEx shape (see [example shapes](https://shexshapes.inrupt.net/public/) for examples).
+- Parsing the name of the predicate assigned to that field.
 
-In the future, labels will be generated more dynamically. 
+In the future, labels will be generated more dynamically.
 
 #### Usage
+
 ```
 <ShexFormBuilder documentUri={url} shexUri={}  />
 ```
-| Props              | Type     | Default                                                   | Description
-| ------------------ | -------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------
-| documentUri        | string   | null                                                      | Required. The URL representing the root subject to save the form data to, for example a WebID or file in the user's Pod.
-| shexUri            | string   | null                                                      | Required. The URL to the ShEx shape to use to render the form.
-| rootShape          | string   | null                                                      | Optional. The shape in the shexUri file to begin parsing. If a START shape is defined in the shape, this is not necessary.
-| theme              | Object   | null                                                      | Optional. An object (defined below) allowing custom overrides to the look and feel of the form.
-| languageTheme      | Object   | null                                                      | Optional. An object (defined below) allowing customization of the text of the form. Can be used in combination with i18n in the parent app.
-| successCallback    | Function | Function that writes a success message to console         | Optional. Overrides the existing success callback and allows custom success functions.
-| errorCallback      | Function | Function that writes the error message to console         | Optional. Overrides the existing error callback function.
-| messageValidation  | Object   | null                                                      | An Object containing an array of error strings. The error strings will be used in most non-validation situations.
-| autoSaveMode       | Boolean  | false                                                     | Optional. Determines of the form will autosave or have a save/cancel button. Default is save/cancel button.
 
+| Props             | Type     | Default                                           | Description                                                                                                                                 |
+| ----------------- | -------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| documentUri       | string   | null                                              | Required. The URL representing the root subject to save the form data to, for example a WebID or file in the user's Pod.                    |
+| shexUri           | string   | null                                              | Required. The URL to the ShEx shape to use to render the form.                                                                              |
+| rootShape         | string   | null                                              | Optional. The shape in the shexUri file to begin parsing. If a START shape is defined in the shape, this is not necessary.                  |
+| theme             | Object   | null                                              | Optional. An object (defined below) allowing custom overrides to the look and feel of the form.                                             |
+| languageTheme     | Object   | null                                              | Optional. An object (defined below) allowing customization of the text of the form. Can be used in combination with i18n in the parent app. |
+| successCallback   | Function | Function that writes a success message to console | Optional. Overrides the existing success callback and allows custom success functions.                                                      |
+| errorCallback     | Function | Function that writes the error message to console | Optional. Overrides the existing error callback function.                                                                                   |
+| messageValidation | Object   | null                                              | An Object containing an array of error strings. The error strings will be used in most non-validation situations.                           |
+| autoSaveMode      | Boolean  | false                                             | Optional. Determines of the form will autosave or have a save/cancel button. Default is save/cancel button.                                 |
 
 Theme object:
 
-| Key                | Type     | Default                               | Description
-| ------------------ | -------- | ------------------------------------- | ------------------------------------------------
-| input              | string   | solid-input-shex                      | Custom class name for input fields in the form.
-| select             | string   | solid-input-shex solid-select-shex    | Custom class name for select fields in the form.
-| deleteButton       | string   | solid-button-shex                     | Custom class name for the delete button.
-| form               | string   | solid-shex-form                       | Custom class name for the form.
+| Key          | Type   | Default                            | Description                                      |
+| ------------ | ------ | ---------------------------------- | ------------------------------------------------ |
+| input        | string | solid-input-shex                   | Custom class name for input fields in the form.  |
+| select       | string | solid-input-shex solid-select-shex | Custom class name for select fields in the form. |
+| deleteButton | string | solid-button-shex                  | Custom class name for the delete button.         |
+| form         | string | solid-shex-form                    | Custom class name for the form.                  |
 
 LanguageTheme object:
 
-| Key                   | Type      | Default                           | Description                           
-| --------------------- | ----------|---------------------------------- | -------------------------------------------------------
-| language              | string    | 'en'                              | String representing the language code to use for the translations
-| saveBtn               | string    | 'Save'                            | String representing the save button text
-| resetBtn              | string    | 'Reset'                           | String representing the reset button text
-| addButtonText         | string    | '+ Add new'                       | String representing the add new item button text
-| deleteButton          | string    | 'Delete'                          | String representing the delete button text
-| dropdownDefaultText   | string    | '- Select -'                      | String representing the default text for a dropdown menu
-
+| Key                 | Type   | Default      | Description                                                       |
+| ------------------- | ------ | ------------ | ----------------------------------------------------------------- |
+| language            | string | 'en'         | String representing the language code to use for the translations |
+| saveBtn             | string | 'Save'       | String representing the save button text                          |
+| resetBtn            | string | 'Reset'      | String representing the reset button text                         |
+| addButtonText       | string | '+ Add new'  | String representing the add new item button text                  |
+| deleteButton        | string | 'Delete'     | String representing the delete button text                        |
+| dropdownDefaultText | string | '- Select -' | String representing the default text for a dropdown menu          |
 
 ##### Shapes
-A set of example shapes can be found [here](https://shexshapes.inrupt.net/public/), which show various ShEx shapes. 
+
+A set of example shapes can be found [here](https://shexshapes.inrupt.net/public/), which show various ShEx shapes.

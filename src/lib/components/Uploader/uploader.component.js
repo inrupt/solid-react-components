@@ -103,9 +103,7 @@ class Uploader extends Component<Props> {
           const newFileName = this.renameFile(file, suffix);
 
           // Get destination file url
-          const destinationUri = `${fileBase}/${encodeURIComponent(
-            newFileName
-          )}`;
+          const destinationUri = `${fileBase}/${encodeURIComponent(newFileName)}`;
 
           // Send file on Base64 to server using fetch from solid-auth-client
           const response = await auth.fetch(destinationUri, {
@@ -163,10 +161,8 @@ class Uploader extends Component<Props> {
     this.counter += 1;
 
     if (
-      (event.dataTransfer.items &&
-        event.dataTransfer.items[this.positionFile]) ||
-      (event.dataTransfer.types &&
-        event.dataTransfer.types[this.positionFile] === 'Files')
+      (event.dataTransfer.items && event.dataTransfer.items[this.positionFile]) ||
+      (event.dataTransfer.types && event.dataTransfer.types[this.positionFile] === 'Files')
     ) {
       this.setState({ dragging: true });
     }
@@ -278,8 +274,7 @@ Uploader.defaultProps = {
   errorsText: {
     sizeLimit: 'File size exceeds the allowable limit',
     unsupported: 'Unsupported media type',
-    maximumFiles:
-      'Sorry, you have exceeded the maximum number of files allowed per upload'
+    maximumFiles: 'Sorry, you have exceeded the maximum number of files allowed per upload'
   }
 };
 

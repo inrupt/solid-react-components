@@ -27,12 +27,7 @@ const DeleteButton = (props: Props) => {
         <DeleteButtonWrapper
           className={theme && theme.deleteButton}
           type="button"
-          onClick={() =>
-            onDelete(
-              predicate ? { ...fieldData, predicate } : fieldData,
-              parent
-            )
-          }
+          onClick={() => onDelete(predicate ? { ...fieldData, predicate } : fieldData, parent)}
           floating={parent}
         >
           {deleteButton || text}

@@ -390,9 +390,7 @@
                   "_formValues": [
                     {
                       "type": "NodeConstraint",
-                      "values": [
-                        "http://www.w3.org/2006/vcard/ns#StreetAddress"
-                      ],
+                      "values": ["http://www.w3.org/2006/vcard/ns#StreetAddress"],
                       "_formFocus": {
                         "value": "",
                         "parentSubject": "https://jpablo.solid.community/profile/card#id1556561095001",

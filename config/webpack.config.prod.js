@@ -50,10 +50,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
     {
       loader: MiniCssExtractPlugin.loader,
-      options: Object.assign(
-        {},
-        shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
-      )
+      options: Object.assign({}, shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined)
     },
     {
       loader: require.resolve('css-loader'),
@@ -202,17 +199,12 @@ module.exports = {
     extensions: ['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
       react: path.resolve(path.join(__dirname, '../node_modules/react')),
-      'react-dom': path.resolve(
-        path.join(__dirname, '../node_modules/react-dom')
-      ),
+      'react-dom': path.resolve(path.join(__dirname, '../node_modules/react-dom')),
       // 'react-dom': require.resolve('react-dom'),
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
-      '@styled-components': path.resolve(
-        __dirname,
-        '../src/lib/styled-components'
-      ),
+      '@styled-components': path.resolve(__dirname, '../src/lib/styled-components'),
       '@components': path.resolve(__dirname, '../src/lib/components'),
       '@entities': path.resolve(__dirname, '../src/lib/entities'),
       '@utils': path.resolve(__dirname, '../src/lib/utils'),
@@ -282,9 +274,7 @@ module.exports = {
             include: paths.appLibSrc, // CRL
             loader: require.resolve('babel-loader'),
             options: {
-              customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
-              ),
+              customize: require.resolve('babel-preset-react-app/webpack-overrides'),
 
               plugins: [
                 [
@@ -315,10 +305,7 @@ module.exports = {
               configFile: false,
               compact: false,
               presets: [
-                [
-                  require.resolve('babel-preset-react-app/dependencies'),
-                  { helpers: true }
-                ]
+                [require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]
               ],
               cacheDirectory: true,
               // Save disk space when time isn't as important

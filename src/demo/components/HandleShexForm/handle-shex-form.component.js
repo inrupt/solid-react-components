@@ -53,16 +53,8 @@ const HandleShexForm = ({ webId }: Props) => {
     <div>
       <h2>Shex Form</h2>
       <Form onSubmit={onSubmit}>
-        <Input
-          placeholder="Document Url"
-          name="documentUri"
-          onChange={onChangeInput}
-        />
-        <Input
-          placeholder="ShexC Url"
-          name="shexUri"
-          onChange={onChangeInput}
-        />
+        <Input placeholder="Document Url" name="documentUri" onChange={onChangeInput} />
+        <Input placeholder="ShexC Url" name="shexUri" onChange={onChangeInput} />
         <Button type="submit">Load Form</Button>
       </Form>
       <ShexFormBuilder {...{ ...podData, languageTheme, autoSaveMode: true }} />

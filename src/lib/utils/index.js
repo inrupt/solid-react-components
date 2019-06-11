@@ -1,12 +1,7 @@
 import SolidError from './error';
 import * as shexUtil from './shex';
 import solidResponse from './statusMessage';
-import {
-  fetchSchema,
-  existDocument,
-  createDocument,
-  fetchLdflexDocument
-} from './solidFetch';
+import { fetchSchema, existDocument, createDocument, fetchLdflexDocument } from './solidFetch';
 import ShexFormValidator from './shexFormValidator';
 
 export {

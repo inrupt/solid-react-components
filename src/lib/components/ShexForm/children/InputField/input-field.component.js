@@ -1,12 +1,7 @@
 import React from 'react';
 import { ShexConfig } from '@context';
 import { DeleteButton } from '..';
-import {
-  ErrorMessage,
-  InputWrapper,
-  Input,
-  InputGroup
-} from './styled.component';
+import { ErrorMessage, InputWrapper, Input, InputGroup } from './styled.component';
 
 const InputField = ({
   type = 'text',
@@ -25,10 +20,7 @@ const InputField = ({
   const currentValue = inputData && inputData.value;
   return (
     <ShexConfig.Consumer>
-      {({
-        theme,
-        config: { onChange, onSubmitSave, autoSaveMode, isValueChanged }
-      }) => (
+      {({ theme, config: { onChange, onSubmitSave, autoSaveMode, isValueChanged } }) => (
         <InputWrapper
           className={`${theme && theme.inputContainer} ${
             inputData && inputData.error ? 'error' : ''
@@ -49,9 +41,7 @@ const InputField = ({
               data-parent-predicate={parentPredicate}
               data-valuexpr={JSON.stringify(valueExpr)}
               data-parent-subject={parentSubject}
-              data-parent-name={
-                parent && parent._formFocus ? parent._formFocus.name : null
-              }
+              data-parent-name={parent && parent._formFocus ? parent._formFocus.name : null}
               onBlur={() =>
                 autoSaveMode &&
                 isValueChanged(currentValue, defaultValue, inputName) &&

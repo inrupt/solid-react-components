@@ -61,7 +61,7 @@ describe('Shex ShapeForm Component', () => {
   });
 
   // eslint-disable-next-line prettier/prettier
-  it('it should have \'fn\' as label', () => {
+  it("it should have 'fn' as label", () => {
     const deleteButtons = getByText('fn');
     expect(deleteButtons).toBeTruthy();
   });
@@ -72,7 +72,7 @@ describe('Shex ShapeForm Component', () => {
   });
 
   // eslint-disable-next-line prettier/prettier
-  it('it should have a \'+ Add\' button', () => {
+  it("it should have a '+ Add' button", () => {
     const input = getAllByText('+ Add new fn');
     expect(input).toBeTruthy();
   });
