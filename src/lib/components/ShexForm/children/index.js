@@ -5,11 +5,4 @@ import Field from './Field';
 import InputField from './InputField';
 import DropDownField from './DropDownField';
 
-export {
-  ExpressionFields,
-  AddButton,
-  DeleteButton,
-  Field,
-  InputField,
-  DropDownField
-};
+export { ExpressionFields, AddButton, DeleteButton, Field, InputField, DropDownField };

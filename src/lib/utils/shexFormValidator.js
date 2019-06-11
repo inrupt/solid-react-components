@@ -20,8 +20,7 @@ class ShexFormValidator {
 
       if (!regex.test(field.value)) {
         const message =
-          (this.messages && this.messages.default) ||
-          'Error: Field value has wrong format';
+          (this.messages && this.messages.default) || 'Error: Field value has wrong format';
 
         return this.errorFieldFactory(field, message);
       }
@@ -33,8 +32,7 @@ class ShexFormValidator {
         (valueExpr.maxlength && valueExpr.maxlength < field.value.length)
       ) {
         const defaultMessage = 'Error: Min and max should be ';
-        const message = `${(this.messages && this.messages.minMaxString) ||
-          defaultMessage} 
+        const message = `${(this.messages && this.messages.minMaxString) || defaultMessage} 
                 ${valueExpr.minlength}, ${valueExpr.maxlength}`;
 
         return this.errorFieldFactory(field, message);
@@ -42,9 +40,7 @@ class ShexFormValidator {
     }
 
     if (valueExpr.length && valueExpr.length === field.value.length) {
-      const message = `Error: Characters length should be equal than ${
-        valueExpr.length
-      }`;
+      const message = `Error: Characters length should be equal than ${valueExpr.length}`;
 
       return this.errorFieldFactory(field, message);
     }
@@ -62,8 +58,7 @@ class ShexFormValidator {
           (valueExpr.maxinclusive && valueExpr.maxinclusive < field.value)
         ) {
           const defaultMessage = 'Error: Min and max should be ';
-          const message = `${(this.messages &&
-            this.messages.minMxNumberInclusive) ||
+          const message = `${(this.messages && this.messages.minMxNumberInclusive) ||
             defaultMessage}
                     ${valueExpr.mininclusive}, ${valueExpr.maxinclusive}`;
 
@@ -77,8 +72,7 @@ class ShexFormValidator {
           (valueExpr.maxexclusive && valueExpr.maxexclusive <= field.value)
         ) {
           const defaultMessage = 'Error: Min and max value should be ';
-          const message = `${(this.messages &&
-            this.messages.minMxNumberExclusive) ||
+          const message = `${(this.messages && this.messages.minMxNumberExclusive) ||
             defaultMessage}
                      ${valueExpr.minexclusive}, ${valueExpr.maxexclusive}`;
 
@@ -96,10 +90,7 @@ class ShexFormValidator {
     const updatedFields = formValuesKeys.reduce((acc, field) => {
       const currentField = this.fields[field];
 
-      if (
-        currentField.valueExpr &&
-        currentField.valueExpr.datatype.includes('string')
-      ) {
+      if (currentField.valueExpr && currentField.valueExpr.datatype.includes('string')) {
         const updatedField = this.formStringValidation(currentField);
 
         if (updatedField.error) isValid = false;

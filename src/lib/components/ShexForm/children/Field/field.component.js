@@ -9,13 +9,7 @@ type FieldProps = {
   inputData: Object
 };
 
-const Field = ({
-  data,
-  fieldData,
-  inputData,
-  canDelete,
-  parent
-}: FieldProps) => {
+const Field = ({ data, fieldData, inputData, canDelete, parent }: FieldProps) => {
   const inputType = data.valueExpr.values ? 'select' : 'text';
   const { predicate } = data;
   const annotation = shexUtil.findAnnotation('layoutprefix', data.annotations);
@@ -26,9 +20,7 @@ const Field = ({
     <ShexConfig.Consumer>
       {({ languageTheme: { language } }) => (
         <Fragment>
-          <label htmlFor={inputData.name}>
-            {shexUtil.formLabel(data, language)}
-          </label>
+          <label htmlFor={inputData.name}>{shexUtil.formLabel(data, language)}</label>
           {inputType === 'text' ? (
             <InputField
               {...{

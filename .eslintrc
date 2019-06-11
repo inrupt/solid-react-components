@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": ["react-app", "airbnb", "prettier"],
-  "plugins": ["prettier"],
+  "plugins": ["react", "prettier"],
   "rules": {
     "prettier/prettier": [1],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
@@ -13,6 +13,7 @@
     "no-restricted-syntax": [0],
     "consistent-return": [0],
     "import/prefer-default-export": [0],
+    "import/no-cycle": [0],
     "quotes": [1, "single"],
     "react/no-array-index-key": [1]
   },
