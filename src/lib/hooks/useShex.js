@@ -581,7 +581,10 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
       let validate;
 
       if (autoSave) {
-        const validator = new ShexFormValidator(formValues, languageTheme.formValidate);
+        const validator = new ShexFormValidator(
+          { [key]: { ...formValues[key] } },
+          languageTheme.formValidate
+        );
         validate = validator.validate();
       }
       const keys = Object.keys(formValues);
