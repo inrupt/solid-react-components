@@ -48,6 +48,7 @@ const Field = ({ data, fieldData, inputData, canDelete, parent }: FieldProps) =>
                 parent,
                 parentPredicate,
                 value: inputData.value,
+                disabled: inputData.disabled,
                 defaultValue: fieldData._formFocus.value,
                 subject: fieldData._formFocus.parentSubject,
                 name: inputData.name,

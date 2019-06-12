@@ -580,9 +580,25 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
       const originalValue = value;
       let validate;
 
+      /**
+       * Validate individual field when auto save is enable
+       */
       if (autoSave) {
         const validator = new ShexFormValidator(formValues, languageTheme.formValidate);
         validate = validator.validate();
+        /**
+         * disabled field input while is saving on POD
+         */
+        setShexData({
+          ...shexData,
+          formValues: {
+            ...formValues,
+            [key]: {
+              ...formValues[key],
+              disabled: true
+            }
+          }
+        });
       }
       const keys = Object.keys(formValues);
 

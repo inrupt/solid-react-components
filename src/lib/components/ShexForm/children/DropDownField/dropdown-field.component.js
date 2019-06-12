@@ -8,6 +8,7 @@ const DropDownField = ({
   value,
   values,
   name,
+  disabled,
   error,
   defaultValue,
   subject,
@@ -30,6 +31,7 @@ const DropDownField = ({
             className={theme && theme.select}
             value={value}
             name={name}
+            disabled={disabled}
             autoComplete="skip"
             onChange={onChange}
             onBlur={() =>
