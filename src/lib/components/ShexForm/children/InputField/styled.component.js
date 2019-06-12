@@ -17,6 +17,10 @@ export const Input = styled.input`
   .error & {
     margin-bottom: 5px;
   }
+
+  &:disabled {
+    background: #c0c0c0;
+  }
 `;
 
 export const InputGroup = styled.div`

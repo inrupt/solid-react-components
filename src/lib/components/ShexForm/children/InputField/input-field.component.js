@@ -18,6 +18,8 @@ const InputField = ({
   const inputName = inputData && inputData.name;
   const defaultValue = fieldData && fieldData._formFocus.value;
   const currentValue = inputData && inputData.value;
+  const disabled = inputData && inputData.disabled;
+
   return (
     <ShexConfig.Consumer>
       {({ theme, config: { onChange, onSubmitSave, autoSaveMode, isValueChanged } }) => (
@@ -31,6 +33,7 @@ const InputField = ({
               className={theme && theme.input}
               type={type}
               autoComplete="skip"
+              disabled={disabled}
               value={currentValue}
               name={inputName}
               onChange={onChange}
