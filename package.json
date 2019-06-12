@@ -18,6 +18,7 @@
     "build",
     "CONTRIBUTING.md"
   ],
+  "main": "build/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Inrupt-inc/solid-react-components"
