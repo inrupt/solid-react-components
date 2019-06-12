@@ -584,7 +584,10 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
        * Validate individual field when auto save is enable
        */
       if (autoSave) {
-        const validator = new ShexFormValidator(formValues, languageTheme.formValidate);
+        const validator = new ShexFormValidator(
+          { [key]: { ...formValues[key] } },
+          languageTheme.formValidate
+        );
         validate = validator.validate();
         /**
          * disabled field input while is saving on POD
