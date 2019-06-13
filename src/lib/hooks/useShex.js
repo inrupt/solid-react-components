@@ -24,6 +24,7 @@ let ownerUpdate = false;
 const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
   const { errorCallback, timestamp, languageTheme } = options;
   const [shexData, setShexData] = useState({});
+  const [isProcessing, setIsProcessing] = useState(false);
   let shapes = [];
   const seed = 1;
 
@@ -542,7 +543,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    * @param {String} key or name of the field(expression)
    * @param { any } value for expression
    */
-  const updateExpression = useCallback((key: String, value: Any) => {
+  const updateExpression = useCallback((key: String, value: Any, cb) => {
     const { parentName } = shexData.formValues[key];
 
     updateShexJ(
@@ -562,6 +563,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
       },
       'update'
     );
+    cb();
   });
 
   /**
@@ -572,6 +574,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    */
   const saveForm = useCallback(async (key: String, autoSave: ?boolean) => {
     try {
+      setIsProcessing(true);
       ownerUpdate = true;
 
       const { formValues } = shexData;
@@ -632,7 +635,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         }
 
         // If save field was successful we update expression and parentExpression.
-        updateExpression(key, originalValue);
+        updateExpression(key, originalValue, () => setIsProcessing(false));
 
         return solidResponse(200, 'Form submitted successfully');
       }
@@ -642,6 +645,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
       }
     } catch (error) {
+      setIsProcessing(false);
       return error;
     }
   });
@@ -718,12 +722,12 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
   };
 
   useEffect(() => {
-    if (!timestamp) {
-      toShexJForm();
-    } else {
-      updatesListener();
-    }
-  }, [fileShex, documentUri, timestamp]);
+    toShexJForm();
+  }, [fileShex, documentUri]);
+
+  useEffect(() => {
+    if (!isProcessing && timestamp) updatesListener();
+  }, [timestamp, isProcessing]);
 
   return {
     shexData,
