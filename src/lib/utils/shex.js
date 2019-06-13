@@ -73,7 +73,7 @@ const createField = (expression: Expression, parentSubject: Object, settings: ob
     nodeValue = createIdNode(settings.documentUri, settings.seed);
     const updatedExp = expression.expression.expressions.map(exp => {
       const newExpr = exp._formValues.map(frm => {
-        return createField(frm, { parentSubject: nodeValue });
+        return createField(frm, { parentSubject: nodeValue, isNew: true });
       });
       /** Return an expression with new name and empty value in _formValues */
       return { ...exp, _formValues: [newExpr[0]] };

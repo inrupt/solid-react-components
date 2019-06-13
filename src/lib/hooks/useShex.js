@@ -39,9 +39,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
     const { formData, shexJ } = shexData;
     const newFormData = shexUtil.mapFormValues(formData, (formValue, currentExpression, index) => {
       const { _formValues } = expression;
-
       if (_formValues.length - 1 === index) {
-        // console.log(expression._formValueClone, 'into');
         if (!parentExpresion && expression.predicate === currentExpression.predicate) {
           return [
             formValue,
@@ -69,7 +67,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    */
   const updateShexJ = useCallback((options: Options, action: String) => {
     const { formData, shexJ, formValues } = shexData;
-    const newFormData = shexUtil.mapFormValues(formData, formValue => {
+    const newFormData = shexUtil.mapFormValues(formData, (formValue, expression) => {
       if (options.parent && formValue._formFocus.name === options.parent.key) {
         return {
           ...formValue,
@@ -82,7 +80,14 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
 
       if (formValue._formFocus.name === options.key) {
         if (action === 'delete') {
-          return null;
+          if (expression._formValues.length > 1) {
+            return null;
+          }
+
+          return shexUtil.createField(expression._formValueClone, documentUri, {
+            documentUri,
+            seed: unique()
+          });
         }
         return {
           ...formValue,
