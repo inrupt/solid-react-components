@@ -548,7 +548,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    * @param {String} key or name of the field(expression)
    * @param { any } value for expression
    */
-  const updateExpression = useCallback((key: String, value: Any, cb) => {
+  const updateExpression = useCallback((key: String, value: Any, cb = null) => {
     const { parentName } = shexData.formValues[key];
 
     updateShexJ(
@@ -568,7 +568,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
       },
       'update'
     );
-    cb();
+    if (cb && typeof cb === 'function') cb();
   });
 
   /**
