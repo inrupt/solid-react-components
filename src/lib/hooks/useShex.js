@@ -20,13 +20,14 @@ type Options = {
 };
 
 let ownerUpdate = false;
+let currentTimeStamp;
 
 const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
   const { errorCallback, timestamp, languageTheme } = options;
   const [shexData, setShexData] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
   let shapes = [];
-  const seed = 1;
+  // const seed = 1;
 
   /**
    * Add a new field into form using mapFormValues(recursive function) function from shex utils
@@ -38,13 +39,15 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
     const { formData, shexJ } = shexData;
     const newFormData = shexUtil.mapFormValues(formData, (formValue, currentExpression, index) => {
       const { _formValues } = expression;
+
       if (_formValues.length - 1 === index) {
+        // console.log(expression._formValueClone, 'into');
         if (!parentExpresion && expression.predicate === currentExpression.predicate) {
           return [
             formValue,
             shexUtil.createField(expression._formValueClone, documentUri, {
               documentUri,
-              seed
+              seed: unique()
             })
           ];
         }
@@ -253,7 +256,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         let linkValue = value;
 
         if (value === '') {
-          linkValue = shexUtil.createIdNode(documentUri, seed);
+          linkValue = shexUtil.createIdNode(documentUri, unique());
         }
 
         // eslint-disable-next-line no-use-before-define
@@ -502,6 +505,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       ownerUpdate = true;
+      setIsProcessing(true);
 
       const { _formFocus } = shexj;
       const { parentSubject, name, value, isNew } = _formFocus;
@@ -516,10 +520,11 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
       }
 
       // Delete expression from ShexJ
-      updateShexJ({ key: name }, 'delete');
+      updateShexJ({ key: name }, 'delete', () => setIsProcessing(false));
 
       return solidResponse(200, 'Form submitted successfully');
     } catch (error) {
+      setIsProcessing(false);
       let solidError = error;
 
       if (!error.status && !error.code) {
@@ -726,7 +731,10 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
   }, [fileShex, documentUri]);
 
   useEffect(() => {
-    if (!isProcessing && timestamp) updatesListener();
+    if (!isProcessing && timestamp !== currentTimeStamp) {
+      updatesListener();
+      currentTimeStamp = timestamp;
+    }
   }, [timestamp, isProcessing]);
 
   return {
