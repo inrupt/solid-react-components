@@ -13,6 +13,7 @@ type ShexFormProps = {
 
 const ShexForm = ({ shexj, parent = null, formValues }: ShexFormProps) => {
   const { expression } = shexj;
+
   return shexj ? (
     <ShexConfig.Consumer>
       {({ theme, languageTheme: { language } }) => (

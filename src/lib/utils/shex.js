@@ -4,6 +4,11 @@ import { namedNode } from '@rdfjs/data-model';
 import unique from 'unique-string';
 
 /**
+ * Cache timestamp seed to avoid issues on build form
+ */
+let seed = 0;
+
+/**
  * Return annotations from ShexJ
  * @param key
  * @param annotations
@@ -28,11 +33,14 @@ const findAnnotation = (key: String, annotations: Object, language: ?String = 'e
  * @param seed
  * @returns {string}
  */
-const createIdNode = (documentUri: String, seed: number) => {
-  const randomId = Date.parse(new Date()) + (seed + 1);
+const createIdNode = (documentUri: String) => {
+  const randomId = Date.parse(new Date()) + seed;
   const doc = documentUri || 'https://example.org';
   const id = `${doc.split('#')[0]}#id${randomId}`;
-
+  /**
+   * Added one second to timestamp to avoid issues on build formValues
+   */
+  seed += 1;
   return id;
 };
 
@@ -70,7 +78,7 @@ const createField = (expression: Expression, parentSubject: Object, settings: ob
   let newExpression;
   /** if this expression is a link to other expression shape will deep into children expression */
   if (expression.expression && expression.expression.expressions) {
-    nodeValue = createIdNode(settings.documentUri, settings.seed);
+    nodeValue = createIdNode(settings.documentUri);
     const updatedExp = expression.expression.expressions.map(exp => {
       const newExpr = exp._formValues.map(frm => {
         return createField(frm, { parentSubject: nodeValue, isNew: true });

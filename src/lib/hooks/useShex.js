@@ -27,7 +27,6 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
   const [shexData, setShexData] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
   let shapes = [];
-  // const seed = 1;
 
   /**
    * Add a new field into form using mapFormValues(recursive function) function from shex utils
@@ -44,8 +43,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
           return [
             formValue,
             shexUtil.createField(expression._formValueClone, documentUri, {
-              documentUri,
-              seed: unique()
+              documentUri
             })
           ];
         }
@@ -85,8 +83,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
           }
 
           return shexUtil.createField(expression._formValueClone, documentUri, {
-            documentUri,
-            seed: unique()
+            documentUri
           });
         }
         return {
@@ -261,7 +258,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         let linkValue = value;
 
         if (value === '') {
-          linkValue = shexUtil.createIdNode(documentUri, unique());
+          linkValue = shexUtil.createIdNode(documentUri);
         }
 
         // eslint-disable-next-line no-use-before-define
