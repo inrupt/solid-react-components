@@ -13,13 +13,13 @@ import InruptImg from '../../../assets/inrupt_logo.png';
 type Props = {
   providers?: Array<Provider>,
   callbackUri: String,
-  className: String,
   selectPlaceholder?: String,
   inputPlaholder?: String,
   formButtonText?: String,
   btnTxtWebId?: String,
   btnTxtProvider?: String,
-  onError: (error: Error) => void
+  onError: (error: Error) => void,
+  theme?: Object
 };
 
 export default class LoginComponent extends Component<Props> {
@@ -124,6 +124,7 @@ export default class LoginComponent extends Component<Props> {
 
   render() {
     const { error, withWebId } = this.state;
+    const { theme } = this.props;
     return (
       <LoginForm
         {...this.props}
@@ -133,6 +134,7 @@ export default class LoginComponent extends Component<Props> {
         optionToggle={this.optionToggle}
         onChangeInput={this.onChangeInput}
         onSelectChange={this.onProviderSelect}
+        theme={theme}
       />
     );
   }
@@ -165,5 +167,10 @@ LoginComponent.defaultProps = {
       registerLink: 'https://solid.community/register',
       description: 'This is a prototype implementation of a Solid server'
     }
-  ]
+  ],
+  theme: {
+    buttonLogin: '',
+    inputLogin: '',
+    linkButton: ''
+  }
 };
