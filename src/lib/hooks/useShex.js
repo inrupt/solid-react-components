@@ -464,18 +464,26 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    * @param { Object } field _formFocus expression
    */
   const _createLink = useCallback(async (field: Object) => {
-    const { subject, parentPredicate, parentSubject } = field;
-    const id = `#${subject.split('#').pop()}`;
-    await ldflex[parentSubject][parentPredicate].add(namedNode(id));
+    try {
+      const { subject, parentPredicate, parentSubject } = field;
+      const id = `#${subject.split('#').pop()}`;
+      await ldflex[parentSubject][parentPredicate].add(namedNode(id));
+    } catch (e) {
+      throw e;
+    }
   });
 
   /**
    * Create new Node into POD
    */
   const _create = useCallback(async field => {
-    const { subject, predicate, value } = field;
-    if (field.parentSubject) await _createLink(field);
-    await ldflex[subject][predicate].add(value);
+    try {
+      const { subject, predicate, value } = field;
+      if (field.parentSubject) await _createLink(field);
+      await ldflex[subject][predicate].add(value);
+    } catch (e) {
+      throw e;
+    }
   });
 
   /**
@@ -652,8 +660,13 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
       }
     } catch (error) {
+      let solidError = error;
       setIsProcessing(false);
-      return error;
+
+      if (!error.status && !error.code) {
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
+      }
+      return solidError;
     }
   });
 
