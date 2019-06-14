@@ -24,7 +24,8 @@ const LoginForm = props => {
     optionToggle,
     btnTxtProvider,
     btnTxtWebId,
-    formButtonText
+    formButtonText,
+    theme
   } = props;
   return (
     <LoginFormWrapper className={`solid-provider-login-component ${className} ${error && 'error'}`}>
@@ -47,17 +48,18 @@ const LoginForm = props => {
             onChange={onChangeInput}
             placeholder={inputPlaholder}
             data-testid="input-webid"
+            className={theme.inputLogin}
           />
         )}
         <SolidLinkButton
           type="button"
-          className="link"
+          className={`link ${theme.linkButton}`}
           onClick={optionToggle}
           data-testid="change-mode-button"
         >
           {withWebId ? btnTxtProvider : btnTxtWebId}
         </SolidLinkButton>
-        <SolidButton type="submit" data-testid="provider-form-button">
+        <SolidButton type="submit" data-testid="provider-form-button" className={theme.buttonLogin}>
           {formButtonText}
         </SolidButton>
       </form>
