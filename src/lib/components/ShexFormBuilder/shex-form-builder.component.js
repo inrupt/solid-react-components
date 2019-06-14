@@ -49,7 +49,7 @@ ShexFormBuilder.defaultProps = {
   // eslint-disable-next-line no-console
   successCallback: () => console.log('Submitted successfully'),
   // eslint-disable-next-line no-console
-  errorCallback: e => console.log('Status: ', e.status || e.code, e),
+  errorCallback: e => console.error('Status:', e.status || e.code, e.message),
   theme: {
     input: 'solid-input-shex',
     select: 'solid-input-shex solid-select-shex',
