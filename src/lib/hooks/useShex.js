@@ -20,12 +20,13 @@ type Options = {
 };
 
 let ownerUpdate = false;
+let currentTimeStamp;
 
 const useShex = (fileShex: String, documentUri: String, rootShape: String, options: Object) => {
   const { errorCallback, timestamp, languageTheme } = options;
   const [shexData, setShexData] = useState({});
+  const [isProcessing, setIsProcessing] = useState(false);
   let shapes = [];
-  const seed = 1;
 
   /**
    * Add a new field into form using mapFormValues(recursive function) function from shex utils
@@ -42,8 +43,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
           return [
             formValue,
             shexUtil.createField(expression._formValueClone, documentUri, {
-              documentUri,
-              seed
+              documentUri
             })
           ];
         }
@@ -65,7 +65,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    */
   const updateShexJ = useCallback((options: Options, action: String) => {
     const { formData, shexJ, formValues } = shexData;
-    const newFormData = shexUtil.mapFormValues(formData, formValue => {
+    const newFormData = shexUtil.mapFormValues(formData, (formValue, expression) => {
       if (options.parent && formValue._formFocus.name === options.parent.key) {
         return {
           ...formValue,
@@ -78,7 +78,13 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
 
       if (formValue._formFocus.name === options.key) {
         if (action === 'delete') {
-          return null;
+          if (expression._formValues.length > 1) {
+            return null;
+          }
+
+          return shexUtil.createField(expression._formValueClone, documentUri, {
+            documentUri
+          });
         }
         return {
           ...formValue,
@@ -252,7 +258,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         let linkValue = value;
 
         if (value === '') {
-          linkValue = shexUtil.createIdNode(documentUri, seed);
+          linkValue = shexUtil.createIdNode(documentUri);
         }
 
         // eslint-disable-next-line no-use-before-define
@@ -458,18 +464,26 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    * @param { Object } field _formFocus expression
    */
   const _createLink = useCallback(async (field: Object) => {
-    const { subject, parentPredicate, parentSubject } = field;
-    const id = `#${subject.split('#').pop()}`;
-    await ldflex[parentSubject][parentPredicate].add(namedNode(id));
+    try {
+      const { subject, parentPredicate, parentSubject } = field;
+      const id = `#${subject.split('#').pop()}`;
+      await ldflex[parentSubject][parentPredicate].add(namedNode(id));
+    } catch (e) {
+      throw e;
+    }
   });
 
   /**
    * Create new Node into POD
    */
   const _create = useCallback(async field => {
-    const { subject, predicate, value } = field;
-    if (field.parentSubject) await _createLink(field);
-    await ldflex[subject][predicate].add(value);
+    try {
+      const { subject, predicate, value } = field;
+      if (field.parentSubject) await _createLink(field);
+      await ldflex[subject][predicate].add(value);
+    } catch (e) {
+      throw e;
+    }
   });
 
   /**
@@ -501,6 +515,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       ownerUpdate = true;
+      setIsProcessing(true);
 
       const { _formFocus } = shexj;
       const { parentSubject, name, value, isNew } = _formFocus;
@@ -515,10 +530,11 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
       }
 
       // Delete expression from ShexJ
-      updateShexJ({ key: name }, 'delete');
+      updateShexJ({ key: name }, 'delete', () => setIsProcessing(false));
 
       return solidResponse(200, 'Form submitted successfully');
     } catch (error) {
+      setIsProcessing(false);
       let solidError = error;
 
       if (!error.status && !error.code) {
@@ -542,7 +558,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    * @param {String} key or name of the field(expression)
    * @param { any } value for expression
    */
-  const updateExpression = useCallback((key: String, value: Any) => {
+  const updateExpression = useCallback((key: String, value: Any, cb = null) => {
     const { parentName } = shexData.formValues[key];
 
     updateShexJ(
@@ -562,6 +578,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
       },
       'update'
     );
+    if (cb && typeof cb === 'function') cb();
   });
 
   /**
@@ -572,6 +589,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
    */
   const saveForm = useCallback(async (key: String, autoSave: ?boolean) => {
     try {
+      setIsProcessing(true);
       ownerUpdate = true;
 
       const { formValues } = shexData;
@@ -632,7 +650,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         }
 
         // If save field was successful we update expression and parentExpression.
-        updateExpression(key, originalValue);
+        updateExpression(key, originalValue, () => setIsProcessing(false));
 
         return solidResponse(200, 'Form submitted successfully');
       }
@@ -642,7 +660,13 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
         throw new SolidError('Please ensure all values are in a proper format.', 'ShexForm', 406);
       }
     } catch (error) {
-      return error;
+      let solidError = error;
+      setIsProcessing(false);
+
+      if (!error.status && !error.code) {
+        solidError = new SolidError(error.message, 'Ldflex Error', 500);
+      }
+      return solidError;
     }
   });
 
@@ -718,12 +742,15 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
   };
 
   useEffect(() => {
-    if (!timestamp) {
-      toShexJForm();
-    } else {
+    toShexJForm();
+  }, [fileShex, documentUri]);
+
+  useEffect(() => {
+    if (!isProcessing && timestamp !== currentTimeStamp) {
       updatesListener();
+      currentTimeStamp = timestamp;
     }
-  }, [fileShex, documentUri, timestamp]);
+  }, [timestamp, isProcessing]);
 
   return {
     shexData,
