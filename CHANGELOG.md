@@ -1,5 +1,27 @@
 # Solid React Components Library
 
+## 0.4.3 ( June 18, 2019 )
+
+### Added
+
+- [Prettier](https://prettier.io/) support was added, as well as better ESLint rules
+
+### Updated
+
+- Autofill temporarily disabled in the ShexFormBuilder component to prevent issues with autosave and autofill competing with each other
+- Many, many formatting changes across the site to comply with prettier and ESLint
+
+### Fixed
+
+- Adding a new email and phone number in the same session will no longer merge the fields together
+- A conflict error is no longer shown when two people edit the form to the same value (since there is no conflict)
+
+## 0.4.2 ( June 5, 2019 )
+
+### Fixed
+
+- Fixed a bug where a blank field was being seen as "undefined"
+
 ## 0.4.1 ( June 5, 2019 )
 
 ### Updated
