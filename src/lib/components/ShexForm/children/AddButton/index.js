@@ -1,3 +1,3 @@
-import { AddButton } from "./add-button.component";
+import AddButton from './add-button.component';
 
-export { AddButton };
+export default AddButton;

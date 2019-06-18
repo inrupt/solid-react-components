@@ -1,12 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { ProviderSelect } from "@components";
-import {
-  SolidInput,
-  SolidLinkButton,
-  SolidButton,
-  ErrorMessage
-} from "@styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { ProviderSelect } from '@components';
+import { SolidInput, SolidLinkButton, SolidButton, ErrorMessage } from '@styled-components';
 
 const LoginFormWrapper = styled.div`
   button {
@@ -16,37 +11,55 @@ const LoginFormWrapper = styled.div`
 `;
 
 const LoginForm = props => {
+  const {
+    className,
+    onSubmit,
+    error,
+    withWebId,
+    selectPlaceholder,
+    onSelectChange,
+    providers,
+    onChangeInput,
+    inputPlaholder,
+    optionToggle,
+    btnTxtProvider,
+    btnTxtWebId,
+    formButtonText
+  } = props;
   return (
-    <LoginFormWrapper
-      className={`solid-provider-login-component ${
-        props.className
-      } ${props.error && "error"}`}
-    >
-      <form onSubmit={props.onSubmit}>
-        {props.error && <ErrorMessage>{props.error.message}</ErrorMessage>}
-        {!props.withWebId ? (
+    <LoginFormWrapper className={`solid-provider-login-component ${className} ${error && 'error'}`}>
+      <form onSubmit={onSubmit}>
+        {error && <ErrorMessage>{error.message}</ErrorMessage>}
+        {!withWebId ? (
           <ProviderSelect
             {...{
-              placeholder: props.selectPlaceholder,
-              onChange: props.onSelectChange,
-              options: props.providers,
+              placeholder: selectPlaceholder,
+              onChange: onSelectChange,
+              options: providers,
               components: true,
-              name: "provider"
+              name: 'provider'
             }}
           />
         ) : (
           <SolidInput
             type="text"
             name="idp"
-            onChange={props.onChangeInput}
-            placeholder={props.inputPlaholder}
+            onChange={onChangeInput}
+            placeholder={inputPlaholder}
             data-testid="input-webid"
           />
         )}
-        <SolidLinkButton type="button" className="link" onClick={props.optionToggle} data-testid="change-mode-button">
-          {props.withWebId ? props.btnTxtProvider : props.btnTxtWebId}
+        <SolidLinkButton
+          type="button"
+          className="link"
+          onClick={optionToggle}
+          data-testid="change-mode-button"
+        >
+          {withWebId ? btnTxtProvider : btnTxtWebId}
         </SolidLinkButton>
-        <SolidButton type="submit" data-testid="provider-form-button">{props.formButtonText}</SolidButton>
+        <SolidButton type="submit" data-testid="provider-form-button">
+          {formButtonText}
+        </SolidButton>
       </form>
     </LoginFormWrapper>
   );

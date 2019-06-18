@@ -1,5 +1,5 @@
-;
-
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
@@ -15,15 +15,14 @@ function ensureSlash(inputPath, needsSlash) {
   const hasSlash = inputPath.endsWith('/');
   if (hasSlash && !needsSlash) {
     return inputPath.substr(0, inputPath.length - 1);
-  } else if (!hasSlash && needsSlash) {
-    return `${inputPath}/`;
-  } else {
-    return inputPath;
   }
+  if (!hasSlash && needsSlash) {
+    return `${inputPath}/`;
+  }
+  return inputPath;
 }
 
-const getPublicUrl = appPackageJson =>
-  envPublicUrl || require(appPackageJson).homepage;
+const getPublicUrl = appPackageJson => envPublicUrl || require(appPackageJson).homepage;
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
@@ -33,8 +32,7 @@ const getPublicUrl = appPackageJson =>
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
-  const servedUrl =
-    envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/');
+  const servedUrl = envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/');
   return ensureSlash(servedUrl, true);
 }
 
@@ -49,7 +47,7 @@ const moduleFileExtensions = [
   'tsx',
   'json',
   'web.jsx',
-  'jsx',
+  'jsx'
 ];
 
 // Resolve file paths in the same order as webpack
@@ -88,7 +86,7 @@ module.exports = {
 
   // CRL: New paths for library
   appLibIndexJs: resolveApp('src/lib/index.js'),
-  appLibSrc: resolveApp('src/lib'),
+  appLibSrc: resolveApp('src/lib')
 };
 
 module.exports.moduleFileExtensions = moduleFileExtensions;

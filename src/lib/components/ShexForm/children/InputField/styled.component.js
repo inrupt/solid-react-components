@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ErrorMessage = styled.p`
   margin: 0;
@@ -16,6 +16,10 @@ export const InputWrapper = styled.div`
 export const Input = styled.input`
   .error & {
     margin-bottom: 5px;
+  }
+
+  &:disabled {
+    background: #c0c0c0;
   }
 `;
 

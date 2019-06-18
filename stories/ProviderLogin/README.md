@@ -8,15 +8,15 @@ For now, the list of Providers is passed in as a parameter. In the future, this 
 <ProviderLogin />
 ```
 
-| Props             | Type                                                                     | Default                                                                                                                                                                           | Description                               |
-| ----------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| providers         | Array of Providers (label, image, value, register link, and description) | Solid and Inrupt Providers.                                                                                                                                                       |
-| callback          | Function                                                                 | null                                                                                                                                                                              | Will call after login.                    |
-| className         | String                                                                   | null                                                                                                                                                                              | Custom class for component.               |
-| OnError           | Function                                                                 | null                                                                                                                                                                              | If an error occurs, this will fire.       |
-| selectPlaceholder | String                                                                   | Select ID Provider                                                                                                                                                                |
-| inputPlaholder    | String                                                                   | WebID                                                                                                                                                                             |
-| formButtonText    | String                                                                   | Log In                                                                                                                                                                            |
-| btnTxtWebId       | String                                                                   | Log In with WebID                                                                                                                                                                 |
-| btnTxtProvider    | String                                                                   | Log In with Provider                                                                                                                                                              |
-| errorsText        | Object  
+| Props             | Type                                                                     | Default                     | Description                         |
+| ----------------- | ------------------------------------------------------------------------ | --------------------------- | ----------------------------------- |
+| providers         | Array of Providers (label, image, value, register link, and description) | Solid and Inrupt Providers. |
+| callback          | Function                                                                 | null                        | Will call after login.              |
+| className         | String                                                                   | null                        | Custom class for component.         |
+| OnError           | Function                                                                 | null                        | If an error occurs, this will fire. |
+| selectPlaceholder | String                                                                   | Select ID Provider          |
+| inputPlaholder    | String                                                                   | WebID                       |
+| formButtonText    | String                                                                   | Log In                      |
+| btnTxtWebId       | String                                                                   | Log In with WebID           |
+| btnTxtProvider    | String                                                                   | Log In with Provider        |
+| errorsText        | Object                                                                   |

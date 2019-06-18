@@ -1,8 +1,8 @@
-import React from "react";
-import { useWebId } from "@solid/react";
-import styled from "styled-components";
-import SolidImg from "../assets/solid_logo.png";
-import { ProviderLogin, Uploader, ProfileUploader } from "../lib";
+import React from 'react';
+import { useWebId } from '@solid/react';
+import styled from 'styled-components';
+import SolidImg from '../assets/solid_logo.png';
+import { ProviderLogin, Uploader, ProfileUploader } from '../lib';
 import HandleShexForm from './components';
 
 const HeaderWrapper = styled.section`
@@ -33,7 +33,7 @@ const ShexFormComponent = styled.div`
    }
 `;
 
-const Header = props => {
+const Header = () => {
   return (
     <HeaderWrapper>
       <img src={SolidImg} alt="React logo" width="62" />
@@ -51,22 +51,26 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <Uploader
         {...{
-          fileBase: "Your POD folder here",
+          fileBase: 'Your POD folder here',
           limitFiles: 1,
           limitSize: 500000,
-          accept: "png,jpg,jpeg",
+          accept: 'png,jpg,jpeg',
           onError: error => {
+            // eslint-disable-next-line no-console
             console.log(error.statusText);
           },
-          onComplete: uploadedFiles => {
-            console.log(uploadedFiles);
+          onComplete: (recentlyUploadedFiles, uploadedFiles) => {
+            // eslint-disable-next-line no-console
+            console.log(recentlyUploadedFiles, uploadedFiles);
           },
           render: props => <ProfileUploader {...{ ...props }} />
         }}
       />
-        { webId && <ShexFormComponent>
-            <HandleShexForm  {...{ webId }}/>
-      </ShexFormComponent> }
+      {webId && (
+        <ShexFormComponent>
+          <HandleShexForm {...{ webId }} />
+        </ShexFormComponent>
+      )}
     </DemoWrapper>
   );
 };

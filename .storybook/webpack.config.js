@@ -13,7 +13,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
     require.resolve('style-loader'),
     {
       loader: require.resolve('css-loader'),
-      options: cssOptions,
+      options: cssOptions
     },
     {
       // Options for PostCSS as we reference these options twice
@@ -28,13 +28,13 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
           require('postcss-flexbugs-fixes'),
           require('postcss-preset-env')({
             autoprefixer: {
-              flexbox: 'no-2009',
+              flexbox: 'no-2009'
             },
-            stage: 3,
-          }),
-        ],
-      },
-    },
+            stage: 3
+          })
+        ]
+      }
+    }
   ];
   if (preProcessor) {
     loaders.push(require.resolve(preProcessor));
@@ -43,7 +43,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 };
 
 module.exports = {
-  resolve:{
+  resolve: {
     alias: {
       '@solid-react-components': path.resolve(__dirname, '../src/lib'),
       '@styled-components': path.resolve(__dirname, '../src/lib/styled-components'),
@@ -55,8 +55,7 @@ module.exports = {
       '@context': path.resolve(__dirname, '../src/lib/context')
     }
   },
-  plugins: [
-  ],
+  plugins: [],
   module: {
     rules: [
       {
@@ -72,8 +71,8 @@ module.exports = {
             loader: require.resolve('url-loader'),
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
+              name: 'static/media/[name].[hash:8].[ext]'
+            }
           },
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -85,8 +84,8 @@ module.exports = {
             test: cssRegex,
             exclude: cssModuleRegex,
             use: getStyleLoaders({
-              importLoaders: 1,
-            }),
+              importLoaders: 1
+            })
           },
           // Opt-in support for SASS (using .scss or .sass extensions).
           // Chains the sass-loader with the css-loader and the style-loader
@@ -96,23 +95,23 @@ module.exports = {
           {
             test: sassRegex,
             exclude: sassModuleRegex,
-            use: getStyleLoaders({ importLoaders: 2 }, 'sass-loader'),
+            use: getStyleLoaders({ importLoaders: 2 }, 'sass-loader')
           },
           // Adds support for CSS Modules, but using SASS
           // using the extension .module.scss or .module.sass
           {
             test: sassModuleRegex,
             use: getStyleLoaders(
-                {
-                  importLoaders: 2,
-                  modules: true,
-                  getLocalIdent: getCSSModuleLocalIdent,
-                },
-                'sass-loader'
-            ),
-          },
-        ],
-      },
-    ],
-  },
+              {
+                importLoaders: 2,
+                modules: true,
+                getLocalIdent: getCSSModuleLocalIdent
+              },
+              'sass-loader'
+            )
+          }
+        ]
+      }
+    ]
+  }
 };

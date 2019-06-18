@@ -1,1 +1,478 @@
-{"numFailedTestSuites":0,"numFailedTests":0,"numPassedTestSuites":15,"numPassedTests":37,"numPendingTestSuites":0,"numPendingTests":0,"numRuntimeErrorTestSuites":0,"numTotalTestSuites":15,"numTotalTests":37,"openHandles":[],"snapshot":{"added":0,"didUpdate":false,"failure":false,"filesAdded":0,"filesRemoved":0,"filesUnmatched":0,"filesUpdated":0,"matched":0,"total":0,"unchecked":0,"uncheckedKeysByFile":[],"unmatched":0,"updated":0},"startTime":1558026321539,"success":true,"testResults":[{"assertionResults":[{"ancestorTitles":["Private Route"],"failureMessages":[],"fullName":"Private Route should render loading when user is not logged","location":null,"status":"passed","title":"should render loading when user is not logged"},{"ancestorTitles":["Private Route"],"failureMessages":[],"fullName":"Private Route should not render loader when user is logged","location":null,"status":"passed","title":"should not render loader when user is logged"}],"endTime":1558026326631,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/PrivateRoute/private-route.component.test.js","startTime":1558026323156,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders without crashing","location":null,"status":"passed","title":"should renders without crashing"}],"endTime":1558026327044,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/Field/field.component.test.js","startTime":1558026326676,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders without crashing","location":null,"status":"passed","title":"should renders without crashing"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders with object values","location":null,"status":"passed","title":"should renders with object values"}],"endTime":1558026327303,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/DropDownField/dropdown-field.component.test.js","startTime":1558026327107,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders without crashing","location":null,"status":"passed","title":"should renders without crashing"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders error when come from props","location":null,"status":"passed","title":"should renders error when come from props"}],"endTime":1558026327499,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/InputField/input-field.component.test.js","startTime":1558026327322,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders without crashing","location":null,"status":"passed","title":"should renders without crashing"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component it should have 'fn' as label","location":null,"status":"passed","title":"it should have 'fn' as label"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component it should have an input","location":null,"status":"passed","title":"it should have an input"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component it should have a '+ Add' button","location":null,"status":"passed","title":"it should have a '+ Add' button"}],"endTime":1558026327738,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/shex-form.test.js","startTime":1558026327533,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["should render without crashing"],"failureMessages":[],"fullName":"should render without crashing should render component","location":null,"status":"passed","title":"should render component"},{"ancestorTitles":["should render without crashing"],"failureMessages":[],"fullName":"should render without crashing should render No image without upload file","location":null,"status":"passed","title":"should render No image without upload file"},{"ancestorTitles":["should render without crashing"],"failureMessages":[],"fullName":"should render without crashing should render image if was uploaded","location":null,"status":"passed","title":"should render image if was uploaded"},{"ancestorTitles":["should render without crashing"],"failureMessages":[],"fullName":"should render without crashing should render upload button","location":null,"status":"passed","title":"should render upload button"}],"endTime":1558026327953,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ProfileUploader/profile-uploader.test.js","startTime":1558026327757,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["useForm"],"failureMessages":[],"fullName":"useForm returns function and empty object","location":null,"status":"passed","title":"returns function and empty object"}],"endTime":1558026328058,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/hooks/useForm.test.js","startTime":1558026323161,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders without crashing","location":null,"status":"passed","title":"should renders without crashing"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders language version","location":null,"status":"passed","title":"should renders language version"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should not renders if allowNewField is false","location":null,"status":"passed","title":"should not renders if allowNewField is false"}],"endTime":1558026328117,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/AddButton/add-button.component.test.js","startTime":1558026327968,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["useShex"],"failureMessages":[],"fullName":"useShex returns object when shexC is not loaded","location":null,"status":"passed","title":"returns object when shexC is not loaded"}],"endTime":1558026328188,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/hooks/useShex.test.js","startTime":1558026323166,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Solid Uploader","render without crashing"],"failureMessages":[],"fullName":"Solid Uploader render without crashing should render uploader component","location":null,"status":"passed","title":"should render uploader component"},{"ancestorTitles":["Solid Uploader","render without crashing"],"failureMessages":[],"fullName":"Solid Uploader render without crashing should render component by prop","location":null,"status":"passed","title":"should render component by prop"},{"ancestorTitles":["Solid Uploader","render without crashing"],"failureMessages":[],"fullName":"Solid Uploader render without crashing should render input file","location":null,"status":"passed","title":"should render input file"}],"endTime":1558026328268,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/Uploader/uploader.test.js","startTime":1558026328129,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["A withWebId wrapper","before a session is received"],"failureMessages":[],"fullName":"A withWebId wrapper before a session is received renders the loader component","location":null,"status":"passed","title":"renders the loader component"},{"ancestorTitles":["A withWebId wrapper","when the user is not logged in"],"failureMessages":[],"fullName":"A withWebId wrapper when the user is not logged in redirect user","location":null,"status":"passed","title":"redirect user"},{"ancestorTitles":["A withWebId wrapper","when the user is logged in"],"failureMessages":[],"fullName":"A withWebId wrapper when the user is logged in renders the wrapped component","location":null,"status":"passed","title":"renders the wrapped component"}],"endTime":1558026328336,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/withAuthorization/with-authorization.test.js","startTime":1558026323159,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should render without crashing","location":null,"status":"passed","title":"should render without crashing"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should render a submit button","location":null,"status":"passed","title":"should render a submit button"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should render a reset button","location":null,"status":"passed","title":"should render a reset button"}],"endTime":1558026328374,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexFormBuilder/shex-form-builder.component.test.js","startTime":1558026323156,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders without crashing","location":null,"status":"passed","title":"should renders without crashing"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should renders language version","location":null,"status":"passed","title":"should renders language version"},{"ancestorTitles":["Shex ShapeForm Component"],"failureMessages":[],"fullName":"Shex ShapeForm Component should not renders if canDelete is false","location":null,"status":"passed","title":"should not renders if canDelete is false"}],"endTime":1558026328467,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/DeleteButton/delete-button.component.test.js","startTime":1558026328096,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["ProviderSelect"],"failureMessages":[],"fullName":"ProviderSelect should render without crashing","location":null,"status":"passed","title":"should render without crashing"}],"endTime":1558026328473,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ProviderSelect/provider.select.component.test.js","startTime":1558026323156,"status":"passed","summary":""},{"assertionResults":[{"ancestorTitles":["Provider Login Container"],"failureMessages":[],"fullName":"Provider Login Container shoud renders without crashing","location":null,"status":"passed","title":"shoud renders without crashing"},{"ancestorTitles":["Provider Login Container"],"failureMessages":[],"fullName":"Provider Login Container should render WebId by default","location":null,"status":"passed","title":"should render WebId by default"},{"ancestorTitles":["Provider Login Container"],"failureMessages":[],"fullName":"Provider Login Container clicking link button should render Provider Select","location":null,"status":"passed","title":"clicking link button should render Provider Select"},{"ancestorTitles":["Provider Login Container"],"failureMessages":[],"fullName":"Provider Login Container should not call login without webId or provider","location":null,"status":"passed","title":"should not call login without webId or provider"}],"endTime":1558026328614,"message":"","name":"/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ProviderLogin/provider-login.container.test.js","startTime":1558026323159,"status":"passed","summary":""}],"wasInterrupted":false}
+{
+  "numFailedTestSuites": 0,
+  "numFailedTests": 0,
+  "numPassedTestSuites": 15,
+  "numPassedTests": 37,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTotalTestSuites": 15,
+  "numTotalTests": 37,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0
+  },
+  "startTime": 1558026321539,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Private Route"],
+          "failureMessages": [],
+          "fullName": "Private Route should render loading when user is not logged",
+          "location": null,
+          "status": "passed",
+          "title": "should render loading when user is not logged"
+        },
+        {
+          "ancestorTitles": ["Private Route"],
+          "failureMessages": [],
+          "fullName": "Private Route should not render loader when user is logged",
+          "location": null,
+          "status": "passed",
+          "title": "should not render loader when user is logged"
+        }
+      ],
+      "endTime": 1558026326631,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/PrivateRoute/private-route.component.test.js",
+      "startTime": 1558026323156,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should renders without crashing"
+        }
+      ],
+      "endTime": 1558026327044,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/Field/field.component.test.js",
+      "startTime": 1558026326676,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should renders without crashing"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders with object values",
+          "location": null,
+          "status": "passed",
+          "title": "should renders with object values"
+        }
+      ],
+      "endTime": 1558026327303,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/DropDownField/dropdown-field.component.test.js",
+      "startTime": 1558026327107,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should renders without crashing"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders error when come from props",
+          "location": null,
+          "status": "passed",
+          "title": "should renders error when come from props"
+        }
+      ],
+      "endTime": 1558026327499,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/InputField/input-field.component.test.js",
+      "startTime": 1558026327322,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should renders without crashing"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component it should have 'fn' as label",
+          "location": null,
+          "status": "passed",
+          "title": "it should have 'fn' as label"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component it should have an input",
+          "location": null,
+          "status": "passed",
+          "title": "it should have an input"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component it should have a '+ Add' button",
+          "location": null,
+          "status": "passed",
+          "title": "it should have a '+ Add' button"
+        }
+      ],
+      "endTime": 1558026327738,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/shex-form.test.js",
+      "startTime": 1558026327533,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["should render without crashing"],
+          "failureMessages": [],
+          "fullName": "should render without crashing should render component",
+          "location": null,
+          "status": "passed",
+          "title": "should render component"
+        },
+        {
+          "ancestorTitles": ["should render without crashing"],
+          "failureMessages": [],
+          "fullName": "should render without crashing should render No image without upload file",
+          "location": null,
+          "status": "passed",
+          "title": "should render No image without upload file"
+        },
+        {
+          "ancestorTitles": ["should render without crashing"],
+          "failureMessages": [],
+          "fullName": "should render without crashing should render image if was uploaded",
+          "location": null,
+          "status": "passed",
+          "title": "should render image if was uploaded"
+        },
+        {
+          "ancestorTitles": ["should render without crashing"],
+          "failureMessages": [],
+          "fullName": "should render without crashing should render upload button",
+          "location": null,
+          "status": "passed",
+          "title": "should render upload button"
+        }
+      ],
+      "endTime": 1558026327953,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ProfileUploader/profile-uploader.test.js",
+      "startTime": 1558026327757,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["useForm"],
+          "failureMessages": [],
+          "fullName": "useForm returns function and empty object",
+          "location": null,
+          "status": "passed",
+          "title": "returns function and empty object"
+        }
+      ],
+      "endTime": 1558026328058,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/hooks/useForm.test.js",
+      "startTime": 1558026323161,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should renders without crashing"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders language version",
+          "location": null,
+          "status": "passed",
+          "title": "should renders language version"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should not renders if allowNewField is false",
+          "location": null,
+          "status": "passed",
+          "title": "should not renders if allowNewField is false"
+        }
+      ],
+      "endTime": 1558026328117,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/AddButton/add-button.component.test.js",
+      "startTime": 1558026327968,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["useShex"],
+          "failureMessages": [],
+          "fullName": "useShex returns object when shexC is not loaded",
+          "location": null,
+          "status": "passed",
+          "title": "returns object when shexC is not loaded"
+        }
+      ],
+      "endTime": 1558026328188,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/hooks/useShex.test.js",
+      "startTime": 1558026323166,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Solid Uploader", "render without crashing"],
+          "failureMessages": [],
+          "fullName": "Solid Uploader render without crashing should render uploader component",
+          "location": null,
+          "status": "passed",
+          "title": "should render uploader component"
+        },
+        {
+          "ancestorTitles": ["Solid Uploader", "render without crashing"],
+          "failureMessages": [],
+          "fullName": "Solid Uploader render without crashing should render component by prop",
+          "location": null,
+          "status": "passed",
+          "title": "should render component by prop"
+        },
+        {
+          "ancestorTitles": ["Solid Uploader", "render without crashing"],
+          "failureMessages": [],
+          "fullName": "Solid Uploader render without crashing should render input file",
+          "location": null,
+          "status": "passed",
+          "title": "should render input file"
+        }
+      ],
+      "endTime": 1558026328268,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/Uploader/uploader.test.js",
+      "startTime": 1558026328129,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["A withWebId wrapper", "before a session is received"],
+          "failureMessages": [],
+          "fullName": "A withWebId wrapper before a session is received renders the loader component",
+          "location": null,
+          "status": "passed",
+          "title": "renders the loader component"
+        },
+        {
+          "ancestorTitles": ["A withWebId wrapper", "when the user is not logged in"],
+          "failureMessages": [],
+          "fullName": "A withWebId wrapper when the user is not logged in redirect user",
+          "location": null,
+          "status": "passed",
+          "title": "redirect user"
+        },
+        {
+          "ancestorTitles": ["A withWebId wrapper", "when the user is logged in"],
+          "failureMessages": [],
+          "fullName": "A withWebId wrapper when the user is logged in renders the wrapped component",
+          "location": null,
+          "status": "passed",
+          "title": "renders the wrapped component"
+        }
+      ],
+      "endTime": 1558026328336,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/withAuthorization/with-authorization.test.js",
+      "startTime": 1558026323159,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should render without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should render without crashing"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should render a submit button",
+          "location": null,
+          "status": "passed",
+          "title": "should render a submit button"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should render a reset button",
+          "location": null,
+          "status": "passed",
+          "title": "should render a reset button"
+        }
+      ],
+      "endTime": 1558026328374,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexFormBuilder/shex-form-builder.component.test.js",
+      "startTime": 1558026323156,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should renders without crashing"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should renders language version",
+          "location": null,
+          "status": "passed",
+          "title": "should renders language version"
+        },
+        {
+          "ancestorTitles": ["Shex ShapeForm Component"],
+          "failureMessages": [],
+          "fullName": "Shex ShapeForm Component should not renders if canDelete is false",
+          "location": null,
+          "status": "passed",
+          "title": "should not renders if canDelete is false"
+        }
+      ],
+      "endTime": 1558026328467,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ShexForm/children/DeleteButton/delete-button.component.test.js",
+      "startTime": 1558026328096,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["ProviderSelect"],
+          "failureMessages": [],
+          "fullName": "ProviderSelect should render without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "should render without crashing"
+        }
+      ],
+      "endTime": 1558026328473,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ProviderSelect/provider.select.component.test.js",
+      "startTime": 1558026323156,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Provider Login Container"],
+          "failureMessages": [],
+          "fullName": "Provider Login Container shoud renders without crashing",
+          "location": null,
+          "status": "passed",
+          "title": "shoud renders without crashing"
+        },
+        {
+          "ancestorTitles": ["Provider Login Container"],
+          "failureMessages": [],
+          "fullName": "Provider Login Container should render WebId by default",
+          "location": null,
+          "status": "passed",
+          "title": "should render WebId by default"
+        },
+        {
+          "ancestorTitles": ["Provider Login Container"],
+          "failureMessages": [],
+          "fullName": "Provider Login Container clicking link button should render Provider Select",
+          "location": null,
+          "status": "passed",
+          "title": "clicking link button should render Provider Select"
+        },
+        {
+          "ancestorTitles": ["Provider Login Container"],
+          "failureMessages": [],
+          "fullName": "Provider Login Container should not call login without webId or provider",
+          "location": null,
+          "status": "passed",
+          "title": "should not call login without webId or provider"
+        }
+      ],
+      "endTime": 1558026328614,
+      "message": "",
+      "name": "/Users/pablorodriguez/Documents/dev/solid-react-components/src/lib/components/ProviderLogin/provider-login.container.test.js",
+      "startTime": 1558026323159,
+      "status": "passed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

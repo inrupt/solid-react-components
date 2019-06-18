@@ -10,9 +10,9 @@ import { jsxDecorator } from 'storybook-addon-jsx';
 addDecorator(jsxDecorator);
 
 addDecorator(
-    withTests({
-      results,
-    })
+  withTests({
+    results
+  })
 );
 addDecorator(addReadme);
 

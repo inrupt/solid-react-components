@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { render, cleanup } from 'react-testing-library';
 import Uploader from './uploader.component';
 
@@ -7,7 +7,6 @@ const BasicComponent = () => <div data-testid="render-component">Basic Component
 afterAll(cleanup);
 
 describe('Solid Uploader', () => {
-
   describe('render without crashing', () => {
     const { container, getByTestId } = render(<Uploader render={() => <BasicComponent />} />);
 

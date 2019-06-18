@@ -1,2 +1,3 @@
-import ShexForm from "./shex-form.component";
+import ShexForm from './shex-form.component';
+
 export default ShexForm;

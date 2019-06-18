@@ -1,15 +1,16 @@
-import React, { Component } from "react";
-import Select, { components } from "react-select";
-import { SelectOptions } from "@entities";
+// @flow
+import React from 'react';
+import Select, { components } from 'react-select';
+import { SelectOptions } from '@entities';
 
 import { Item, Icon, ItemText } from './styled.components';
 
 type Props = {
   className: String,
-  placeholder: String,
+  placeholder: string,
   options: Array<SelectOptions>,
   onChange: () => void,
-  components?: any
+  components: Array<React.Node>
 };
 
 const Option = ({ innerProps, isDisabled, innerRef, data }): React.Component =>
@@ -29,27 +30,19 @@ const SingleValue = ({ data, ...props }): React.Component => {
   );
 };
 
-class ProviderSelect extends Component<Props> {
-  render() {
-    const {
-      className,
-      placeholder,
-      options,
-      components,
-      onChange
-    } = this.props;
-    return (
-      <Select
-        {...{
-          placeholder,
-          className: `solid-provider-select ${className ? className : ""}`,
-          options,
-          components: components ? { Option, SingleValue } : null,
-          onChange
-        }}
-      />
-    );
-  }
-}
+const ProviderSelect = (props: Props) => {
+  const { className, placeholder, options, components, onChange } = props;
+  return (
+    <Select
+      {...{
+        placeholder,
+        className: `solid-provider-select ${className || ''}`,
+        options,
+        components: components && { Option, SingleValue },
+        onChange
+      }}
+    />
+  );
+};
 
 export default ProviderSelect;

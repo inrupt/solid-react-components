@@ -4,26 +4,23 @@ import { cleanup } from 'react-testing-library';
 import { act } from 'react-dom/test-utils';
 
 const setup = () => {
-    let component;
+  let component;
 
-    act( () => {
-        component = renderHook(() => useShex(null, null, null, { errorCallback: '' }));
-    });
+  act(() => {
+    component = renderHook(() => useShex(null, null, null, { errorCallback: '' }));
+  });
 
-    return component;
+  return component;
 };
 
 describe('useShex', () => {
+  afterAll(() => cleanup);
 
-    afterAll( () => cleanup);
+  it('returns object when shexC is not loaded', async () => {
+    const { result } = setup();
 
-    it('returns object when shexC is not loaded', async () => {
-        const { result } = setup();
-
-        expect(result.current.shexData).toEqual({});
-        expect(result.current.addNewShexField).toBeTruthy();
-        expect(result.current.updateShexJ).toBeTruthy();
-    });
-
-
+    expect(result.current.shexData).toEqual({});
+    expect(result.current.addNewShexField).toBeTruthy();
+    expect(result.current.updateShexJ).toBeTruthy();
+  });
 });

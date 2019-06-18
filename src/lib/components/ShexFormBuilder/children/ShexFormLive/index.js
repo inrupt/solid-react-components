@@ -1,3 +1,3 @@
 import ShexFormLive from './shex-form-live.component';
 
-export { ShexFormLive };
+export default ShexFormLive;

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SolidInput = styled.input`
   background-color: hsl(0, 0%, 100%);
