@@ -1,9 +1,11 @@
 import React from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
+// import auth from 'solid-auth-client';
 import SolidImg from '../assets/solid_logo.png';
 import { ProviderLogin, Uploader, ProfileUploader } from '../lib';
 import HandleShexForm from './components';
+// import { Notification } from '../classes/notification';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -42,9 +44,15 @@ const Header = () => {
   );
 };
 
+const createFolder = async () => {
+  // const notify = new Notification();
+  // await notify.createInbox('https://jairocampos.solid.community/public/inboxtest/');
+  // await auth.fetch('https://jairocampos.solid.community/public/gametest', { method: 'PUT'});
+};
+
 const App = () => {
   const webId = useWebId();
-
+  createFolder();
   return (
     <DemoWrapper>
       <Header />
