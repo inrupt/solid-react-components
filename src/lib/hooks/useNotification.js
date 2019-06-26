@@ -23,10 +23,9 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
 
   const fetchNotification = async () => {
     try {
-      console.log('Notify', notify);
       await notify.createInbox();
-      // const notificationList = await notify.fetch();
-      // setNotifications(notificationList);
+      const notificationList = await notify.fetch();
+      setNotifications(notificationList);
     } catch (error) {
       console.log(error);
     }

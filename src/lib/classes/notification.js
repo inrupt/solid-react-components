@@ -125,7 +125,7 @@ export class Notification {
       }
 
       if (!this.schema['@context']) {
-        throw new SolidError('Schema do not have context', 'Notification', 500);
+        throw new SolidError('Schema does not have context', 'Notification', 500);
       }
 
       const { '@context': context, shape } = this.schema;
@@ -196,24 +196,44 @@ export class Notification {
     }
   };
 
+  getPredicate = field => {
+    const prefix = field.property.split(':')[0];
+    const ontology = this.schema['@context'][prefix];
+    return `${ontology}${field.label}`;
+  };
+
   fetch = async () => {
     try {
+      if (!this.schema) await this.fetchNotificationShape(this.shape);
       const inbox = await solidLdlex[this.inboxRoot];
-      let notificationsPath = [];
-      let notification = [];
-
-      for await (const notificationPath of inbox) {
-        notificationsPath = [...notificationsPath, await notificationPath.value];
+      let notificationPaths = [];
+      let notifications = [];
+      for await (const path of inbox['ldp:contains']) {
+        notificationPaths = [...notificationPaths, path.value];
       }
 
-      for await (const notificationPath of notificationsPath) {
-        const currentNotification = await solidLdlex[notificationPath];
-        const title = await currentNotification['schema:title'];
+      for await (const path of notificationPaths) {
+        const turtleNotification = await solidLdlex[path];
+        const id = path
+          .split('/')
+          .pop()
+          .split('.')[0];
+        let notificationData = id !== '' ? { id } : {};
+        for await (const field of this.schema.shape) {
+          const data = await turtleNotification[this.getPredicate(field)];
+          const value = data ? data.value : null;
+          // const value = values.length > 1 ? values : values[0];
+          notificationData = value
+            ? { ...notificationData, [field.label]: value }
+            : notificationData;
+        }
 
-        notification = [...notification, { title: title.value }];
+        notifications =
+          Object.keys(notificationData).length > 0
+            ? [...notifications, notificationData]
+            : notifications;
       }
-
-      console.log(notification);
+      return notifications;
     } catch (error) {
       throw new SolidError(error.message, 'Notification Fetch', error.status);
     }
