@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { Notification } from '@classes';
 
-export const useNotification = (inboxRoot, owner, schema = 'public/shapes/notification.json') => {
+export const useNotification = (inboxRoot, owner, schema = '/shapes/notification.json') => {
   const notify = new Notification(owner, inboxRoot, schema);
   const createInbox = useCallback(async () => {
     try {
