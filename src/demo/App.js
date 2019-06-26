@@ -46,18 +46,13 @@ const Header = () => {
 
 const App = () => {
   const webId = useWebId();
-  const { createNotification, createInbox } = useNotification(
-    'https://jairocampos.solid.community/public/notificationexample/test3/inbox',
-    webId
-  );
-
-  useEffect(() => {
-    createInbox();
-  }, [webId]);
+  const url = webId ? `${webId.split('/profile')[0]}/public/notificationexample/test3/inbox` : null;
+  const { notifications, createNotification, createInbox } = useNotification(url, webId);
 
   return (
     <DemoWrapper>
       <Header />
+      <p>{JSON.stringify(notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <Uploader
         {...{

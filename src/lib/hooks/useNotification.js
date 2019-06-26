@@ -2,31 +2,41 @@ import { useCallback, useEffect, useState } from 'react';
 import { Notification } from '@classes';
 
 export const useNotification = (inboxRoot, owner, schema = '/shapes/notification.json') => {
-  const notify = new Notification(owner, inboxRoot, schema);
+  const [notify, setNotify] = useState(null);
   const [notifications, setNotifications] = useState([]);
+
   const createInbox = useCallback(async () => {
     try {
-      if (owner) {
-        console.log(owner);
-        await notify.createInbox();
-      }
+      if (owner) await notify.createInbox();
     } catch (error) {
-      console.log('error', error);
+      throw error;
     }
-  }, [inboxRoot, owner]);
+  }, [owner, notify]);
 
   const createNotification = useCallback(async () => {
     await notify.create();
   }, [inboxRoot]);
 
-  const fetchNotification = useCallback(async () => {
-    const notificationList = await notify.fetch();
-    setNotifications(notificationList);
-  }, [inboxRoot]);
+  const fetchNotification = async () => {
+    try {
+      console.log('Notify', notify);
+      await notify.createInbox();
+      const notificationList = await notify.fetch();
+      setNotifications(notificationList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    fetchNotification();
+    if (inboxRoot && owner) {
+      setNotify(new Notification(owner, inboxRoot, schema));
+    }
   }, [inboxRoot, owner]);
+
+  useEffect(() => {
+    if (notify) fetchNotification();
+  }, [notify]);
 
   return {
     fetchNotification,
