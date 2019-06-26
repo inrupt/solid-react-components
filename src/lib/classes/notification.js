@@ -113,10 +113,10 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (content = {}) => {
+  create = async (content = {}, to) => {
     try {
       const notificationName = unique();
-      const notificationPath = `${this.inboxRoot}/${notificationName}.ttl`;
+      const notificationPath = `${to || this.inboxRoot}/${notificationName}.ttl`;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
 
@@ -162,7 +162,6 @@ export class Notification {
       });
       return solidResponse(200, 'Notification was created');
     } catch (error) {
-      console.log(error);
       throw new SolidError(error.message, 'Notification', error.status);
     }
   };
