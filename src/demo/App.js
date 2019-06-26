@@ -80,7 +80,7 @@ const App = () => {
       )}
       <button
         type="button"
-        onClick={() => createNotification({ title: 'Notification', content: 'Detail' })}
+        onClick={() => createNotification({ title: 'Notification', summary: 'Detail' })}
       >
         Create notification
       </button>
