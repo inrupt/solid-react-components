@@ -1,0 +1,48 @@
+{
+  "notification": {
+    "@context": {
+      "terms": "http://purl.org/dc/terms#",
+      "as": "https://www.w3.org/ns/activitystreams#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+      "schema": "http://schema.org/"
+    },
+    "shape": [
+      {
+        "label": "id",
+        "property": "terms:id"
+      },
+      {
+        "label": "title",
+        "property": "terms:title"
+      },
+      {
+        "label": "summary",
+        "property": "as:summary"
+      },
+      {
+        "label": "type",
+        "property": "rdfs:type"
+      },
+      {
+        "label": "target",
+        "property": "as:target"
+      },
+      {
+        "label": "object",
+        "property": "as:object"
+      },
+      {
+        "label": "image",
+        "property": "schema:image"
+      },
+      {
+        "label": "sender",
+        "property": "schema:sender"
+      },
+      {
+        "label": "read",
+        "property": "as:read"
+      }
+    ]
+  }
+}

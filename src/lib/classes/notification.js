@@ -1,6 +1,6 @@
 import solid from 'solid-auth-client';
 import N3 from 'n3';
-import solidLdlex from 'ldlex';
+import solidLdlex from '@solid/query-ldflex';
 import unique from 'unique';
 import { solidResponse, SolidError } from '@utils';
 
@@ -35,7 +35,7 @@ export class Notification {
        * if Inbox already exists we throw error
        */
       if (result.status === 200) {
-        throw SolidError('Inbox already exists', 'Inbox', 500);
+        throw new SolidError('Inbox already exists', 'Inbox', 500);
       }
 
       const termFactory = N3.DataFactory;
@@ -77,6 +77,8 @@ export class Notification {
         if (error) {
           throw error;
         }
+        await solid.fetch(`${inboxRoot}/.dummy`, { method: 'PUT' });
+
         await solid.fetch(`${inboxRoot}/.acl`, {
           method: 'PUT',
           body: result,
@@ -85,7 +87,17 @@ export class Notification {
       });
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
-      return SolidError(error.message, 'Inbox', 500);
+      throw new SolidError(error.message, 'Inbox', 500);
+    }
+  };
+
+  fetchNotificationShape = async file => {
+    try {
+      const result = await fetch(file);
+
+      return JSON.parse(result);
+    } catch (error) {
+      throw new SolidError(error.message, 'Fetch Shape', 500);
     }
   };
   /**
@@ -97,7 +109,7 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (inboxRoot, title, content, options) => {
+  create = async (inboxRoot, title, content, options = {}) => {
     try {
       const notificationName = unique();
       const notificationPath = `${inboxRoot}/${notificationName}`;
@@ -112,45 +124,25 @@ export class Notification {
         format: 'text/turtle'
       });
 
+      const notificationShape = await this.fetchNotificationShape(
+        options.schema || 'public/shapes/notification.json'
+      );
+
       writer.addQuad(
         namedNode(notificationPath),
         namedNode(`${PREFIXES.things}id`),
         literal(notificationName)
       );
 
-      writer.addQuad(
-        namedNode(notificationPath),
-        namedNode(`${PREFIXES.schema}title`),
-        literal(title)
-      );
+      /* notificationShape.forEach(); */
 
-      writer.addQuad(
-        namedNode(notificationPath),
-        namedNode(`${PREFIXES.terms}content`),
-        literal(content)
-      );
-
-      writer.addQuad(
-        namedNode(notificationPath),
-        namedNode(`${PREFIXES.terms}read`),
-        literal(false)
-      );
-
-      if (options.link) {
+      /* options.forEach(custom => {
         writer.addQuad(
-          namedNode(notificationPath),
-          namedNode(`${PREFIXES.things}link`),
-          literal(options.link)
-        );
-      }
-
-      options.forEach(custom => {
-        writer.addQuad(
-          namedNode(notificationPath),
+          namedNode(custom.subject || notificationPath),
           namedNode(custom.predicate),
           literal(custom.value)
         );
-      });
+      }); */
 
       await writer.end(async (error, result) => {
         if (error) {
@@ -164,17 +156,17 @@ export class Notification {
       });
       return solidResponse(200, 'Notification was created');
     } catch (error) {
-      return SolidError(error.message, 'Notification', error.status);
+      throw new SolidError(error.message, 'Notification', error.status);
     }
   };
 
   markAsRead = async notificationPath => {
     try {
-      await solidLdlex[notificationPath][PREFIXES.terms].set(true);
+      await solidLdlex[notificationPath][`${PREFIXES.terms}:read`].set(true);
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
-      return SolidError(error.message, 'Notification', error.status);
+      throw new SolidError(error.message, 'Notification', error.status);
     }
   };
 
@@ -183,7 +175,30 @@ export class Notification {
       await solid.fetch(notificationPath, { method: 'DELETE' });
       return solidResponse(200, 'Notification was deleted it');
     } catch (error) {
-      return SolidError(error.message, 'Notification Delete', error.status);
+      throw new SolidError(error.message, 'Notification Delete', error.status);
+    }
+  };
+
+  fetch = async inboxRoot => {
+    try {
+      const inbox = await solidLdlex[inboxRoot];
+      let notificationsPath = [];
+      let notification = [];
+
+      for await (const notificationPath of inbox) {
+        notificationsPath = [...notificationsPath, await notificationPath.value];
+      }
+
+      for await (const notificationPath of notificationsPath) {
+        const currentNotification = await solidLdlex[notificationPath];
+        const title = await currentNotification['schema:title'];
+
+        notification = [...notification, { title: title.value }];
+      }
+
+      console.log(notification);
+    } catch (error) {
+      throw new SolidError(error.message, 'Notification Delete', error.status);
     }
   };
 }

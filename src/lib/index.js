@@ -17,6 +17,8 @@ import {
   ShexFormBuilder
 } from '@components';
 
+import { useNotification } from '@hooks';
+
 export {
   ProviderLogin,
   PrivateRoute,
@@ -31,5 +33,6 @@ export {
   UpdateContext,
   useLiveUpdate,
   ShexForm,
-  ShexFormBuilder
+  ShexFormBuilder,
+  useNotification
 };
