@@ -171,7 +171,7 @@ export class Notification {
 
   markAsRead = async notificationPath => {
     try {
-      await solidLdlex[notificationPath][`${PREFIXES.terms}:read`].set(true);
+      await solidLdlex[notificationPath][`https://www.w3.org/ns/activitystreams#read`].set(true);
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {

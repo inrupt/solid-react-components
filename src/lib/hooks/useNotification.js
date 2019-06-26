@@ -40,6 +40,14 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
     }
   };
 
+  const markAsReadNotification = async notificationPath => {
+    try {
+      await notify.markAsRead(notificationPath);
+    } catch (error) {
+      throw new SolidError(error.message, 'Update Notification', error.status);
+    }
+  };
+
   useEffect(() => {
     if (inboxRoot && owner) {
       setNotify(new Notification(owner, inboxRoot, schema));
@@ -54,6 +62,7 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
     fetchNotification,
     createNotification,
     deleteNotification,
+    markAsReadNotification,
     createInbox,
     notifications
   };
