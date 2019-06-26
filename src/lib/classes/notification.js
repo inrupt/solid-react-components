@@ -18,6 +18,9 @@ export class Notification {
     this.shape = shape;
     this.owner = owner;
     this.inboxRoot = inboxRoot;
+    this.schema = null;
+
+    this.fetchNotificationShape(this.shape);
   }
 
   hasInbox = async path => {
@@ -100,10 +103,11 @@ export class Notification {
   fetchNotificationShape = async file => {
     try {
       const result = await fetch(file);
+      const schema = await result.json();
 
-      return JSON.parse(result);
+      this.schema = schema;
     } catch (error) {
-      throw new SolidError(error.message, 'Fetch Shape', 500);
+      throw new SolidError(error.message, 'Fetch Shape', error.status);
     }
   };
   /**
@@ -130,15 +134,27 @@ export class Notification {
         format: 'text/turtle'
       });
 
-      const notificationShape = await this.fetchNotificationShape(this.shape);
-
-      writer.addQuad(
+      if (this.schema) {
+        await this.fetchNotificationShape(this.shape);
+      }
+      console.log(this.schema);
+      /* writer.addQuad(
         namedNode(notificationPath),
         namedNode(`${PREFIXES.things}id`),
         literal(notificationName)
-      );
+      ); */
 
-      /* notificationShape.forEach(); */
+      /* notificationShape.forEach(item => {
+        if (item.predicate && item.predicate.includes(':')) {
+          writer.addQuad(
+            namedNode(notificationPath),
+            namedNode(`${PREFIXES[item.predicate.split(':')[0]]}id`),
+            literal(notificationName)
+          );
+        } else {
+          throw new SolidError('Schema do not have predicate', 'Notification', 500);
+        }
+      }); */
 
       /* options.forEach(custom => {
         writer.addQuad(
@@ -148,7 +164,7 @@ export class Notification {
         );
       }); */
 
-      await writer.end(async (error, result) => {
+      /* await writer.end(async (error, result) => {
         if (error) {
           throw error;
         }
@@ -157,9 +173,10 @@ export class Notification {
           body: result,
           contentType: 'text/turtle'
         });
-      });
+      }); */
       return solidResponse(200, 'Notification was created');
     } catch (error) {
+      console.log(error);
       throw new SolidError(error.message, 'Notification', error.status);
     }
   };
