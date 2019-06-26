@@ -14,6 +14,12 @@ const PREFIXES = {
 };
 
 export class Notification {
+  constructor(owner, inboxRoot, shape) {
+    this.shape = shape;
+    this.owner = owner;
+    this.inboxRoot = inboxRoot;
+  }
+
   hasInbox = async path => {
     try {
       return await solid.fetch(path, { method: 'GET' });
@@ -28,9 +34,9 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  createInbox = async (inboxRoot, owner) => {
+  createInbox = async () => {
     try {
-      const result = await this.hasInbox(inboxRoot);
+      const result = await this.hasInbox(this.inboxRoot);
       /**
        * if Inbox already exists we throw error
        */
@@ -51,7 +57,7 @@ export class Notification {
 
       writer.addQuad(namedNode('#owner'), namedNode('ns:type'), namedNode('acl:Authorization'));
 
-      writer.addQuad(namedNode('#owner'), namedNode('acl:agent'), namedNode(owner));
+      writer.addQuad(namedNode('#owner'), namedNode('acl:agent'), namedNode(this.owner));
 
       writer.addQuad(namedNode('#owner'), namedNode('acl:accessTo'), namedNode('./'));
 
@@ -77,9 +83,9 @@ export class Notification {
         if (error) {
           throw error;
         }
-        await solid.fetch(`${inboxRoot}/.dummy`, { method: 'PUT' });
+        await solid.fetch(`${this.inboxRoot}/.dummy`, { method: 'PUT' });
 
-        await solid.fetch(`${inboxRoot}/.acl`, {
+        await solid.fetch(`${this.inboxRoot}/.acl`, {
           method: 'PUT',
           body: result,
           contentType: 'text/turtle'
@@ -109,10 +115,10 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (inboxRoot, title, content, options = {}) => {
+  create = async (title, content, options = {}) => {
     try {
       const notificationName = unique();
-      const notificationPath = `${inboxRoot}/${notificationName}`;
+      const notificationPath = `${this.inboxRoot}/${notificationName}`;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
       const writer = new N3.Writer({
@@ -124,9 +130,7 @@ export class Notification {
         format: 'text/turtle'
       });
 
-      const notificationShape = await this.fetchNotificationShape(
-        options.schema || 'public/shapes/notification.json'
-      );
+      const notificationShape = await this.fetchNotificationShape(this.shape);
 
       writer.addQuad(
         namedNode(notificationPath),
@@ -179,9 +183,9 @@ export class Notification {
     }
   };
 
-  fetch = async inboxRoot => {
+  fetch = async () => {
     try {
-      const inbox = await solidLdlex[inboxRoot];
+      const inbox = await solidLdlex[this.inboxRoot];
       let notificationsPath = [];
       let notification = [];
 
