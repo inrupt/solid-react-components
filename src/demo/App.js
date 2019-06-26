@@ -47,7 +47,7 @@ const Header = () => {
 const App = () => {
   const webId = useWebId();
   const { createNotification, createInbox } = useNotification(
-    'https://jairocampos.solid.community/public/notificationexample/test3/inbox',
+    'https://jairocampos.solid.community/public/notificationexample/test7/inbox',
     webId
   );
 
@@ -81,7 +81,10 @@ const App = () => {
           <HandleShexForm {...{ webId }} />
         </ShexFormComponent>
       )}
-      <button type="button" onClick={createNotification}>
+      <button
+        type="button"
+        onClick={() => createNotification({ title: 'Notification', content: 'Detail' })}
+      >
         Create notification
       </button>
     </DemoWrapper>

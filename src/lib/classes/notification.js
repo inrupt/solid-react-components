@@ -119,61 +119,53 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (title, content, options = {}) => {
+  create = async (content = {}) => {
     try {
       const notificationName = unique();
-      const notificationPath = `${this.inboxRoot}/${notificationName}`;
+      const notificationPath = `${this.inboxRoot}/${notificationName}.ttl`;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
+
+      if (!this.schema['@context']) {
+        throw new SolidError('Schema do not have context', 'Notification', 500);
+      }
+
+      const { '@context': context, shape } = this.schema;
+
       const writer = new N3.Writer({
-        prefixes: {
-          things: PREFIXES.things,
-          schema: PREFIXES.schema,
-          terms: PREFIXES.terms
-        },
+        prefixes: context,
         format: 'text/turtle'
       });
 
       if (this.schema) {
         await this.fetchNotificationShape(this.shape);
       }
-      console.log(this.schema);
-      /* writer.addQuad(
-        namedNode(notificationPath),
-        namedNode(`${PREFIXES.things}id`),
-        literal(notificationName)
-      ); */
 
-      /* notificationShape.forEach(item => {
-        if (item.predicate && item.predicate.includes(':')) {
-          writer.addQuad(
-            namedNode(notificationPath),
-            namedNode(`${PREFIXES[item.predicate.split(':')[0]]}id`),
-            literal(notificationName)
-          );
+      shape.forEach(item => {
+        if (item.property && item.property.includes(':')) {
+          if (content[item.label]) {
+            writer.addQuad(
+              namedNode(notificationPath),
+              namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
+              literal(content[item.label])
+            );
+          }
         } else {
-          throw new SolidError('Schema do not have predicate', 'Notification', 500);
+          throw new SolidError('Schema do not have property', 'Notification', 500);
         }
-      }); */
+      });
 
-      /* options.forEach(custom => {
-        writer.addQuad(
-          namedNode(custom.subject || notificationPath),
-          namedNode(custom.predicate),
-          literal(custom.value)
-        );
-      }); */
-
-      /* await writer.end(async (error, result) => {
+      await writer.end(async (error, result) => {
         if (error) {
           throw error;
         }
+
         await solid.fetch(notificationPath, {
           method: 'PUT',
           body: result,
           contentType: 'text/turtle'
         });
-      }); */
+      });
       return solidResponse(200, 'Notification was created');
     } catch (error) {
       console.log(error);

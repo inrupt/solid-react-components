@@ -14,9 +14,12 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
     }
   }, [inboxRoot, owner]);
 
-  const createNotification = useCallback(async () => {
-    await notify.create();
-  }, [inboxRoot]);
+  const createNotification = useCallback(
+    async content => {
+      await notify.create(content);
+    },
+    [inboxRoot]
+  );
 
   const fetchNotification = useCallback(async () => {
     await notify.fetch();
