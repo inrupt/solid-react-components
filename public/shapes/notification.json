@@ -40,7 +40,8 @@
     },
     {
       "label": "read",
-      "property": "as:read"
+      "property": "as:read",
+      "value": false
     }
   ]
 }

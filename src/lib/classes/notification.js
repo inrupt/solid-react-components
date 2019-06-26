@@ -137,11 +137,14 @@ export class Notification {
 
       shape.forEach(item => {
         if (item.property && item.property.includes(':')) {
-          if (content[item.label]) {
+          const defaultValue = item.value;
+
+          if (content[item.label] || defaultValue || item.label === 'read') {
+            const value = item.label === 'read' ? false : content[item.label];
             writer.addQuad(
               namedNode(notificationPath),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
-              literal(content[item.label])
+              literal(defaultValue || value)
             );
           }
         } else {
