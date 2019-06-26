@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Notification } from '@classes';
+import { SolidError } from '@utils';
 
 export const useNotification = (inboxRoot, owner, schema = '/shapes/notification.json') => {
   const [notify, setNotify] = useState(null);
@@ -31,6 +32,14 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
     }
   };
 
+  const deleteNotification = async (filename, inboxRoot) => {
+    try {
+      await notify.delete(filename, inboxRoot);
+    } catch (error) {
+      throw new SolidError(error.message, 'Delete Notification', error.status);
+    }
+  };
+
   useEffect(() => {
     if (inboxRoot && owner) {
       setNotify(new Notification(owner, inboxRoot, schema));
@@ -44,6 +53,7 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
   return {
     fetchNotification,
     createNotification,
+    deleteNotification,
     createInbox,
     notifications
   };

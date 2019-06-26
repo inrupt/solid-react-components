@@ -179,9 +179,17 @@ export class Notification {
     }
   };
 
-  delete = async notificationPath => {
+  delete = async (filename, inboxRoot) => {
     try {
-      await solid.fetch(notificationPath, { method: 'DELETE' });
+      /**
+       * Delete file into inbox folder
+       */
+      await solid.fetch(`${inboxRoot}/${filename}`, { method: 'DELETE' });
+      /**
+       * Delete file name into inbox file list[contains]
+       */
+      await solidLdlex[inboxRoot]['ldp:contains'].delete(filename);
+
       return solidResponse(200, 'Notification was deleted it');
     } catch (error) {
       throw new SolidError(error.message, 'Notification Delete', error.status);
