@@ -1,8 +1,9 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Notification } from '@classes';
 
 export const useNotification = (inboxRoot, owner, schema = 'public/shapes/notification.json') => {
   const notify = new Notification(owner, inboxRoot, schema);
+  const [notifications, setNotifications] = useState([]);
   const createInbox = useCallback(async () => {
     try {
       if (owner) {
@@ -19,14 +20,18 @@ export const useNotification = (inboxRoot, owner, schema = 'public/shapes/notifi
   }, [inboxRoot]);
 
   const fetchNotification = useCallback(async () => {
-    await notify.fetch();
+    const notificationList = await notify.fetch();
+    setNotifications(notificationList);
   }, [inboxRoot]);
 
-  useEffect(() => {}, [inboxRoot, owner]);
+  useEffect(() => {
+    fetchNotification();
+  }, [inboxRoot, owner]);
 
   return {
     fetchNotification,
     createNotification,
-    createInbox
+    createInbox,
+    notifications
   };
 };
