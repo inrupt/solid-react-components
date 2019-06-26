@@ -19,16 +19,11 @@ export class Notification {
     this.owner = owner;
     this.inboxRoot = inboxRoot;
     this.schema = null;
-
-    this.fetchNotificationShape(this.shape);
   }
 
   hasInbox = async path => {
-    try {
-      return await solid.fetch(path, { method: 'GET' });
-    } catch (error) {
-      return false;
-    }
+    const result = await solid.fetch(path, { method: 'GET' });
+    return result.ok;
   };
   /**
    * Create inbox container with default permissions
@@ -39,14 +34,9 @@ export class Notification {
 
   createInbox = async () => {
     try {
-      const result = await this.hasInbox(this.inboxRoot);
-      /**
-       * if Inbox already exists we throw error
-       */
-      if (result.status === 200) {
-        throw new SolidError('Inbox already exists', 'Inbox', 500);
-      }
+      const hasInbox = await this.hasInbox(this.inboxRoot);
 
+      if (hasInbox) return;
       const termFactory = N3.DataFactory;
       const { namedNode } = termFactory;
       const writer = new N3.Writer({
@@ -64,6 +54,8 @@ export class Notification {
 
       writer.addQuad(namedNode('#owner'), namedNode('acl:accessTo'), namedNode('./'));
 
+      writer.addQuad(namedNode('#owner'), namedNode('acl:defaultForNew'), namedNode('./'));
+
       writer.addQuad(
         namedNode('#owner'),
         namedNode('acl:mode'),
@@ -79,6 +71,8 @@ export class Notification {
       );
 
       writer.addQuad(namedNode('#public'), namedNode('acl:accessTo'), namedNode('./'));
+
+      writer.addQuad(namedNode('#pulic'), namedNode('acl:defaultForNew'), namedNode('./'));
 
       writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Append'));
 
@@ -126,6 +120,10 @@ export class Notification {
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
 
+      if (!this.schema) {
+        await this.fetchNotificationShape(this.shape);
+      }
+
       if (!this.schema['@context']) {
         throw new SolidError('Schema do not have context', 'Notification', 500);
       }
@@ -136,10 +134,6 @@ export class Notification {
         prefixes: context,
         format: 'text/turtle'
       });
-
-      if (this.schema) {
-        await this.fetchNotificationShape(this.shape);
-      }
 
       shape.forEach(item => {
         if (item.property && item.property.includes(':')) {
@@ -211,7 +205,7 @@ export class Notification {
 
       console.log(notification);
     } catch (error) {
-      throw new SolidError(error.message, 'Notification Delete', error.status);
+      throw new SolidError(error.message, 'Notification Fetch', error.status);
     }
   };
 }
