@@ -107,7 +107,11 @@ export class Notification {
           throw error;
         }
 
-        await solid.fetch(`${this.inboxRoot}/.acl`, {
+        await solid.fetch(`${this.inboxRoot}.dummy`, { method: 'PUT' });
+
+        await solid.fetch(`${this.inboxRoot}.dummy`, { method: 'DELETE' });
+
+        await solid.fetch(`${this.inboxRoot}.acl`, {
           method: 'PUT',
           body: result,
           contentType: 'text/turtle'
@@ -199,7 +203,7 @@ export class Notification {
         }
 
         await solid.fetch(notificationPath, {
-          method: 'PUT',
+          method: 'POST',
           body: result,
           contentType: 'text/turtle'
         });
