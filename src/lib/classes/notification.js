@@ -1,6 +1,6 @@
 import solid from 'solid-auth-client';
 import N3 from 'n3';
-import solidLflex from '@solid/query-ldflex';
+import solidLDflex from '@solid/query-ldflex';
 import unique from 'unique';
 import { solidResponse, SolidError } from '@utils';
 import defaultShape from '../shapes/notification.json';
@@ -30,7 +30,7 @@ export class Notification {
   hasInbox = async path => {
     const result = await solid.fetch(path, { method: 'GET' });
     let inboxList = [];
-    for await (const inbox of solidLflex[this.owner]['ldp:inbox']) {
+    for await (const inbox of solidLDflex[this.owner]['ldp:inbox']) {
       inboxList = [...inboxList, inbox.value];
     }
     return result.ok && inboxList.includes(path);
@@ -44,7 +44,7 @@ export class Notification {
     try {
       await solid.fetch(`${this.inboxRoot}`, { method: 'DELETE' });
 
-      await solidLflex[this.owner]['ldp:inbox'].delete(this.inboxRoot);
+      await solidLDflex[this.owner]['ldp:inbox'].delete(this.inboxRoot);
 
       return solidResponse(200, 'Inbox was deleted');
     } catch (error) {
@@ -114,7 +114,7 @@ export class Notification {
         });
       });
 
-      await solidLflex[this.owner]['ldp:inbox'].add(namedNode(this.inboxRoot));
+      await solidLDflex[this.owner]['ldp:inbox'].add(namedNode(this.inboxRoot));
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
       throw new SolidError(error.message, 'Inbox', 500);
@@ -217,7 +217,7 @@ export class Notification {
    */
   markAsRead = async notificationPath => {
     try {
-      await solidLflex[notificationPath]['https://www.w3.org/ns/activitystreams#read'].set(true);
+      await solidLDflex[notificationPath]['https://www.w3.org/ns/activitystreams#read'].set(true);
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
@@ -240,7 +240,7 @@ export class Notification {
       /**
        * Delete file name into inbox file list[contains]
        */
-      await solidLflex[inboxRoot]['ldp:contains'].delete(filename);
+      await solidLDflex[inboxRoot]['ldp:contains'].delete(filename);
 
       return solidResponse(200, 'Notification was deleted it');
     } catch (error) {
@@ -257,7 +257,7 @@ export class Notification {
   fetch = async () => {
     try {
       if (!this.schema) await this.fetchNotificationShape(this.shape);
-      const inbox = await solidLflex[this.inboxRoot];
+      const inbox = await solidLDflex[this.inboxRoot];
       let notificationPaths = [];
       let notifications = [];
       for await (const path of inbox['ldp:contains']) {
@@ -265,7 +265,7 @@ export class Notification {
       }
 
       for await (const path of notificationPaths) {
-        const turtleNotification = await solidLflex[path];
+        const turtleNotification = await solidLDflex[path];
         const id = path
           .split('/')
           .pop()
