@@ -157,7 +157,7 @@ export class Notification {
   create = async (content = {}, to) => {
     try {
       const notificationName = unique();
-      const notificationPath = `${to || this.inboxRoot}/${notificationName}.ttl`;
+      const notificationPath = `${to || this.inboxRoot}${notificationName}.ttl`;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
 
