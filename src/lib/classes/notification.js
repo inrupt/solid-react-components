@@ -23,7 +23,11 @@ export class Notification {
 
   hasInbox = async path => {
     const result = await solid.fetch(path, { method: 'GET' });
-    return result.ok;
+    let inboxList = [];
+    for await (const inbox of solidLdlex[this.owner]['ldp:inbox']) {
+      inboxList = [...inboxList, inbox.value];
+    }
+    return result.ok && inboxList.includes(path);
   };
   /**
    * Create inbox container with default permissions
