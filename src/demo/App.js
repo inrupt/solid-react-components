@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 // import auth from 'solid-auth-client';

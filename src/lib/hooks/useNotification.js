@@ -31,7 +31,7 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
       const notificationList = await notify.fetch();
       setNotifications(notificationList);
     } catch (error) {
-      console.log(error);
+      throw new SolidError(error.message, 'Fetch Notification', error.status);
     }
   };
 
