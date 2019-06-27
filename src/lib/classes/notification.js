@@ -84,7 +84,6 @@ export class Notification {
         if (error) {
           throw error;
         }
-        await solid.fetch(`${this.inboxRoot}/.dummy`, { method: 'PUT' });
 
         await solid.fetch(`${this.inboxRoot}/.acl`, {
           method: 'PUT',
