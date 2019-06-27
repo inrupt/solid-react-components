@@ -1,11 +1,9 @@
 import React from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
-// import auth from 'solid-auth-client';
 import SolidImg from '../assets/solid_logo.png';
 import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
 import HandleShexForm from './components';
-// import { Notification } from '../classes/notification';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
