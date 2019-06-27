@@ -88,6 +88,8 @@ export class Notification {
           contentType: 'text/turtle'
         });
       });
+
+      await solidLdlex[this.owner]['ldp:inbox'].add(namedNode(this.inboxRoot));
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
       throw new SolidError(error.message, 'Inbox', 500);
