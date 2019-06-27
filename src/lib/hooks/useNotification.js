@@ -39,6 +39,14 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
     }
   };
 
+  const deleteInbox = async () => {
+    try {
+      notify.deleteInbox();
+    } catch (error) {
+      throw new SolidError(error.message, 'Delete Inbox Error', error.status);
+    }
+  };
+
   const markAsReadNotification = async notificationPath => {
     try {
       await notify.markAsRead(notificationPath);
@@ -63,6 +71,7 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
     deleteNotification,
     markAsReadNotification,
     createInbox,
-    notifications
+    notifications,
+    deleteInbox
   };
 };

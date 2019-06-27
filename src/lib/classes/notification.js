@@ -21,6 +21,11 @@ export class Notification {
     this.schema = null;
   }
 
+  /**
+   * We are checking if user has inbox reference on card also if inbox folder exists.
+   * @param path
+   * @returns {Promise<*|boolean>}
+   */
   hasInbox = async path => {
     const result = await solid.fetch(path, { method: 'GET' });
     let inboxList = [];
@@ -28,6 +33,22 @@ export class Notification {
       inboxList = [...inboxList, inbox.value];
     }
     return result.ok && inboxList.includes(path);
+  };
+  /**
+   * Delete inbox folder and ldp on user card
+   * @returns {Promise<*>}
+   */
+
+  deleteInbox = async () => {
+    try {
+      await solid.fetch(`${this.inboxRoot}`, { method: 'DELETE' });
+
+      await solidLdlex[this.owner]['ldp:inbox'].delete(this.inboxRoot);
+
+      return solidResponse(200, 'Inbox was deleted');
+    } catch (error) {
+      throw new SolidError(error.message, 'Delete Inbox', 500);
+    }
   };
   /**
    * Create inbox container with default permissions
@@ -99,6 +120,12 @@ export class Notification {
     }
   };
 
+  /**
+   * Fetch shape object that will be use it to build notifications and also
+   * to know how we need to render it.
+   * @param file
+   * @returns {Promise<void>}
+   */
   fetchNotificationShape = async file => {
     try {
       const result = await fetch(file);
@@ -174,6 +201,11 @@ export class Notification {
     }
   };
 
+  /**
+   * Mark has read notifications
+   * @param notificationPath
+   * @returns {Promise<*>}
+   */
   markAsRead = async notificationPath => {
     try {
       await solidLdlex[notificationPath][`https://www.w3.org/ns/activitystreams#read`].set(true);
@@ -184,6 +216,12 @@ export class Notification {
     }
   };
 
+  /**
+   * Delete notification file from inbox folder and container list
+   * @param filename
+   * @param inboxRoot
+   * @returns {Promise<*>}
+   */
   delete = async (filename, inboxRoot) => {
     try {
       /**
@@ -227,7 +265,6 @@ export class Notification {
         for await (const field of this.schema.shape) {
           const data = await turtleNotification[this.getPredicate(field)];
           const value = data ? data.value : null;
-          // const value = values.length > 1 ? values : values[0];
           notificationData = value
             ? { ...notificationData, [field.label]: value }
             : notificationData;
