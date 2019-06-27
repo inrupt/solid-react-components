@@ -3,6 +3,7 @@ import N3 from 'n3';
 import solidLflex from '@solid/query-ldflex';
 import unique from 'unique';
 import { solidResponse, SolidError } from '@utils';
+import defaultShape from '../shapes/notification.json';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',
@@ -14,7 +15,7 @@ const PREFIXES = {
 };
 
 export class Notification {
-  constructor(owner, inboxRoot, shape) {
+  constructor(owner, inboxRoot, shape = defaultShape) {
     this.shape = shape;
     this.owner = owner;
     this.inboxRoot = inboxRoot;
@@ -97,7 +98,7 @@ export class Notification {
 
       writer.addQuad(namedNode('#public'), namedNode('acl:accessTo'), namedNode('./'));
 
-      writer.addQuad(namedNode('#pulic'), namedNode('acl:defaultForNew'), namedNode('./'));
+      writer.addQuad(namedNode('#public'), namedNode('acl:defaultForNew'), namedNode('./'));
 
       writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Append'));
 
@@ -128,6 +129,14 @@ export class Notification {
    */
   fetchNotificationShape = async file => {
     try {
+      /**
+       * if shape comes like object will return the object instead of make a fetch request
+       */
+      if (typeof file === 'object') {
+        this.schema = file;
+        return;
+      }
+
       const result = await fetch(file);
       const schema = await result.json();
 

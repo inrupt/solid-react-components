@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Notification } from '@classes';
 import { SolidError } from '@utils';
 
-export const useNotification = (inboxRoot, owner, schema = '/shapes/notification.json') => {
+export const useNotification = (inboxRoot, owner, schema) => {
   const [notify, setNotify] = useState(null);
   const [notifications, setNotifications] = useState([]);
 
