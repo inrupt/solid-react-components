@@ -16,7 +16,11 @@ export const useNotification = (inboxRoot, owner, schema = '/shapes/notification
 
   const createNotification = useCallback(
     async content => {
-      await notify.create(content);
+      try {
+        await notify.create(content);
+      } catch (error) {
+        throw new SolidError(error.message, 'Create notification', error.status);
+      }
     },
     [inboxRoot, notify]
   );
