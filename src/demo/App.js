@@ -44,9 +44,7 @@ const Header = () => {
 
 const App = () => {
   const webId = useWebId();
-  const url = webId
-    ? `${webId.split('/profile')[0]}/public/notificationexample/test28/inbox/`
-    : null;
+  const url = webId ? `${webId.split('/profile')[0]}/public/game/game1/inbox/` : null;
   const { notifications, createNotification } = useNotification(url, webId);
 
   return (

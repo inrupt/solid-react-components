@@ -114,7 +114,9 @@ export class Notification {
         await solid.fetch(`${this.inboxRoot}.acl`, {
           method: 'PUT',
           body: result,
-          contentType: 'text/turtle'
+          headers: {
+            'Content-Type': 'text/turtle'
+          }
         });
       });
 
@@ -203,9 +205,11 @@ export class Notification {
         }
 
         await solid.fetch(notificationPath, {
-          method: 'POST',
+          method: 'PUT',
           body: result,
-          contentType: 'text/turtle'
+          headers: {
+            'Content-Type': 'text/turtle'
+          }
         });
       });
       return solidResponse(200, 'Notification was created');
