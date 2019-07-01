@@ -16,6 +16,11 @@ const PREFIXES = {
 
 export class Notification {
   constructor(owner, inboxRoot, shape = defaultShape) {
+    if (Notification.instance) {
+      console.log(owner, inboxRoot);
+      return Notification.instance;
+    }
+    Notification.instance = this;
     this.shape = shape;
     this.owner = owner;
     this.inboxRoot = inboxRoot;
@@ -264,13 +269,16 @@ export class Notification {
 
   fetch = async () => {
     try {
+      console.log('Class fetch');
       if (!this.schema) await this.fetchNotificationShape(this.shape);
       const inbox = await solidLDflex[this.inboxRoot];
+      console.log('Inbox', inbox);
       let notificationPaths = [];
       let notifications = [];
       for await (const path of inbox['ldp:contains']) {
         notificationPaths = [...notificationPaths, path.value];
       }
+      console.log('Notifications Paths', notificationPaths);
 
       for await (const path of notificationPaths) {
         const turtleNotification = await solidLDflex[path];

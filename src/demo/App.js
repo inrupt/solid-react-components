@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import SolidImg from '../assets/solid_logo.png';
@@ -45,7 +45,11 @@ const Header = () => {
 const App = () => {
   const webId = useWebId();
   const url = webId ? `${webId.split('/profile')[0]}/public/game/game1/inbox/` : null;
-  const { notifications, createNotification } = useNotification(url, webId);
+  const { fetchNotification, notifications, createNotification } = useNotification(url, webId);
+
+  useEffect(() => {
+    if (webId && url) fetchNotification();
+  }, [webId, url]);
 
   return (
     <DemoWrapper>
