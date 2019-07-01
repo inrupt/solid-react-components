@@ -31,7 +31,6 @@ export const useNotification = (inboxRoot, owner, schema) => {
       const notify = new Notification(owner, inboxRoot, schema);
 
       if (notify) {
-        console.log('Fetching', notify);
         const notificationList = await notify.fetch();
         setNotifications(notificationList);
       }
