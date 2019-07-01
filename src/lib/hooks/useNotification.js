@@ -12,13 +12,13 @@ export const useNotification = (inboxRoot, owner, schema) => {
     } catch (error) {
       throw error;
     }
-  }, [owner]);
+  }, [owner, inboxRoot]);
 
   const createNotification = useCallback(
-    async content => {
+    async (content, to) => {
       try {
         const notify = new Notification(owner, inboxRoot, schema);
-        await notify.create(content);
+        await notify.create(content, to);
       } catch (error) {
         throw new SolidError(error.message, 'Create notification', error.status);
       }
@@ -37,7 +37,7 @@ export const useNotification = (inboxRoot, owner, schema) => {
     } catch (error) {
       throw new SolidError(error.message, 'Fetch Notification', error.status);
     }
-  });
+  }, [inboxRoot]);
 
   const deleteNotification = async (filename, inboxRoot) => {
     try {
