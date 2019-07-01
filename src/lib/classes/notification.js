@@ -115,7 +115,7 @@ export class Notification {
 
         await solid.fetch(`${this.inboxRoot}.dummy`, { method: 'DELETE' });
 
-        await solid.fetch(`${this.inboxRoot}.acl`, {
+        await solid.fetch(`${this.inboxRoot}/inbox.acl`, {
           method: 'PUT',
           body: result,
           headers: {

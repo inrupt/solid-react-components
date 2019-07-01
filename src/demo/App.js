@@ -44,9 +44,8 @@ const Header = () => {
 
 const App = () => {
   const webId = useWebId();
-  const url = webId ? `${webId.split('/profile')[0]}/public/game/game1/inbox/` : null;
+  const url = webId ? `${webId.split('/profile')[0]}/public/tictactoe/inbox/` : null;
   const { fetchNotification, notifications, createNotification } = useNotification(url, webId);
-
   useEffect(() => {
     if (webId && url) fetchNotification();
   }, [webId, url]);

@@ -3,7 +3,7 @@ import { Notification } from '@classes';
 import { SolidError } from '@utils';
 
 export const useNotification = (inboxRoot, owner, schema) => {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState({ notifications: [], unread: 0 });
 
   const createInbox = useCallback(async () => {
     try {
@@ -32,7 +32,22 @@ export const useNotification = (inboxRoot, owner, schema) => {
 
       if (notify) {
         const notificationList = await notify.fetch();
-        setNotifications(notificationList);
+        /**
+         * Get unread notifications
+         * @type {number}
+         */
+        const unread = Array.isArray(notificationList)
+          ? notificationList.filter(item => item.read === 'false').length
+          : 0;
+
+        /**
+         * Set notifications list and unread notification count
+         */
+        setNotifications({
+          ...notifications,
+          notifications: notificationList,
+          unread
+        });
       }
     } catch (error) {
       throw new SolidError(error.message, 'Fetch Notification', error.status);

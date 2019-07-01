@@ -5,7 +5,8 @@ import {
   LiveUpdate,
   useWebId,
   UpdateContext,
-  useLiveUpdate
+  useLiveUpdate,
+  useLatestUpdate
 } from '@solid/react';
 import {
   ProviderLogin,
@@ -32,6 +33,7 @@ export {
   useWebId,
   UpdateContext,
   useLiveUpdate,
+  useLatestUpdate,
   ShexForm,
   ShexFormBuilder,
   useNotification
