@@ -16,12 +16,14 @@ const PREFIXES = {
 
 export class Notification {
   constructor(owner, inboxRoot, shape = defaultShape) {
-    if (!Notification.instance) Notification.instance = this;
+    if (Notification.instance) {
+      return Notification.instance;
+    }
+    this.shape = shape;
     this.owner = owner;
     this.inboxRoot = inboxRoot;
-    this.shape = shape;
     this.schema = null;
-    return Notification.instance;
+    Notification.instance = this;
   }
 
   /**
