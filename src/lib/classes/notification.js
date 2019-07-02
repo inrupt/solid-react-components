@@ -229,7 +229,7 @@ export class Notification {
    */
   markAsRead = async notificationPath => {
     try {
-      await solidLDflex[notificationPath]['https://www.w3.org/ns/activitystreams#read'].set(true);
+      await solidLDflex[notificationPath]['as:read'].set('true');
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
@@ -281,7 +281,7 @@ export class Notification {
           .split('/')
           .pop()
           .split('.')[0];
-        let notificationData = id !== '' ? { id } : {};
+        let notificationData = id !== '' ? { id, path } : {};
         for await (const field of this.schema.shape) {
           const data = await turtleNotification[this.getPredicate(field)];
           const value = data ? data.value : null;

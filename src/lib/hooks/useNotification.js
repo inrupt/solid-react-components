@@ -72,9 +72,24 @@ export const useNotification = (inboxRoot, owner, schema) => {
     }
   };
 
-  const markAsReadNotification = async notificationPath => {
+  const markAsReadNotification = async (notificationPath, id) => {
     try {
       const notify = new Notification(owner, inboxRoot, schema);
+      /**
+       * Update notification read to true
+       */
+      if (id) {
+        const { notifications: list, unread } = notifications;
+        const updatedNotification = list.map(item =>
+          item.id === id ? { ...item, read: 'true' } : item
+        );
+        const updatedUnread = unread === 0 ? 0 : unread - 1;
+        setNotifications({
+          ...notifications,
+          notifications: updatedNotification,
+          unread: updatedUnread
+        });
+      }
       await notify.markAsRead(notificationPath);
     } catch (error) {
       throw new SolidError(error.message, 'Update Notification', error.status);
