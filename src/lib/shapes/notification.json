@@ -8,40 +8,49 @@
   "shape": [
     {
       "label": "id",
-      "property": "terms:id"
+      "property": "terms:id",
+      "type": "Literal"
     },
     {
       "label": "title",
-      "property": "terms:title"
+      "property": "terms:title",
+      "type": "Literal"
     },
     {
       "label": "summary",
-      "property": "as:summary"
+      "property": "as:summary",
+      "type": "Literal"
     },
     {
       "label": "type",
-      "property": "rdfs:type"
+      "property": "rdfs:type",
+      "type": "Literal"
     },
     {
       "label": "target",
-      "property": "as:target"
+      "property": "as:target",
+      "type": "NamedNode"
     },
     {
       "label": "object",
-      "property": "as:object"
+      "property": "as:object",
+      "type": "NamedNode"
     },
     {
       "label": "image",
-      "property": "schema:image"
+      "property": "schema:image",
+      "type": "NamedNode"
     },
     {
       "label": "sender",
-      "property": "schema:sender"
+      "property": "schema:sender",
+      "type": "NamedNode"
     },
     {
       "label": "read",
       "property": "as:read",
-      "value": false
+      "value": false,
+      "type": "Literal"
     }
   ]
 }

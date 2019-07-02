@@ -192,10 +192,11 @@ export class Notification {
 
           if (content[item.label] || defaultValue || item.label === 'read') {
             const value = item.label === 'read' ? false : content[item.label];
+            const typedValue = item.type === 'NamedNode' ? namedNode(value) : literal(value);
             writer.addQuad(
               namedNode(notificationPath),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
-              literal(defaultValue || value)
+              typedValue
             );
           }
         } else {
