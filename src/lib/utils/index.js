@@ -4,6 +4,11 @@ import solidResponse from './statusMessage';
 import { fetchSchema, existDocument, createDocument, fetchLdflexDocument } from './solidFetch';
 import ShexFormValidator from './shexFormValidator';
 
+const getFileName = path => {
+  // eslint-disable-next-line no-useless-escape
+  return path.replace(/^.*[\\\/]/, '');
+};
+
 export {
   shexUtil,
   SolidError,
@@ -12,5 +17,6 @@ export {
   existDocument,
   createDocument,
   fetchLdflexDocument,
-  ShexFormValidator
+  ShexFormValidator,
+  getFileName
 };

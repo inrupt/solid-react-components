@@ -2,7 +2,7 @@ import solid from 'solid-auth-client';
 import N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
 import unique from 'unique';
-import { solidResponse, SolidError } from '@utils';
+import { solidResponse, SolidError, getFileName } from '@utils';
 import defaultShape from '../shapes/notification.json';
 
 const PREFIXES = {
@@ -261,16 +261,17 @@ export class Notification {
    * @param inboxRoot
    * @returns {Promise<*>}
    */
-  delete = async (filename, inboxRoot) => {
+  delete = async (file, inboxRoot) => {
     try {
       /**
        * Delete file into inbox folder
        */
-      await solid.fetch(`${inboxRoot}/${filename}`, { method: 'DELETE' });
+      await solid.fetch(file, { method: 'DELETE' });
       /**
        * Delete file name into inbox file list[contains]
        */
-      await solidLDflex[inboxRoot]['ldp:contains'].delete(filename);
+      const fileName = getFileName(file);
+      await solidLDflex[inboxRoot]['ldp:contains'].delete(fileName);
 
       return solidResponse(200, 'Notification was deleted it');
     } catch (error) {
@@ -313,6 +314,11 @@ export class Notification {
             ? [...notifications, notificationData]
             : notifications;
       }
+      /**
+       * short by date
+       * @type {this}
+       */
+      // eslint-disable-next-line no-nested-ternary
       return notifications;
     } catch (error) {
       throw new SolidError(error.message, 'Notification Fetch', error.status);

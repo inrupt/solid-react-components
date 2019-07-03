@@ -54,9 +54,9 @@ export const useNotification = (inboxRoot, owner, schema) => {
     }
   }, [inboxRoot]);
 
-  const deleteNotification = async (filename, inboxRoot) => {
+  const deleteNotification = async (filename, inbox) => {
     try {
-      const notify = new Notification(owner, inboxRoot, schema);
+      const notify = new Notification(owner, inbox || inboxRoot, schema);
       await notify.delete(filename, inboxRoot);
     } catch (error) {
       throw new SolidError(error.message, 'Delete Notification', error.status);
