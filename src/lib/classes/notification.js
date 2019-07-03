@@ -190,8 +190,25 @@ export class Notification {
         if (item.property && item.property.includes(':')) {
           const defaultValue = item.value;
 
-          if (content[item.label] || defaultValue || item.label === 'read') {
-            const value = item.label === 'read' ? 'false' : content[item.label];
+          if (
+            content[item.label] ||
+            defaultValue ||
+            item.label === 'read' ||
+            item.label === 'sent'
+          ) {
+            /**
+             * Add read by default on notification document
+             * @type {string}
+             */
+            let value = item.label === 'read' ? 'false' : content[item.label];
+            /**
+             * Add send time by default on notification document
+             * @type {string}
+             */
+            value = item.label === 'sent' ? new Date().toISOString() : value;
+            /**
+             * Check if object from schema is a literal or node value
+             */
             const typedValue = item.type === 'NamedNode' ? namedNode(value) : literal(value);
             writer.addQuad(
               namedNode(notificationPath),

@@ -47,6 +47,11 @@
       "type": "NamedNode"
     },
     {
+      "label": "sent",
+      "property": "schema:sent",
+      "type": "Literal"
+    },
+    {
       "label": "read",
       "property": "as:read",
       "value": false,
