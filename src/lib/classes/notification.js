@@ -191,7 +191,7 @@ export class Notification {
           const defaultValue = item.value;
 
           if (content[item.label] || defaultValue || item.label === 'read') {
-            const value = item.label === 'read' ? false : content[item.label];
+            const value = item.label === 'read' ? 'false' : content[item.label];
             const typedValue = item.type === 'NamedNode' ? namedNode(value) : literal(value);
             writer.addQuad(
               namedNode(notificationPath),
