@@ -45,15 +45,21 @@ const Header = () => {
 const App = () => {
   const webId = useWebId();
   const url = webId ? `${webId.split('/profile')[0]}/public/tictactoe/inbox/` : null;
-  const { fetchNotification, notifications, createNotification } = useNotification(url, webId);
+  const {
+    fetchNotification,
+    notifications,
+    createNotification,
+    deleteNotification
+  } = useNotification(url, webId);
+
   useEffect(() => {
-    if (webId && url) fetchNotification();
-  }, [webId, url]);
+    if (notifications && notifications.notify) fetchNotification(url);
+  }, [notifications]);
 
   return (
     <DemoWrapper>
       <Header />
-      <p>{JSON.stringify(notifications)}</p>
+      <p>{JSON.stringify(notifications && notifications.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <Uploader
         {...{
@@ -79,7 +85,11 @@ const App = () => {
       )}
       <button
         type="button"
-        onClick={() => createNotification({ title: 'Notification', summary: 'Detail' })}
+        onClick={() =>
+          deleteNotification(
+            'https://jairo88.inrupt.net/public/tictactoe/inbox/1228282510627072.ttl'
+          )
+        }
       >
         Create notification
       </button>

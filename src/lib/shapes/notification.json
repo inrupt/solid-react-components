@@ -1,4 +1,5 @@
 {
+  "id": "default",
   "@context": {
     "terms": "http://purl.org/dc/terms#",
     "as": "https://www.w3.org/ns/activitystreams#",

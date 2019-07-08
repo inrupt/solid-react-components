@@ -2,7 +2,7 @@ import solid from 'solid-auth-client';
 import N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
 import unique from 'unique';
-import { solidResponse, SolidError, getFileName } from '@utils';
+import { solidResponse, SolidError } from '@utils';
 import defaultShape from '../shapes/notification.json';
 
 const PREFIXES = {
@@ -15,14 +15,14 @@ const PREFIXES = {
 };
 
 export class Notification {
-  constructor(owner, inboxRoot, shape = defaultShape) {
+  constructor(owner) {
     if (Notification.instance) {
       return Notification.instance;
     }
-    this.shape = shape;
+    this.shape = defaultShape;
     this.owner = owner;
-    this.inboxRoot = inboxRoot;
     this.schema = null;
+    this.shapeName = 'default';
     Notification.instance = this;
   }
 
@@ -44,17 +44,18 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  deleteInbox = async () => {
+  deleteInbox = async inbox => {
     try {
-      await solid.fetch(`${this.inboxRoot}`, { method: 'DELETE' });
+      await solid.fetch(`${inbox}`, { method: 'DELETE' });
 
-      await solidLDflex[this.owner]['ldp:inbox'].delete(this.inboxRoot);
+      await solidLDflex[this.owner]['ldp:inbox'].delete(inbox);
 
       return solidResponse(200, 'Inbox was deleted');
     } catch (error) {
       throw new SolidError(error.message, 'Delete Inbox', 500);
     }
   };
+
   /**
    * Create inbox container with default permissions
    * @param inboxRoot
@@ -62,9 +63,9 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  createInbox = async () => {
+  createInbox = async inboxPath => {
     try {
-      const hasInbox = await this.hasInbox(this.inboxRoot);
+      const hasInbox = await this.hasInbox(inboxPath);
 
       if (hasInbox) return;
       const termFactory = N3.DataFactory;
@@ -111,11 +112,11 @@ export class Notification {
           throw error;
         }
 
-        await solid.fetch(`${this.inboxRoot}.dummy`, { method: 'PUT' });
+        await solid.fetch(`${inboxPath}.dummy`, { method: 'PUT' });
 
-        await solid.fetch(`${this.inboxRoot}.dummy`, { method: 'DELETE' });
+        await solid.fetch(`${inboxPath}.dummy`, { method: 'DELETE' });
 
-        await solid.fetch(`${this.inboxRoot}/inbox.acl`, {
+        await solid.fetch(`${inboxPath}/inbox.acl`, {
           method: 'PUT',
           body: result,
           headers: {
@@ -124,7 +125,8 @@ export class Notification {
         });
       });
 
-      await solidLDflex[this.owner]['ldp:inbox'].add(namedNode(this.inboxRoot));
+      await solidLDflex[this.owner]['ldp:inbox'].add(namedNode(inboxPath));
+
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
       throw new SolidError(error.message, 'Inbox', 500);
@@ -137,24 +139,37 @@ export class Notification {
    * @param file
    * @returns {Promise<void>}
    */
-  fetchNotificationShape = async file => {
+  fetchNotificationShape = async (file, name) => {
     try {
       /**
        * if shape comes like object will return the object instead of make a fetch request
        */
       if (typeof file === 'object') {
-        this.schema = file;
+        this.schema = {
+          ...this.schema,
+          [name]: file
+        };
         return;
       }
-
       const result = await fetch(file);
       const schema = await result.json();
 
-      this.schema = schema;
+      this.schema = {
+        ...this.schema,
+        [name]: schema
+      };
     } catch (error) {
       throw new SolidError(error.message, 'Fetch Shape', error.status);
     }
   };
+
+  buildShapeObject = shape => {
+    return {
+      name: (shape && shape.name) || this.shapeName,
+      shape: (shape && shape.path) || this.shape
+    };
+  };
+
   /**
    * create and send notification to user inbox
    * @param inboxRoot
@@ -164,22 +179,23 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (content = {}, to) => {
+  create = async (content = {}, to, options) => {
     try {
+      const currentShape = this.buildShapeObject(options && options.shape);
+      const { name, shape: defaultShape } = currentShape;
       const notificationName = unique();
-      const notificationPath = `${to || this.inboxRoot}${notificationName}.ttl`;
+      const notificationPath = `${to}${notificationName}.ttl`;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
 
-      if (!this.schema) {
-        await this.fetchNotificationShape(this.shape);
+      if (!this.schema || (this.schema && !this.schema[name])) {
+        await this.fetchNotificationShape(defaultShape, name);
       }
-
-      if (!this.schema['@context']) {
+      if (!this.schema[name]['@context']) {
         throw new SolidError('Schema does not have context', 'Notification', 500);
       }
 
-      const { '@context': context, shape } = this.schema;
+      const { '@context': context, shape } = this.schema[name];
 
       const writer = new N3.Writer({
         prefixes: context,
@@ -261,17 +277,12 @@ export class Notification {
    * @param inboxRoot
    * @returns {Promise<*>}
    */
-  delete = async (file, inboxRoot) => {
+  delete = async file => {
     try {
       /**
-       * Delete file into inbox folder
+       * Delete file into inbox folder by default will delete the reference on inbox container
        */
       await solid.fetch(file, { method: 'DELETE' });
-      /**
-       * Delete file name into inbox file list[contains]
-       */
-      const fileName = getFileName(file);
-      await solidLDflex[inboxRoot]['ldp:contains'].delete(fileName);
 
       return solidResponse(200, 'Notification was deleted it');
     } catch (error) {
@@ -279,21 +290,27 @@ export class Notification {
     }
   };
 
-  getPredicate = field => {
+  getPredicate = (field, shapeName) => {
     const prefix = field.property.split(':')[0];
-    const ontology = this.schema['@context'][prefix];
+    const ontology = this.schema[shapeName]['@context'][prefix];
     return `${ontology}${field.label}`;
   };
 
-  fetch = async () => {
+  fetch = async (inboxRoot, customShape) => {
     try {
-      if (!this.schema) await this.fetchNotificationShape(this.shape);
-      const inbox = await solidLDflex[this.inboxRoot];
+      const currentShape = this.buildShapeObject(customShape);
+      const { name, shape } = currentShape;
+      const inbox = await solidLDflex[inboxRoot];
       let notificationPaths = [];
       let notifications = [];
+
+      if ((this.schema && !this.schema[name]) || !this.schema)
+        await this.fetchNotificationShape(shape, name);
+
       for await (const path of inbox['ldp:contains']) {
         notificationPaths = [...notificationPaths, path.value];
       }
+
       for await (const path of notificationPaths) {
         const turtleNotification = await solidLDflex[path];
         const id = path
@@ -301,8 +318,9 @@ export class Notification {
           .pop()
           .split('.')[0];
         let notificationData = id !== '' ? { id, path } : {};
-        for await (const field of this.schema.shape) {
-          const data = await turtleNotification[this.getPredicate(field)];
+
+        for await (const field of this.schema[name].shape) {
+          const data = await turtleNotification[this.getPredicate(field, name)];
           const value = data ? data.value : null;
           notificationData = value
             ? { ...notificationData, [field.label]: value }
@@ -314,11 +332,6 @@ export class Notification {
             ? [...notifications, notificationData]
             : notifications;
       }
-      /**
-       * short by date
-       * @type {this}
-       */
-      // eslint-disable-next-line no-nested-ternary
       return notifications;
     } catch (error) {
       throw new SolidError(error.message, 'Notification Fetch', error.status);
