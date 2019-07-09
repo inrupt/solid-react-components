@@ -14,7 +14,8 @@ export const useNotification = owner => {
   const createInbox = useCallback(
     async (inboxPath, appPath) => {
       try {
-        if (owner && notification.notify) await notification.notify.createInbox(inboxPath, appPath);
+        const notify = new Notification(owner);
+        if (owner && notify) await notification.notify.createInbox(inboxPath, appPath);
       } catch (error) {
         throw error;
       }
