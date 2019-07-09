@@ -1,43 +1,52 @@
 import { useCallback, useState, useEffect } from 'react';
+import moment from 'moment';
 import { Notification } from '@classes';
 import { SolidError } from '@utils';
 
 export const useNotification = owner => {
-  const [notifications, setNotifications] = useState({
+  const [notification, setNotifications] = useState({
     notifications: [],
+    originalNotifications: [],
     unread: 0,
     notify: null
   });
 
   const createInbox = useCallback(
-    async inboxPath => {
+    async (inboxPath, appPath) => {
       try {
-        if (owner && notifications.notify) await notifications.notify.createInbox(inboxPath);
+        if (owner && notification.notify) await notification.notify.createInbox(inboxPath, appPath);
       } catch (error) {
         throw error;
       }
     },
-    [notifications]
+    [notification]
   );
 
   const createNotification = useCallback(
     async (content, to) => {
       try {
-        const { notify } = notifications;
+        // const { notify } = notification;
+        const notify = new Notification(owner);
         await notify.create(content, to);
       } catch (error) {
         throw new SolidError(error.message, 'Create notification', error.status);
       }
     },
-    [notifications]
+    [notification]
   );
 
   const fetchNotification = useCallback(
-    async (url, shape) => {
-      const { notify } = notifications;
+    async (url, options) => {
+      const { notify } = notification;
       try {
         if (notify) {
-          const notificationList = await notify.fetch(url, shape);
+          let notificationList = await notify.fetch(url, options);
+
+          notificationList = notificationList.sort(
+            (a, b) =>
+              // eslint-disable-next-line no-nested-ternary
+              moment(b.sent).format('YYYYMMDD') - moment(a.sent).format('YYYYMMDD')
+          );
           /**
            * Get unread notifications
            * @type {number}
@@ -50,8 +59,9 @@ export const useNotification = owner => {
            * Set notifications list and unread notification count
            */
           setNotifications({
-            ...notifications,
+            ...notification,
             notifications: notificationList,
+            originalNotifications: notificationList,
             unread
           });
         }
@@ -59,45 +69,45 @@ export const useNotification = owner => {
         throw new SolidError(error.message, 'Fetch Notification', error.status);
       }
     },
-    [notifications]
+    [notification]
   );
 
   const deleteNotification = useCallback(
     async fileName => {
       try {
-        const { notify } = notifications;
+        const { notify } = notification;
         await notify.delete(fileName);
       } catch (error) {
         throw new SolidError(error.message, 'Delete Notification', error.status);
       }
     },
-    [notifications]
+    [notification]
   );
 
   const deleteInbox = useCallback(async () => {
     try {
-      const { notify } = notifications;
+      const { notify } = notification;
       notify.deleteInbox();
     } catch (error) {
       throw new SolidError(error.message, 'Delete Inbox Error', error.status);
     }
-  }, [notifications]);
+  }, [notification]);
 
   const markAsReadNotification = useCallback(
     async (notificationPath, id) => {
       try {
-        const { notify } = notifications;
+        const { notify } = notification;
         /**
          * Update notification read to true
          */
         if (id) {
-          const { notifications: list, unread } = notifications;
+          const { notifications: list, unread } = notification;
           const updatedNotification = list.map(item =>
             item.id === id ? { ...item, read: 'true' } : item
           );
           const updatedUnread = unread === 0 ? 0 : unread - 1;
           setNotifications({
-            ...notifications,
+            ...notification,
             notifications: updatedNotification,
             unread: updatedUnread
           });
@@ -107,23 +117,47 @@ export const useNotification = owner => {
         throw new SolidError(error.message, 'Update Notification', error.status);
       }
     },
-    [notifications]
+    [notification]
   );
+
+  const filterNotification = useCallback(
+    name => {
+      const { originalNotifications } = notification;
+      let filteredNotifications = [];
+      if (name) {
+        filteredNotifications = originalNotifications.filter(
+          notification => notification.inboxName === name
+        );
+      } else {
+        filteredNotifications = originalNotifications;
+      }
+
+      setNotifications({ ...notification, notifications: filteredNotifications });
+    },
+    [notification.notifications]
+  );
+
+  const discoveryInbox = useCallback(async () => {
+    const { notify } = notification;
+    return notify.discoveryInbox();
+  });
 
   useEffect(() => {
     if (owner) {
       const notify = new Notification(owner);
-      setNotifications({ ...notifications, notify });
+      setNotifications({ ...notification, notify });
     }
   }, [owner]);
 
   return {
     fetchNotification,
     createNotification,
+    filterNotification,
     deleteNotification,
     markAsReadNotification,
+    discoveryInbox,
     createInbox,
-    notifications,
+    notification,
     deleteInbox
   };
 };

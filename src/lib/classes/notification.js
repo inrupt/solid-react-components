@@ -39,6 +39,7 @@ export class Notification {
     }
     return result.ok && inboxList.includes(path);
   };
+
   /**
    * Delete inbox folder and ldp on user card
    * @returns {Promise<*>}
@@ -63,10 +64,9 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  createInbox = async inboxPath => {
+  createInbox = async (inboxPath, appPath) => {
     try {
       const hasInbox = await this.hasInbox(inboxPath);
-
       if (hasInbox) return;
       const termFactory = N3.DataFactory;
       const { namedNode } = termFactory;
@@ -125,7 +125,7 @@ export class Notification {
         });
       });
 
-      await solidLDflex[this.owner]['ldp:inbox'].add(namedNode(inboxPath));
+      await solidLDflex[appPath]['ldp:inbox'].add(namedNode(inboxPath));
 
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
@@ -296,41 +296,51 @@ export class Notification {
     return `${ontology}${field.label}`;
   };
 
-  fetch = async (inboxRoot, customShape) => {
+  discoveryInbox = async document => {
     try {
-      const currentShape = this.buildShapeObject(customShape);
-      const { name, shape } = currentShape;
-      const inbox = await solidLDflex[inboxRoot];
-      let notificationPaths = [];
+      const user = await solidLDflex[document];
+      const inbox = await user['ldp:inbox'];
+
+      return inbox && inbox.value;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  fetch = async inboxRoot => {
+    try {
       let notifications = [];
+      for await (const currentInbox of inboxRoot) {
+        const currentShape = this.buildShapeObject(currentInbox.shape);
+        const { name, shape } = currentShape;
+        const inbox = await solidLDflex[currentInbox.path];
+        let notificationPaths = [];
 
-      if ((this.schema && !this.schema[name]) || !this.schema)
-        await this.fetchNotificationShape(shape, name);
+        if ((this.schema && !this.schema[name]) || !this.schema)
+          await this.fetchNotificationShape(shape, name);
 
-      for await (const path of inbox['ldp:contains']) {
-        notificationPaths = [...notificationPaths, path.value];
-      }
-
-      for await (const path of notificationPaths) {
-        const turtleNotification = await solidLDflex[path];
-        const id = path
-          .split('/')
-          .pop()
-          .split('.')[0];
-        let notificationData = id !== '' ? { id, path } : {};
-
-        for await (const field of this.schema[name].shape) {
-          const data = await turtleNotification[this.getPredicate(field, name)];
-          const value = data ? data.value : null;
-          notificationData = value
-            ? { ...notificationData, [field.label]: value }
-            : notificationData;
+        for await (const path of inbox['ldp:contains']) {
+          notificationPaths = [...notificationPaths, path.value];
         }
 
-        notifications =
-          Object.keys(notificationData).length > 0
-            ? [...notifications, notificationData]
-            : notifications;
+        for await (const path of notificationPaths) {
+          const turtleNotification = await solidLDflex[path];
+          const id = path
+            .split('/')
+            .pop()
+            .split('.')[0];
+          let notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
+
+          for await (const field of this.schema[name].shape) {
+            const data = await turtleNotification[this.getPredicate(field, name)];
+            const value = data ? data.value : null;
+            notificationData = value
+              ? { ...notificationData, [field.label]: value }
+              : notificationData;
+          }
+
+          notifications = [...notifications, notificationData];
+        }
       }
       return notifications;
     } catch (error) {
