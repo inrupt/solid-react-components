@@ -2,7 +2,7 @@ import solid from 'solid-auth-client';
 import N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
 import unique from 'unique';
-import { solidResponse, SolidError } from '@utils';
+import { solidResponse, SolidError, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 
 const PREFIXES = {
@@ -356,6 +356,9 @@ export class Notification {
               ? { ...notificationData, [field.label]: value }
               : notificationData;
           }
+
+          const sender = await getBasicPod(notificationData.sender);
+          notificationData = { ...notificationData, sender };
 
           notifications = [...notifications, notificationData];
         }
