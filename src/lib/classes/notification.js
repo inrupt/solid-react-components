@@ -33,11 +33,8 @@ export class Notification {
    */
   hasInbox = async path => {
     const result = await solid.fetch(path, { method: 'GET' });
-    let inboxList = [];
-    for await (const inbox of solidLDflex[this.owner]['ldp:inbox']) {
-      inboxList = [...inboxList, inbox.value];
-    }
-    return result.ok && inboxList.includes(path);
+
+    return result.ok;
   };
 
   /**
@@ -68,7 +65,6 @@ export class Notification {
     try {
       const hasInbox = await this.hasInbox(inboxPath);
       const appSettingPat = `${appPath}settings.ttl`;
-
       if (hasInbox) return;
 
       const termFactory = N3.DataFactory;
@@ -145,7 +141,7 @@ export class Notification {
       /**
        * Create inbox reference to discovery into app
        */
-      await solidLDflex[appSettingPat]['ldp:inbox'].set(namedNode(inboxPath));
+      await solidLDflex[appSettingPat]['ldp:inbox'].add(namedNode(inboxPath));
 
       if (!settingsResult.ok)
         throw new Error('Notifications need to have settings file to save reference');
