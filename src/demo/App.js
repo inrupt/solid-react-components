@@ -45,7 +45,7 @@ const Header = () => {
 const App = () => {
   const webId = useWebId();
   const url = webId ? `${webId.split('/profile')[0]}/public/tictactoe/inbox/` : null;
-  const { fetchNotification, notification, createNotification } = useNotification(url, webId);
+  const { fetchNotification, notification, createNotification } = useNotification(webId);
 
   useEffect(() => {
     if (notification && notification.notify)
@@ -53,7 +53,7 @@ const App = () => {
         { path: url, inboxName: 'App' },
         { path: 'https://jairocampos.solid.community/inbox/', inboxName: 'Global App' }
       ]);
-  }, [notification.notify]);
+  }, [notification.notify, webId]);
 
   return (
     <DemoWrapper>

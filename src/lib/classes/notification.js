@@ -108,7 +108,11 @@ export class Notification {
 
       writer.addQuad(namedNode('#public'), namedNode('acl:defaultForNew'), namedNode('./'));
       // Append
-      writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Write'));
+      writer.addQuad(
+        namedNode('#public'),
+        namedNode('acl:mode'),
+        namedNode('acl:Write', 'acl:Read')
+      );
 
       await writer.end(async (error, result) => {
         if (error) {
