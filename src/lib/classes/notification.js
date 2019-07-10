@@ -67,7 +67,10 @@ export class Notification {
   createInbox = async (inboxPath, appPath) => {
     try {
       const hasInbox = await this.hasInbox(inboxPath);
+      const appSettingPat = `${appPath}settings.ttl`;
+
       if (hasInbox) return;
+
       const termFactory = N3.DataFactory;
       const { namedNode } = termFactory;
       const writer = new N3.Writer({
@@ -104,19 +107,31 @@ export class Notification {
       writer.addQuad(namedNode('#public'), namedNode('acl:accessTo'), namedNode('./'));
 
       writer.addQuad(namedNode('#public'), namedNode('acl:defaultForNew'), namedNode('./'));
-
-      writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Append'));
+      // Append
+      writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Write'));
 
       await writer.end(async (error, result) => {
         if (error) {
           throw error;
         }
 
-        await solid.fetch(`${inboxPath}.dummy`, { method: 'PUT' });
+        await solid.fetch(appSettingPat, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'text/turtle'
+          }
+        });
+
+        await solid.fetch(`${inboxPath}.dummy`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'text/turtle'
+          }
+        });
 
         await solid.fetch(`${inboxPath}.dummy`, { method: 'DELETE' });
 
-        await solid.fetch(`${inboxPath}/inbox.acl`, {
+        await solid.fetch(`${inboxPath}.acl`, {
           method: 'PUT',
           body: result,
           headers: {
@@ -125,7 +140,15 @@ export class Notification {
         });
       });
 
-      await solidLDflex[appPath]['ldp:inbox'].add(namedNode(inboxPath));
+      const settingsResult = await solid.fetch(appSettingPat, { method: 'GET' });
+
+      /**
+       * Create inbox reference to discovery into app
+       */
+      await solidLDflex[appSettingPat]['ldp:inbox'].set(namedNode(inboxPath));
+
+      if (!settingsResult.ok)
+        throw new Error('Notifications need to have settings file to save reference');
 
       return solidResponse(200, 'Inbox was created');
     } catch (error) {

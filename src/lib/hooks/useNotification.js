@@ -20,7 +20,7 @@ export const useNotification = owner => {
         throw error;
       }
     },
-    [notification]
+    [notification, owner]
   );
 
   const createNotification = useCallback(
@@ -33,7 +33,7 @@ export const useNotification = owner => {
         throw new SolidError(error.message, 'Create notification', error.status);
       }
     },
-    [notification]
+    [notification, owner]
   );
 
   const fetchNotification = useCallback(
@@ -70,7 +70,7 @@ export const useNotification = owner => {
         throw new SolidError(error.message, 'Fetch Notification', error.status);
       }
     },
-    [notification]
+    [notification, owner]
   );
 
   const deleteNotification = useCallback(
@@ -82,7 +82,7 @@ export const useNotification = owner => {
         throw new SolidError(error.message, 'Delete Notification', error.status);
       }
     },
-    [notification]
+    [notification, owner]
   );
 
   const deleteInbox = useCallback(async () => {
@@ -92,7 +92,7 @@ export const useNotification = owner => {
     } catch (error) {
       throw new SolidError(error.message, 'Delete Inbox Error', error.status);
     }
-  }, [notification]);
+  }, [notification, owner]);
 
   const markAsReadNotification = useCallback(
     async (notificationPath, id) => {
@@ -118,7 +118,7 @@ export const useNotification = owner => {
         throw new SolidError(error.message, 'Update Notification', error.status);
       }
     },
-    [notification]
+    [notification, owner]
   );
 
   const filterNotification = useCallback(
