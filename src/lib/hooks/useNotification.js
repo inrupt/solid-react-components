@@ -42,7 +42,6 @@ export const useNotification = owner => {
       try {
         if (notify) {
           let notificationList = await notify.fetch(url, options);
-
           notificationList = notificationList.sort(
             (a, b) =>
               // eslint-disable-next-line no-nested-ternary

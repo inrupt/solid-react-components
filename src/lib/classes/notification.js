@@ -345,7 +345,6 @@ export class Notification {
         for await (const path of inbox['ldp:contains']) {
           notificationPaths = [...notificationPaths, path.value];
         }
-
         for await (const path of notificationPaths) {
           const turtleNotification = await solidLDflex[path];
           const id = path

@@ -51,7 +51,7 @@ const App = () => {
     if (notification && notification.notify)
       fetchNotification([
         { path: url, inboxName: 'App' },
-        { path: 'https://jairo88.inrupt.net/inbox/', inboxName: 'Global App' }
+        { path: 'https://jairocampos.solid.community/inbox/', inboxName: 'Global App' }
       ]);
   }, [notification.notify]);
 
