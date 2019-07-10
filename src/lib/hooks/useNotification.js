@@ -1,5 +1,4 @@
 import { useCallback, useState, useEffect } from 'react';
-import moment from 'moment';
 import { Notification } from '@classes';
 import { SolidError } from '@utils';
 
@@ -42,11 +41,7 @@ export const useNotification = owner => {
       try {
         if (notify) {
           let notificationList = await notify.fetch(url, options);
-          notificationList = notificationList.sort(
-            (a, b) =>
-              // eslint-disable-next-line no-nested-ternary
-              moment(b.sent).format('YYYYMMDD') - moment(a.sent).format('YYYYMMDD')
-          );
+          notificationList = notificationList.sort((a, b) => new Date(b.sent) - new Date(a.sent));
           /**
            * Get unread notifications
            * @type {number}
