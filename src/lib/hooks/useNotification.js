@@ -132,10 +132,13 @@ export const useNotification = owner => {
     [notification.notifications]
   );
 
-  const discoveryInbox = useCallback(async () => {
-    const { notify } = notification;
-    return notify.discoveryInbox();
-  });
+  const discoveryInbox = useCallback(
+    async document => {
+      const { notify } = notification;
+      return notify.discoveryInbox(document);
+    },
+    [owner, notification.notify]
+  );
 
   useEffect(() => {
     if (owner) {

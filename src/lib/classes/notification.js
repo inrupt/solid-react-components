@@ -317,10 +317,12 @@ export class Notification {
 
   discoveryInbox = async document => {
     try {
-      const user = await solidLDflex[document];
-      const inbox = await user['ldp:inbox'];
+      const existDocument = await this.hasInbox(document);
+      if (!existDocument) return false;
 
-      return inbox && inbox.value;
+      const inboxDocument = await solidLDflex[document]['ldp:inbox'];
+      const inbox = inboxDocument ? await inboxDocument.value : false;
+      return inbox;
     } catch (error) {
       throw error;
     }
