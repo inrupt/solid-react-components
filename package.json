@@ -52,14 +52,13 @@
     "@rdfjs/data-model": "^1.1.1",
     "@shexjs/core": "^1.0.0-alpha.4",
     "@shexjs/parser": "^1.0.0-alpha.4",
-    "@solid/query-ldflex": "^2.5.1",
     "@solid/react": "^1.6.0",
     "file-type": "^10.7.1",
     "html-webpack-include-assets-plugin": "^1.0.6",
     "mime-types": "^2.1.24",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.2.0",
-    "solid-auth-client": "^2.3.0",
+    "uglify-js": "^3.6.0",
     "unique-string": "^1.0.0"
   },
   "devDependencies": {
@@ -145,7 +144,8 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "styled-components": "^4.1.3",
-    "solid-auth-client": "^2.3.0"
+    "solid-auth-client": "^2.3.0",
+    "@solid/query-ldflex": "^2.5.1"
   },
   "browserslist": [
     ">0.2%",
