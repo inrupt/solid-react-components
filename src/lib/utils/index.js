@@ -1,7 +1,13 @@
 import SolidError from './error';
 import * as shexUtil from './shex';
 import solidResponse from './statusMessage';
-import { fetchSchema, existDocument, createDocument, fetchLdflexDocument } from './solidFetch';
+import {
+  fetchSchema,
+  existDocument,
+  createDocument,
+  fetchLdflexDocument,
+  getBasicPod
+} from './solidFetch';
 import ShexFormValidator from './shexFormValidator';
 
 const getFileName = path => {
@@ -18,5 +24,6 @@ export {
   createDocument,
   fetchLdflexDocument,
   ShexFormValidator,
-  getFileName
+  getFileName,
+  getBasicPod
 };
