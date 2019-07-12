@@ -24,10 +24,10 @@ export const useNotification = owner => {
    * @param {String} appPath file where will leave the path link(reference) for the user inbox.
    */
   const createInbox = useCallback(
-    async (inboxPath, appPath) => {
+    async (inboxPath, appPath, settingFileName) => {
       try {
         const { notify } = notification;
-        if (owner && notify) await notify.createInbox(inboxPath, appPath);
+        if (owner && notify) await notify.createInbox(inboxPath, appPath, settingFileName);
       } catch (error) {
         throw error;
       }
