@@ -195,6 +195,7 @@
       "@hooks": "<rootDir>/src/lib/hooks",
       "@contex": "<rootDir>/src/lib/context",
       "@testSetup": "<rootDir>/src/test/setup",
+      "@classes": "<rootDir>/src/lib/classes",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
     "moduleFileExtensions": [
