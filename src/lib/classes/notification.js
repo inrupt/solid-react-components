@@ -386,18 +386,33 @@ export class Notification {
   fetch = async inboxRoot => {
     try {
       let notifications = [];
+      /**
+       * Run over all inbox to fetch notifications
+       */
       for await (const currentInbox of inboxRoot) {
+        /**
+         * Build notification shape using json-ld format
+         */
         const currentShape = this.buildShapeObject(currentInbox.shape);
         const { name, shape } = currentShape;
+        /**
+         * Get container document
+         */
         const inbox = await solidLDflex[currentInbox.path];
         let notificationPaths = [];
 
         if ((this.schema && !this.schema[name]) || !this.schema)
           await this.fetchNotificationShape(shape, name);
-
+        /**
+         * Get contains links from inbox container
+         */
         for await (const path of inbox['ldp:contains']) {
           notificationPaths = [...notificationPaths, path.value];
         }
+
+        /**
+         * Get notifications files from contains links
+         */
         for await (const path of notificationPaths) {
           const turtleNotification = await solidLDflex[path];
           const id = path
@@ -405,7 +420,9 @@ export class Notification {
             .pop()
             .split('.')[0];
           let notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
-
+          /**
+           * Run over the shape schema to build notification object
+           */
           for await (const field of this.schema[name].shape) {
             const data = await turtleNotification[this.getPredicate(field, name)];
             const value = data ? data.value : null;
