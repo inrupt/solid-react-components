@@ -56,7 +56,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (notification.notify) init();
+    if (webId) init();
   }, [notification.notify, webId]);
 
   return (

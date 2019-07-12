@@ -26,6 +26,10 @@ export class Notification {
     Notification.instance = this;
   }
 
+  setOwner = owner => {
+    this.owner = owner;
+  };
+
   /**
    * We are checking if user has inbox reference on card also if inbox folder exists.
    * @param path
