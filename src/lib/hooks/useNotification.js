@@ -64,7 +64,9 @@ export const useNotification = owner => {
       try {
         if (notify) {
           let notificationList = await notify.fetch(inboxes);
-          notificationList = notificationList.sort((a, b) => new Date(b.sent) - new Date(a.sent));
+          notificationList = notificationList.sort(
+            (a, b) => new Date(b.datetime) - new Date(a.datetime)
+          );
           /**
            * Get unread notifications
            * @type {number}
