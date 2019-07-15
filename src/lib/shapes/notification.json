@@ -4,7 +4,8 @@
     "terms": "http://purl.org/dc/terms#",
     "as": "https://www.w3.org/ns/activitystreams#",
     "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "schema": "http://schema.org/"
+    "schema": "http://schema.org/",
+    "solid": "https://www.w3.org/ns/solid/terms#"
   },
   "shape": [
     {
@@ -28,6 +29,11 @@
       "type": "Literal"
     },
     {
+      "label": "actor",
+      "property": "as:actor",
+      "type": "NamedNode"
+    },
+    {
       "label": "target",
       "property": "as:target",
       "type": "NamedNode"
@@ -43,19 +49,14 @@
       "type": "NamedNode"
     },
     {
-      "label": "sender",
-      "property": "schema:sender",
-      "type": "NamedNode"
-    },
-    {
-      "label": "sent",
-      "property": "schema:sent",
+      "label": "read",
+      "property": "solid:read",
+      "value": false,
       "type": "Literal"
     },
     {
-      "label": "read",
-      "property": "as:read",
-      "value": false,
+      "label": "datetime",
+      "property": "rdfs:datetime",
       "type": "Literal"
     }
   ]

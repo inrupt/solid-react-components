@@ -233,7 +233,7 @@ export class Notification {
             content[item.label] ||
             defaultValue ||
             item.label === 'read' ||
-            item.label === 'sent'
+            item.label === 'datetime'
           ) {
             /**
              * Add read by default on notification document
@@ -244,7 +244,7 @@ export class Notification {
              * Add send time by default on notification document
              * @type {string}
              */
-            value = item.label === 'sent' ? new Date().toISOString() : value;
+            value = item.label === 'datetime' ? new Date().toISOString() : value;
             /**
              * Check if object from schema is a literal or node value
              */
@@ -363,8 +363,8 @@ export class Notification {
               : notificationData;
           }
 
-          const sender = await getBasicPod(notificationData.sender);
-          notificationData = { ...notificationData, sender };
+          const actor = await getBasicPod(notificationData.actor);
+          notificationData = { ...notificationData, actor };
 
           notifications = [...notifications, notificationData];
         }
