@@ -88,7 +88,12 @@ const App = () => {
       )}
       <button
         type="button"
-        onClick={() => createNotification({ title: 'App notification', summary: 'Summary App' })}
+        onClick={() =>
+          createNotification(
+            { title: 'App notification', summary: 'Summary App' },
+            'https://jairocr.inrupt.net/inbox/'
+          )
+        }
       >
         Create notification
       </button>

@@ -37,4 +37,12 @@ describe('useNotification', () => {
     const NotificationInstance = new Notification();
     expect(Notification).toHaveBeenCalledTimes(1);
   });
+
+  it('called a method on the class instance', () => {
+    const { hookConsumerNotification } = setup();
+
+    const notificationConsumer = hookConsumerNotification;
+    // Constructor should have been called again:
+    expect(Notification).toHaveBeenCalledTimes(1);
+  });
 });

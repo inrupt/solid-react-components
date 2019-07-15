@@ -1,7 +1,6 @@
 import solid from 'solid-auth-client';
 import N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
-import unique from 'unique';
 import { solidResponse, SolidError, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 
@@ -42,8 +41,7 @@ export class Notification {
    */
   hasInbox = async path => {
     const result = await solid.fetch(path, { method: 'GET' });
-
-    return result.ok;
+    return result.code === 403 || result.code === 200;
   };
 
   /**
@@ -55,6 +53,12 @@ export class Notification {
 
   deleteInbox = async (inbox, document) => {
     try {
+      if (!inbox || !document)
+        return new SolidError(
+          'Inbox and Document are necessary to delete inbox',
+          'Delete Inbox',
+          500
+        );
       /**
        * Delete container file into pod.
        */
@@ -247,8 +251,6 @@ export class Notification {
     try {
       const currentShape = this.buildShapeObject(options && options.shape);
       const { name, shape: defaultShape } = currentShape;
-      const notificationName = unique();
-      const notificationPath = `${to}${notificationName}.ttl`;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
 
@@ -289,9 +291,10 @@ export class Notification {
             /**
              * Check if object from schema is a literal or node value
              */
+
             const typedValue = item.type === 'NamedNode' ? namedNode(value) : literal(value);
             writer.addQuad(
-              namedNode(notificationPath),
+              namedNode(''),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
               typedValue
             );
@@ -306,8 +309,8 @@ export class Notification {
           throw error;
         }
 
-        await solid.fetch(notificationPath, {
-          method: 'PUT',
+        await solid.fetch(to, {
+          method: 'POST',
           body: result,
           headers: {
             'Content-Type': 'text/turtle'
@@ -386,10 +389,11 @@ export class Notification {
   fetch = async inboxRoot => {
     try {
       let notifications = [];
+      const filteredNotifications = inboxRoot.filter(inbox => inbox.path);
       /**
        * Run over all inbox to fetch notifications
        */
-      for await (const currentInbox of inboxRoot) {
+      for await (const currentInbox of filteredNotifications) {
         /**
          * Build notification shape using json-ld format
          */
@@ -431,7 +435,7 @@ export class Notification {
               : notificationData;
           }
 
-          const actor = await getBasicPod(notificationData.actor);
+          const actor = notificationData.actor && (await getBasicPod(notificationData.actor));
           notificationData = { ...notificationData, actor };
 
           notifications = [...notifications, notificationData];
