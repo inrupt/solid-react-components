@@ -14,6 +14,11 @@ const PREFIXES = {
   acl: 'http://www.w3.org/ns/auth/acl#'
 };
 
+/**
+ * Notification Class for SOLID
+ * To know more about ACL please go to: https://github.com/solid/web-access-control-spec
+ * To know more about N3 please go to: https://www.npmjs.com/package/n3
+ */
 export class Notification {
   constructor(owner) {
     if (Notification.instance) {
@@ -44,13 +49,20 @@ export class Notification {
   /**
    * Delete inbox folder and ldp on user card
    * @returns {Promise<*>}
+   * @param {String} inbox path of the container
+   * @param {String} document an optional parameter to delete reference on document
    */
 
-  deleteInbox = async inbox => {
+  deleteInbox = async (inbox, document) => {
     try {
+      /**
+       * Delete container file into pod.
+       */
       await solid.fetch(`${inbox}`, { method: 'DELETE' });
-
-      await solidLDflex[this.owner]['ldp:inbox'].delete(inbox);
+      /**
+       * Delete inbox link reference from user card or custom file
+       */
+      await solidLDflex[document || this.owner]['ldp:inbox'].delete(inbox);
 
       return solidResponse(200, 'Inbox was deleted');
     } catch (error) {
@@ -65,12 +77,16 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  createInbox = async (inboxPath, appPath) => {
+  createInbox = async (inboxPath, appPath, settingFileName = 'settings.ttl') => {
     try {
       const hasInbox = await this.hasInbox(inboxPath);
-      const appSettingPat = `${appPath}settings.ttl`;
+      const appSettingPat = `${appPath}${settingFileName}`;
       if (hasInbox) return;
 
+      /**
+       * Start to build ACL file to add access to owner and users to inbox container
+       * To know more about ACL please go to: https://github.com/solid/web-access-control-spec
+       */
       const termFactory = N3.DataFactory;
       const { namedNode } = termFactory;
       const writer = new N3.Writer({
@@ -82,20 +98,32 @@ export class Notification {
         format: 'text/turtle'
       });
 
+      /**
+       * Add Quad type Authorization
+       */
       writer.addQuad(namedNode('#owner'), namedNode('ns:type'), namedNode('acl:Authorization'));
-
+      /**
+       * Add agent permission to owner
+       */
       writer.addQuad(namedNode('#owner'), namedNode('acl:agent'), namedNode(this.owner));
-
+      /**
+       * Add access reference to the container folder
+       */
       writer.addQuad(namedNode('#owner'), namedNode('acl:accessTo'), namedNode('./'));
-
       writer.addQuad(namedNode('#owner'), namedNode('acl:defaultForNew'), namedNode('./'));
 
+      /**
+       * Add roles to owner Read, Write and Control
+       */
       writer.addQuad(
         namedNode('#owner'),
         namedNode('acl:mode'),
         namedNode('acl:Read, acl:Write, acl:Control')
       );
 
+      /**
+       * Add permissions to public users
+       */
       writer.addQuad(namedNode('#public'), namedNode('ns:type'), namedNode('acl:Authorization'));
 
       writer.addQuad(
@@ -103,11 +131,16 @@ export class Notification {
         namedNode('acl:agentClass'),
         namedNode('http://xmlns.com/foaf/0.1/Agent')
       );
-
+      /**
+       * Add access reference to the container folder
+       */
       writer.addQuad(namedNode('#public'), namedNode('acl:accessTo'), namedNode('./'));
 
       writer.addQuad(namedNode('#public'), namedNode('acl:defaultForNew'), namedNode('./'));
-      // Append
+      /**
+       * Add roles to public Read, Write
+       * Note: Should be Append we are using Read, Write for now
+       */
       writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Read, acl:Write'));
 
       await writer.end(async (error, result) => {
@@ -122,6 +155,9 @@ export class Notification {
           }
         });
 
+        /**
+         * Create inbox container
+         */
         await solid.fetch(`${inboxPath}.dummy`, {
           method: 'PUT',
           headers: {
@@ -130,7 +166,9 @@ export class Notification {
         });
 
         await solid.fetch(`${inboxPath}.dummy`, { method: 'DELETE' });
-
+        /**
+         * Create a default ACL for inbox container
+         */
         await solid.fetch(`${inboxPath}.acl`, {
           method: 'PUT',
           body: result,
@@ -140,6 +178,9 @@ export class Notification {
         });
       });
 
+      /**
+       * Check if setting reference is into the pod.
+       */
       const settingsResult = await solid.fetch(appSettingPat, { method: 'GET' });
 
       /**
@@ -319,6 +360,11 @@ export class Notification {
     return `${ontology}${field.label}`;
   };
 
+  /**
+   * Find user inbox from document file
+   * @param document file url to find inbox path
+   * @returns {Promise<boolean>}
+   */
   discoveryInbox = async document => {
     try {
       const existDocument = await this.hasInbox(document);
@@ -331,22 +377,42 @@ export class Notification {
       throw error;
     }
   };
+  /**
+   * Fetch notifications from inboxes
+   * @param inboxRoot an array on inboxes path
+   * @returns {Promise<Array>}
+   */
 
   fetch = async inboxRoot => {
     try {
       let notifications = [];
+      /**
+       * Run over all inbox to fetch notifications
+       */
       for await (const currentInbox of inboxRoot) {
+        /**
+         * Build notification shape using json-ld format
+         */
         const currentShape = this.buildShapeObject(currentInbox.shape);
         const { name, shape } = currentShape;
+        /**
+         * Get container document
+         */
         const inbox = await solidLDflex[currentInbox.path];
         let notificationPaths = [];
 
         if ((this.schema && !this.schema[name]) || !this.schema)
           await this.fetchNotificationShape(shape, name);
-
+        /**
+         * Get contains links from inbox container
+         */
         for await (const path of inbox['ldp:contains']) {
           notificationPaths = [...notificationPaths, path.value];
         }
+
+        /**
+         * Get notifications files from contains links
+         */
         for await (const path of notificationPaths) {
           const turtleNotification = await solidLDflex[path];
           const id = path
@@ -354,7 +420,9 @@ export class Notification {
             .pop()
             .split('.')[0];
           let notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
-
+          /**
+           * Run over the shape schema to build notification object
+           */
           for await (const field of this.schema[name].shape) {
             const data = await turtleNotification[this.getPredicate(field, name)];
             const value = data ? data.value : null;
