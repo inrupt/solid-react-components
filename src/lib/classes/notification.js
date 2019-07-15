@@ -145,7 +145,7 @@ export class Notification {
        * Add roles to public Read, Write
        * Note: Should be Append we are using Read, Write for now
        */
-      writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Read, acl:Write'));
+      writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Append'));
 
       await writer.end(async (error, result) => {
         if (error) {
