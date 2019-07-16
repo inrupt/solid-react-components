@@ -156,7 +156,7 @@ export const useNotification = owner => {
             unread: updatedUnread
           });
         }
-        await notify.markAsRead(file);
+        await notify.markAsRead(file, status);
       } catch (error) {
         throw new SolidError(error.message, 'Update Notification', error.status);
       }

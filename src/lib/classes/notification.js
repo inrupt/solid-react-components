@@ -330,9 +330,9 @@ export class Notification {
    * @param notificationPath
    * @returns {Promise<*>}
    */
-  markAsRead = async notificationPath => {
+  markAsRead = async (notificationPath, status) => {
     try {
-      await solidLDflex[notificationPath]['solid:read'].set('true');
+      await solidLDflex[notificationPath]['https://www.w3.org/ns/solid/terms#read'].set(status);
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
