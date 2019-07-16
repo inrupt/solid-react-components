@@ -219,7 +219,7 @@ export class Notification {
         };
         return;
       }
-      const result = await fetch(file);
+      const result = await solid.fetch(file);
       const schema = await result.json();
 
       this.schema = {

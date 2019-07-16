@@ -45,9 +45,9 @@ describe('Notification test', () => {
     }
   });
 
-  /* it('should return object', async () => {
-    const result = await NotificationInstance.fetchNotificationShape(inboxExample, webIdExample);
-
-    expect(result).toBe(200);
-  }); */
+  it('should return a shape object', () => {
+    const result = NotificationInstance.buildShapeObject({ name: 'shapeName', path: 'shapePath' });
+    const mockObject = { name: 'shapeName', shape: 'shapePath' };
+    expect(result).toEqual(mockObject);
+  });
 });
