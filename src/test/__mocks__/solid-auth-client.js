@@ -23,7 +23,7 @@ class SolidAuthClient extends EventEmitter {
   currentSession() {}
 
   fetch() {
-    return { ok: true, code: 200 };
+    return { ok: true, status: 200 };
   }
 }
 
