@@ -1,9 +1,13 @@
 const { context } = jest.requireActual('@solid/query-ldflex').default;
 
-export default {
+const ldflex = {
   context,
   resolve: jest.fn(),
   clearCache: jest.fn(),
   delete: jest.fn(() => true),
-  'ldp:inbox': ''
+  add: jest.fn(() => true)
 };
+ldflex['ldp:inbox'] = ldflex;
+ldflex['https://example.org/#me'] = ldflex['ldp:inbox'];
+
+export default ldflex;

@@ -85,7 +85,7 @@ export class Notification {
     try {
       const hasInbox = await this.hasInbox(inboxPath);
       const appSettingPat = `${appPath}${settingFileName}`;
-      if (hasInbox) return;
+      if (hasInbox) throw new SolidError('Inbox already exist', 'Inbox', 303);
 
       /**
        * Start to build ACL file to add access to owner and users to inbox container
@@ -197,7 +197,7 @@ export class Notification {
 
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
-      throw new SolidError(error.message, 'Inbox', 500);
+      throw new SolidError(error.message, 'Inbox', error.code || 500);
     }
   };
 

@@ -30,4 +30,24 @@ describe('Notification test', () => {
 
     expect(result.code).toBe(500);
   });
+
+  it('should return 200 when delete notification', async () => {
+    const result = await NotificationInstance.deleteInbox(inboxExample, webIdExample);
+
+    expect(result.code).toBe(200);
+  });
+
+  it('should throw an error when inbox already exist on pod', async () => {
+    try {
+      await NotificationInstance.createInbox(inboxExample, webIdExample);
+    } catch (error) {
+      expect(error.message).toBe('Inbox already exist');
+    }
+  });
+
+  /* it('should return object', async () => {
+    const result = await NotificationInstance.fetchNotificationShape(inboxExample, webIdExample);
+
+    expect(result).toBe(200);
+  }); */
 });
