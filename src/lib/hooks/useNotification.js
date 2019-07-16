@@ -203,7 +203,7 @@ export const useNotification = owner => {
    * init Notification instance when hook mount
    */
   useEffect(() => {
-    const notify = new Notification(null);
+    const notify = new Notification(owner);
     setNotifications({ ...notification, notify });
   }, []);
 

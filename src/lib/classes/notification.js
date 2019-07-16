@@ -87,6 +87,8 @@ export class Notification {
       const appSettingPat = `${appPath}${settingFileName}`;
       if (hasInbox) throw new SolidError('Inbox already exist', 'Inbox', 303);
 
+      if (!this.owner) throw new SolidError('Owner is undefined', 'Inbox', 500);
+
       /**
        * Start to build ACL file to add access to owner and users to inbox container
        * To know more about ACL please go to: https://github.com/solid/web-access-control-spec
