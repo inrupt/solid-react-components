@@ -332,7 +332,7 @@ export class Notification {
    */
   markAsRead = async notificationPath => {
     try {
-      await solidLDflex[notificationPath]['as:read'].set('true');
+      await solidLDflex[notificationPath]['solid:read'].set('true');
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
