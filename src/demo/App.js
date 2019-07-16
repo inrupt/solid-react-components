@@ -44,7 +44,6 @@ const Header = () => {
 
 const App = () => {
   const webId = useWebId();
-  const url = webId ? `${webId.split('/profile')[0]}/public/tictactoe/inbox/` : null;
   const { fetchNotification, notification, createNotification, discoveryInbox } = useNotification(
     webId
   );
@@ -52,7 +51,7 @@ const App = () => {
   const init = async () => {
     const result = await discoveryInbox(webId);
 
-    fetchNotification([{ path: url, inboxName: 'App' }, { path: result, inboxName: 'Global App' }]);
+    fetchNotification([{ path: result, inboxName: 'Global App' }]);
   };
 
   useEffect(() => {

@@ -41,7 +41,7 @@ export class Notification {
    */
   hasInbox = async path => {
     const result = await solid.fetch(path, { method: 'GET' });
-    return result.code === 403 || result.code === 200;
+    return result.status === 403 || result.status === 200;
   };
 
   /**
