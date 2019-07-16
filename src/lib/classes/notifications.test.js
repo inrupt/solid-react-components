@@ -45,6 +45,11 @@ describe('Notification test', () => {
     }
   });
 
+  it('should return code 200 on delete notification file', async () => {
+    const result = await NotificationInstance.delete(`${inboxExample}/notification.ttl`);
+    expect(result.code).toBe(200);
+  });
+
   it('should return a shape object', () => {
     const result = NotificationInstance.buildShapeObject({ name: 'shapeName', path: 'shapePath' });
     const mockObject = { name: 'shapeName', shape: 'shapePath' };
