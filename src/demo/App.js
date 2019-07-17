@@ -3,6 +3,7 @@ import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import SolidImg from '../assets/solid_logo.png';
 import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
+import { AccessControlList } from '@classes';
 import HandleShexForm from './components';
 
 const HeaderWrapper = styled.section`
@@ -54,6 +55,16 @@ const App = () => {
     fetchNotification([{ path: result, inboxName: 'Global App' }]);
   };
 
+  const createAcl = async () => {
+    if (webId) {
+      const documentURI = 'https://jprod.inrupt.net/public/demoacl3/test';
+      const { MODES } = AccessControlList;
+      // const permissions = [{ modes: [MODES.READ], user: null }];
+      const aclInstance = new AccessControlList(webId, documentURI);
+      await aclInstance.getACLTurtle();
+    }
+  };
+
   useEffect(() => {
     if (webId) init();
   }, [notification.notify, webId]);
@@ -61,6 +72,9 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
+      <button type="button" onClick={createAcl}>
+        Create ACL
+      </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <Uploader
