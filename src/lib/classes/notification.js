@@ -35,7 +35,7 @@ export class Notification {
   };
 
   /**
-   * We are checking if user has inbox reference on card also if inbox folder exists.
+   * We are checking if the user has an inbox reference on the card and, also, if the inbox folder exists.
    * @param path
    * @returns {Promise<*|boolean>}
    */
@@ -45,10 +45,10 @@ export class Notification {
   };
 
   /**
-   * Delete inbox folder and ldp on user card
+   * Delete the inbox folder and ldp on user's card
    * @returns {Promise<*>}
    * @param {String} inbox path of the container
-   * @param {String} document an optional parameter to delete reference on document
+   * @param {String} document an optional parameter to delete a reference on a document
    */
 
   deleteInbox = async (inbox, document) => {
@@ -60,7 +60,7 @@ export class Notification {
           500
         );
       /**
-       * Delete container file into pod.
+       * Delete container file in pod.
        */
       await solid.fetch(`${inbox}`, { method: 'DELETE' });
       /**
@@ -144,8 +144,7 @@ export class Notification {
 
       writer.addQuad(namedNode('#public'), namedNode('acl:defaultForNew'), namedNode('./'));
       /**
-       * Add roles to public Read, Write
-       * Note: Should be Append we are using Read, Write for now
+       * Add roles to public Append
        */
       writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Append'));
 
@@ -185,12 +184,12 @@ export class Notification {
       });
 
       /**
-       * Check if setting reference is into the pod.
+       * Check if settings reference is in the pod.
        */
       const settingsResult = await solid.fetch(appSettingPat, { method: 'GET' });
 
       /**
-       * Create inbox reference to discovery into app
+       * Create inbox reference to be discovered in the pod
        */
       await solidLDflex[appSettingPat]['ldp:inbox'].add(namedNode(inboxPath));
 
@@ -204,7 +203,7 @@ export class Notification {
   };
 
   /**
-   * Fetch shape object that will be use it to build notifications and also
+   * Fetch shape object that will be used to build notifications and also
    * to know how we need to render it.
    * @param file
    * @returns {Promise<void>}
@@ -212,7 +211,7 @@ export class Notification {
   fetchNotificationShape = async (file, name) => {
     try {
       /**
-       * if shape comes like object will return the object instead of make a fetch request
+       * if shape comes like object will return the object instead of making a fetch request
        */
       if (typeof file === 'object') {
         this.schema = {
@@ -241,7 +240,7 @@ export class Notification {
   };
 
   /**
-   * create and send notification to user inbox
+   * create and send a notification to user's inbox
    * @param inboxRoot
    * @param title
    * @param content
@@ -286,15 +285,15 @@ export class Notification {
              */
             let value = item.label === 'read' ? 'false' : content[item.label];
             /**
-             * Add send time by default on notification document
+             * Add datetime time by default on notification document
              * @type {string}
              */
             value = item.label === 'datetime' ? new Date().toISOString() : value;
             /**
              * Check if object from schema is a literal or node value
              */
-
             const typedValue = item.type === 'NamedNode' ? namedNode(value) : literal(value);
+
             writer.addQuad(
               namedNode(''),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
@@ -329,7 +328,7 @@ export class Notification {
   };
 
   /**
-   * Mark has read notifications
+   * Mark as read the notifications
    * @param notificationPath
    * @returns {Promise<*>}
    */
@@ -352,7 +351,7 @@ export class Notification {
   delete = async file => {
     try {
       /**
-       * Delete file into inbox folder by default will delete the reference on inbox container
+       * Delete a file at an inbox folder by default will delete the reference on inbox container
        */
       await solid.fetch(file, { method: 'DELETE' });
 
@@ -369,7 +368,7 @@ export class Notification {
   };
 
   /**
-   * Find user inbox from document file
+   * Find user's inbox from document file
    * @param document file url to find inbox path
    * @returns {Promise<boolean>}
    */
@@ -396,7 +395,7 @@ export class Notification {
       let notifications = [];
       const filteredNotifications = inboxRoot.filter(inbox => inbox.path);
       /**
-       * Run over all inbox to fetch notifications
+       * Run over all inboxes to fetch notifications
        */
       for await (const currentInbox of filteredNotifications) {
         /**

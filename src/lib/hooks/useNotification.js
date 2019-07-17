@@ -1,8 +1,8 @@
 /**
- * Notification hook
- * Create, delete notification and inbox.
+ * Notifications hook
+ * Create, update and delete notifications and inbox containers.
  * We are using ldflex, solid-auth-client and N3.
- * Append permission on notifications: create a new file(notification) into the the receiver container(inbox)
+ * Append permissions on notifications: create a new file(notification) in the receiver inbox (container)
  * An user can have more than one inbox to receive notifications.
  */
 import { useCallback, useState, useEffect } from 'react';
@@ -20,8 +20,8 @@ export const useNotification = owner => {
   /**
    * Create container(inbox) with all the permissions ready to receive notifications
    * @type {Function}
-   * @param {String} inboxPath container path where will leave the container into the pod.
-   * @param {String} appPath file where will leave the path link(reference) for the user inbox.
+   * @param {String} inboxPath path where the inbox will be created in the pod.
+   * @param {String} appPath link(reference) to the app's container.
    */
   const createInbox = useCallback(
     async (inboxPath, appPath, settingFileName) => {
@@ -39,7 +39,7 @@ export const useNotification = owner => {
    * Create a notification file and send to user
    * @type {Function}
    * @param {Object} content object that has the content for the notification
-   * @param {String} to path of the user that will receive the notification
+   * @param {String} to path of the notification receiver's user
    */
   const createNotification = useCallback(
     async (content, to, options) => {
@@ -54,7 +54,7 @@ export const useNotification = owner => {
   );
 
   /**
-   * Fetch user notifications from an inboxes path
+   * Fetch user notifications from an array of inbox paths
    * @type {Function}
    * @param {String} inboxes an array of inbox paths
    */
@@ -92,9 +92,9 @@ export const useNotification = owner => {
     [notification, owner]
   );
   /**
-   * Delete notification file from user pod.
+   * Delete notification file from user's pod.
    * @type {Function}
-   * @param {String} file full path where is located it the notification
+   * @param {String} file full path where the notification is located
    */
   const deleteNotification = useCallback(
     async file => {
@@ -200,7 +200,7 @@ export const useNotification = owner => {
   );
 
   /**
-   * init Notification instance when hook mount
+   * init Notification instance when hook mounts
    */
   useEffect(() => {
     const notify = new Notification(owner);
@@ -208,7 +208,7 @@ export const useNotification = owner => {
   }, []);
 
   /**
-   * After hook receive the owner will set it into Notification instance
+   * After the hook receives the owner, it will set it into the Notification instance
    */
   useEffect(() => {
     if (notification.notify) {
