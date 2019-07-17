@@ -257,6 +257,9 @@ export class Notification {
       const { namedNode, literal } = termFactory;
 
       if (!this.schema || (this.schema && !this.schema[name])) {
+        /**
+         * Fetch remote shape that will be use to render and build notifications
+         */
         await this.fetchNotificationShape(defaultShape, name);
       }
       if (!this.schema[name]['@context']) {
@@ -265,6 +268,12 @@ export class Notification {
 
       const { '@context': context, shape } = this.schema[name];
 
+      /**
+       * N3 is an implementation of the RDF.js low-level specification that lets you handle RDF in JavaScript easily.
+       * Reference: https://www.npmjs.com/package/n3
+       * Create content for the notification using turtle format.
+       * @type {N3Writer}
+       */
       const writer = new N3.Writer({
         prefixes: context,
         format: 'text/turtle'
@@ -310,7 +319,12 @@ export class Notification {
         if (error) {
           throw error;
         }
-
+        /**
+         * Custom header options to create a notification file on pod.
+         * options:
+         * @slug: {String} custom file name that will be save it on the pod
+         * @contentType: {String} format of the file that will be save it on the pod.
+         */
         const optionsHeader = options && options.header;
 
         await solid.fetch(to, {
@@ -335,6 +349,9 @@ export class Notification {
    */
   markAsRead = async (notificationPath, status) => {
     try {
+      /**
+       * Update subject read into notification a notification file.
+       */
       await solidLDflex[notificationPath]['https://www.w3.org/ns/solid/terms#read'].set(status);
 
       return solidResponse(200, 'Notification was updated');
@@ -362,6 +379,12 @@ export class Notification {
     }
   };
 
+  /**
+   * Get the predicate value from the shape object
+   * @param field
+   * @param shapeName
+   * @returns {string}
+   */
   getPredicate = (field, shapeName) => {
     const prefix = field.property.split(':')[0];
     const ontology = this.schema[shapeName]['@context'][prefix];
