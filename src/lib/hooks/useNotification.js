@@ -42,10 +42,10 @@ export const useNotification = owner => {
    * @param {String} to path of the user that will receive the notification
    */
   const createNotification = useCallback(
-    async (content, to) => {
+    async (content, to, options) => {
       try {
         const { notify } = notification;
-        await notify.create(content, to);
+        await notify.create(content, to, options);
       } catch (error) {
         throw new SolidError(error.message, 'Create notification', error.status);
       }

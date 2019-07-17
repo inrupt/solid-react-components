@@ -249,7 +249,7 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (content = {}, to, options) => {
+  create = async (content = {}, to, options = {}) => {
     try {
       const currentShape = this.buildShapeObject(options && options.shape);
       const { name, shape: defaultShape } = currentShape;
@@ -311,11 +311,14 @@ export class Notification {
           throw error;
         }
 
+        const optionsHeader = options && options.header;
+
         await solid.fetch(to, {
           method: 'POST',
           body: result,
           headers: {
-            'Content-Type': 'text/turtle'
+            'Content-Type': 'text/turtle',
+            ...optionsHeader
           }
         });
       });
