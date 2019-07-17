@@ -85,7 +85,7 @@ export class Notification {
     try {
       const hasInbox = await this.hasInbox(inboxPath);
       const appSettingPat = `${appPath}${settingFileName}`;
-      if (hasInbox) throw new SolidError('Inbox already exist', 'Inbox', 303);
+      if (hasInbox) return solidResponse(200, 'Inbox is ready to use');
 
       if (!this.owner) throw new SolidError('Owner is undefined', 'Inbox', 500);
 
