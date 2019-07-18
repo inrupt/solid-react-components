@@ -153,7 +153,27 @@ export class Notification {
           throw error;
         }
 
-        await solid.fetch(appSettingPat, {
+        const settingsResult = await solid.fetch(appSettingPat, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'text/turtle'
+          }
+        });
+        /**
+         * Check if settings reference was created it.
+         */
+        if (!settingsResult.ok)
+          throw new SolidError(
+            settingsResult.message ||
+              'Error when game tried to create a settings.ttl file, try to reload the page.',
+            'Inbox Error',
+            settingsResult.status
+          );
+
+        /**
+         * Create inbox container
+         */
+        const resultInbox = await solid.fetch(`${inboxPath}.dummy`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'text/turtle'
@@ -161,44 +181,43 @@ export class Notification {
         });
 
         /**
-         * Create inbox container
+         * If create inbox fail we return an error message
          */
-        await solid.fetch(`${inboxPath}.dummy`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'text/turtle'
-          }
-        });
+        if (!resultInbox.ok)
+          throw new SolidError(
+            result.message || 'Error when tried to create an inbox',
+            'Error',
+            resultInbox.status
+          );
 
         await solid.fetch(`${inboxPath}.dummy`, { method: 'DELETE' });
         /**
          * Create a default ACL for inbox container
          */
-        await solid.fetch(`${inboxPath}.acl`, {
+        const resultAcl = await solid.fetch(`${inboxPath}.acl`, {
           method: 'PUT',
           body: result,
           headers: {
             'Content-Type': 'text/turtle'
           }
         });
-      });
 
-      /**
-       * Check if settings reference is in the pod.
-       */
-      const settingsResult = await solid.fetch(appSettingPat, { method: 'GET' });
+        if (!resultAcl.ok)
+          throw new SolidError(
+            result.message || 'An error when tried to assign permissions',
+            'Error',
+            resultAcl.status
+          );
+      });
 
       /**
        * Create inbox reference to be discovered in the pod
        */
       await solidLDflex[appSettingPat]['ldp:inbox'].add(namedNode(inboxPath));
 
-      if (!settingsResult.ok)
-        throw new Error('Notifications need to have settings file to save reference');
-
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
-      throw new SolidError(error.message, 'Inbox', error.code || 500);
+      throw new SolidError(error.message, 'Inbox Error', error.code || error.status);
     }
   };
 
