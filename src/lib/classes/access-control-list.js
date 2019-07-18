@@ -88,14 +88,16 @@ class AccessControlList {
     return turtle;
   };
 
-  createACLFile = async permissions => {
-    const permissionList = [
-      { user: this.owner, modes: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.CONTROL] },
-      ...permissions
-    ];
-    const body = this.createPermissionsTurtle(permissionList);
+  createACLFile = async (permissions = null) => {
     await this.createSolidFile(this.documentUri);
-    await this.createSolidFile(this.aclUri, { body });
+    if (permissions) {
+      const permissionList = [
+        { user: this.owner, modes: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.CONTROL] },
+        ...permissions
+      ];
+      const body = this.createPermissionsTurtle(permissionList);
+      await this.createSolidFile(this.aclUri, { body });
+    }
   };
 
   createSolidFile = async (url, options = {}) =>
@@ -116,7 +118,6 @@ class AccessControlList {
     let newPathname = isContainer ? pathname.slice(0, pathname.length - 1) : pathname;
     newPathname = `${newPathname.slice(0, newPathname.lastIndexOf('/'))}/`;
     const parentURI = `${newURL.origin}${newPathname}`;
-    console.log('Parent', parentURI);
     const result = await solid.fetch(`${parentURI}.acl`);
     if (result.status === 404) return this.getParentACL(parentURI);
     if (result.status === 200) return result;
