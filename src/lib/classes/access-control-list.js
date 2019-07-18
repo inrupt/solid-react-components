@@ -145,7 +145,10 @@ class AccessControlList {
     }
   };
 
-  removePermissions = () => {};
+  removePermissions = async () => {
+    const result = await solid.fetch(this.aclUri, { method: 'DELETE' });
+    return result.ok;
+  };
 
   updatePermissions = () => {};
 
