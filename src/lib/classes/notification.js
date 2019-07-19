@@ -10,7 +10,8 @@ const PREFIXES = {
   things: 'https://schema.org/Thing#',
   ns: 'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
   foaf: 'http://xmlns.com/foaf/0.1/',
-  acl: 'http://www.w3.org/ns/auth/acl#'
+  acl: 'http://www.w3.org/ns/auth/acl#',
+  ldp: 'http://www.w3.org/ns/ldp#'
 };
 
 /**
@@ -72,6 +73,33 @@ export class Notification {
     } catch (error) {
       throw new SolidError(error.message, 'Delete Inbox', 500);
     }
+  };
+
+  settingsTurtle = async (path, inboxPath, fileName = 'settings.ttl') => {
+    const termFactory = N3.DataFactory;
+    const { namedNode } = termFactory;
+    const writer = new N3.Writer({
+      prefixes: {
+        ldp: PREFIXES.ldp
+      },
+      format: 'text/turtle'
+    });
+
+    writer.addQuad(namedNode(''), namedNode('ldp:inbox'), namedNode(inboxPath));
+    let resultPut = { ok: false };
+
+    await writer.end(async (error, result) => {
+      resultPut = await solid.fetch(path, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'text/turtle',
+          slug: fileName
+        },
+        body: result
+      });
+    });
+
+    return resultPut;
   };
 
   /**
@@ -153,23 +181,6 @@ export class Notification {
           throw error;
         }
 
-        const settingsResult = await solid.fetch(appSettingPat, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'text/turtle'
-          }
-        });
-        /**
-         * Check if settings reference was created it.
-         */
-        if (!settingsResult.ok)
-          throw new SolidError(
-            settingsResult.message ||
-              'Error when game tried to create a settings.ttl file, try to reload the page.',
-            'Inbox Error',
-            settingsResult.status
-          );
-
         /**
          * Create inbox container
          */
@@ -191,6 +202,17 @@ export class Notification {
           );
 
         await solid.fetch(`${inboxPath}.dummy`, { method: 'DELETE' });
+
+        /**
+         * Create inbox reference to be discovered in the pod into settings.ttl
+         */
+        const settingsResult = await this.settingsTurtle(appSettingPat, inboxPath);
+
+        /**
+         * Check if settings reference was created it if not we will try one time more.
+         */
+        if (!settingsResult.ok) await this.settingsTurtle(appSettingPat, inboxPath);
+
         /**
          * Create a default ACL for inbox container
          */
@@ -209,11 +231,6 @@ export class Notification {
             resultAcl.status
           );
       });
-
-      /**
-       * Create inbox reference to be discovered in the pod
-       */
-      await solidLDflex[appSettingPat]['ldp:inbox'].add(namedNode(inboxPath));
 
       return solidResponse(200, 'Inbox was created');
     } catch (error) {
