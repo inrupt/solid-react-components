@@ -61,7 +61,8 @@ const App = () => {
       const { MODES } = AccessControlList;
       // const permissions = [{ modes: [MODES.READ], user: null }];
       const aclInstance = new AccessControlList(webId, documentURI);
-      await aclInstance.getACLTurtle();
+      const acl = await aclInstance.getACLObject();
+      console.log('ACL', acl);
     }
   };
 

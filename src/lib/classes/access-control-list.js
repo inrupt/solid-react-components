@@ -126,7 +126,7 @@ class AccessControlList {
   getACLFile = async () => {
     try {
       const result = await solid.fetch(this.aclUri);
-      if (result.status === 403) throw new Error('Not authorized');
+      if (result.status === 403) throw new Error(result.message || 'Not authorized');
       if (result.status === 404) return this.getParentACL(this.documentUri);
       return result;
     } catch (e) {
@@ -134,13 +134,27 @@ class AccessControlList {
     }
   };
 
-  getACLTurtle = async () => {
+  getSubjects = async document => {
+    let subjects = [];
+    for await (const subject of document.subjects) {
+      let agents = [];
+      for await (const agent of subject['acl:agent']) {
+        agents = [...agents, agent.value];
+      }
+      const agentClass = await subject['acl:agentClass'];
+      const subjectName = subject.value.split('#')[1];
+      if (agents.length > 0) subjects = [...subjects, { subject: subjectName, agents }];
+      if (agentClass) subjects = [...subjects, { subject: subjectName, agents: null }];
+    }
+    return subjects;
+  };
+
+  getACLObject = async () => {
     try {
       const file = await this.getACLFile();
-      console.log(file);
       if (!file) throw new Error('ACL File was not found for the resource');
       const doc = await ldflex[file.url];
-      console.log('Doc', doc);
+      return this.getSubjects(doc);
     } catch (e) {
       throw e;
     }
