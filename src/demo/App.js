@@ -59,9 +59,11 @@ const App = () => {
     if (webId) {
       const documentURI = 'https://jprod.inrupt.net/public/demoacl3/test';
       const { MODES } = AccessControlList;
-      // const permissions = [{ modes: [MODES.READ], user: null }];
+      const permissions = [
+        { modes: [MODES.CONTROL], agents: ['https://jprod.inrupt.net/profile/card#me'] }
+      ];
       const aclInstance = new AccessControlList(webId, documentURI);
-      const acl = await aclInstance.getACLObject();
+      const acl = await aclInstance.assignPermissions(permissions);
       console.log('ACL', acl);
     }
   };

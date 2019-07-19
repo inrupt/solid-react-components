@@ -11,7 +11,7 @@ const PERMISSIONS = {
 };
 
 type Permissions = {
-  user: String,
+  agents: null | String | Array,
   modes: Array<String>
 };
 
@@ -27,6 +27,11 @@ class AccessControlList {
     this.owner = owner;
     this.documentUri = documentUri;
     this.aclUri = `${this.documentUri}.acl`;
+    this.acl = null;
+  }
+
+  set setAcl(acl) {
+    this.acl = acl;
   }
 
   static get MODES() {
@@ -39,20 +44,25 @@ class AccessControlList {
     object
   });
 
-  createQuadList = (modes, user) => {
+  createQuadList = (modes, agents) => {
     const { acl, foaf, a } = ACL_PREFIXES;
     const subject = `${this.aclUri}#${modes.join('')}`;
     const originalPredicates = [
       this.createQuad(subject, `${a}`, namedNode(`${acl}Authorization`)),
       this.createQuad(subject, `${acl}accessTo`, namedNode(this.documentUri))
     ];
-
-    const predicates = user
-      ? [...originalPredicates, this.createQuad(subject, `${acl}agent`, namedNode(user))]
-      : [
-          ...originalPredicates,
-          this.createQuad(subject, `${acl}agentClass`, namedNode(`${foaf}Agent`))
-        ];
+    let predicates = [];
+    console.log('Agents', agents);
+    if (agents) {
+      const agentsArray = Array.isArray(agents) ? agents : [agents];
+      const agentsQuads = agentsArray.map(agent =>
+        this.createQuad(subject, `${acl}agent`, namedNode(agent))
+      );
+      predicates = [...originalPredicates, ...agentsQuads];
+    } else {
+      const publicQuad = this.createQuad(subject, `${acl}agentClass`, namedNode(`${foaf}Agent`));
+      predicates = [...originalPredicates, publicQuad];
+    }
 
     const quadList = modes.reduce(
       (array, mode) => [
@@ -70,7 +80,9 @@ class AccessControlList {
     const prefixes = { ...ACL_PREFIXES, '': `${this.aclUri}#`, me: this.owner };
     const { namedNode, quad } = DataFactory;
     const writer = new N3.Writer({ prefixes });
-    const quadPermissions = permissions.map(({ modes, user }) => this.createQuadList(modes, user));
+    const quadPermissions = permissions.map(({ modes, agents }) =>
+      this.createQuadList(modes, agents)
+    );
     const quads = quadPermissions
       .map(quadItem => {
         const itemQuads = quadItem.map(({ subject, predicate, object }) =>
@@ -92,7 +104,7 @@ class AccessControlList {
     await this.createSolidFile(this.documentUri);
     if (permissions) {
       const permissionList = [
-        { user: this.owner, modes: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.CONTROL] },
+        { agents: this.owner, modes: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.CONTROL] },
         ...permissions
       ];
       const body = this.createPermissionsTurtle(permissionList);
@@ -138,36 +150,98 @@ class AccessControlList {
     let subjects = [];
     for await (const subject of document.subjects) {
       let agents = [];
+      let modes = [];
       for await (const agent of subject['acl:agent']) {
         agents = [...agents, agent.value];
       }
+      for await (const mode of subject['acl:mode']) {
+        const modeName = mode.value ? mode.value.split('#')[1] : '';
+        modes = [...modes, modeName];
+      }
       const agentClass = await subject['acl:agentClass'];
       const subjectName = subject.value.split('#')[1];
-      if (agents.length > 0) subjects = [...subjects, { subject: subjectName, agents }];
-      if (agentClass) subjects = [...subjects, { subject: subjectName, agents: null }];
+      if (agents.length > 0) subjects = [...subjects, { subject: subjectName, agents, modes }];
+      if (agentClass) subjects = [...subjects, { subject: subjectName, agents: null, modes }];
     }
     return subjects;
   };
 
-  getACLObject = async () => {
+  getPermissions = async () => {
     try {
-      const file = await this.getACLFile();
-      if (!file) throw new Error('ACL File was not found for the resource');
-      const doc = await ldflex[file.url];
-      return this.getSubjects(doc);
+      if (!this.acl) {
+        const file = await this.getACLFile();
+        if (!file) throw new Error('ACL File was not found for the resource');
+        const doc = await ldflex[file.url];
+        const permissions = this.getSubjects(doc);
+        this.setAcl = permissions;
+        return permissions;
+      }
+      return this.acl;
     } catch (e) {
       throw e;
     }
   };
 
-  deletePermissions = async () => {
+  deleteACL = async () => {
     const result = await solid.fetch(this.aclUri, { method: 'DELETE' });
     return result.ok;
   };
 
-  updatePermissions = () => {};
+  isSameMode = (modes1, modes2) => {
+    return modes1.sort() === modes2.sort();
+  };
 
-  getPermissions = () => {};
+  createMode = async (document, { modes, agents }) => {
+    try {
+      const { acl, foaf, a } = ACL_PREFIXES;
+      const subject = `${this.aclUri}#${modes.join('')}`;
+      await document[subject][a].add(namedNode(`${acl}Authorization`));
+      await document[subject]['acl:accessTo'].add(namedNode(this.documentUri));
+      if (agents) {
+        for await (const agent of agents) {
+          await document[subject]['acl:agent'].add(namedNode(agent));
+        }
+      } else {
+        await document[subject]['acl:agentClass'].add(namedNode(`${foaf}Agent`));
+      }
+
+      for await (const mode of modes) {
+        await document[subject]['acl:mode'].add(namedNode(`${acl}${mode}`));
+      }
+      return { modes, agents };
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  assignPermissions = async permissions => {
+    const aclPermissions = await this.getPermissions();
+    const document = await ldflex[this.aclUri];
+    for await (const permission of permissions) {
+      console.log('Permission', permission);
+      const modeExists = aclPermissions.filter(per => this.isSameMode(per.modes, permission.modes));
+      if (modeExists.length > 0) {
+        console.log('Mode', modeExists);
+        const agentsExists = modeExists[0].agents.filter(
+          agent => !permission.agents.includes(agent)
+        );
+      } else {
+        console.log('Mode does not exist');
+        return this.createMode(document, permission);
+      }
+    }
+  };
+
+  removePermissions = async permissions => {
+    const aclPermissions = await this.getPermissions();
+    const document = await ldflex[this.aclUri];
+    permissions.forEach(({ modes, agents }) => {});
+  };
+
+  updatePermissions = async permissions => {
+    const aclPermissions = await this.getPermissions();
+    const document = await ldflex[this.aclUri];
+  };
 }
 
 export default AccessControlList;
