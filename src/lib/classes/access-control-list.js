@@ -1,6 +1,7 @@
 import { namedNode } from '@rdfjs/data-model';
 import solid from 'solid-auth-client';
 import N3 from 'n3';
+import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
 
 const PERMISSIONS = {
@@ -38,13 +39,24 @@ class AccessControlList {
     return PERMISSIONS;
   }
 
+  /**
+   * @function createsQuad Creates a simple quad object
+   * @param {String} subject Subject of the quad
+   * @param {String} predicate Predicate of the quad
+   * @param {String} object Object of the quad
+   */
   createQuad = (subject, predicate, object) => ({
     subject,
     predicate,
     object
   });
 
-  createQuadList = (modes, agents) => {
+  /**
+   * @function createQuadList Creates a N3 quad list to later be parsed as Turtle
+   * @param {Array<String>} modes Array of modes
+   * @param {Array<String> | null} agents Array of webId or null if for everyone
+   */
+  createQuadList = (modes: Array<String>, agents: Array<String> | null) => {
     const { acl, foaf, a } = ACL_PREFIXES;
     const subject = `${this.aclUri}#${modes.join('')}`;
     const originalPredicates = [
@@ -52,7 +64,6 @@ class AccessControlList {
       this.createQuad(subject, `${acl}accessTo`, namedNode(this.documentUri))
     ];
     let predicates = [];
-    console.log('Agents', agents);
     if (agents) {
       const agentsArray = Array.isArray(agents) ? agents : [agents];
       const agentsQuads = agentsArray.map(agent =>
@@ -75,6 +86,11 @@ class AccessControlList {
     return quadList;
   };
 
+  /**
+   * @function createPermissionsTurtle Creates a turtle looking string with specific permissions
+   * @param {Array<Permissions> | null} permissions Array of permissions to be added to the turtle string
+   * @return {String } A Turtle looking string with all of the necessary permissions
+   */
   createPermissionsTurtle = (permissions: Array<Permissions>) => {
     const { DataFactory } = N3;
     const prefixes = { ...ACL_PREFIXES, '': `${this.aclUri}#`, me: this.owner };
@@ -100,6 +116,10 @@ class AccessControlList {
     return turtle;
   };
 
+  /**
+   * @function createACLFile Creates a file or a container with it specfic set of acls. Assigns READ, WRITE and CONTROL permissions to the owner by default
+   * @param {Array<Permissions> | null} permissions Array of permissions to be added in the acl file
+   */
   createACLFile = async (permissions = null) => {
     await this.createSolidFile(this.documentUri);
     if (permissions) {
@@ -112,7 +132,12 @@ class AccessControlList {
     }
   };
 
-  createSolidFile = async (url, options = {}) =>
+  /**
+   * @function void Helper function to create a file
+   * @param {String} url Url where the solid file has to be created
+   * @param {Object} options Options to add as part of the native fetch options object
+   */
+  createSolidFile = async (url: String, options: Object = {}) =>
     solid.fetch(url, {
       method: 'PUT',
       headers: {
@@ -121,7 +146,12 @@ class AccessControlList {
       ...options
     });
 
-  getParentACL = async url => {
+  /**
+   * @function getParentACL Recursively tries to retrieve the acl file from the parent containers if there is not a direct one
+   * @param {String} url Url of the parent container
+   * @returns {Object} Parent acl fetched file
+   */
+  getParentACL = async (url: String) => {
     const newURL = new URL(url);
     const { pathname } = newURL;
     const hasParent = pathname.length > 1;
@@ -135,6 +165,10 @@ class AccessControlList {
     if (result.status === 200) return result;
   };
 
+  /**
+   * @function getACLFile Retrieves the acl file from the network
+   * @returns {Object} Acl fetched file
+   */
   getACLFile = async () => {
     try {
       const result = await solid.fetch(this.aclUri);
@@ -146,6 +180,11 @@ class AccessControlList {
     }
   };
 
+  /**
+   * @function getSubjects Creates an object based on a ldflex proxy document
+   * @param {Proxy} document The base ldflex proxy document from where the data will be extracted
+   * @returns {Array<Permissions>} A custom object to visualized the acls of a document or container it a Pod
+   */
   getSubjects = async document => {
     let subjects = [];
     for await (const subject of document.subjects) {
@@ -159,13 +198,16 @@ class AccessControlList {
         modes = [...modes, modeName];
       }
       const agentClass = await subject['acl:agentClass'];
-      const subjectName = subject.value.split('#')[1];
-      if (agents.length > 0) subjects = [...subjects, { subject: subjectName, agents, modes }];
-      if (agentClass) subjects = [...subjects, { subject: subjectName, agents: null, modes }];
+      if (agents.length > 0) subjects = [...subjects, { subject, agents, modes }];
+      if (agentClass) subjects = [...subjects, { subject, agents: null, modes }];
     }
     return subjects;
   };
 
+  /**
+   * @function getPermissions Retrieves the acl file as an array of Permissions objects
+   * @returns {Array<Permissions>} An array of permissions
+   */
   getPermissions = async () => {
     try {
       if (!this.acl) {
@@ -182,31 +224,44 @@ class AccessControlList {
     }
   };
 
+  /**
+   * @function deleteACL Deletes the entire acl file, leaving the default acls from the parent container
+   * @return {Boolean} Returns if deletion was successful
+   */
   deleteACL = async () => {
     const result = await solid.fetch(this.aclUri, { method: 'DELETE' });
     return result.ok;
   };
 
-  isSameMode = (modes1, modes2) => {
-    return modes1.sort() === modes2.sort();
-  };
+  /**
+   * @function isSameMode checks if two sorted arrays of modes are equal
+   * @param {Array<String>} modes1 An array of mode names to be compared
+   * @param {Array<String>} modes2 An array of mode names to be compared
+   * @returns {Boolean} The result of comparing two array to see if are equals
+   */
+  isSameMode = (modes1, modes2) => isEqual(modes1.sort(), modes2.sort());
 
-  createMode = async (document, { modes, agents }) => {
+  /**
+   * @function createMode creates a new mode in the acl file
+   * @param {Array<Permissions>} permissions An array of permissions with the necessary modes and agents
+   */
+  createMode = async ({ modes, agents }) => {
     try {
       const { acl, foaf, a } = ACL_PREFIXES;
       const subject = `${this.aclUri}#${modes.join('')}`;
-      await document[subject][a].add(namedNode(`${acl}Authorization`));
-      await document[subject]['acl:accessTo'].add(namedNode(this.documentUri));
+      await ldflex[subject][a].add(namedNode(`${acl}Authorization`));
+      await ldflex[subject]['acl:accessTo'].add(namedNode(this.documentUri));
+      /* If agents is null then it will be added to the default permission (acl:agentClass) for 'everyone' */
       if (agents) {
         for await (const agent of agents) {
-          await document[subject]['acl:agent'].add(namedNode(agent));
+          await ldflex[subject]['acl:agent'].add(namedNode(agent));
         }
       } else {
-        await document[subject]['acl:agentClass'].add(namedNode(`${foaf}Agent`));
+        await ldflex[subject]['acl:agentClass'].add(namedNode(`${foaf}Agent`));
       }
 
       for await (const mode of modes) {
-        await document[subject]['acl:mode'].add(namedNode(`${acl}${mode}`));
+        await ldflex[subject]['acl:mode'].add(namedNode(`${acl}${mode}`));
       }
       return { modes, agents };
     } catch (e) {
@@ -214,33 +269,64 @@ class AccessControlList {
     }
   };
 
+  /**
+   * @function addPermissionsToMode removes a specific agent from a specific mode in the acl file
+   * @param {Permissions} mode An existing mode (subject) in the acl file
+   * @param {String} agent WebId of the user the mode will be assigned to
+   */
+  addPermissionsToMode = async (mode, agent) => {
+    const { subject } = mode;
+    await ldflex[subject]['acl:agent'].add(namedNode(agent));
+  };
+
+  /**
+   * @function removePermissionsFromMode removes a specific agent from a specific mode in the acl file
+   * @param {Permissions} mode An existing mode (subject) in the acl file
+   * @param {String} agent WebId of the user to remove from an existing mode
+   */
+  removePermissionsFromMode = async (mode: Permissions, agent: String) => {
+    const { subject } = mode;
+    await ldflex[subject]['acl:agent'].delete(namedNode(agent));
+  };
+
+  /**
+   * @function assignPermissions Assigns permissions to specific agents, creates a new mode if it does not exist
+   * @param {Array<Permissions> | null | String} permissionss An array of permissions to be assigned
+   */
   assignPermissions = async permissions => {
     const aclPermissions = await this.getPermissions();
-    const document = await ldflex[this.aclUri];
     for await (const permission of permissions) {
-      console.log('Permission', permission);
-      const modeExists = aclPermissions.filter(per => this.isSameMode(per.modes, permission.modes));
+      const { modes, agents } = permission;
+      const modeExists = aclPermissions.filter(per => this.isSameMode(per.modes, modes));
       if (modeExists.length > 0) {
-        console.log('Mode', modeExists);
-        const agentsExists = modeExists[0].agents.filter(
-          agent => !permission.agents.includes(agent)
-        );
+        const mode = modeExists[0];
+        const agentsExists = agents.filter(agent => !mode.agents.includes(agent));
+        for await (const agent of agentsExists) {
+          await this.addPermissionsToMode(mode, agent);
+        }
       } else {
-        console.log('Mode does not exist');
-        return this.createMode(document, permission);
+        return this.createMode(permission);
       }
     }
   };
 
+  /**
+   * @function removePermissions Removes specific permissions to specific agents if exists
+   * @param {Array<Permissions> | null | String} permissionss An array of permissions to be removed
+   */
   removePermissions = async permissions => {
     const aclPermissions = await this.getPermissions();
-    const document = await ldflex[this.aclUri];
-    permissions.forEach(({ modes, agents }) => {});
-  };
-
-  updatePermissions = async permissions => {
-    const aclPermissions = await this.getPermissions();
-    const document = await ldflex[this.aclUri];
+    for await (const permission of permissions) {
+      const { modes, agents } = permission;
+      const modeExists = aclPermissions.filter(per => this.isSameMode(per.modes, modes));
+      if (modeExists.length > 0) {
+        const mode = modeExists[0];
+        const agentsExists = mode.agents.filter(agent => agents.includes(agent));
+        for await (const agent of agentsExists) {
+          await this.removePermissionsFromMode(mode, agent);
+        }
+      }
+    }
   };
 }
 

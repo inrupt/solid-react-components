@@ -57,6 +57,7 @@
     "file-type": "^10.7.1",
     "html-webpack-include-assets-plugin": "^1.0.6",
     "ldflex": "^2.4.0",
+    "lodash": "^4.17.15",
     "mime-types": "^2.1.24",
     "moment": "^2.24.0",
     "n3": "^1.1.1",

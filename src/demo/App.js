@@ -60,10 +60,11 @@ const App = () => {
       const documentURI = 'https://jprod.inrupt.net/public/demoacl3/test';
       const { MODES } = AccessControlList;
       const permissions = [
-        { modes: [MODES.CONTROL], agents: ['https://jprod.inrupt.net/profile/card#me'] }
+        { modes: [MODES.CONTROL], agents: ['https://jprod.solid.community/profile/card#me'] }
       ];
       const aclInstance = new AccessControlList(webId, documentURI);
       const acl = await aclInstance.assignPermissions(permissions);
+      // eslint-disable-next-line no-console
       console.log('ACL', acl);
     }
   };
