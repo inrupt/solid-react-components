@@ -191,10 +191,10 @@ export const useNotification = owner => {
    * @type {function(*=): (*|Promise<boolean|*|undefined>)}
    * @param {String} document url of the file into the pod.
    */
-  const discoveryInbox = useCallback(
+  const discoverInbox = useCallback(
     async document => {
       const { notify } = notification;
-      return notify.discoveryInbox(document);
+      return notify.discoverInbox(document);
     },
     [owner, notification.notify]
   );
@@ -223,7 +223,7 @@ export const useNotification = owner => {
     filterNotification,
     deleteNotification,
     markAsReadNotification,
-    discoveryInbox,
+    discoverInbox,
     createInbox,
     notification,
     deleteInbox

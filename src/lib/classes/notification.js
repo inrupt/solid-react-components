@@ -103,7 +103,7 @@ export class Notification {
   };
 
   /**
-   * Create inbox container with default permissions
+   * Create inbox container with default permissions in the pod from a specific path
    * @param inboxRoot
    * @param owner
    * @returns {Promise<*>}
@@ -111,8 +111,15 @@ export class Notification {
 
   createInbox = async (inboxPath, appPath, settingFileName = 'settings.ttl') => {
     try {
+      /**
+       * Check if inbox already exists or not in the target path.
+       * @type {*|boolean}
+       */
       const hasInbox = await this.hasInbox(inboxPath);
       const appSettingPat = `${appPath}${settingFileName}`;
+      /**
+       * if container exist will return message without changes.
+       */
       if (hasInbox) return solidResponse(200, 'Inbox is ready to use');
 
       if (!this.owner) throw new SolidError('Owner is undefined', 'Inbox', 500);
@@ -346,7 +353,7 @@ export class Notification {
             );
           }
         } else {
-          throw new SolidError('Schema do not have property', 'Notification', 500);
+          throw new SolidError('Schema does not have property', 'Notification', 500);
         }
       });
 
@@ -431,10 +438,10 @@ export class Notification {
    * @param document file url to find inbox path
    * @returns {Promise<boolean>}
    */
-  discoveryInbox = async document => {
+  discoverInbox = async document => {
     try {
-      const existDocument = await this.hasInbox(document);
-      if (!existDocument) return false;
+      const hasDocument = await this.hasInbox(document);
+      if (!hasDocument) return false;
 
       const inboxDocument = await solidLDflex[document]['ldp:inbox'];
       const inbox = inboxDocument ? await inboxDocument.value : false;

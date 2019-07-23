@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import SolidImg from '../assets/solid_logo.png';
@@ -34,6 +34,21 @@ const ShexFormComponent = styled.div`
    }
 `;
 
+const NotificationSection = styled.div`
+  button {
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  input {
+    margin: 20px 0;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+`;
+
 const Header = () => {
   return (
     <HeaderWrapper>
@@ -44,13 +59,19 @@ const Header = () => {
 };
 
 const App = () => {
+  const [userInbox, setUserInbox] = useState(null);
   const webId = useWebId();
-  const { fetchNotification, notification, createNotification, discoveryInbox } = useNotification(
+  const { fetchNotification, notification, createNotification, discoverInbox } = useNotification(
     webId
   );
 
+  const onChange = useCallback((event: Event) => {
+    const { target } = event;
+    setUserInbox(target.value);
+  });
+
   const init = async () => {
-    const result = await discoveryInbox(webId);
+    const result = await discoverInbox(webId);
 
     fetchNotification([{ path: result, inboxName: 'Global App' }]);
   };
@@ -100,17 +121,32 @@ const App = () => {
           <HandleShexForm {...{ webId }} />
         </ShexFormComponent>
       )}
-      <button
-        type="button"
-        onClick={() =>
-          createNotification(
-            { title: 'App notification', summary: 'Summary App' },
-            'https://jairocr.inrupt.net/inbox/'
-          )
-        }
-      >
-        Create notification
-      </button>
+      <NotificationSection>
+        <h3>Create notification example using your inbox</h3>
+        <input
+          type="text"
+          placeholder="Inbox Path"
+          name="userInbox"
+          defaultValue=""
+          onChange={onChange}
+          value={userInbox}
+        />
+        <button
+          type="button"
+          disabled={!userInbox}
+          onClick={() =>
+            createNotification(
+              {
+                title: 'Notification Example',
+                summary: 'This is a basic solid notification example.'
+              },
+              userInbox
+            )
+          }
+        >
+          Create notification
+        </button>
+      </NotificationSection>
     </DemoWrapper>
   );
 };
