@@ -105,7 +105,7 @@ class AccessControlList {
   };
 
   /**
-   * @function createACLFile Creates a file or a container with it specific set of acls. Assigns READ, WRITE and CONTROL permissions to the owner by default
+   * @function createACLFile Creates a file or container with a specific set of acls. Assigns READ, WRITE and CONTROL permissions to the owner by default
    * @param {Array<Permissions> | null} permissions Array of permissions to be added in the acl file
    */
   createACLFile = async (permissions = null) => {
