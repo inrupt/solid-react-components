@@ -6,5 +6,6 @@ export default class SolidError extends Error {
     this.name = name || 'SolidError';
     this.type = this.name;
     this.code = code || 0;
+    this.status = code || 0;
   }
 }

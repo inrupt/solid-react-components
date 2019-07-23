@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.4.3",
+  "version": "0.4.5",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
@@ -55,10 +55,16 @@
     "@solid/react": "^1.6.0",
     "file-type": "^10.7.1",
     "html-webpack-include-assets-plugin": "^1.0.6",
+    "ldflex": "^2.4.0",
+    "lodash": "^4.17.15",
     "mime-types": "^2.1.24",
+    "moment": "^2.24.0",
+    "n3": "^1.1.1",
+    "rdflib": "^0.20.1",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.2.0",
-    "uglify-js": "^3.6.0",
+    "solid-auth-client": "^2.3.0",
+    "unique": "0.0.1",
     "unique-string": "^1.0.0"
   },
   "devDependencies": {
@@ -134,6 +140,7 @@
     "style-loader": "0.23.0",
     "styled-components": "^4.1.3",
     "terser-webpack-plugin": "1.1.0",
+    "uglify-js": "^3.6.0",
     "url-loader": "1.1.1",
     "webpack": "4.19.1",
     "webpack-dev-server": "3.1.14",
@@ -191,6 +198,8 @@
       "@hooks": "<rootDir>/src/lib/hooks",
       "@contex": "<rootDir>/src/lib/context",
       "@testSetup": "<rootDir>/src/test/setup",
+      "@classes": "<rootDir>/src/lib/classes",
+      "@constants": "<rootDir>/src/lib/constants",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
     "moduleFileExtensions": [

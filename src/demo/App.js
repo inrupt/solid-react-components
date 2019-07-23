@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader } from '../lib';
+import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
+import { AccessControlList } from '@classes';
 import HandleShexForm from './components';
 
 const HeaderWrapper = styled.section`
@@ -33,6 +34,21 @@ const ShexFormComponent = styled.div`
    }
 `;
 
+const NotificationSection = styled.div`
+  button {
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  input {
+    margin: 20px 0;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+`;
+
 const Header = () => {
   return (
     <HeaderWrapper>
@@ -43,11 +59,45 @@ const Header = () => {
 };
 
 const App = () => {
+  const [userInbox, setUserInbox] = useState(null);
   const webId = useWebId();
+  const { fetchNotification, notification, createNotification, discoverInbox } = useNotification(
+    webId
+  );
+
+  const onChange = useCallback((event: Event) => {
+    const { target } = event;
+    setUserInbox(target.value);
+  });
+
+  const init = async () => {
+    const result = await discoverInbox(webId);
+
+    fetchNotification([{ path: result, inboxName: 'Global App' }]);
+  };
+
+  const createAcl = async () => {
+    if (webId) {
+      const uri = new URL(webId);
+      const documentURI = `${uri.origin}/public/test`;
+      const { MODES } = AccessControlList;
+      const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
+      const aclInstance = new AccessControlList(webId, documentURI);
+      await aclInstance.createACLFile(permissions);
+    }
+  };
+
+  useEffect(() => {
+    if (webId) init();
+  }, [notification.notify, webId]);
 
   return (
     <DemoWrapper>
       <Header />
+      <button type="button" onClick={createAcl}>
+        Create ACL
+      </button>
+      <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <Uploader
         {...{
@@ -71,6 +121,32 @@ const App = () => {
           <HandleShexForm {...{ webId }} />
         </ShexFormComponent>
       )}
+      <NotificationSection>
+        <h3>Create notification example using your inbox</h3>
+        <input
+          type="text"
+          placeholder="Inbox Path"
+          name="userInbox"
+          defaultValue=""
+          onChange={onChange}
+          value={userInbox}
+        />
+        <button
+          type="button"
+          disabled={!userInbox}
+          onClick={() =>
+            createNotification(
+              {
+                title: 'Notification Example',
+                summary: 'This is a basic solid notification example.'
+              },
+              userInbox
+            )
+          }
+        >
+          Create notification
+        </button>
+      </NotificationSection>
     </DemoWrapper>
   );
 };
