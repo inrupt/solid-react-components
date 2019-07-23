@@ -87,7 +87,7 @@ class AccessControlList {
   };
 
   /**
-   * @function createPermissionsTurtle Creates a turtle looking string with specific permissions
+   * @function createPermissionsTurtle Creates a turtle with specific permissions
    * @param {Array<Permissions> | null} permissions Array of permissions to be added to the turtle string
    * @return {String } A Turtle looking string with all of the necessary permissions
    */
