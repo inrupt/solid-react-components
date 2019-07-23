@@ -149,7 +149,7 @@ class AccessControlList {
   /**
    * @function getParentACL Recursively tries to retrieve the acl file from the parent containers if there is not a direct one
    * @param {String} url Url of the parent container
-   * @returns {Object} Parent acl fetched file
+   * @getParentACL {Object || null} Parent acl fetched file
    */
   getParentACL = async (url: String) => {
     const newURL = new URL(url);
@@ -163,6 +163,8 @@ class AccessControlList {
     const result = await solid.fetch(`${parentURI}.acl`);
     if (result.status === 404) return this.getParentACL(parentURI);
     if (result.status === 200) return result;
+
+    return null;
   };
 
   /**
@@ -183,7 +185,7 @@ class AccessControlList {
   /**
    * @function getSubjects Creates an object based on a ldflex proxy document
    * @param {Proxy} document The base ldflex proxy document from where the data will be extracted
-   * @returns {Array<Permissions>} A custom object to visualized the acls of a document or container it a Pod
+   * @returns {Array<Permissions>} A custom object to visualize the acls of a document or container in a Pod
    */
   getSubjects = async document => {
     let subjects = [];
