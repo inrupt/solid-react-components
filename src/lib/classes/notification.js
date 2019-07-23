@@ -38,7 +38,7 @@ export class Notification {
   /**
    * We are checking if the user has an inbox reference on the card and, also, if the inbox folder exists.
    * @param path
-   * @returns {Promise<*|boolean>}
+   * @returns {Promise<boolean>}
    */
   hasInbox = async path => {
     const result = await solid.fetch(path, { method: 'GET' });
@@ -46,7 +46,7 @@ export class Notification {
   };
 
   /**
-   * Delete the inbox folder and ldp on user's card
+   * Delete the inbox and the link to the inbox for discoverability
    * @returns {Promise<*>}
    * @param {String} inbox path of the container
    * @param {String} document an optional parameter to delete a reference on a document
@@ -75,6 +75,13 @@ export class Notification {
     }
   };
 
+  /**
+   * Create turtle document to discover inbox in the user pod.
+   * @param path
+   * @param inboxPath
+   * @param fileName
+   * @returns {Promise<{ok: boolean}>}
+   */
   settingsTurtle = async (path, inboxPath, fileName = 'settings.ttl') => {
     const termFactory = N3.DataFactory;
     const { namedNode } = termFactory;

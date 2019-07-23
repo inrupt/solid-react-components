@@ -223,7 +223,8 @@ module.exports = {
       '@utils': path.resolve(__dirname, '../src/lib/utils'),
       '@hooks': path.resolve(__dirname, '../src/lib/hooks'),
       '@context': path.resolve(__dirname, '../src/lib/context'),
-      '@classes': path.resolve(__dirname, '../src/lib/classes')
+      '@classes': path.resolve(__dirname, '../src/lib/classes'),
+      '@constants': path.resolve(__dirname, '../src/lib/constants')
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding

@@ -3,24 +3,12 @@ import solid from 'solid-auth-client';
 import N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
-
-const PERMISSIONS = {
-  APPEND: 'Append',
-  READ: 'Read',
-  WRITE: 'Write',
-  CONTROL: 'Control'
-};
+import { SolidError } from '@utils';
+import { PERMISSIONS, ACL_PREFIXES } from '@constants';
 
 type Permissions = {
   agents: null | String | Array,
   modes: Array<String>
-};
-
-const ACL_PREFIXES = {
-  acl: 'http://www.w3.org/ns/auth/acl#',
-  foaf: 'http://xmlns.com/foaf/0.1/',
-  n: 'http://www.w3.org/2006/vcard/ns#',
-  a: 'http://www.w3.org/ns/auth/acl#type'
 };
 
 class AccessControlList {
@@ -214,7 +202,8 @@ class AccessControlList {
     try {
       if (!this.acl) {
         const file = await this.getACLFile();
-        if (!file) throw new Error('ACL File was not found for the resource');
+        if (!file)
+          throw new SolidError('ACL File was not found for the resource', 'Permission Errors', 404);
         const doc = await ldflex[file.url];
         const permissions = this.getSubjects(doc);
         this.setAcl = permissions;
@@ -245,7 +234,7 @@ class AccessControlList {
 
   /**
    * @function createMode creates a new mode in the acl file
-   * @param {Array<Permissions>} permissions An array of permissions with the necessary modes and agents
+   * @param {Permissions} permissions Permissions with the necessary modes and agents
    */
   createMode = async ({ modes, agents }) => {
     try {
