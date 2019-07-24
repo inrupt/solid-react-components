@@ -11,7 +11,7 @@ type Permissions = {
   modes: Array<String>
 };
 
-class AccessControlList {
+export default class AccessControlList {
   constructor(owner, documentUri) {
     this.owner = owner;
     this.documentUri = documentUri;
