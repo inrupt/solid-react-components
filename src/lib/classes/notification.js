@@ -3,6 +3,7 @@ import N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
 import { solidResponse, SolidError, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
+import AccessControlList from './access-control-list';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',
@@ -115,15 +116,16 @@ export class Notification {
    * @param owner
    * @returns {Promise<*>}
    */
-
   createInbox = async (inboxPath, appPath, settingFileName = 'settings.ttl') => {
     try {
+      const newInboxPath = inboxPath.endsWith('/') ? inboxPath : `${inboxPath}/`;
+      const newAppPath = appPath.endsWith('/') ? appPath : `${appPath}/`;
       /**
        * Check if inbox already exists or not in the target path.
        * @type {*|boolean}
        */
-      const hasInbox = await this.hasInbox(inboxPath);
-      const appSettingPat = `${appPath}${settingFileName}`;
+      const hasInbox = await this.hasInbox(newInboxPath);
+      const appSettingPath = `${newAppPath}${settingFileName}`;
       /**
        * if container exist will return message without changes.
        */
@@ -132,119 +134,35 @@ export class Notification {
       if (!this.owner) throw new SolidError('Owner is undefined', 'Inbox', 500);
 
       /**
-       * Start to build ACL file to add access to owner and users to inbox container
-       * To know more about ACL please go to: https://github.com/solid/web-access-control-spec
+       * Create inbox reference to be discovered in the pod into settings.ttl
        */
-      const termFactory = N3.DataFactory;
-      const { namedNode } = termFactory;
-      const writer = new N3.Writer({
-        prefixes: {
-          ns: PREFIXES.ns,
-          foaf: PREFIXES.foaf,
-          acl: PREFIXES.acl
-        },
-        format: 'text/turtle'
-      });
+      const settingsResult = await this.settingsTurtle(appSettingPath, newInboxPath);
 
       /**
-       * Add Quad type Authorization
+       * Check if settings reference was created it if not we will try one time more.
        */
-      writer.addQuad(namedNode('#owner'), namedNode('ns:type'), namedNode('acl:Authorization'));
-      /**
-       * Add agent permission to owner
-       */
-      writer.addQuad(namedNode('#owner'), namedNode('acl:agent'), namedNode(this.owner));
-      /**
-       * Add access reference to the container folder
-       */
-      writer.addQuad(namedNode('#owner'), namedNode('acl:accessTo'), namedNode('./'));
-      writer.addQuad(namedNode('#owner'), namedNode('acl:defaultForNew'), namedNode('./'));
+      if (!settingsResult.ok) await this.settingsTurtle(appSettingPath, newInboxPath);
 
       /**
-       * Add roles to owner Read, Write and Control
+       * Create inbox container
        */
-      writer.addQuad(
-        namedNode('#owner'),
-        namedNode('acl:mode'),
-        namedNode('acl:Read, acl:Write, acl:Control')
-      );
-
-      /**
-       * Add permissions to public users
-       */
-      writer.addQuad(namedNode('#public'), namedNode('ns:type'), namedNode('acl:Authorization'));
-
-      writer.addQuad(
-        namedNode('#public'),
-        namedNode('acl:agentClass'),
-        namedNode('http://xmlns.com/foaf/0.1/Agent')
-      );
-      /**
-       * Add access reference to the container folder
-       */
-      writer.addQuad(namedNode('#public'), namedNode('acl:accessTo'), namedNode('./'));
-
-      writer.addQuad(namedNode('#public'), namedNode('acl:defaultForNew'), namedNode('./'));
-      /**
-       * Add roles to public Append
-       */
-      writer.addQuad(namedNode('#public'), namedNode('acl:mode'), namedNode('acl:Append'));
-
-      await writer.end(async (error, result) => {
-        if (error) {
-          throw error;
+      const resultInbox = await solid.fetch(`${newInboxPath}.dummy`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'text/turtle'
         }
-
-        /**
-         * Create inbox container
-         */
-        const resultInbox = await solid.fetch(`${inboxPath}.dummy`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'text/turtle'
-          }
-        });
-
-        /**
-         * If create inbox fail we return an error message
-         */
-        if (!resultInbox.ok)
-          throw new SolidError(
-            result.message || 'Error when tried to create an inbox',
-            'Error',
-            resultInbox.status
-          );
-
-        await solid.fetch(`${inboxPath}.dummy`, { method: 'DELETE' });
-
-        /**
-         * Create inbox reference to be discovered in the pod into settings.ttl
-         */
-        const settingsResult = await this.settingsTurtle(appSettingPat, inboxPath);
-
-        /**
-         * Check if settings reference was created it if not we will try one time more.
-         */
-        if (!settingsResult.ok) await this.settingsTurtle(appSettingPat, inboxPath);
-
-        /**
-         * Create a default ACL for inbox container
-         */
-        const resultAcl = await solid.fetch(`${inboxPath}.acl`, {
-          method: 'PUT',
-          body: result,
-          headers: {
-            'Content-Type': 'text/turtle'
-          }
-        });
-
-        if (!resultAcl.ok)
-          throw new SolidError(
-            result.message || 'An error when tried to assign permissions',
-            'Error',
-            resultAcl.status
-          );
       });
+
+      /**
+       * If create inbox fail we return an error message
+       */
+      if (!resultInbox.ok)
+        throw new SolidError('Error when tried to create an inbox', 'Error', resultInbox.status);
+
+      await solid.fetch(`${newInboxPath}.dummy`, { method: 'DELETE' });
+      const permissions = [{ agents: null, modes: [AccessControlList.MODES.APPEND] }];
+      const aclContainer = new AccessControlList(this.owner, newInboxPath);
+      await aclContainer.createACL(permissions);
 
       return solidResponse(200, 'Inbox was created');
     } catch (error) {

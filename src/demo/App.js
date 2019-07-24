@@ -79,11 +79,11 @@ const App = () => {
   const createAcl = async () => {
     if (webId) {
       const uri = new URL(webId);
-      const documentURI = `${uri.origin}/public/test`;
+      const documentURI = `${uri.origin}/public/container`;
       const { MODES } = AccessControlList;
       const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
       const aclInstance = new AccessControlList(webId, documentURI);
-      await aclInstance.createACLFile(permissions);
+      await aclInstance.createACL(permissions);
     }
   };
 

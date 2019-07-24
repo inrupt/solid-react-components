@@ -20,6 +20,8 @@ import {
 
 import { useNotification } from '@hooks';
 
+import { AccessControlList } from '@classes';
+
 export {
   ProviderLogin,
   PrivateRoute,
@@ -36,5 +38,6 @@ export {
   useLatestUpdate,
   ShexForm,
   ShexFormBuilder,
-  useNotification
+  useNotification,
+  AccessControlList
 };
