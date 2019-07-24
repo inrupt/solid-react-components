@@ -105,18 +105,21 @@ class AccessControlList {
   };
 
   /**
-   * @function createACLFile Creates a file or container with a specific set of acls. Assigns READ, WRITE and CONTROL permissions to the owner by default
+   * @function createACL Creates a file or container with a specific set of acls. Assigns READ, WRITE and CONTROL permissions to the owner by default
    * @param {Array<Permissions> | null} permissions Array of permissions to be added in the acl file
    */
-  createACLFile = async (permissions = null) => {
-    await this.createSolidFile(this.documentUri);
-    if (permissions) {
-      const permissionList = [
-        { agents: this.owner, modes: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.CONTROL] },
-        ...permissions
-      ];
-      const body = this.createPermissionsTurtle(permissionList);
-      await this.createSolidFile(this.aclUri, { body });
+  createACL = async (permissions = null) => {
+    try {
+      if (permissions) {
+        const permissionList = [
+          { agents: this.owner, modes: [PERMISSIONS.READ, PERMISSIONS.WRITE, PERMISSIONS.CONTROL] },
+          ...permissions
+        ];
+        const body = this.createPermissionsTurtle(permissionList);
+        return await this.createSolidResource(this.aclUri, { body });
+      }
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -125,7 +128,7 @@ class AccessControlList {
    * @param {String} url Url where the solid file has to be created
    * @param {Object} options Options to add as part of the native fetch options object
    */
-  createSolidFile = async (url: String, options: Object = {}) =>
+  createSolidResource = async (url: String, options: Object = {}) =>
     solid.fetch(url, {
       method: 'PUT',
       headers: {
@@ -306,19 +309,21 @@ class AccessControlList {
    * @param {Array<Permissions> | null | String} permissionss An array of permissions to be removed
    */
   removePermissions = async permissions => {
-    const aclPermissions = await this.getPermissions();
-    for await (const permission of permissions) {
-      const { modes, agents } = permission;
-      const modeExists = aclPermissions.filter(per => this.isSameMode(per.modes, modes));
-      if (modeExists.length > 0) {
-        const mode = modeExists[0];
-        const agentsExists = mode.agents.filter(agent => agents.includes(agent));
-        for await (const agent of agentsExists) {
-          await this.removePermissionsFromMode(mode, agent);
+    try {
+      const aclPermissions = await this.getPermissions();
+      for await (const permission of permissions) {
+        const { modes, agents } = permission;
+        const modeExists = aclPermissions.filter(per => this.isSameMode(per.modes, modes));
+        if (modeExists.length > 0) {
+          const mode = modeExists[0];
+          const agentsExists = mode.agents.filter(agent => agents.includes(agent));
+          for await (const agent of agentsExists) {
+            await this.removePermissionsFromMode(mode, agent);
+          }
         }
       }
+    } catch (e) {
+      throw e;
     }
   };
 }
-
-export default AccessControlList;
