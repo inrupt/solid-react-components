@@ -20,7 +20,7 @@ import {
 
 import { useNotification } from '@hooks';
 
-import { AccessControlList } from '@classes';
+import { AccessControlList, AppPermission } from '@classes';
 
 export {
   ProviderLogin,
@@ -39,5 +39,6 @@ export {
   ShexForm,
   ShexFormBuilder,
   useNotification,
-  AccessControlList
+  AccessControlList,
+  AppPermission
 };
