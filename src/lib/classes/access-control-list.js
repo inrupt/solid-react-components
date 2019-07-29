@@ -47,9 +47,11 @@ export default class AccessControlList {
   createQuadList = (modes: Array<String>, agents: Array<String> | null) => {
     const { acl, foaf, a } = ACL_PREFIXES;
     const subject = `${this.aclUri}#${modes.join('')}`;
+    const { documentUri } = this;
     const originalPredicates = [
       this.createQuad(subject, `${a}`, namedNode(`${acl}Authorization`)),
-      this.createQuad(subject, `${acl}accessTo`, namedNode(this.documentUri))
+      this.createQuad(subject, `${acl}accessTo`, namedNode(documentUri)),
+      this.createQuad(subject, `${acl}defaultForNew`, namedNode(documentUri))
     ];
     let predicates = [];
     if (agents) {
@@ -244,7 +246,9 @@ export default class AccessControlList {
       const { acl, foaf, a } = ACL_PREFIXES;
       const subject = `${this.aclUri}#${modes.join('')}`;
       await ldflex[subject][a].add(namedNode(`${acl}Authorization`));
-      await ldflex[subject]['acl:accessTo'].add(namedNode(this.documentUri));
+      const path = namedNode(this.documentUri);
+      await ldflex[subject]['acl:accessTo'].add(path);
+      await ldflex[subject]['acl:defaultForNew'].add(path);
       /* If agents is null then it will be added to the default permission (acl:agentClass) for 'everyone' */
       if (agents) {
         for await (const agent of agents) {
