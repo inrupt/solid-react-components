@@ -23,7 +23,7 @@ class SolidAuthClient extends EventEmitter {
   currentSession() {}
 
   fetch() {
-    return { ok: true };
+    return { ok: true, status: 200, url: 'https://example.org/public/test.ttl.acl' };
   }
 }
 

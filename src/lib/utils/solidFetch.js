@@ -66,3 +66,18 @@ export const fetchLdflexDocument = async documentUri => {
     return error;
   }
 };
+
+export const getBasicPod = async webId => {
+  try {
+    if (webId) {
+      const nameData = await data[webId]['vcard:fn'];
+      const imageData = await data[webId]['vcard:hasPhoto'];
+      const name = nameData ? nameData.value : webId;
+      const image = imageData ? imageData.value : null;
+      return { name, image, webId };
+    }
+    return {};
+  } catch (e) {
+    throw e;
+  }
+};

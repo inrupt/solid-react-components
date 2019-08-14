@@ -46,6 +46,14 @@ class Uploader extends Component<Props> {
     }
   }
 
+  componentWillUnmount(): void {
+    /**
+     * Remove subscribe after component Unmount
+     */
+    window.removeEventListener('dragover', this.overrideEvent);
+    window.removeEventListener('drop', this.overrideEvent);
+  }
+
   validateAcceptFiles = (accept: String, type: String) => {
     const extensions = accept.split(',');
 

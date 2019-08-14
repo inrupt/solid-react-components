@@ -209,7 +209,7 @@ const useShex = (fileShex: String, documentUri: String, rootShape: String, optio
     const { formData, shexJ } = shexData;
     let updatedFormValue = {};
 
-    if (!ownerUpdate) {
+    if (!ownerUpdate && formData.expression) {
       const updatedFormData = await shexUtil.mapExpFormValues(
         formData.expression,
         (_formValue, _formValues, value, parentUri) => {

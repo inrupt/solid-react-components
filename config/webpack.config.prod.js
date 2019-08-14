@@ -16,6 +16,7 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+
 // const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -98,7 +99,7 @@ module.exports = {
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.
   // You can exclude the *.map files from the build during deployment.
-  devtool: shouldUseSourceMap ? 'source-map' : false,
+  // devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the app code.
   entry: [paths.appLibIndexJs], // CRL: update entry
   output: {
@@ -116,7 +117,19 @@ module.exports = {
   optimization: {
     minimizer: [
       new TerserPlugin({
+        minify: (file, sourceMap) => {
+          const uglifyJsOptions = {};
+
+          if (sourceMap) {
+            uglifyJsOptions.sourceMap = {
+              content: sourceMap
+            };
+          }
+
+          return require('uglify-js').minify(file, uglifyJsOptions);
+        },
         terserOptions: {
+          warnings: false,
           parse: {
             // we want terser to parse ecma 8 code. However, we don't want it
             // to apply any minfication steps that turns valid ecma 5 code
@@ -155,7 +168,7 @@ module.exports = {
         parallel: true,
         // Enable file caching
         cache: true,
-        sourceMap: shouldUseSourceMap
+        sourceMap: false
       }),
       new OptimizeCSSAssetsPlugin({
         cssProcessorOptions: {
@@ -209,7 +222,9 @@ module.exports = {
       '@entities': path.resolve(__dirname, '../src/lib/entities'),
       '@utils': path.resolve(__dirname, '../src/lib/utils'),
       '@hooks': path.resolve(__dirname, '../src/lib/hooks'),
-      '@context': path.resolve(__dirname, '../src/lib/context')
+      '@context': path.resolve(__dirname, '../src/lib/context'),
+      '@classes': path.resolve(__dirname, '../src/lib/classes'),
+      '@constants': path.resolve(__dirname, '../src/lib/constants')
     },
     plugins: [
       // Adds support for installing with Plug'n'Play, leading to faster installs and adding

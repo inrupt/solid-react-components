@@ -1,5 +1,16 @@
 # Solid React Components Library
 
+## 0.4.4 ( August 14, 2019 )
+
+### Added
+
+- Access Control Library was added, which helps developers to manage file and folder permissions in a Solid Pod
+- App Permissions Library to help manage application specific permissions
+- New Notification Library:
+  - Global Inbox Discovery helper
+  - Inbox Creation tools - add a new inbox and delete an existing inbox
+  - Send Notification to and delete Notifications from a particular inbox
+
 ## 0.4.3 ( June 18, 2019 )
 
 ### Added

@@ -1,3 +1,4 @@
 import useShex from './useShex';
+import { useNotification } from './useNotification';
 
-export { useShex }; // eslint-disable-line import/prefer-default-export
+export { useShex, useNotification }; // eslint-disable-line import/prefer-default-export

@@ -1,0 +1,63 @@
+{
+  "id": "default",
+  "@context": {
+    "terms": "http://purl.org/dc/terms#",
+    "as": "https://www.w3.org/ns/activitystreams#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "schema": "http://schema.org/",
+    "solid": "https://www.w3.org/ns/solid/terms#"
+  },
+  "shape": [
+    {
+      "label": "id",
+      "property": "terms:id",
+      "type": "Literal"
+    },
+    {
+      "label": "title",
+      "property": "terms:title",
+      "type": "Literal"
+    },
+    {
+      "label": "summary",
+      "property": "as:summary",
+      "type": "Literal"
+    },
+    {
+      "label": "type",
+      "property": "rdfs:type",
+      "type": "Literal"
+    },
+    {
+      "label": "actor",
+      "property": "as:actor",
+      "type": "NamedNode"
+    },
+    {
+      "label": "target",
+      "property": "as:target",
+      "type": "NamedNode"
+    },
+    {
+      "label": "object",
+      "property": "as:object",
+      "type": "NamedNode"
+    },
+    {
+      "label": "image",
+      "property": "schema:image",
+      "type": "NamedNode"
+    },
+    {
+      "label": "read",
+      "property": "solid:read",
+      "value": false,
+      "type": "Literal"
+    },
+    {
+      "label": "datetime",
+      "property": "rdfs:datetime",
+      "type": "Literal"
+    }
+  ]
+}
