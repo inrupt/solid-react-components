@@ -235,3 +235,34 @@ LanguageTheme object:
 ##### Shapes
 
 A set of example shapes can be found [here](https://shexshapes.inrupt.net/public/), which show various ShEx shapes.
+
+## Class List
+
+Included in this library are a series of helper classes to make certain functionality easier for Solid developers. Each of these classes covers a specific functional area.
+
+### Access Control List
+
+The ACL helper class provides an interface for managing file and folder permissions for a Solid pod. This class contains functions to add or remove a permission from a resource, as well as functions to create a new Turtle file with specific permissions already applied.
+
+Many of the functions in this class are expecting a custom Permissions object as a parameter. The Permissions object looks like this:
+
+```javascript
+type Permissions = {
+  agents: null | String | Array,
+  modes: Array<String>
+};
+```
+
+### Application Permissions
+
+The Application Permissions helper class is designed to help developers check application permissions. Some applications will need to have specific permissions to function properly.
+
+For example, if an application wants to grant permissions to other users to edit a file, it will need the Control permission. The helper functions in this class will allow developers to check if their app has the proper permissions before attempting a call, and also allow the application to handle cases where additional permissions are needed.
+
+### Notifications
+
+The Notifications helper class is a large class, containing many functions that help with Inbox and Notification management.
+
+Included in this helper class are functions that will allow a developer to discover global inboxes, create new inboxes, and delete old inboxes. It will also allow a developer an interface to send a notification to a specific inbox, or delete existing notifications for a user.
+
+These notifications will be added to the inbox, using a common data structure. It is up to the application itself to decide what to do with these notifications.
