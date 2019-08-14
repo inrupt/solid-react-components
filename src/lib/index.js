@@ -15,7 +15,8 @@ import {
   Uploader,
   ProfileUploader,
   ShexForm,
-  ShexFormBuilder
+  ShexFormBuilder,
+  FormModel
 } from '@components';
 
 import { useNotification } from '@hooks';
@@ -40,5 +41,6 @@ export {
   ShexFormBuilder,
   useNotification,
   AccessControlList,
-  AppPermission
+  AppPermission,
+  FormModel
 };

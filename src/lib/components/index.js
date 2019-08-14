@@ -6,6 +6,7 @@ import Uploader from './Uploader';
 import ProfileUploader from './ProfileUploader';
 import ShexForm from './ShexForm';
 import ShexFormBuilder from './ShexFormBuilder';
+import FormModel from './FormModel';
 
 export {
   ProviderSelect,
@@ -15,5 +16,6 @@ export {
   Uploader,
   ProfileUploader,
   ShexForm,
-  ShexFormBuilder
+  ShexFormBuilder,
+  FormModel
 };

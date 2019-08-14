@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
+import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '../lib';
 import { AccessControlList } from '@classes';
 import HandleShexForm from './components';
 
@@ -59,7 +59,7 @@ const Header = () => {
 };
 
 const App = () => {
-  const [userInbox, setUserInbox] = useState(null);
+  const [userInbox, setUserInbox] = useState('');
   const webId = useWebId();
   const { fetchNotification, notification, createNotification, discoverInbox } = useNotification(
     webId
@@ -94,6 +94,7 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
+      <FormModel />
       <button type="button" onClick={createAcl}>
         Create ACL
       </button>
@@ -127,7 +128,6 @@ const App = () => {
           type="text"
           placeholder="Inbox Path"
           name="userInbox"
-          defaultValue=""
           onChange={onChange}
           value={userInbox}
         />
