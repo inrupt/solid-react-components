@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import INPUTS from './input-mapping';
 import Form from './form.component';
+import { CheckBox, RadioButton } from './InputControls';
 
 const FormModel = () => {
   const [text, setText] = useState('');
@@ -21,6 +22,7 @@ const FormModel = () => {
       </button>
 
       <Form fields={fields} />
+      <RadioButton label="Test" />
     </div>
   );
 };

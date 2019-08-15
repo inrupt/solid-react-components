@@ -3,8 +3,10 @@ import {
   TextArea,
   InputText,
   CheckBox,
+  CheckBoxList,
   DateTimePicker,
-  RadioButton
+  RadioButton,
+  RadioButtonList
 } from './InputControls';
 
 const INPUTS = {
@@ -13,7 +15,9 @@ const INPUTS = {
   input_text: InputText,
   checkbox: CheckBox,
   datetimepicker: DateTimePicker,
-  radio_button: RadioButton
+  radio_button: RadioButton,
+  checkbox_list: CheckBoxList,
+  radio_button_list: RadioButtonList
 };
 
 export default INPUTS;
