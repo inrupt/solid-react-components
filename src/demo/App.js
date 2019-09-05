@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
+import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '../lib';
 import { AccessControlList } from '@classes';
 import HandleShexForm from './components';
 
@@ -59,7 +59,7 @@ const Header = () => {
 };
 
 const App = () => {
-  const [userInbox, setUserInbox] = useState(null);
+  const [userInbox, setUserInbox] = useState('');
   const webId = useWebId();
   const { fetchNotification, notification, createNotification, discoverInbox } = useNotification(
     webId
@@ -99,6 +99,7 @@ const App = () => {
       </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
+      <FormModel />
       <Uploader
         {...{
           fileBase: 'Your POD folder here',
@@ -127,7 +128,6 @@ const App = () => {
           type="text"
           placeholder="Inbox Path"
           name="userInbox"
-          defaultValue=""
           onChange={onChange}
           value={userInbox}
         />
