@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import unique from 'unique';
 import { fetchLdflexDocument } from '@utils';
 
-const Classifier = ({ id, retrieveNewFormObject, ...rest }) => {
+type Props = {
+  id: string,
+  retrieveNewFormObject: Function
+};
+
+const Classifier = ({ id, retrieveNewFormObject, ...rest }: Props) => {
   const [options, setOptions] = useState([]);
   const from = rest['ui:from'] || null;
   const canMintNew = rest['ui:canMintNew'] || false;
