@@ -1,5 +1,13 @@
 import Input from './Input';
 import Classifier from './Classifier';
+import Comment from './Comment';
+import Heading from './Heading';
+import TextArea from './TextArea';
+import RadioButtonList from './RadioButtonList';
+import RadioButton from './RadioButton';
+import CheckBoxList from './CheckBoxList';
+import CheckBox from './CheckBox';
+
 import { UITypes } from '@constants';
 
 const UIMapping = type => {
@@ -9,7 +17,7 @@ const UIMapping = type => {
       component = Input;
       break;
     case UITypes.MultiLineTextField:
-      component = 'textarea';
+      component = TextArea;
       break;
     case UITypes.DecimalField:
       component = Input;
@@ -27,10 +35,10 @@ const UIMapping = type => {
       component = Input;
       break;
     case UITypes.BooleanField:
-      component = Input;
+      component = RadioButton;
       break;
     case UITypes.TriStateField:
-      component = Input;
+      component = CheckBox;
       break;
     case UITypes.ColorField:
       component = Input;
@@ -48,10 +56,10 @@ const UIMapping = type => {
       component = Classifier;
       break;
     case UITypes.Heading:
-      component = 'label';
+      component = Heading;
       break;
     case UITypes.Comment:
-      component = 'span';
+      component = Comment;
       break;
     default:
       component = Input;

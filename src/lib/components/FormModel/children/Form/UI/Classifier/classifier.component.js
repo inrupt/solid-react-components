@@ -15,20 +15,13 @@ const Classifier = ({ id, retrieveNewFormObject, ...rest }: Props) => {
   const init = async () => {
     /*
     const document = from ? await fetchLdflexDocument(from) : null;
-    console.log('Document', document);
     if (document) {
+      let docOptions = [];
       for await (const subject of document.subjects) {
-        const subclass = subject.value;
-        let subClassURL;
-        try {
-          subClassURL = new URL(subclass);
-        } catch (e) {
-          subClassURL = null;
-        }
-        if (subClassURL) {
-          console.log('Subclass', subClassURL);
-        }
+        docOptions = [...docOptions, subject.value.split('#').pop()];
       }
+      setOptions(docOptions);
+      // setOptions(options.map(subject => subject.split('#').pop()));
     }
     */
   };

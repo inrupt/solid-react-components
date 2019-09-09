@@ -34,3 +34,12 @@ export const UITypes = {
   Heading: 'http://www.w3.org/ns/ui#Heading',
   Comment: 'http://www.w3.org/ns/ui#Comment'
 };
+
+export const InputTextTypes = {
+  'http://www.w3.org/ns/ui#SingleLineTextField': 'text',
+  'http://www.w3.org/ns/ui#EmailField': 'email',
+  'http://www.w3.org/ns/ui#PhoneField': 'phone',
+  'http://www.w3.org/ns/ui#DecimalField': 'number',
+  'http://www.w3.org/ns/ui#FloatField': 'number',
+  'http://www.w3.org/ns/ui#IntegerField': 'number'
+};

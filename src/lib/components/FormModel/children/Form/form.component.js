@@ -10,7 +10,7 @@ import UIMapping from './UI/ui-mapping';
 
 const UI_PARTS = 'ui:parts';
 
-const Form = ({ formModel, formActions, formObject, setFormObject }) => {
+const Form = ({ formModel, modifyFormObject, formObject, parent }) => {
   const [formFields, setFormFields] = useState([]);
   const parts = formModel[UI_PARTS];
   const getArrayFields = () => {
@@ -33,20 +33,28 @@ const Form = ({ formModel, formActions, formObject, setFormObject }) => {
           const component = UIMapping(field['rdf:type']);
           const id = field.name || item;
           return fieldParts ? (
-            <Form key={item} formModel={field} {...{ formActions, formObject, setFormObject }} />
+            <Form
+              key={item}
+              formModel={field}
+              {...{ formObject, modifyFormObject, parent: formModel }}
+            />
           ) : (
             <ControlGroup
               key={item}
               component={component}
-              fieldData={{ id, ...field }}
-              retrieveNewFormObject={formActions.retrieveNewFormObject}
+              value={field['ui:value']}
+              fieldData={{ id, ...field, ...parent }}
+              modifyFormObject={modifyFormObject}
               formObject={formObject}
-              setFormObject={setFormObject}
             />
           );
         })}
     </Group>
   );
+};
+
+Form.defaultProps = {
+  parent: null
 };
 
 export default Form;

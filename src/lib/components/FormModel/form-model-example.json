@@ -59,7 +59,6 @@
       "ui:contents": "Address"
     },
     "subject:addresses": {
-      "dc:title": "Address details",
       "rdf:type": "http://www.w3.org/ns/ui#Multiple",
       "ui:parts": {
         "id15676283978810": {
@@ -194,7 +193,6 @@
       "ui:contents": "Email"
     },
     "subject:eMails": {
-      "dc:title": "Emails",
       "rdf:type": "http://www.w3.org/ns/ui#Multiple",
       "ui:parts": {
         "id15676283980340": {
@@ -231,7 +229,6 @@
       "ui:contents": "Phones"
     },
     "subject:telephones": {
-      "dc:title": "Telephones",
       "rdf:type": "http://www.w3.org/ns/ui#Multiple",
       "ui:parts": {
         "id15676283981100": {
