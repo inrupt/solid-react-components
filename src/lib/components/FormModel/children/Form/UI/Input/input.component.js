@@ -1,33 +1,40 @@
 import React from 'react';
+import styled from 'styled-components';
+import { InputTextTypes } from '@constants';
 
-const InputTypes = {
-  'http://www.w3.org/ns/ui#SingleLineTextField': 'text',
-  'http://www.w3.org/ns/ui#EmailField': 'email',
-  'http://www.w3.org/ns/ui#PhoneField': 'phone'
-};
+const Label = styled.label`
+  box-sizing: border-box;
+  padding: 0.5em 1em;
+  display: flex;
+  align-items: center;
+  & input {
+    border-radius: 2px;
+    border: solid 1px #ccc;
+    padding: 0.5em;
+    margin-left: 1em;
+  }
+`;
 
-const Input = ({ id, value, retrievenewformobject, setformobject, formobject, ...rest }) => {
+const Input = ({ id, value, modifyFormObject, formObject, ...rest }) => {
   const type = rest['rdf:type'];
   const label = rest['ui:label'] || '';
   const maxLength = rest['ui:maxLength'] || 256;
   const size = rest['ui:size'] || 40;
-  const actualValue = formobject[id] || formobject[id] === '' ? formobject[id].value : value;
+  const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
   const onChange = ({ target }) => {
     const obj = { value: target.value, ...rest };
-    const formObject = retrievenewformobject(id, obj);
-
-    setformobject(formObject);
+    modifyFormObject(id, obj);
   };
 
   return (
-    <label htmlFor={id}>
+    <Label htmlFor={id}>
       <span>{label}</span>
       <input
         id={id}
-        type={InputTypes[type]}
+        type={InputTextTypes[type]}
         {...{ maxLength, size, value: actualValue || '', onChange }}
       />
-    </label>
+    </Label>
   );
 };
 

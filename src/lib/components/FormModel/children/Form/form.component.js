@@ -8,25 +8,15 @@ import DeleteButton from './UI/DeleteButton';
 
 const UI_PARTS = 'ui:parts';
 
-type Props = {
-  formModel: Object,
-  formActions: Object,
-  formObject: Object,
-  children: Node,
-  addNewField: id => Object,
-  deleteField: id => Object,
-  setFormObject: id => void
-};
-
 const Form = ({
   formModel,
-  formActions,
+  modifyFormObject,
   formObject,
-  setFormObject,
-  children,
+  parent,
+  deleteField,
   addNewField,
-  deleteField
-}: Props) => {
+  children
+}) => {
   const [formFields, setFormFields] = useState([]);
   const parts = formModel[UI_PARTS];
   const getArrayFields = () => {
@@ -59,7 +49,7 @@ const Form = ({
             <Form
               key={item}
               formModel={field}
-              {...{ formActions, formObject, setFormObject, deleteField }}
+              {...{ formObject, modifyFormObject, parent: formModel, deleteField }}
             >
               <Multiple {...{ field, addNewField }} />
               <DeleteButton
@@ -70,16 +60,20 @@ const Form = ({
             <ControlGroup
               key={item}
               component={component}
-              fieldData={{ id, ...field }}
-              retrievenewformobject={formActions.retrieveNewFormObject}
-              formobject={formObject}
-              setformobject={setFormObject}
+              value={field['ui:value']}
+              fieldData={{ id, ...field, ...parent }}
+              modifyFormObject={modifyFormObject}
+              formObject={formObject}
             />
           );
         })}
       {children}
     </Group>
   );
+};
+
+Form.defaultProps = {
+  parent: null
 };
 
 export default Form;

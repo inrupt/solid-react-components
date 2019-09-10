@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, cleanup } from 'react-testing-library';
-import InputText from './input-text.component';
+import Input from './input.component';
 import 'jest-dom/extend-expect';
 
 afterAll(cleanup);
 
 describe('Provider Login Container', () => {
-  const { container } = render(<InputText />);
+  const { container } = render(<Input />);
 
   it('shoud renders without crashing', () => {
     expect(container).toBeTruthy();

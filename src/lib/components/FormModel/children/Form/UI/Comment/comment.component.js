@@ -1,9 +1,9 @@
 import React from 'react';
 
-type Props = {
-  content: string
+const Comment = props => {
+  // eslint-disable-next-line react/destructuring-assignment
+  const contents = props['ui:contents'];
+  return <h2>{contents}</h2>;
 };
-
-const Comment = ({ content }: Props) => <span>{content}</span>;
 
 export default Comment;

@@ -7,16 +7,15 @@ import Form from './children/Form';
 // import formModelObjectData from './form-model-example.json';
 
 const FormModel = memo(() => {
+  const [formModel, setFormModel] = useState({});
   const [formObject, setFormObject] = useState({});
-  const [formModelObject, setFormModel] = useState({});
-  const formActions = new FormActions(formModelObject, formObject);
+  const formActions = new FormActions(formModel, formObject);
 
-  const loadFormModel = useCallback(async () => {
+  const init = useCallback(async () => {
     const model = await formUi.convertFormModel(
       'https://jairocr.inrupt.net/public/form.ttl#form1',
-      'https://jcampos.inrupt.net/profile/card#me'
+      'https://jprod.inrupt.net/profile/card#me'
     );
-
     setFormModel(model);
   });
 
@@ -32,17 +31,18 @@ const FormModel = memo(() => {
     setFormModel(updatedFormModelObject);
   });
 
-  useEffect(() => {
-    loadFormModel();
-  }, []);
+  const modifyFormObject = useCallback((id, obj) => {
+    const formObject = formActions.retrieveNewFormObject(id, obj);
+    setFormObject(formObject);
+  });
 
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <form>
       <h1>Form Model</h1>
-      <Form
-        formModel={formModelObject}
-        {...{ formActions, formObject, setFormObject, addNewField, deleteField }}
-      />
+      <Form {...{ formModel, formObject, modifyFormObject, deleteField, addNewField }} />
     </form>
   );
 });
