@@ -6,17 +6,17 @@ const InputTypes = {
   'http://www.w3.org/ns/ui#PhoneField': 'phone'
 };
 
-const Input = ({ id, value, retrieveNewFormObject, setFormObject, formObject, ...rest }) => {
+const Input = ({ id, value, retrievenewformobject, setformobject, formobject, ...rest }) => {
   const type = rest['rdf:type'];
   const label = rest['ui:label'] || '';
   const maxLength = rest['ui:maxLength'] || 256;
   const size = rest['ui:size'] || 40;
-  const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
+  const actualValue = formobject[id] || formobject[id] === '' ? formobject[id].value : value;
   const onChange = ({ target }) => {
     const obj = { value: target.value, ...rest };
-    const formObject = retrieveNewFormObject(id, obj);
-    console.log('Form Object', formObject);
-    setFormObject(formObject);
+    const formObject = retrievenewformobject(id, obj);
+
+    setformobject(formObject);
   };
 
   return (

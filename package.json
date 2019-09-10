@@ -65,6 +65,7 @@
     "react-router-dom": "^4.3.1",
     "react-select": "^2.2.0",
     "solid-auth-client": "^2.3.0",
+    "solid-forms": "file:../solid-sdk-forms",
     "unique": "0.0.1",
     "unique-string": "^1.0.0"
   },

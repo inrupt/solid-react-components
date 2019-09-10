@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import unique from 'unique';
-import { fetchLdflexDocument } from '@utils';
+// import { fetchLdflexDocument } from '@utils';
 
 type Props = {
   id: string,
@@ -31,6 +31,7 @@ const Classifier = ({ id, retrieveNewFormObject, ...rest }: Props) => {
       }
     }
     */
+    setOptions([]);
   };
 
   useEffect(() => {
