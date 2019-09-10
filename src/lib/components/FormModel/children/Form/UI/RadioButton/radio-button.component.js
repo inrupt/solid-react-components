@@ -49,7 +49,14 @@ const Label = styled.label`
   }
 `;
 
-const RadioButton = ({ label, name, checked, value }) => {
+type Props = {
+  label: String,
+  name: String,
+  checked: any,
+  value: String
+};
+
+const RadioButton = ({ label, name, checked, value }: Props) => {
   return (
     <Label htmlFor={name}>
       <input type="radio" name={name} checked={checked || false} value={value} />

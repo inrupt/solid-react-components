@@ -8,6 +8,16 @@ import DeleteButton from './UI/DeleteButton';
 
 const UI_PARTS = 'ui:parts';
 
+type Props = {
+  formModel: Object,
+  formObject: Object,
+  parent?: any,
+  modifyFormObject: () => void,
+  deleteField: id => Object,
+  addNewField: id => Object,
+  children: Node
+};
+
 const Form = ({
   formModel,
   modifyFormObject,
@@ -16,7 +26,7 @@ const Form = ({
   deleteField,
   addNewField,
   children
-}) => {
+}: Props) => {
   const [formFields, setFormFields] = useState([]);
   const parts = formModel[UI_PARTS];
   const getArrayFields = () => {

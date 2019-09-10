@@ -49,7 +49,13 @@ const Label = styled.label`
   }
 `;
 
-const CheckBox = ({ name, label, selected }) => {
+type Props = {
+  name: String,
+  label: String,
+  selected: any
+};
+
+const CheckBox = ({ name, label, selected }: Props) => {
   const [value, setValue] = useState(selected);
   return (
     <Label htmlFor={name}>
