@@ -14,8 +14,9 @@ const FormModel = memo(() => {
   const init = useCallback(async () => {
     const model = await formUi.convertFormModel(
       'https://jairocr.inrupt.net/public/form.ttl#form1',
-      'https://jprod.inrupt.net/profile/card#me'
+      'https://jcampos.inrupt.net/profile/card#me'
     );
+
     setFormModel(model);
   });
 
@@ -39,6 +40,7 @@ const FormModel = memo(() => {
   useEffect(() => {
     init();
   }, []);
+
   return (
     <form>
       <h1>Form Model</h1>

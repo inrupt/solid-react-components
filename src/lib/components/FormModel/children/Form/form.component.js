@@ -47,19 +47,21 @@ const Form = ({
           const field = parts[item];
           const fieldParts = field && field[UI_PARTS];
           const component = field && UIMapping(field['rdf:type']);
-          const id = (field && field.name) || item;
+          const id = (field && field['ui:name']) || item;
 
           /**
            * Return null when field doesn't exists
            * this avoid to crash app using recursive component
            */
           if (!field) return null;
+          /* eslint no-useless-computed-key: "off" */
+          const { ['ui:parts']: deleted, ...udpatedField } = field;
 
           return fieldParts ? (
             <Form
               key={item}
               formModel={field}
-              {...{ formObject, modifyFormObject, parent: formModel, deleteField }}
+              {...{ formObject, modifyFormObject, parent: udpatedField, deleteField }}
             >
               <Multiple {...{ field, addNewField }} />
               <DeleteButton
@@ -71,7 +73,7 @@ const Form = ({
               key={item}
               component={component}
               value={field['ui:value']}
-              fieldData={{ id, ...field, ...parent }}
+              fieldData={{ id, ...field, parent }}
               modifyFormObject={modifyFormObject}
               formObject={formObject}
             />
