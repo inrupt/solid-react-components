@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { FormModel } from 'solid-forms';
 import { Group } from './form.style';
 import ControlGroup from './control-group.component';
 import UIMapping from './UI/ui-mapping';
@@ -38,7 +38,7 @@ const Form = ({
   useEffect(() => {
     getArrayFields();
   }, [formModel]);
-
+  console.log(formObject, 'field');
   return (
     <Group>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}

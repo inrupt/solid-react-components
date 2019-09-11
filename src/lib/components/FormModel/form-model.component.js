@@ -26,8 +26,9 @@ const FormModel = memo(() => {
     setFormModel(updatedFormModelObject);
   });
 
-  const deleteField = useCallback(id => {
-    const updatedFormModelObject = formActions.deleteField(id);
+  const deleteField = useCallback(async id => {
+    // console.log(id, formObject)
+    const updatedFormModelObject = await formActions.deleteField(id);
 
     setFormModel(updatedFormModelObject);
   });
@@ -37,14 +38,20 @@ const FormModel = memo(() => {
     setFormObject(formObject);
   });
 
+  const onSubmit = useCallback(async e => {
+    e.preventDefault();
+    await formActions.saveData();
+  });
+
   useEffect(() => {
     init();
   }, []);
-
+  console.log(formModel);
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <h1>Form Model</h1>
       <Form {...{ formModel, formObject, modifyFormObject, deleteField, addNewField }} />
+      <button type="submit">Save</button>
     </form>
   );
 });
