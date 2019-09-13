@@ -6,16 +6,19 @@ import { FormActions, formUi } from 'solid-forms';
 import Form from './children/Form';
 // import formModelObjectData from './form-model-example.json';
 
-const FormModel = memo(() => {
+type Props = {
+  modelPath: string,
+  podPath: string,
+  autoSave: boolean
+};
+
+const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
   const [formModel, setFormModel] = useState({});
   const [formObject, setFormObject] = useState({});
   const formActions = new FormActions(formModel, formObject);
 
   const init = useCallback(async () => {
-    const model = await formUi.convertFormModel(
-      'https://jairocr.inrupt.net/public/form.ttl#form1',
-      'https://jcampos.inrupt.net/profile/card#me'
-    );
+    const model = await formUi.convertFormModel(modelPath, podPath);
 
     setFormModel(model);
   });
@@ -27,7 +30,6 @@ const FormModel = memo(() => {
   });
 
   const deleteField = useCallback(async id => {
-    // console.log(id, formObject)
     const updatedFormModelObject = await formActions.deleteField(id);
 
     setFormModel(updatedFormModelObject);
@@ -38,7 +40,7 @@ const FormModel = memo(() => {
     setFormObject(formObject);
   });
 
-  const onSubmit = useCallback(async e => {
+  const onSave = useCallback(async e => {
     e.preventDefault();
     await formActions.saveData();
   });
@@ -46,12 +48,14 @@ const FormModel = memo(() => {
   useEffect(() => {
     init();
   }, []);
-  console.log(formModel);
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSave}>
       <h1>Form Model</h1>
-      <Form {...{ formModel, formObject, modifyFormObject, deleteField, addNewField }} />
-      <button type="submit">Save</button>
+      <Form
+        {...{ formModel, formObject, modifyFormObject, deleteField, addNewField, onSave, autoSave }}
+      />
+      {autoSave && <button type="submit">Save</button>}
     </form>
   );
 });

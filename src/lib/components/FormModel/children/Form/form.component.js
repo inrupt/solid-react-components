@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FormModel } from 'solid-forms';
 import { Group } from './form.style';
 import ControlGroup from './control-group.component';
 import UIMapping from './UI/ui-mapping';
@@ -13,6 +12,7 @@ type Props = {
   formObject: Object,
   parent?: any,
   modifyFormObject: () => void,
+  onSave: () => void,
   deleteField: id => Object,
   addNewField: id => Object,
   children: Node
@@ -25,7 +25,9 @@ const Form = ({
   parent,
   deleteField,
   addNewField,
-  children
+  autoSave,
+  children,
+  onSave
 }: Props) => {
   const [formFields, setFormFields] = useState([]);
   const parts = formModel[UI_PARTS];
@@ -38,7 +40,7 @@ const Form = ({
   useEffect(() => {
     getArrayFields();
   }, [formModel]);
-  console.log(formObject, 'field');
+
   return (
     <Group>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
@@ -61,7 +63,14 @@ const Form = ({
             <Form
               key={item}
               formModel={field}
-              {...{ formObject, modifyFormObject, parent: udpatedField, deleteField }}
+              {...{
+                formObject,
+                modifyFormObject,
+                parent: udpatedField,
+                deleteField,
+                onSave,
+                autoSave
+              }}
             >
               <Multiple {...{ field, addNewField }} />
               <DeleteButton
@@ -76,6 +85,8 @@ const Form = ({
               fieldData={{ id, ...field, parent }}
               modifyFormObject={modifyFormObject}
               formObject={formObject}
+              autoSave={autoSave}
+              onSave={onSave}
             />
           );
         })}

@@ -15,7 +15,7 @@ const Label = styled.label`
   }
 `;
 
-const Input = ({ id, value, modifyFormObject, formObject, ...rest }) => {
+const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...rest }) => {
   const type = rest['rdf:type'];
   const label = rest['ui:label'] || '';
   const maxLength = rest['ui:maxLength'] || 256;
@@ -32,6 +32,7 @@ const Input = ({ id, value, modifyFormObject, formObject, ...rest }) => {
       <input
         id={id}
         type={InputTextTypes[type]}
+        onBlur={autoSave && onSave}
         {...{ maxLength, size, value: actualValue || '', onChange }}
       />
     </Label>

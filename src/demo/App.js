@@ -99,7 +99,11 @@ const App = () => {
       </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
-      <FormModel />
+      <FormModel
+        modelPath="https://jairocr.inrupt.net/public/form.ttl#form1"
+        podPath="https://jcampos.inrupt.net/profile/card#me"
+        autoSave
+      />
       <Uploader
         {...{
           fileBase: 'Your POD folder here',
