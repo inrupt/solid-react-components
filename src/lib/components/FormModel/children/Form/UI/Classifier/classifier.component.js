@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { n3Helper } from 'solid-forms';
 import unique from 'unique';
-// import { fetchLdflexDocument } from '@utils';
 
 type Props = {
   id: string,
@@ -10,21 +10,11 @@ type Props = {
 const Classifier = ({ id, retrieveNewFormObject, ...rest }: Props) => {
   const [options, setOptions] = useState([]);
   const from = rest['ui:from'] || null;
-  const canMintNew = rest['ui:canMintNew'] || false;
+  // const canMintNew = rest['ui:canMintNew'] || false;
 
   const init = async () => {
-    /*
-    const document = from ? await fetchLdflexDocument(from) : null;
-    if (document) {
-      let docOptions = [];
-      for await (const subject of document.subjects) {
-        docOptions = [...docOptions, subject.value.split('#').pop()];
-      }
-      setOptions(docOptions);
-      // setOptions(options.map(subject => subject.split('#').pop()));
-    }
-    */
-    setOptions([]);
+    const docOptions = await n3Helper.getClassifierOptions(from, 'Type');
+    setOptions(docOptions);
   };
 
   useEffect(() => {
@@ -35,7 +25,7 @@ const Classifier = ({ id, retrieveNewFormObject, ...rest }: Props) => {
     <div>
       <select>
         {options.map(option => (
-          <option key={unique()} />
+          <option key={unique()}>{option}</option>
         ))}
       </select>
     </div>

@@ -15,7 +15,8 @@ type Props = {
   onSave: () => void,
   deleteField: id => Object,
   addNewField: id => Object,
-  children: Node
+  children: Node,
+  autoSave: boolean
 };
 
 const Form = ({

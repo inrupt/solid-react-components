@@ -1,7 +1,11 @@
 import React from 'react';
 import CheckBox from '../CheckBox/check-box.component';
 
-const CheckBoxList = ({ list }) => {
+type Props = {
+  list: any[]
+};
+
+const CheckBoxList = ({ list }: Props) => {
   return (
     <div>
       {list.map(check => (

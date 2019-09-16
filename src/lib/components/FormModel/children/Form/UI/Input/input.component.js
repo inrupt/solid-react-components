@@ -20,7 +20,6 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
   const label = rest['ui:label'] || '';
   const maxLength = rest['ui:maxLength'] || 256;
   const size = rest['ui:size'] || 40;
-  // console.log(formObject, value, 'into input')
   const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
   const onChange = ({ target }) => {
     const obj = { value: target.value, ...rest };

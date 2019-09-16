@@ -1,10 +1,7 @@
 import React, { useState, useCallback, useEffect, memo } from 'react';
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { FormActions, formUi } from 'solid-forms';
-
 import Form from './children/Form';
-// import formModelObjectData from './form-model-example.json';
 
 type Props = {
   modelPath: string,
@@ -49,7 +46,7 @@ const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
   useEffect(() => {
     init();
   }, []);
-  console.log(formModel);
+
   return (
     <form onSubmit={onSave}>
       <h1>Form Model</h1>
