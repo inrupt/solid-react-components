@@ -71,9 +71,8 @@ const App = () => {
   });
 
   const init = async () => {
-    const result = await discoverInbox(webId);
-
-    fetchNotification([{ path: result, inboxName: 'Global App' }]);
+    // const result = await discoverInbox(webId);
+    // fetchNotification([{ path: result, inboxName: 'Global App' }]);
   };
 
   const createAcl = async () => {
@@ -88,7 +87,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (webId) init();
+    // if (webId) init();
   }, [notification.notify, webId]);
 
   return (
@@ -121,11 +120,11 @@ const App = () => {
           render: props => <ProfileUploader {...{ ...props }} />
         }}
       />
-      {webId && (
+      {/* webId && (
         <ShexFormComponent>
           <HandleShexForm {...{ webId }} />
         </ShexFormComponent>
-      )}
+      ) */}
       <NotificationSection>
         <h3>Create notification example using your inbox</h3>
         <input

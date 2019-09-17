@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { n3Helper } from 'solid-forms';
 import unique from 'unique';
 
@@ -7,15 +7,37 @@ type Props = {
   retrieveNewFormObject: Function
 };
 
-const Classifier = ({ id, retrieveNewFormObject, ...rest }: Props) => {
+const Classifier = ({
+  value,
+  id,
+  modifyFormObject,
+  formObject,
+  onSave,
+  autoSave,
+  ...rest
+}: Props) => {
   const [options, setOptions] = useState([]);
   const from = rest['ui:from'] || null;
-  // const canMintNew = rest['ui:canMintNew'] || false;
 
   const init = async () => {
-    const docOptions = await n3Helper.getClassifierOptions(from, 'Type');
+    const docOptions = await n3Helper.getClassifierOptions(from);
     setOptions(docOptions);
   };
+
+  const getValueFromObject = useCallback(value => {
+    return typeof value === 'object' ? value.value : value;
+  });
+
+  const getDropDownLabel = useCallback((value: string) => {
+    return value && value.includes('#') ? value.split('#')[1] : value;
+  });
+
+  const onChange = ({ target }) => {
+    const obj = { value: target.value, ...rest };
+    modifyFormObject(id, obj);
+  };
+  const actualValue =
+    formObject[id] || formObject[id] === '' ? getValueFromObject(formObject[id].value) : value;
 
   useEffect(() => {
     init();
@@ -23,9 +45,11 @@ const Classifier = ({ id, retrieveNewFormObject, ...rest }: Props) => {
 
   return (
     <div>
-      <select>
+      <select name={id} onBlur={autoSave && onSave} onChange={onChange} value={actualValue}>
         {options.map(option => (
-          <option key={unique()}>{option}</option>
+          <option key={unique()} value={option}>
+            {getDropDownLabel(option)}
+          </option>
         ))}
       </select>
     </div>

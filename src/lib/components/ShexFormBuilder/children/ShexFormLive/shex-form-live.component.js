@@ -46,6 +46,8 @@ const ShexFormLive = ({
     languageTheme
   });
 
+  console.log(shexData);
+
   const onDelete = useCallback(async (shexj: ShexJ, parent: any = false) => {
     try {
       const deleted = await deleteFn(shexj, parent);

@@ -42,6 +42,8 @@ const Form = ({
     getArrayFields();
   }, [formModel]);
 
+  // console.log(formObject, formModel, 'formoBJECT')
+
   return (
     <Group>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
@@ -51,7 +53,6 @@ const Form = ({
           const fieldParts = field && field[UI_PARTS];
           const component = field && UIMapping(field['rdf:type']);
           const id = (field && field['ui:name']) || item;
-
           /**
            * Return null when field doesn't exists
            * this avoid to crash app using recursive component

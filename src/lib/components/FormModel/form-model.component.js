@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, memo } from 'react';
+import data from '@solid/query-ldflex';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { FormActions, formUi } from 'solid-forms';
 import Form from './children/Form';
@@ -46,6 +47,8 @@ const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
   useEffect(() => {
     init();
   }, []);
+
+  console.log(formModel, 'model');
 
   return (
     <form onSubmit={onSave}>
