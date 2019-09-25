@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
+import { FormModel as FormModelClass, ShexFormModel } from 'solid-forms';
 import SolidImg from '../assets/solid_logo.png';
 import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '../lib';
 import { AccessControlList } from '@classes';
@@ -73,6 +74,18 @@ const App = () => {
   const init = async () => {
     // const result = await discoverInbox(webId);
     // fetchNotification([{ path: result, inboxName: 'Global App' }]);
+
+    const formModel = new FormModelClass(
+      'https://jmartin.inrupt.net/public/shapes/book.shex',
+      'https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot'
+    );
+    const schema = await formModel.parseSchema(
+      'https://jmartin.inrupt.net/public/shapes/book.shex'
+    );
+    const formModelOutput = await formModel.parseShEx(schema);
+    // const formModelOutput = shexClass.convert();
+
+    console.log(formModelOutput, 'model new');
   };
 
   const createAcl = async () => {
@@ -87,7 +100,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    // if (webId) init();
+    if (webId) init();
   }, [notification.notify, webId]);
 
   return (
@@ -99,8 +112,8 @@ const App = () => {
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
-        modelPath="https://jairocr.inrupt.net/public/form.ttl#form1"
-        podPath="https://jcampos.inrupt.net/profile/card#me"
+        modelPath="https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot"
+        podPath=""
         autoSave
       />
       <Uploader

@@ -56,10 +56,12 @@ type Props = {
   value: String
 };
 
-const RadioButton = ({ label, name, checked, value }: Props) => {
+const RadioButton = ({ name, checked, value, ...rest }: Props) => {
+  console.log('try to init', rest);
+  const label = rest['ui:label'] || '';
   return (
     <Label htmlFor={name}>
-      <input type="radio" name={name} checked={checked || false} value={value} />
+      <input type="radio" name={name} value={value} />
       <span className="label-text">{label || 'Label'}</span>
     </Label>
   );
