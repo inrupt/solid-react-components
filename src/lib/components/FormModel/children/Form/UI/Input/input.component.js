@@ -31,6 +31,7 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
       <span>{label}</span>
       <input
         id={id}
+        name={id}
         type={InputTextTypes[type]}
         onBlur={autoSave && onSave}
         {...{ maxLength, size, value: actualValue || '', onChange }}

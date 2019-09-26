@@ -48,8 +48,6 @@ const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
     init();
   }, []);
 
-  console.log(formModel, 'model');
-
   return (
     <form onSubmit={onSave}>
       <h1>Form Model</h1>

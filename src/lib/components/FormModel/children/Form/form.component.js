@@ -19,6 +19,12 @@ type Props = {
   autoSave: boolean
 };
 
+const ParentLabel = ({ formModel }) => {
+  return formModel['rdf:type'] && formModel['rdf:type'].includes('Multiple') ? (
+    <p>{formModel['ui:label']}</p>
+  ) : null;
+};
+
 const Form = ({
   formModel,
   modifyFormObject,
@@ -42,11 +48,10 @@ const Form = ({
     getArrayFields();
   }, [formModel]);
 
-  // console.log(formObject, formModel, 'formoBJECT')
-
   return (
     <Group>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
+      <ParentLabel formModel={formModel} />
       {formFields.length > 0 &&
         formFields.map(item => {
           const field = parts[item];

@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Label = styled.label`
+  display: inline-block;
+  margin: 10px 5px;
   cursor: pointer;
   & > input[type='radio'] {
     display: none;
@@ -56,14 +58,26 @@ type Props = {
   value: String
 };
 
-const RadioButton = ({ name, checked, value, ...rest }: Props) => {
-  console.log('try to init', rest);
+const RadioButton = ({ checked, ...rest }: Props) => {
   const label = rest['ui:label'] || '';
+  const value = Number(rest['ui:default']);
+  const name = rest['ui:name'] || 'radio';
+  const secondRadio = !value;
+  const radiolabel = value ? 'Yes' : 'No';
+  const secondrdioLabel = secondRadio ? 'Yes' : 'No';
+
   return (
-    <Label htmlFor={name}>
-      <input type="radio" name={name} value={value} />
+    <div className="radio-button">
       <span className="label-text">{label || 'Label'}</span>
-    </Label>
+      <Label htmlFor={name}>
+        <input type="radio" name={name} value={value} defaultChecked />
+        <span className="label-text">{radiolabel || 'Label'}</span>
+      </Label>
+      <Label htmlFor={name}>
+        <input type="radio" name={name} value={secondRadio} />
+        <span className="label-text">{secondrdioLabel || 'Label'}</span>
+      </Label>
+    </div>
   );
 };
 
