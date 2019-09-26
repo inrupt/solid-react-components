@@ -5,6 +5,7 @@ import SolidImg from '../assets/solid_logo.png';
 import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
 import { AccessControlList } from '@classes';
 import HandleShexForm from './components';
+import { ProfileViewer } from '../lib/components';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -94,6 +95,11 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
+      <ProfileViewer webId="https://jmartin.inrupt.net/profile/card#me" direction="down">
+        <span>James Martin</span>
+      </ProfileViewer>
+
+      <br />
       <button type="button" onClick={createAcl}>
         Create ACL
       </button>
