@@ -20,7 +20,7 @@ const LoginForm = props => {
     onSelectChange,
     providers,
     onChangeInput,
-    inputPlaholder,
+    inputPlaceholder,
     optionToggle,
     btnTxtProvider,
     btnTxtWebId,
@@ -46,7 +46,7 @@ const LoginForm = props => {
             type="text"
             name="idp"
             onChange={onChangeInput}
-            placeholder={inputPlaholder}
+            placeholder={inputPlaceholder}
             data-testid="input-webid"
             className={theme.inputLogin}
           />

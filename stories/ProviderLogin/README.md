@@ -15,7 +15,7 @@ For now, the list of Providers is passed in as a parameter. In the future, this 
 | className         | String                                                                   | null                        | Custom class for component.         |
 | OnError           | Function                                                                 | null                        | If an error occurs, this will fire. |
 | selectPlaceholder | String                                                                   | Select ID Provider          |
-| inputPlaholder    | String                                                                   | WebID                       |
+| inputPlaceholder  | String                                                                   | WebID                       |
 | formButtonText    | String                                                                   | Log In                      |
 | btnTxtWebId       | String                                                                   | Log In with WebID           |
 | btnTxtProvider    | String                                                                   | Log In with Provider        |
