@@ -1,13 +1,12 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const Label = styled.label`
-  display: inline-block;
-  margin: 10px 5px;
+export const Label = styled.label`
   cursor: pointer;
-  & > input[type='radio'] {
+  overflow: hidden;
+  padding: 0.5em 1em;
+  & > input[type='checkbox'] {
     display: none;
-    appearance: none;
+
     & + .label-text {
       display: flex;
       height: 1em;
@@ -17,7 +16,7 @@ const Label = styled.label`
       &::before,
       &::after {
         content: '';
-        border-radius: 50%;
+        border-radius: 0;
         box-sizing: border-box;
       }
 
@@ -31,9 +30,9 @@ const Label = styled.label`
         display: inline-block;
       }
       &::after {
-        left: 2px;
-        width: 0.7em;
-        height: 0.7em;
+        left: 1.5px;
+        width: 0.8em;
+        height: 0.8em;
         opacity: 0;
         background: #37b2b2;
         transform: translate3d(-20px, 0, 0) scale(0.2);
@@ -50,27 +49,3 @@ const Label = styled.label`
     }
   }
 `;
-
-type Props = {
-  label: String,
-  name: String,
-  checked: any,
-  value: String
-};
-
-const RadioButton = ({ checked, ...rest }: Props) => {
-  const label = rest['ui:label'] || '';
-  const value = Number(rest['ui:default']);
-  const name = rest['ui:name'] || 'radio';
-
-  return (
-    <div className="radio-button">
-      <Label htmlFor={name}>
-        <input type="radio" name={name} value={value} defaultChecked />
-        <span className="label-text">{label || 'Label'}</span>
-      </Label>
-    </div>
-  );
-};
-
-export default RadioButton;

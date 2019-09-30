@@ -34,10 +34,10 @@ const UIMapping = type => {
     case UITypes.PhoneField:
       component = Input;
       break;
-    case UITypes.BooleanField:
+    case UITypes.TriStateField:
       component = RadioButton;
       break;
-    case UITypes.TriStateField:
+    case UITypes.BooleanField:
       component = CheckBox;
       break;
     case UITypes.ColorField:

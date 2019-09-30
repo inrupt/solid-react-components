@@ -113,7 +113,7 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         modelPath="https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot"
-        podPath=""
+        podPath="https://jcampos.inrupt.net/public/formModel/bookData.ttl"
         autoSave
       />
       <Uploader

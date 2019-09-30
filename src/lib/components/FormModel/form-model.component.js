@@ -39,7 +39,9 @@ const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
   });
 
   const onSave = useCallback(async e => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     const updatedFormModel = await formActions.saveData();
     setFormModel(updatedFormModel);
   });
@@ -47,6 +49,8 @@ const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
   useEffect(() => {
     init();
   }, []);
+
+  // console.log(formModel, formObject)
 
   return (
     <form onSubmit={onSave}>
