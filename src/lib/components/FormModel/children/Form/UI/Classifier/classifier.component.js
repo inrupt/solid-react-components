@@ -4,7 +4,12 @@ import unique from 'unique';
 
 type Props = {
   id: string,
-  retrieveNewFormObject: Function
+  value: string,
+  retrieveNewFormObject: Function,
+  modifyFormObject: Function,
+  onSave: Function,
+  autoSave: boolean,
+  formObject: object
 };
 
 const Classifier = ({

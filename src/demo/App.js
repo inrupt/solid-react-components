@@ -114,6 +114,12 @@ const App = () => {
       <FormModel
         modelPath="https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot"
         podPath="https://jcampos.inrupt.net/public/formModel/bookData.ttl"
+        settings={{
+          theme: {
+            inputText: 'sdk-input',
+            inputCheckbox: 'sdk-checkbox'
+          }
+        }}
         autoSave
       />
       <Uploader

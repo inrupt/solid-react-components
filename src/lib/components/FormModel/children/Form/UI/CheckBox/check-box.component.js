@@ -1,4 +1,6 @@
 import React from 'react';
+import { FormModelConfig } from '@context';
+
 import { Label } from './check-box.styles';
 
 type Props = {
@@ -25,16 +27,24 @@ const CheckBox = ({ id, modifyFormObject, formObject, onSave, autoSave, ...rest 
   };
 
   return (
-    <Label htmlFor={name} onClick={() => onChange(actualValue)}>
-      <input
-        type="checkbox"
-        name={name}
-        onChange={() => {}}
-        value={actualValue}
-        checked={actualValue}
-      />
-      <span className="label-text">{label || 'Label'}</span>
-    </Label>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <Label
+          htmlFor={name}
+          onClick={() => onChange(actualValue)}
+          className={theme && theme.inputCheckbox}
+        >
+          <input
+            type="checkbox"
+            name={name}
+            onChange={() => {}}
+            value={actualValue}
+            checked={actualValue}
+          />
+          <span className="label-text">{label || 'Label'}</span>
+        </Label>
+      )}
+    </FormModelConfig.Consumer>
   );
 };
 
