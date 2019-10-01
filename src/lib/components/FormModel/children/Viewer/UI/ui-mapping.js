@@ -1,3 +1,4 @@
+import React from 'react';
 import { UITypes } from '@constants';
 
 import SingleLine from './SingleLine';
@@ -40,13 +41,13 @@ const UIMapping = type => {
       component = ColorLine;
       break;
     case UITypes.DateField:
-      component = DateLine;
+      component = props => <DateLine format="D M, YYYY" {...props} />;
       break;
     case UITypes.DateTimeField:
-      component = DateLine;
+      component = props => <DateLine format="HH:mm a - Do M, YYYY" {...props} />;
       break;
     case UITypes.TimeField:
-      component = DateLine;
+      component = props => <DateLine format="HH:mm a" {...props} />;
       break;
     case UITypes.Classifier:
       component = SingleLine;

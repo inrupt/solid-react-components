@@ -80,7 +80,9 @@ const FormModel = memo(({ modelPath, podPath, autoSave, settings = {}, title, vi
       </form>
     </FormModelConfig.Provider>
   ) : (
-    <Viewer {...{ formModel }} />
+    <FormModelConfig.Provider value={settings}>
+      <Viewer {...{ formModel }} />
+    </FormModelConfig.Provider>
   );
 });
 

@@ -1,12 +1,17 @@
 import React from 'react';
+import { FormModelConfig } from '@context';
 import { Wrapper, Label, Value } from './single-line.style';
 
 const SingleLine = ({ value, ...rest }) => {
   return value ? (
-    <Wrapper>
-      <Label>{rest['ui:label']}</Label>
-      <Value>{value}</Value>
-    </Wrapper>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <Wrapper className={theme && theme.singleLineViewerClass}>
+          <Label className="label">{rest['ui:label']}</Label>
+          <Value className="value">{value}</Value>
+        </Wrapper>
+      )}
+    </FormModelConfig.Consumer>
   ) : null;
 };
 
