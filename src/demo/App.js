@@ -115,6 +115,7 @@ const App = () => {
         modelPath="https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot"
         podPath="https://jcampos.inrupt.net/public/formModel/bookData.ttl"
         autoSave
+        viewer
       />
       <Uploader
         {...{

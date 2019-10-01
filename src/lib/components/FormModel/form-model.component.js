@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, memo } from 'react';
-import data from '@solid/query-ldflex';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { FormActions, formUi } from 'solid-forms';
 import Form from './children/Form';
+import Viewer from './children/Viewer';
 
 type Props = {
   modelPath: string,
@@ -10,7 +10,7 @@ type Props = {
   autoSave: boolean
 };
 
-const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
+const FormModel = memo(({ modelPath, podPath, autoSave, viewer }: Props) => {
   const [formModel, setFormModel] = useState({});
   const [formObject, setFormObject] = useState({});
   const formActions = new FormActions(formModel, formObject);
@@ -52,7 +52,7 @@ const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
 
   // console.log(formModel, formObject)
 
-  return (
+  return !viewer ? (
     <form onSubmit={onSave}>
       <h1>Form Model</h1>
       <Form
@@ -60,6 +60,8 @@ const FormModel = memo(({ modelPath, podPath, autoSave }: Props) => {
       />
       {autoSave && <button type="submit">Save</button>}
     </form>
+  ) : (
+    <Viewer {...{ formModel }} />
   );
 });
 
