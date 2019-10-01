@@ -25,7 +25,13 @@ const Classifier = ({
   const from = rest['ui:from'] || null;
 
   const init = async () => {
-    const docOptions = await n3Helper.getClassifierOptions(from);
+    const values = rest['ui:values'];
+    let docOptions = [];
+    if (from) {
+      docOptions = await n3Helper.getClassifierOptions(from);
+    } else {
+      docOptions = values ? [...values] : [];
+    }
     setOptions(docOptions);
   };
 
