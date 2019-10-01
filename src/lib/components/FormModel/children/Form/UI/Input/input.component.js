@@ -1,19 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import { InputTextTypes } from '@constants';
+import { FormModelConfig } from '@context';
 
-const Label = styled.label`
-  box-sizing: border-box;
-  padding: 0.5em 1em;
-  display: flex;
-  align-items: center;
-  & input {
-    border-radius: 2px;
-    border: solid 1px #ccc;
-    padding: 0.5em;
-    margin-left: 1em;
-  }
-`;
+import { Label } from './input.styles';
 
 const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...rest }) => {
   const type = rest['rdf:type'];
@@ -27,16 +16,20 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
   };
 
   return (
-    <Label htmlFor={id}>
-      <span>{label}</span>
-      <input
-        id={id}
-        name={id}
-        type={InputTextTypes[type]}
-        onBlur={autoSave && onSave}
-        {...{ maxLength, size, value: actualValue || '', onChange }}
-      />
-    </Label>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <Label htmlFor={id} className={theme && theme.inputText}>
+          <span>{label}</span>
+          <input
+            id={id}
+            name={id}
+            type={InputTextTypes[type]}
+            onBlur={autoSave && onSave}
+            {...{ maxLength, size, value: actualValue || '', onChange }}
+          />
+        </Label>
+      )}
+    </FormModelConfig.Consumer>
   );
 };
 

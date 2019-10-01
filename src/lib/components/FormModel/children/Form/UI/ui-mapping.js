@@ -3,9 +3,9 @@ import Classifier from './Classifier';
 import Comment from './Comment';
 import Heading from './Heading';
 import TextArea from './TextArea';
-import RadioButtonList from './RadioButtonList';
+// import RadioButtonList from './RadioButtonList';
 import RadioButton from './RadioButton';
-import CheckBoxList from './CheckBoxList';
+// import CheckBoxList from './CheckBoxList';
 import CheckBox from './CheckBox';
 
 import { UITypes } from '@constants';

@@ -4,7 +4,12 @@ import unique from 'unique';
 
 type Props = {
   id: string,
-  retrieveNewFormObject: Function
+  value: string,
+  retrieveNewFormObject: Function,
+  modifyFormObject: Function,
+  onSave: Function,
+  autoSave: boolean,
+  formObject: object
 };
 
 const Classifier = ({
@@ -20,7 +25,13 @@ const Classifier = ({
   const from = rest['ui:from'] || null;
 
   const init = async () => {
-    const docOptions = await n3Helper.getClassifierOptions(from);
+    const values = rest['ui:values'];
+    let docOptions = [];
+    if (from) {
+      docOptions = await n3Helper.getClassifierOptions(from);
+    } else {
+      docOptions = values ? [...values] : [];
+    }
     setOptions(docOptions);
   };
 

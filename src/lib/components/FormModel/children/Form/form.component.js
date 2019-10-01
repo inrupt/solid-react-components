@@ -16,10 +16,11 @@ type Props = {
   deleteField: id => Object,
   addNewField: id => Object,
   children: Node,
-  autoSave: boolean
+  autoSave: boolean,
+  settings: Object
 };
 
-const ParentLabel = ({ formModel }) => {
+const ParentLabel = ({ formModel }: Props.formModel) => {
   return formModel['rdf:type'] && formModel['rdf:type'].includes('Multiple') ? (
     <p>{formModel['ui:label']}</p>
   ) : null;
@@ -34,7 +35,8 @@ const Form = ({
   addNewField,
   autoSave,
   children,
-  onSave
+  onSave,
+  settings
 }: Props) => {
   const [formFields, setFormFields] = useState([]);
   const parts = formModel[UI_PARTS];
@@ -49,7 +51,7 @@ const Form = ({
   }, [formModel]);
 
   return (
-    <Group>
+    <Group className={settings.theme && settings.theme.form}>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
       <ParentLabel formModel={formModel} />
       {formFields.length > 0 &&
@@ -76,12 +78,24 @@ const Form = ({
                 parent: udpatedField,
                 deleteField,
                 onSave,
-                autoSave
+                autoSave,
+                settings
               }}
             >
-              <Multiple {...{ field, addNewField }} />
+              <Multiple
+                {...{
+                  field,
+                  addNewField,
+                  className: settings.theme && settings.theme.multiple
+                }}
+              />
               <DeleteButton
-                {...{ type: field['rdf:type'], action: deleteField, id: field['ui:name'] }}
+                {...{
+                  type: field['rdf:type'],
+                  action: deleteField,
+                  id: field['ui:name'],
+                  className: settings.theme && settings.theme.deleteButton
+                }}
               />
             </Form>
           ) : (
