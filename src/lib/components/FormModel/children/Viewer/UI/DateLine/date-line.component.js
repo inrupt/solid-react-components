@@ -3,7 +3,14 @@ import moment from 'moment';
 import { FormModelConfig } from '@context';
 import { Wrapper, Label, Value } from './date-line.style';
 
-const DateLine = ({ value, format = 'D, MMM YYYY', ...rest }) => {
+const DateLine = ({
+  value,
+  format = 'D, MMM YYYY',
+  ...rest
+}: {
+  value: String,
+  format: String
+}) => {
   return value ? (
     <FormModelConfig.Consumer>
       {({ theme }) => (

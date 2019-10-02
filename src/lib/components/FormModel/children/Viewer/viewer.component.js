@@ -10,7 +10,7 @@ type Props = {
   parent?: any
 };
 
-const ParentLabel = ({ formModel }) =>
+const ParentLabel = ({ formModel }: { formModel: Object }) =>
   formModel['rdf:type'] && formModel['rdf:type'].includes('Multiple') ? (
     <Label>{formModel['ui:label']}</Label>
   ) : null;

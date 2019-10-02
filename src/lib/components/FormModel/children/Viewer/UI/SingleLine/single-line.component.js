@@ -2,7 +2,7 @@ import React from 'react';
 import { FormModelConfig } from '@context';
 import { Wrapper, Label, Value } from './single-line.style';
 
-const SingleLine = ({ value, ...rest }) => {
+const SingleLine = ({ value, ...rest }: { value: String }) => {
   return value ? (
     <FormModelConfig.Consumer>
       {({ theme }) => (

@@ -1,8 +1,6 @@
 import React from 'react';
 import { FormModelConfig } from '@context';
 
-import { Label } from './check-box.styles';
-
 type Props = {
   formObject: any,
   id: String,
