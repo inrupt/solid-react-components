@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Group } from './form.style';
-import ControlGroup from './control-group.component';
+import ControlGroup from '../control-group.component';
 import UIMapping from './UI/ui-mapping';
 import Multiple from './UI/Multiple';
 import DeleteButton from './UI/DeleteButton';

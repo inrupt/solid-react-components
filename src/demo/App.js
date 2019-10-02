@@ -121,6 +121,7 @@ const App = () => {
           }
         }}
         autoSave
+        viewer
       />
       <Uploader
         {...{
