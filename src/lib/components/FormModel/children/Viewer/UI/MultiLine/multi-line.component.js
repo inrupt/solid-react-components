@@ -2,7 +2,7 @@ import React from 'react';
 import { FormModelConfig } from '@context';
 import { Wrapper, Label, Value } from './multi-line.style';
 
-const MultiLine = ({ value, ...rest }) => {
+const MultiLine = ({ value, ...rest }: { value: String }) => {
   return value ? (
     <FormModelConfig.Consumer>
       {({ theme }) => (

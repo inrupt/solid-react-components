@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
-import { FormModel as FormModelClass, ShexFormModel } from 'solid-forms';
+import { FormModel as FormModelClass } from 'solid-forms';
 import SolidImg from '../assets/solid_logo.png';
 import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '../lib';
 import { AccessControlList } from '@classes';
-import HandleShexForm from './components';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -22,17 +21,6 @@ const Headline = styled.h1`
   color: #333;
   font-size: 36px;
   font-weight: 300;
-`;
-
-const ShexFormComponent = styled.div`
-    border-top: 1px solid black;
-    
-    input {
-      margin: 20px 0;
-      padding: 10px;
-      width: 100%
-      box-sizing: border-box;
-   }
 `;
 
 const NotificationSection = styled.div`
@@ -62,9 +50,7 @@ const Header = () => {
 const App = () => {
   const [userInbox, setUserInbox] = useState('');
   const webId = useWebId();
-  const { fetchNotification, notification, createNotification, discoverInbox } = useNotification(
-    webId
-  );
+  const { notification, createNotification } = useNotification(webId);
 
   const onChange = useCallback((event: Event) => {
     const { target } = event;

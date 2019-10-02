@@ -2,7 +2,11 @@ import React from 'react';
 import { FormModelConfig } from '@context';
 import { Label } from './bool-line.style';
 
-const BoolLine = ({ value, ...rest }) => {
+type Props = {
+  value: Object
+};
+
+const BoolLine = ({ value, ...rest }: Props) => {
   return value ? (
     <FormModelConfig.Consumer>
       {({ theme }) => (
