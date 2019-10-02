@@ -2,7 +2,7 @@ import React from 'react';
 import { InputTextTypes } from '@constants';
 import { FormModelConfig } from '@context';
 
-import { Label } from './input.styles';
+import { InputGroup } from './input.styles';
 
 const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...rest }) => {
   const type = rest['rdf:type'];
@@ -18,8 +18,10 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
   return (
     <FormModelConfig.Consumer>
       {({ theme }) => (
-        <Label htmlFor={id} className={theme && theme.inputText}>
-          <span>{label}</span>
+        <InputGroup className={theme && theme.inputText}>
+          <label htmlFor={id} id={id}>
+            {label}
+          </label>
           <input
             id={id}
             name={id}
@@ -27,7 +29,7 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
             onBlur={autoSave && onSave}
             {...{ maxLength, size, value: actualValue || '', onChange }}
           />
-        </Label>
+        </InputGroup>
       )}
     </FormModelConfig.Consumer>
   );

@@ -6,8 +6,9 @@ export const Label = styled.label`
   padding: 0.5em 1em;
   & > input[type='checkbox'] {
     display: none;
+  }
 
-    & + .label-text {
+    & {
       display: flex;
       height: 1em;
       width: fit-content;
