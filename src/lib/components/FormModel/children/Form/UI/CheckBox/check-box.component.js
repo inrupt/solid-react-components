@@ -29,7 +29,7 @@ const CheckBox = ({ id, modifyFormObject, formObject, onSave, autoSave, ...rest 
   return (
     <FormModelConfig.Consumer>
       {({ theme }) => (
-        <Label
+        <label
           htmlFor={name}
           onClick={() => onChange(actualValue)}
           className={theme && theme.inputCheckbox}
@@ -41,8 +41,8 @@ const CheckBox = ({ id, modifyFormObject, formObject, onSave, autoSave, ...rest 
             value={actualValue}
             checked={actualValue}
           />
-          <span className="label-text">{label || 'Label'}</span>
-        </Label>
+          {label || 'Label'}
+        </label>
       )}
     </FormModelConfig.Consumer>
   );

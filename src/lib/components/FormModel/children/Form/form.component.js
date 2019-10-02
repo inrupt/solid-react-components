@@ -49,9 +49,10 @@ const Form = ({
   useEffect(() => {
     getArrayFields();
   }, [formModel]);
-
+  const classes = `${parent && settings.theme ? settings.theme.childGroup : ''} ${settings.theme &&
+    settings.theme.form}`;
   return (
-    <Group className={settings.theme && settings.theme.form}>
+    <Group className={classes} parent={parent}>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
       <ParentLabel formModel={formModel} />
       {formFields.length > 0 &&

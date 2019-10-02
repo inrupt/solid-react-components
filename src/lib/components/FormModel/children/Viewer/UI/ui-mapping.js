@@ -3,7 +3,6 @@ import { UITypes } from '@constants';
 
 import SingleLine from './SingleLine';
 import MultiLine from './MultiLine';
-import ColorLine from './ColorLine';
 import DateLine from './DateLine';
 import BoolLine from './BoolLine';
 
@@ -38,7 +37,7 @@ const UIMapping = type => {
       component = BoolLine;
       break;
     case UITypes.ColorField:
-      component = ColorLine;
+      component = SingleLine;
       break;
     case UITypes.DateField:
       component = props => <DateLine format="D M, YYYY" {...props} />;
