@@ -13,6 +13,11 @@ type Props = {
   autoSave: boolean,
   onInit: () => void,
   onLoaded: () => void,
+  onError: () => void,
+  onSuccess: () => void,
+  onSave: () => void,
+  onAddNewField: () => void,
+  onDelete: () => void,
   settings: {
     theme: object,
     languageTheme: object,
@@ -21,7 +26,20 @@ type Props = {
 };
 
 const FormModel = memo(
-  ({ modelPath, podPath, autoSave, settings = {}, title, viewer, onInit, onLoaded }: Props) => {
+  ({
+    modelPath,
+    podPath,
+    autoSave,
+    settings = {},
+    title,
+    viewer,
+    onInit,
+    onLoaded,
+    onError,
+    onSuccess,
+    onAddNewField,
+    onDelete
+  }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
     const formActions = new FormActions(formModel, formObject);
@@ -34,22 +52,30 @@ const FormModel = memo(
 
         setFormModel(model);
         if (onLoaded) onLoaded();
-        return solidResponse(200, 'Init Render Success', { type: 'init' });
+        onSuccess(solidResponse(200, 'Init Render Success', { type: 'init' }));
       } catch (error) {
-        return SolidError(error, 'Error on render', 500);
+        onError(new SolidError(error, 'Error on render', 500));
       }
     });
 
     const addNewField = useCallback(id => {
-      const updatedFormModelObject = formActions.addNewField(id);
-
-      setFormModel(updatedFormModelObject);
+      try {
+        const updatedFormModelObject = formActions.addNewField(id);
+        setFormModel(updatedFormModelObject);
+        onAddNewField(solidResponse(200, 'New field successfully added'));
+      } catch (error) {
+        onError(new SolidError(error, 'Error adding new field', 500));
+      }
     });
 
     const deleteField = useCallback(async id => {
-      const updatedFormModelObject = await formActions.deleteField(id);
-
-      setFormModel(updatedFormModelObject);
+      try {
+        const updatedFormModelObject = await formActions.deleteField(id);
+        setFormModel(updatedFormModelObject);
+        onDelete(solidResponse(200, 'Field successfully deleted'));
+      } catch (error) {
+        onError(new SolidError(error, 'Error deleting field', 500));
+      }
     });
 
     const modifyFormObject = useCallback((id, obj) => {
@@ -61,8 +87,13 @@ const FormModel = memo(
       if (e) {
         e.preventDefault();
       }
-      const updatedFormModel = await formActions.saveData();
-      setFormModel(updatedFormModel);
+      try {
+        const updatedFormModel = await formActions.saveData();
+        setFormModel(updatedFormModel);
+        onSave();
+      } catch (error) {
+        onError(new SolidError(error, 'Error saving form', 500));
+      }
     });
 
     useEffect(() => {
