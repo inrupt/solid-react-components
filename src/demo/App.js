@@ -98,12 +98,22 @@ const App = () => {
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
-        modelPath="https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot"
-        podPath="https://jcampos.inrupt.net/public/formModel/bookData.ttl"
-        settings={{
-          theme: {
-            inputText: 'sdk-input',
-            inputCheckbox: 'sdk-checkbox'
+        {...{
+          modelPath: 'https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot',
+          podPath: 'https://jcampos.inrupt.net/public/formModel/bookData.ttl',
+          settings: {
+            theme: {
+              inputText: 'sdk-input',
+              inputCheckbox: 'sdk-checkbox'
+            }
+          },
+          onError: error => {
+            // eslint-disable-next-line no-console
+            console.log(error);
+          },
+          onSuccess: success => {
+            // eslint-disable-next-line no-console
+            console.log(success);
           }
         }}
         autoSave

@@ -13,6 +13,8 @@ type Props = {
   autoSave: boolean,
   onInit: () => void,
   onLoaded: () => void,
+  onError: () => void,
+  onSuccess: () => void,
   settings: {
     theme: object,
     languageTheme: object,
@@ -21,7 +23,18 @@ type Props = {
 };
 
 const FormModel = memo(
-  ({ modelPath, podPath, autoSave, settings = {}, title, viewer, onInit, onLoaded }: Props) => {
+  ({
+    modelPath,
+    podPath,
+    autoSave,
+    settings = {},
+    title,
+    viewer,
+    onInit,
+    onLoaded,
+    onError,
+    onSuccess
+  }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
     const formActions = new FormActions(formModel, formObject);
@@ -34,9 +47,9 @@ const FormModel = memo(
 
         setFormModel(model);
         if (onLoaded) onLoaded();
-        return solidResponse(200, 'Init Render Success', { type: 'init' });
+        onSuccess(solidResponse(200, 'Init Render Success', { type: 'init' }));
       } catch (error) {
-        return SolidError(error, 'Error on render', 500);
+        onError(new SolidError(error, 'Error on render', 500));
       }
     });
 
