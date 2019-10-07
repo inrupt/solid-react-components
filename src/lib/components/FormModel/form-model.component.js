@@ -15,6 +15,9 @@ type Props = {
   onLoaded: () => void,
   onError: () => void,
   onSuccess: () => void,
+  onSave: () => void,
+  onAddNewField: () => void,
+  onDelete: () => void,
   settings: {
     theme: object,
     languageTheme: object,
@@ -33,7 +36,9 @@ const FormModel = memo(
     onInit,
     onLoaded,
     onError,
-    onSuccess
+    onSuccess,
+    onAddNewField,
+    onDelete
   }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
@@ -54,15 +59,23 @@ const FormModel = memo(
     });
 
     const addNewField = useCallback(id => {
-      const updatedFormModelObject = formActions.addNewField(id);
-
-      setFormModel(updatedFormModelObject);
+      try {
+        const updatedFormModelObject = formActions.addNewField(id);
+        setFormModel(updatedFormModelObject);
+        onAddNewField(solidResponse(200, 'New field successfully added'));
+      } catch (error) {
+        onError(new SolidError(error, 'Error adding new field', 500));
+      }
     });
 
     const deleteField = useCallback(async id => {
-      const updatedFormModelObject = await formActions.deleteField(id);
-
-      setFormModel(updatedFormModelObject);
+      try {
+        const updatedFormModelObject = await formActions.deleteField(id);
+        setFormModel(updatedFormModelObject);
+        onDelete(solidResponse(200, 'Field successfully deleted'));
+      } catch (error) {
+        onError(new SolidError(error, 'Error deleting field', 500));
+      }
     });
 
     const modifyFormObject = useCallback((id, obj) => {
@@ -74,8 +87,13 @@ const FormModel = memo(
       if (e) {
         e.preventDefault();
       }
-      const updatedFormModel = await formActions.saveData();
-      setFormModel(updatedFormModel);
+      try {
+        const updatedFormModel = await formActions.saveData();
+        setFormModel(updatedFormModel);
+        onSave();
+      } catch (error) {
+        onError(new SolidError(error, 'Error saving form', 500));
+      }
     });
 
     useEffect(() => {

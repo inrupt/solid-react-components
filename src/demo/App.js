@@ -114,6 +114,18 @@ const App = () => {
           onSuccess: success => {
             // eslint-disable-next-line no-console
             console.log(success);
+          },
+          onSave: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onAddNewField: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onDelete: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
           }
         }}
         autoSave
@@ -135,11 +147,6 @@ const App = () => {
           render: props => <ProfileUploader {...{ ...props }} />
         }}
       />
-      {/* webId && (
-        <ShexFormComponent>
-          <HandleShexForm {...{ webId }} />
-        </ShexFormComponent>
-      ) */}
       <NotificationSection>
         <h3>Create notification example using your inbox</h3>
         <input
