@@ -224,6 +224,7 @@ module.exports = {
       '@hooks': path.resolve(__dirname, '../src/lib/hooks'),
       '@context': path.resolve(__dirname, '../src/lib/context'),
       '@classes': path.resolve(__dirname, '../src/lib/classes'),
+      '@lib': path.resolve(__dirname, '../src/lib'),
       '@constants': path.resolve(__dirname, '../src/lib/constants')
     },
     plugins: [

@@ -226,6 +226,7 @@ module.exports = {
                       '@hooks': path.resolve(paths.appLibSrc, './hooks'),
                       '@context': path.resolve(paths.appLibSrc, './context'),
                       '@classes': path.resolve(__dirname, '../src/lib/classes'),
+                      '@lib': path.resolve(__dirname, '../src/lib'),
                       '@constants': path.resolve(__dirname, '../src/lib/constants')
                     }
                   }
