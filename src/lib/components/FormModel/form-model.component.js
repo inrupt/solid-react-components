@@ -116,7 +116,7 @@ const FormModel = memo(
               settings
             }}
           />
-          {autoSave && (
+          {!autoSave && (
             <button type="submit">{(languageTheme && languageTheme.save) || 'Save'}</button>
           )}
         </form>
