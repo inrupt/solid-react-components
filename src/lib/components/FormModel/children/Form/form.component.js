@@ -68,7 +68,7 @@ const Form = ({
            */
           if (!field) return null;
           /* eslint no-useless-computed-key: "off" */
-          const { ['ui:parts']: deleted, ...udpatedField } = field;
+          const { ['ui:parts']: deleted, ...updatedField } = field;
 
           return fieldParts ? (
             <Form
@@ -77,7 +77,7 @@ const Form = ({
               {...{
                 formObject,
                 modifyFormObject,
-                parent: udpatedField,
+                parent: updatedField,
                 deleteField,
                 onSave,
                 autoSave,

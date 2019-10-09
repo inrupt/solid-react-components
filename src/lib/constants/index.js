@@ -43,3 +43,10 @@ export const InputTextTypes = {
   'http://www.w3.org/ns/ui#FloatField': 'number',
   'http://www.w3.org/ns/ui#IntegerField': 'number'
 };
+
+export const FromModelUI = {
+  UI_VALUE: 'ui:value',
+  UI_LABEL: 'ui:label',
+  UI_NAME: 'ui:name',
+  UI_DEFAULT: 'ui:default'
+};

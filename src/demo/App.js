@@ -3,7 +3,7 @@ import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import { FormModel as FormModelClass } from 'solid-forms';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '../lib';
+import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '@lib';
 import { AccessControlList } from '@classes';
 
 const HeaderWrapper = styled.section`
@@ -58,9 +58,6 @@ const App = () => {
   });
 
   const init = async () => {
-    // const result = await discoverInbox(webId);
-    // fetchNotification([{ path: result, inboxName: 'Global App' }]);
-
     const formModel = new FormModelClass(
       'https://jmartin.inrupt.net/public/shapes/book.shex',
       'https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot'
@@ -69,7 +66,6 @@ const App = () => {
       'https://jmartin.inrupt.net/public/shapes/book.shex'
     );
     const formModelOutput = await formModel.parseShEx(schema);
-    // const formModelOutput = shexClass.convert();
 
     console.log(formModelOutput, 'model new');
   };
