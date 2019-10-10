@@ -66,7 +66,7 @@ const App = () => {
       'https://jmartin.inrupt.net/public/shapes/book.shex'
     );
     const formModelOutput = await formModel.parseShEx(schema);
-
+    // eslint-disable-next-line
     console.log(formModelOutput, 'model new');
   };
 
@@ -95,8 +95,8 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath: 'https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot',
-          podPath: 'https://jcampos.inrupt.net/public/formModel/bookData.ttl',
+          modelPath: 'https://jcampos.inrupt.net/public/formModel/dateTime.ttl#form1',
+          podPath: 'https://jcampos.inrupt.net/public/data/dates.ttl',
           settings: {
             theme: {
               inputText: 'sdk-input',

@@ -38,7 +38,8 @@ const FormModel = memo(
     onError,
     onSuccess,
     onAddNewField,
-    onDelete
+    onDelete,
+    onSave
   }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
@@ -83,7 +84,7 @@ const FormModel = memo(
       setFormObject(formObject);
     });
 
-    const onSave = useCallback(async e => {
+    const save = useCallback(async e => {
       if (e) {
         e.preventDefault();
       }
@@ -111,7 +112,7 @@ const FormModel = memo(
               modifyFormObject,
               deleteField,
               addNewField,
-              onSave,
+              onSave: save,
               autoSave,
               settings
             }}
