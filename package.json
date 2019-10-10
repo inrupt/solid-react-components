@@ -202,6 +202,7 @@
       "@contex": "<rootDir>/src/lib/context",
       "@testSetup": "<rootDir>/src/test/setup",
       "@classes": "<rootDir>/src/lib/classes",
+      "@lib": "<rootDir>/src/lib",
       "@constants": "<rootDir>/src/lib/constants",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
