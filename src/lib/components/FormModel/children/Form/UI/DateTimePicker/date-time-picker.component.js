@@ -2,27 +2,24 @@ import React, { useState, useEffect, useCallback } from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { FormModelConfig } from '@context';
+import { UITypes, FromModelUI } from '@constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { ErrorMessage } from './date-time.styles';
 
-const getDateType = type => {
-  return type.includes('#') ? type.split('#').pop() : 'default';
-};
-
 const getDateFormat = type => {
   let format = '';
 
   switch (type) {
-    case 'DateTimeField':
-      format = 'mm/dd/yyyy hh:mm:ss';
+    case UITypes.DateTimePicker:
+      format = 'MM/dd/yyyy hh:mm:ss';
       break;
-    case 'TimeField':
+    case UITypes.TimeField:
       format = 'hh:mm:ss';
       break;
     default:
-      format = 'mm/dd/yyyy';
+      format = 'MM/dd/yyyy';
   }
 
   return format;
@@ -32,15 +29,15 @@ const DateTimePicker = React.memo(
   ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...rest }) => {
     const [selectedDate, setDate] = useState(null);
     const [invalidate, setInvalid] = useState(null);
-    const minValue = +rest['ui:minValue'];
-    const maxValue = +rest['ui:maxValue'];
-    const label = rest['ui:label'] || '';
-    const type = rest['rdf:type'];
-    const fieldType = getDateType(type);
-    const showTimeSelect = fieldType === 'DateTimeField' || fieldType === 'TimeField' || false;
-    const showTimeSelectOnly = fieldType === 'TimeField' || false;
-    const dateFormat = getDateFormat(fieldType);
-
+    const { DateTimePicker, TimeField } = UITypes;
+    const { UI_LABEL, RDF_TYPE, MIN_VALUE, MAX_VALUE } = FromModelUI;
+    const minValue = +rest[MIN_VALUE];
+    const maxValue = +rest[MAX_VALUE];
+    const label = rest[UI_LABEL] || '';
+    const type = rest[RDF_TYPE];
+    const showTimeSelect = type === DateTimePicker || type === TimeField || false;
+    const showTimeSelectOnly = type === TimeField || false;
+    const dateFormat = getDateFormat(type);
     const updateDate = useCallback(() => {
       const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
 
