@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { FormModelConfig } from '@context';
@@ -9,6 +9,23 @@ import { ErrorMessage } from './date-time.styles';
 
 const getDateType = type => {
   return type.includes('#') ? type.split('#').pop() : 'default';
+};
+
+const getDateFormat = type => {
+  let format = '';
+
+  switch (type) {
+    case 'DateTimeField':
+      format = 'mm/dd/yyyy hh:mm:ss';
+      break;
+    case 'TimeField':
+      format = 'hh:mm:ss';
+      break;
+    default:
+      format = 'mm/dd/yyyy';
+  }
+
+  return format;
 };
 
 const DateTimePicker = React.memo(
@@ -22,28 +39,32 @@ const DateTimePicker = React.memo(
     const fieldType = getDateType(type);
     const showTimeSelect = fieldType === 'DateTimeField' || fieldType === 'TimeField' || false;
     const showTimeSelectOnly = fieldType === 'TimeField' || false;
+    const dateFormat = getDateFormat(fieldType);
 
-    const updateDate = () => {
+    const updateDate = useCallback(() => {
       const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
 
       if (actualValue) {
         setDate(new Date(actualValue));
       }
-    };
+    }, [formObject]);
 
-    const onChange = date => {
+    const onChange = useCallback(date => {
       const obj = { value: date.toString(), ...rest };
 
       modifyFormObject(id, obj);
       setDate(date);
-    };
+    });
 
-    const handleChangeRaw = date => {
-      const s = document.getElementById(id);
-      s.value = moment(date.target.value).format('DD/MM/YYYY');
+    const handleChangeRaw = useCallback(
+      date => {
+        const s = document.getElementById(id);
+        s.value = moment(date.target.value).format(dateFormat);
 
-      setInvalid(s.value);
-    };
+        setInvalid(s.value);
+      },
+      [value, formObject]
+    );
 
     useEffect(() => {
       updateDate();
@@ -65,7 +86,8 @@ const DateTimePicker = React.memo(
                 className: theme && theme.inputText,
                 onBlur: autoSave && onSave,
                 showTimeSelect,
-                showTimeSelectOnly
+                showTimeSelectOnly,
+                dateFormat
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
