@@ -14,7 +14,7 @@ type Props = {
   providers?: Array<Provider>,
   callbackUri: String,
   selectPlaceholder?: String,
-  inputPlaholder?: String,
+  inputPlaceholder?: String,
   formButtonText?: String,
   btnTxtWebId?: String,
   btnTxtProvider?: String,
@@ -142,7 +142,7 @@ export default class LoginComponent extends Component<Props> {
 
 LoginComponent.defaultProps = {
   selectPlaceholder: 'Select ID Provider',
-  inputPlaholder: 'WebID',
+  inputPlaceholder: 'WebID',
   formButtonText: 'Log In',
   btnTxtWebId: 'Log In with WebId',
   btnTxtProvider: 'Log In with Provider',

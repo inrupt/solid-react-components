@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.4.4",
+  "version": "0.4.4-rc.10",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
@@ -60,11 +60,13 @@
     "lodash": "^4.17.15",
     "mime-types": "^2.1.24",
     "moment": "^2.24.0",
-    "n3": "^1.1.1",
+    "n3": "^1.1.2",
     "rdflib": "^0.20.1",
+    "react-color": "^2.17.3",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.2.0",
     "solid-auth-client": "^2.3.0",
+    "solid-forms": "0.0.14-test",
     "unique": "0.0.1",
     "unique-string": "^1.0.0"
   },
@@ -200,6 +202,7 @@
       "@contex": "<rootDir>/src/lib/context",
       "@testSetup": "<rootDir>/src/test/setup",
       "@classes": "<rootDir>/src/lib/classes",
+      "@lib": "<rootDir>/src/lib",
       "@constants": "<rootDir>/src/lib/constants",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },

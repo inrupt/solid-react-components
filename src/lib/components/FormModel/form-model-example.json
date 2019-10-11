@@ -1,0 +1,273 @@
+{
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "ui": "http://www.w3.org/ns/ui#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "ui:singleTextField": {
+      "@type": "ui:SingleLineTextField"
+    },
+    "ui:Multiple": {
+      "@type": "ui:Multiple"
+    },
+    "ui:Group": {
+      "@type": "ui:Group"
+    },
+    "ui:Classifier": {
+      "@type": "ui:Classifier"
+    },
+    "ui:EmailField": {
+      "@type": "ui:EmailField"
+    },
+    "ui:Comment": {
+      "@type": "ui:Comment"
+    },
+    "subject": "https://jairocr.inrupt.net/public/form.ttl#"
+  },
+  "ui:parts": {
+    "subject:fullNameField": {
+      "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+      "ui:label": "Name",
+      "ui:maxLength": "128",
+      "ui:property": "http://www.w3.org/2006/vcard/ns#fn",
+      "ui:size": "40",
+      "value": "Jairo Campos",
+      "oldValue": "Jairo Campos",
+      "name": "f1626093-d8dd-4d9a-ba2d-149fd696822c"
+    },
+    "subject:roleField": {
+      "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+      "ui:maxLength": "128",
+      "ui:property": "http://www.w3.org/2006/vcard/ns#role",
+      "ui:size": "40",
+      "ui:label": "Role",
+      "value": "Software Developer 2",
+      "oldValue": "Software Developer 2",
+      "name": "520c659a-c6ac-4e40-9343-1bc885e13ce7"
+    },
+    "subject:fullNameFieldC": {
+      "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+      "ui:maxLength": "128",
+      "ui:property": "http://www.w3.org/2006/vcard/ns#organization-name",
+      "ui:size": "40",
+      "ui:label": "Organization Name",
+      "value": "JaneiroDigital",
+      "oldValue": "JaneiroDigital",
+      "name": "d7b20cc5-38cd-4076-b650-0fcddff4b0d8"
+    },
+    "subject:addressesComment": {
+      "rdf:type": "http://www.w3.org/ns/ui#Comment",
+      "ui:contents": "Address"
+    },
+    "subject:addresses": {
+      "rdf:type": "http://www.w3.org/ns/ui#Multiple",
+      "ui:parts": {
+        "id15676283978810": {
+          "rdf:type": "http://www.w3.org/ns/ui#Group",
+          "ui:parts": {
+            "subject:id1409437207443": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#street-address",
+              "ui:size": "40",
+              "ui:label": "Street Address",
+              "value": "Heredia  Costa Rica",
+              "oldValue": "Heredia  Costa Rica",
+              "name": "e353be4f-e8b5-4f53-bcf7-3dbfb2706cad"
+            },
+            "subject:id1409437292400": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#locality",
+              "ui:size": "40",
+              "ui:label": "Locality"
+            },
+            "subject:id1409437421996": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "25",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#postal-code",
+              "ui:size": "25",
+              "ui:label": "Postal Code",
+              "value": "12345",
+              "oldValue": "12345",
+              "name": "feae3582-d294-494d-8b69-d84cfe359ade"
+            },
+            "subject:id1409437467649": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#region",
+              "ui:size": "40",
+              "ui:label": "Region",
+              "value": "Heredia",
+              "oldValue": "Heredia",
+              "name": "05c2084f-f283-4a49-b249-a21e6452572f"
+            },
+            "subject:id1409437569420": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#country-name",
+              "ui:size": "40",
+              "ui:label": "Country Name",
+              "value": "Costa Rica",
+              "oldValue": "Costa Rica",
+              "name": "68d5de54-0000-47fc-9bbb-1cb8e6c3ff28"
+            },
+            "subject:id1409437646712": {
+              "rdf:type": "http://www.w3.org/ns/ui#Classifier",
+              "ui:property": "http://purl.org/dc/terms/type",
+              "ui:from": "https://www.w3.org/1999/02/22-rdf-syntax-ns#Class",
+              "ui:label": "noLabel"
+            }
+          },
+          "ui:property": "http://www.w3.org/2006/vcard/ns#hasAddress",
+          "ui:reference": "subject:oneAddress",
+          "value": "https://jcampos.inrupt.net/profile/card#id1567009884934",
+          "name": "cb20d395-f013-4d10-91dc-6c15b83ca174"
+        },
+        "id156762839788101": {
+          "rdf:type": "http://www.w3.org/ns/ui#Group",
+          "ui:parts": {
+            "subject:id1409437207443": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#street-address",
+              "ui:size": "40",
+              "ui:label": "Street Address",
+              "value": "Heredia  Costa Rica",
+              "oldValue": "Heredia  Costa Rica",
+              "name": "366bb912-7bc9-4db7-92d9-93333996166e"
+            },
+            "subject:id1409437292400": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#locality",
+              "ui:size": "40",
+              "ui:label": "Locality"
+            },
+            "subject:id1409437421996": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "25",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#postal-code",
+              "ui:size": "25",
+              "ui:label": "Postal Code",
+              "value": "12345",
+              "oldValue": "12345",
+              "name": "828df864-c4c0-4c32-9774-20b7be5d9a35"
+            },
+            "subject:id1409437467649": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#region",
+              "ui:size": "40",
+              "ui:label": "Region",
+              "value": "Heredia",
+              "oldValue": "Heredia",
+              "name": "59e9814f-a56c-4d2d-860c-fefdf4d45a7e"
+            },
+            "subject:id1409437569420": {
+              "rdf:type": "http://www.w3.org/ns/ui#SingleLineTextField",
+              "ui:maxLength": "128",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#country-name",
+              "ui:size": "40",
+              "ui:label": "Country Name",
+              "value": "Costa Rica",
+              "oldValue": "Costa Rica",
+              "name": "22a42491-af3e-4349-b326-28e7beb017b1"
+            },
+            "subject:id1409437646712": {
+              "rdf:type": "http://www.w3.org/ns/ui#Classifier",
+              "ui:property": "http://purl.org/dc/terms/type",
+              "ui:from": "https://www.w3.org/1999/02/22-rdf-syntax-ns#Class",
+              "ui:label": "noLabel"
+            }
+          },
+          "ui:property": "http://www.w3.org/2006/vcard/ns#hasAddress",
+          "ui:reference": "subject:oneAddress",
+          "value": "https://jcampos.inrupt.net/profile/card#id1567479100149",
+          "name": "3fb0827c-db7f-4570-a8ad-2c34f1b3529f"
+        }
+      },
+      "ui:property": "http://www.w3.org/2006/vcard/ns#hasAddress"
+    },
+    "subject:emailComment": {
+      "rdf:type": "http://www.w3.org/ns/ui#Comment",
+      "ui:contents": "Email"
+    },
+    "subject:eMails": {
+      "rdf:type": "http://www.w3.org/ns/ui#Multiple",
+      "ui:parts": {
+        "id15676283980340": {
+          "rdf:type": "http://www.w3.org/ns/ui#Group",
+          "ui:parts": {
+            "subject:emailValue": {
+              "rdf:type": "http://www.w3.org/ns/ui#EmailField",
+              "ui:label": "email",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#value",
+              "ui:size": "50",
+              "value": "mailto:jairocamposv@gmail.com",
+              "oldValue": "mailto:jairocamposv@gmail.com",
+              "name": "ae9b50e1-b878-4f71-9ae4-820e6d2840e4"
+            },
+            "subject:emailType": {
+              "rdf:type": "http://www.w3.org/ns/ui#Classifier",
+              "ui:property": "http://purl.org/dc/terms/type",
+              "ui:from": "https://www.w3.org/2006/vcard/ns#Type",
+              "ui:canMintNew": "0",
+              "ui:category": "https://www.w3.org/2006/vcard/ns#Type",
+              "ui:label": "noLabel"
+            }
+          },
+          "ui:property": "http://www.w3.org/2006/vcard/ns#hasEmail",
+          "ui:reference": "subject:oneEMail",
+          "value": "https://jcampos.inrupt.net/profile/card#id1567604080961",
+          "name": "2c809924-57af-4590-90fe-eb01ae3d780b"
+        }
+      },
+      "ui:property": "http://www.w3.org/2006/vcard/ns#hasEmail"
+    },
+    "subject:telephoneComment": {
+      "rdf:type": "http://www.w3.org/ns/ui#Comment",
+      "ui:contents": "Phones"
+    },
+    "subject:telephones": {
+      "rdf:type": "http://www.w3.org/ns/ui#Multiple",
+      "ui:parts": {
+        "id15676283981100": {
+          "rdf:type": "http://www.w3.org/ns/ui#Group",
+          "ui:parts": {
+            "subject:telephoneValue": {
+              "rdf:type": "http://www.w3.org/ns/ui#PhoneField",
+              "ui:property": "http://www.w3.org/2006/vcard/ns#value",
+              "ui:size": "50",
+              "ui:label": "Value",
+              "value": "tel:70124238",
+              "oldValue": "tel:70124238",
+              "name": "9f25fdec-2140-424d-863b-919dd5abd9e2"
+            },
+            "subject:telephoneType": {
+              "rdf:type": "http://www.w3.org/ns/ui#Classifier",
+              "ui:property": "http://purl.org/dc/terms/type",
+              "ui:from": "https://www.w3.org/2006/vcard/ns#Type",
+              "ui:canMintNew": "0",
+              "ui:category": "https://www.w3.org/2006/vcard/ns#Type",
+              "ui:label": "noLabel"
+            }
+          },
+          "ui:property": "http://www.w3.org/2006/vcard/ns#hasTelephone",
+          "ui:reference": "subject:onetelephone",
+          "value": "https://jcampos.inrupt.net/profile/card#id1567604385231",
+          "name": "27cdc5fd-1006-423e-9bfb-f7ae7ce864b4"
+        }
+      },
+      "ui:property": "http://www.w3.org/2006/vcard/ns#hasTelephone"
+    },
+    "subject:noteComment": {
+      "rdf:type": "http://www.w3.org/ns/ui#Comment",
+      "ui:contents": "General Notes"
+    },
+    "subject:noteField": {
+      "rdf:type": "http://www.w3.org/ns/ui#MultiLineTextField",
+      "ui:property": "http://www.w3.org/2006/vcard/ns#note",
+      "ui:label": "Note"
+    }
+  }
+}

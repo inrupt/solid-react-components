@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
+import { FormModel as FormModelClass } from 'solid-forms';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
+import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '@lib';
 import { AccessControlList } from '@classes';
-import HandleShexForm from './components';
 import { ProfileViewer } from '../lib/components';
 
 const HeaderWrapper = styled.section`
@@ -22,17 +22,6 @@ const Headline = styled.h1`
   color: #333;
   font-size: 36px;
   font-weight: 300;
-`;
-
-const ShexFormComponent = styled.div`
-    border-top: 1px solid black;
-    
-    input {
-      margin: 20px 0;
-      padding: 10px;
-      width: 100%
-      box-sizing: border-box;
-   }
 `;
 
 const NotificationSection = styled.div`
@@ -60,11 +49,9 @@ const Header = () => {
 };
 
 const App = () => {
-  const [userInbox, setUserInbox] = useState(null);
+  const [userInbox, setUserInbox] = useState('');
   const webId = useWebId();
-  const { fetchNotification, notification, createNotification, discoverInbox } = useNotification(
-    webId
-  );
+  const { notification, createNotification } = useNotification(webId);
 
   const onChange = useCallback((event: Event) => {
     const { target } = event;
@@ -72,9 +59,17 @@ const App = () => {
   });
 
   const init = async () => {
-    const result = await discoverInbox(webId);
+    const formModel = new FormModelClass(
+      'https://jmartin.inrupt.net/public/shapes/book.shex',
+      'https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot'
+    );
+    const schema = await formModel.parseSchema(
+      'https://jmartin.inrupt.net/public/shapes/book.shex'
+    );
+    const formModelOutput = await formModel.parseShEx(schema);
 
-    fetchNotification([{ path: result, inboxName: 'Global App' }]);
+    // eslint-disable-next-line no-console
+    console.log(formModelOutput, 'model new');
   };
 
   const createAcl = async () => {
@@ -116,6 +111,40 @@ const App = () => {
       </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
+      <FormModel
+        {...{
+          modelPath:
+            'https://solidsdk.inrupt.net/private/FormLanguage/Form%20Model/UserProfileFormModel(NoLabels).ttl#formRoot',
+          podPath: 'https://jmartin.inrupt.net/profile/card#me',
+          settings: {
+            theme: {
+              inputText: 'sdk-input',
+              inputCheckbox: 'sdk-checkbox'
+            }
+          },
+          onError: error => {
+            // eslint-disable-next-line no-console
+            console.log(error);
+          },
+          onSuccess: success => {
+            // eslint-disable-next-line no-console
+            console.log(success);
+          },
+          onSave: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onAddNewField: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onDelete: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          }
+        }}
+        autoSave
+      />
       <Uploader
         {...{
           fileBase: 'Your POD folder here',
@@ -133,18 +162,12 @@ const App = () => {
           render: props => <ProfileUploader {...{ ...props }} />
         }}
       />
-      {webId && (
-        <ShexFormComponent>
-          <HandleShexForm {...{ webId }} />
-        </ShexFormComponent>
-      )}
       <NotificationSection>
         <h3>Create notification example using your inbox</h3>
         <input
           type="text"
           placeholder="Inbox Path"
           name="userInbox"
-          defaultValue=""
           onChange={onChange}
           value={userInbox}
         />
