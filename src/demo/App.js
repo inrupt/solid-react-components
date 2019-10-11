@@ -95,7 +95,16 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
-      <ProfileViewer webId="https://jmartin.inrupt.net/profile/card#me" direction="down">
+      <ProfileViewer
+        {...{
+          webId: 'https://jmartin.inrupt.net/profile/card#me',
+          direction: 'down',
+          onError: error => {
+            // eslint-disable-next-line no-console
+            console.log('ERROR', error.statusText);
+          }
+        }}
+      >
         <span>James Martin</span>
       </ProfileViewer>
 

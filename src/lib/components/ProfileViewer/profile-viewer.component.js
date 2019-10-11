@@ -3,12 +3,17 @@ import ldflex from '@solid/query-ldflex';
 // In-house Components
 // Utils
 import { SolidError } from '@utils';
-// Entities
-import { Provider } from '@entities';
 // Styled Components
 import { ProfileCard, ProfileViewerWrapper } from './profile-viewer.style';
 
-export default class ProfileViewer extends Component<> {
+type ProfileViewerProps = {
+  webId: String,
+  direction: String,
+  onError: (error: Error) => void,
+  children: any
+};
+
+export default class ProfileViewer extends Component<ProfileViewerProps> {
   constructor(props) {
     super(props);
 
@@ -35,17 +40,27 @@ export default class ProfileViewer extends Component<> {
       direction = 'down';
     }
 
-    const name = await ldflex[webId].vcard_fn;
-    const image = await ldflex[webId].vcard_hasPhoto;
-    const company = await ldflex[webId]['vcard_organization-name'];
-    const title = await ldflex[webId].vcard_role;
-    this.setState({
-      name: name.value || '',
-      image: image.value || '',
-      company: company.value || '',
-      title: title.value || '',
-      direction: direction.toLowerCase()
-    });
+    try {
+      const name = await ldflex[webId].vcard_fn;
+      const image = await ldflex[webId].vcard_hasPhoto;
+      const company = await ldflex[webId]['vcard_organization-name'];
+      const title = await ldflex[webId].vcard_role;
+      this.setState({
+        name: name.value || '',
+        image: image.value || '',
+        company: company.value || '',
+        title: title.value || '',
+        direction: direction.toLowerCase()
+      });
+    } catch (error) {
+      const { onError } = this.props;
+      if (onError) {
+        onError(SolidError(error, 'An error has occurred'));
+      } else {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      }
+    }
   };
 
   setVisibilityTrue = () => {
@@ -69,9 +84,9 @@ export default class ProfileViewer extends Component<> {
         {visible && (
           <ProfileCard direction={direction} className="solid-profile-card">
             <img src={image} alt="Profile" className="solid-profile-card-image" />
-            <div className="solid-profile-card-name">{name}</div>
-            <div className="solid-profile-card-company">{company}</div>
-            <div className="solid-profile-card-role">{title}</div>
+            {name && <div className="solid-profile-card-name">{name}</div>}
+            {company && <div className="solid-profile-card-company">{company}</div>}
+            {title && <div className="solid-profile-card-role">{title}</div>}
             <div className="solid-profile-card-view-more">
               <a href={webId} target="_blank" rel="noopener noreferrer">
                 View More

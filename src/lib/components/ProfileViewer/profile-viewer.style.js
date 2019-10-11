@@ -3,8 +3,10 @@ import styled from 'styled-components';
 export const ProfileCard = styled.div`
   border: solid 1px #ccc;
   border-radius: 8px;
-  width: 240px;
-  height: 240px;
+  min-width: 200px;
+  width: auto;
+  min-height: 200px;
+  height: auto;
   box-shadow: #ccc 2px 2px 8px;
   padding: 6px;
   position: absolute;
