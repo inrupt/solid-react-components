@@ -9,8 +9,10 @@ import { ProfileCard, ProfileViewerWrapper } from './profile-viewer.style';
 type ProfileViewerProps = {
   webId: String,
   direction: String,
+  onClick: Boolean,
   onError: (error: Error) => void,
-  children: any
+  children: any,
+  viewMoreText: String
 };
 
 export default class ProfileViewer extends Component<ProfileViewerProps> {
@@ -24,7 +26,9 @@ export default class ProfileViewer extends Component<ProfileViewerProps> {
       image: '',
       company: '',
       title: '',
-      direction: props.direction || 'down'
+      onClick: props.onClick || false,
+      direction: props.direction || 'down',
+      viewMoreText: props.viewMoreText || 'View More'
     };
   }
 
@@ -46,16 +50,16 @@ export default class ProfileViewer extends Component<ProfileViewerProps> {
       const company = await ldflex[webId]['vcard_organization-name'];
       const title = await ldflex[webId].vcard_role;
       this.setState({
-        name: name.value || '',
-        image: image.value || '',
-        company: company.value || '',
-        title: title.value || '',
+        name: (name && name.value) || '',
+        image: (image && image.value) || '',
+        company: (company && company.value) || '',
+        title: (title && title.value) || '',
         direction: direction.toLowerCase()
       });
     } catch (error) {
       const { onError } = this.props;
       if (onError) {
-        onError(SolidError(error, 'An error has occurred'));
+        onError(new SolidError(error, 'An error has occurred'));
       } else {
         // eslint-disable-next-line no-console
         console.log(error);
@@ -63,24 +67,31 @@ export default class ProfileViewer extends Component<ProfileViewerProps> {
     }
   };
 
-  setVisibilityTrue = () => {
-    this.setState({ visible: true });
+  setVisibility = vis => {
+    const { onClick } = this.state;
+    if (!onClick) {
+      this.setState({ visible: vis });
+    }
   };
 
-  setVisibilityFalse = () => {
-    this.setState({ visible: false });
+  toggleVisibility = () => {
+    const { onClick } = this.state;
+    if (onClick) {
+      this.setState(state => ({ ...state, visible: !state.visible }));
+    }
   };
 
   render() {
     const { children, webId } = this.props;
-    const { visible, name, image, company, title, direction } = this.state;
+    const { visible, name, image, company, title, direction, viewMoreText } = this.state;
     return (
       <ProfileViewerWrapper
-        onMouseEnter={this.setVisibilityTrue}
-        onMouseLeave={this.setVisibilityFalse}
+        onMouseEnter={() => this.setVisibility(true)}
+        onMouseLeave={() => this.setVisibility(false)}
+        onClick={this.toggleVisibility}
         className="solid-profile-viewer"
       >
-        <span>{children}</span>
+        {children}
         {visible && (
           <ProfileCard direction={direction} className="solid-profile-card">
             <img src={image} alt="Profile" className="solid-profile-card-image" />
@@ -89,7 +100,7 @@ export default class ProfileViewer extends Component<ProfileViewerProps> {
             {title && <div className="solid-profile-card-role">{title}</div>}
             <div className="solid-profile-card-view-more">
               <a href={webId} target="_blank" rel="noopener noreferrer">
-                View More
+                {viewMoreText}
               </a>
             </div>
           </ProfileCard>

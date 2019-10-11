@@ -15,6 +15,10 @@ export const ProfileCard = styled.div`
   
   bottom: ${({ direction }) => (direction === 'up' ? '20px' : 'auto')}
   top: ${({ direction }) => (direction === 'down' ? '20px' : 'auto')}
+  
+  img {
+    max-width: 100%;
+  }
 
 `;
 

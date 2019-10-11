@@ -99,13 +99,15 @@ const App = () => {
         {...{
           webId: 'https://jmartin.inrupt.net/profile/card#me',
           direction: 'down',
+          viewMoreText: 'See Profile',
           onError: error => {
             // eslint-disable-next-line no-console
             console.log('ERROR', error.statusText);
-          }
+          },
+          onClick: false
         }}
       >
-        <span>James Martin</span>
+        <span>James</span>
       </ProfileViewer>
 
       <br />
