@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, memo } from 'react';
+import React, { useState, useCallback, useEffect, memo, Fragment } from 'react';
 import { FormModelConfig } from '@context';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { solidResponse, SolidError } from '@utils';
@@ -36,6 +36,7 @@ const FormModel = memo(
     onInit,
     onLoaded,
     onError,
+    onCancel,
     onSuccess,
     onAddNewField,
     onDelete,
@@ -84,7 +85,12 @@ const FormModel = memo(
       setFormObject(formObject);
     });
 
-    const save = useCallback(async e => {
+    const onCancelOrReset = useCallback(() => {
+      if (onCancel) onCancel(formModel, formObject);
+      else setFormObject({});
+    });
+
+    const onSave = useCallback(async e => {
       if (e) {
         e.preventDefault();
       }
@@ -117,8 +123,13 @@ const FormModel = memo(
               settings
             }}
           />
-          {autoSave && (
-            <button type="submit">{(languageTheme && languageTheme.save) || 'Save'}</button>
+          {!autoSave && (
+            <Fragment>
+              <button type="submit">{(languageTheme && languageTheme.save) || 'Save'}</button>
+              <button type="button" onClick={onCancelOrReset}>
+                {(languageTheme && languageTheme.cancel) || 'Cancel'}
+              </button>
+            </Fragment>
           )}
         </form>
       </FormModelConfig.Provider>
