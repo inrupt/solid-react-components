@@ -126,7 +126,6 @@ const App = () => {
             console.log(response);
           }
         }}
-        autoSave
       />
       <Uploader
         {...{
