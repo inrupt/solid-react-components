@@ -67,6 +67,7 @@ const App = () => {
     );
     const formModelOutput = await formModel.parseShEx(schema);
 
+
     // eslint-disable-next-line no-console
     console.log(formModelOutput, 'model new');
   };

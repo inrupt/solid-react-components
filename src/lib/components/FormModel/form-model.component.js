@@ -39,7 +39,8 @@ const FormModel = memo(
     onCancel,
     onSuccess,
     onAddNewField,
-    onDelete
+    onDelete,
+    onSave
   }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
@@ -117,7 +118,7 @@ const FormModel = memo(
               modifyFormObject,
               deleteField,
               addNewField,
-              onSave,
+              onSave: save,
               autoSave,
               settings
             }}
