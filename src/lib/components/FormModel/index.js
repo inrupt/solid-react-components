@@ -1,3 +1,3 @@
-import FormModel from './form-model.component';
+import FormModel from './live-form-model.component';
 
 export default FormModel;

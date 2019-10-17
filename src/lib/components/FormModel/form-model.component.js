@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useEffect, memo } from 'react';
+import { useLiveUpdate } from '@solid/react';
+import { FormActions, formUi } from 'solid-forms';
 import { FormModelConfig } from '@context';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { solidResponse, SolidError } from '@utils';
-import { FormActions, formUi } from 'solid-forms';
 import Form from './children/Form';
 import Viewer from './children/Viewer';
 
@@ -42,14 +43,15 @@ const FormModel = memo(
   }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
+    const [newUpdated, setNewUpdate] = useState(false);
     const formActions = new FormActions(formModel, formObject);
+    const { timestamp } = useLiveUpdate();
     const { languageTheme } = settings;
 
     const init = useCallback(async () => {
       try {
         if (onInit) onInit();
         const model = await formUi.convertFormModel(modelPath, podPath);
-
         setFormModel(model);
         if (onLoaded) onLoaded();
         onSuccess(solidResponse(200, 'Init Render Success', { type: 'init' }));
@@ -57,6 +59,15 @@ const FormModel = memo(
         onError(new SolidError(error, 'Error on render', 500));
       }
     });
+
+    const onUpdate = useCallback(async () => {
+      if (Object.keys(formObject).length !== 0) setNewUpdate(true);
+      else {
+        const newData = await formUi.mapFormModelWithData(formModel, podPath);
+        console.log(newData);
+        setFormModel(newData);
+      }
+    }, [formModel, formObject, podPath]);
 
     const addNewField = useCallback(id => {
       try {
@@ -99,6 +110,10 @@ const FormModel = memo(
     useEffect(() => {
       init();
     }, []);
+
+    useEffect(() => {
+      if (timestamp) onUpdate();
+    }, [timestamp]);
 
     return !viewer ? (
       <FormModelConfig.Provider value={settings}>
