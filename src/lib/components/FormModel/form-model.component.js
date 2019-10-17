@@ -45,7 +45,7 @@ const FormModel = memo(
   }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
-    const [newUpdated, setNewUpdate] = useState(false);
+    const [newUpdate, setNewUpdate] = useState(false);
     const formActions = new FormActions(formModel, formObject);
     const { timestamp } = useLiveUpdate();
     const { languageTheme } = settings;
@@ -106,9 +106,17 @@ const FormModel = memo(
         e.preventDefault();
       }
       try {
-        const updatedFormModel = await formActions.saveData();
+        let updatedFormObject = null;
+
+        if (newUpdate) {
+          updatedFormObject = await formUi.mapFormObjectWidthData(formObject, podPath);
+        }
+
+        const updatedFormModel = await formActions.saveData(updatedFormObject);
+
+        setNewUpdate(false);
         setFormModel(updatedFormModel);
-        onSave();
+        onSave(solidResponse(200, 'New field successfully saved'));
       } catch (error) {
         onError(new SolidError(error, 'Error saving form', 500));
       }
@@ -117,8 +125,6 @@ const FormModel = memo(
     useEffect(() => {
       init();
     }, []);
-
-    console.log(formObject);
 
     useEffect(() => {
       if (timestamp) onUpdate();
