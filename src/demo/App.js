@@ -98,7 +98,7 @@ const App = () => {
         {...{
           modelPath:
             'https://solidsdk.inrupt.net/private/FormLanguage/Form%20Model/UserProfileFormModel(NoLabels).ttl#formRoot',
-          podPath: 'https://jprod.inrupt.net/profile/card#me',
+          podPath: 'https://jcampos.inrupt.net/profile/card#me',
           settings: {
             theme: {
               inputText: 'sdk-input',

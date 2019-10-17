@@ -64,7 +64,7 @@ const FormModel = memo(
       if (Object.keys(formObject).length !== 0) setNewUpdate(true);
       else {
         const newData = await formUi.mapFormModelWithData(formModel, podPath);
-        console.log(newData);
+
         setFormModel(newData);
       }
     }, [formModel, formObject, podPath]);
@@ -110,6 +110,8 @@ const FormModel = memo(
     useEffect(() => {
       init();
     }, []);
+
+    console.log(formObject);
 
     useEffect(() => {
       if (timestamp) onUpdate();

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { SolidError } from '@utils';
 import { lookup, extension } from 'mime-types';
 import auth from 'solid-auth-client';
+import { SolidError } from '@utils';
 import { UploadedFiles, SolidError as SolidErrorEntity } from '@entities';
 
 type Props = {
