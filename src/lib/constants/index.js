@@ -48,5 +48,8 @@ export const FromModelUI = {
   UI_VALUE: 'ui:value',
   UI_LABEL: 'ui:label',
   UI_NAME: 'ui:name',
-  UI_DEFAULT: 'ui:default'
+  UI_DEFAULT: 'ui:default',
+  RDF_TYPE: 'rdf:type',
+  MIN_VALUE: 'ui:minValue',
+  MAX_VALUE: 'ui:maxValue'
 };

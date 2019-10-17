@@ -5,6 +5,7 @@ import Heading from './Heading';
 import TextArea from './TextArea';
 import RadioButton from './RadioButton';
 import CheckBox from './CheckBox';
+import DateTimePicker from './DateTimePicker';
 
 import { UITypes } from '@constants';
 
@@ -28,6 +29,11 @@ const UIMapping = type => {
       break;
     case UITypes.Comment:
       component = Comment;
+      break;
+    case UITypes.DateTimeField:
+    case UITypes.TimeField:
+    case UITypes.DateField:
+      component = DateTimePicker;
       break;
     default:
       component = Input;

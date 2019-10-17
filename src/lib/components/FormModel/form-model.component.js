@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, memo } from 'react';
+import React, { useState, useCallback, useEffect, memo, Fragment } from 'react';
 import { useLiveUpdate } from '@solid/react';
 import { FormActions, formUi } from 'solid-forms';
 import { FormModelConfig } from '@context';
@@ -37,9 +37,11 @@ const FormModel = memo(
     onInit,
     onLoaded,
     onError,
+    onCancel,
     onSuccess,
     onAddNewField,
-    onDelete
+    onDelete,
+    onSave
   }: Props) => {
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
@@ -94,7 +96,12 @@ const FormModel = memo(
       setFormObject(formObject);
     });
 
-    const onSave = useCallback(async e => {
+    const onCancelOrReset = useCallback(() => {
+      if (onCancel) onCancel(formModel, formObject);
+      else setFormObject({});
+    });
+
+    const save = useCallback(async e => {
       if (e) {
         e.preventDefault();
       }
@@ -128,13 +135,18 @@ const FormModel = memo(
               modifyFormObject,
               deleteField,
               addNewField,
-              onSave,
+              onSave: save,
               autoSave,
               settings
             }}
           />
-          {autoSave && (
-            <button type="submit">{(languageTheme && languageTheme.save) || 'Save'}</button>
+          {!autoSave && (
+            <Fragment>
+              <button type="submit">{(languageTheme && languageTheme.save) || 'Save'}</button>
+              <button type="button" onClick={onCancelOrReset}>
+                {(languageTheme && languageTheme.cancel) || 'Cancel'}
+              </button>
+            </Fragment>
           )}
         </form>
       </FormModelConfig.Provider>
