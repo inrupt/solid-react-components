@@ -12,7 +12,8 @@ const PREFIXES = {
   ns: 'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
   foaf: 'http://xmlns.com/foaf/0.1/',
   acl: 'http://www.w3.org/ns/auth/acl#',
-  ldp: 'http://www.w3.org/ns/ldp#'
+  ldp: 'http://www.w3.org/ns/ldp#',
+  xsd: 'http://www.w3.org/2001/XMLSchema#'
 };
 
 /**
@@ -254,7 +255,7 @@ export class Notification {
             content[item.label] ||
             defaultValue ||
             item.label === 'read' ||
-            item.label === 'datetime'
+            item.label === 'published'
           ) {
             /**
              * Add read by default on notification document
@@ -265,11 +266,27 @@ export class Notification {
              * Add datetime time by default on notification document
              * @type {string}
              */
-            value = item.label === 'datetime' ? new Date().toISOString() : value;
+            value = item.label === 'published' ? new Date().toISOString() : value;
             /**
-             * Check if object from schema is a literal or node value
+             * Check if object from schema is a literal or node value, and if it requires a datetime type
              */
-            const typedValue = item.type === 'NamedNode' ? namedNode(value) : literal(value);
+            let typedValue = null;
+            if (item.type === 'NamedNode') {
+              typedValue = namedNode(value);
+            } else {
+              switch (item.datatype) {
+                case 'datetime':
+                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}datetime`));
+                  break;
+                case 'boolean':
+                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}boolean`));
+                  break;
+                case 'string':
+                default:
+                  typedValue = literal(value);
+                  break;
+              }
+            }
 
             writer.addQuad(
               namedNode(''),

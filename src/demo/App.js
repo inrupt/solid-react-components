@@ -67,7 +67,6 @@ const App = () => {
     );
     const formModelOutput = await formModel.parseShEx(schema);
 
-
     // eslint-disable-next-line no-console
     console.log(formModelOutput, 'model new');
   };
@@ -149,7 +148,7 @@ const App = () => {
         <h3>Create notification example using your inbox</h3>
         <input
           type="text"
-          placeholder="Inbox Path"
+          placeholder="User Inbox URL"
           name="userInbox"
           onChange={onChange}
           value={userInbox}
@@ -158,6 +157,7 @@ const App = () => {
           type="button"
           disabled={!userInbox}
           onClick={() =>
+            // TODO: Update this to take a resource, instead of an inbox URL, and add target
             createNotification(
               {
                 title: 'Notification Example',
