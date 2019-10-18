@@ -63,10 +63,10 @@ const FormModel = memo(
     });
 
     const onUpdate = useCallback(async () => {
+      // checking if formObject is an empty object (if something has been updated in the form)
       if (Object.keys(formObject).length !== 0) setNewUpdate(true);
       else {
         const newData = await formUi.mapFormModelWithData(formModel, podPath);
-
         setFormModel(newData);
       }
     }, [formModel, formObject, podPath]);
@@ -108,8 +108,13 @@ const FormModel = memo(
       try {
         let updatedFormObject = null;
 
+        /*
+        Checks if an update happened in the podPath document while the form was being updated   
+        */
+
         if (newUpdate) {
-          updatedFormObject = await formUi.mapFormObjectWidthData(formObject, podPath);
+          // If the podPath document was updated, the inputed values are checked against the new values
+          updatedFormObject = await formUi.mapFormObjectWithData(formObject, podPath);
         }
 
         const updatedFormModel = await formActions.saveData(updatedFormObject);
