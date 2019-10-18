@@ -67,7 +67,6 @@ const App = () => {
     );
     const formModelOutput = await formModel.parseShEx(schema);
 
-
     // eslint-disable-next-line no-console
     console.log(formModelOutput, 'model new');
   };
@@ -99,7 +98,7 @@ const App = () => {
         {...{
           modelPath:
             'https://solidsdk.inrupt.net/private/FormLanguage/Form%20Model/UserProfileFormModel(NoLabels).ttl#formRoot',
-          podPath: 'https://jmartin.inrupt.net/profile/card#me',
+          podPath: 'https://jcampos.inrupt.net/profile/card#me',
           settings: {
             theme: {
               inputText: 'sdk-input',
@@ -127,6 +126,8 @@ const App = () => {
             console.log(response);
           }
         }}
+        autoSave
+        liveUpdate
       />
       <Uploader
         {...{
