@@ -3,61 +3,65 @@
   "@context": {
     "terms": "http://purl.org/dc/terms#",
     "as": "https://www.w3.org/ns/activitystreams#",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
     "schema": "http://schema.org/",
-    "solid": "https://www.w3.org/ns/solid/terms#"
+    "solid": "https://www.w3.org/ns/solid/terms#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
   "shape": [
     {
-      "label": "id",
-      "property": "terms:id",
-      "type": "Literal"
-    },
-    {
       "label": "title",
       "property": "terms:title",
-      "type": "Literal"
+      "type": "Literal",
+      "datatype": "string"
     },
     {
       "label": "summary",
       "property": "as:summary",
-      "type": "Literal"
-    },
-    {
-      "label": "type",
-      "property": "rdfs:type",
-      "type": "Literal"
+      "type": "Literal",
+      "datatype": "string"
     },
     {
       "label": "actor",
       "property": "as:actor",
-      "type": "NamedNode"
+      "type": "NamedNode",
+      "datatype": "IRI"
     },
     {
       "label": "target",
       "property": "as:target",
-      "type": "NamedNode"
+      "type": "NamedNode",
+      "datatype": "IRI"
     },
     {
       "label": "object",
       "property": "as:object",
-      "type": "NamedNode"
+      "type": "NamedNode",
+      "datatype": "IRI"
     },
     {
       "label": "image",
       "property": "schema:image",
-      "type": "NamedNode"
+      "type": "NamedNode",
+      "datatype": "IRI"
     },
     {
       "label": "read",
       "property": "solid:read",
       "value": false,
-      "type": "Literal"
+      "type": "Literal",
+      "datatype": "boolean"
     },
     {
-      "label": "datetime",
-      "property": "rdfs:datetime",
-      "type": "Literal"
+      "label": "published",
+      "property": "as:published",
+      "type": "Literal",
+      "datatype": "datetime"
+    },
+    {
+      "label": "license",
+      "property": "schema:license",
+      "type": "Literal",
+      "datatype": "IRI"
     }
   ]
 }
