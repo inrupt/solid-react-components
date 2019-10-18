@@ -12,6 +12,7 @@ import {
   AutoSaveDefaultSpinner
 } from '@lib';
 import { AccessControlList } from '@classes';
+import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -55,13 +56,14 @@ const Header = () => {
 };
 
 const App = () => {
-  const [userInbox, setUserInbox] = useState('');
-  const webId = useWebId();
-  const { notification, createNotification } = useNotification(webId);
+  const [userWebID, setUserWebID] = useState('');
 
-  const onChange = useCallback((event: Event) => {
+  const webId = useWebId();
+  const { notification, createNotification, discoverInbox } = useNotification(webId);
+
+  const onWebIDChange = useCallback((event: Event) => {
     const { target } = event;
-    setUserInbox(target.value);
+    setUserWebID(target.value);
   });
 
   const init = async () => {
@@ -86,6 +88,32 @@ const App = () => {
       const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
       const aclInstance = new AccessControlList(webId, documentURI);
       await aclInstance.createACL(permissions);
+    }
+  };
+
+  const sendSampleNotification = async () => {
+    try {
+      // Discover the inbox url from the resource, using ldp:inbox predicate
+      const inboxUrl = await discoverInbox(userWebID);
+      // The actor in this case is the current application, so we can use the current URL
+      const actor = window.location.href;
+
+      if (!inboxUrl) {
+        throw new Error('Inbox not found');
+      }
+
+      createNotification(
+        {
+          title: 'Notification Example',
+          summary: 'This is a basic solid notification example.',
+          actor
+        },
+        inboxUrl,
+        NotificationTypes.ANNOUNCE
+      );
+    } catch (ex) {
+      // eslint-disable-next-line no-console
+      console.log(ex);
     }
   };
 
@@ -155,27 +183,15 @@ const App = () => {
         }}
       />
       <NotificationSection>
-        <h3>Create notification example using your inbox</h3>
+        <h3>Create notification example using a WebID or Resource path</h3>
         <input
           type="text"
-          placeholder="Inbox Path"
-          name="userInbox"
-          onChange={onChange}
-          value={userInbox}
+          placeholder="WebID or Resource"
+          name="userWebID"
+          onChange={onWebIDChange}
+          value={userWebID}
         />
-        <button
-          type="button"
-          disabled={!userInbox}
-          onClick={() =>
-            createNotification(
-              {
-                title: 'Notification Example',
-                summary: 'This is a basic solid notification example.'
-              },
-              userInbox
-            )
-          }
-        >
+        <button type="button" disabled={!userWebID} onClick={sendSampleNotification}>
           Create notification
         </button>
       </NotificationSection>

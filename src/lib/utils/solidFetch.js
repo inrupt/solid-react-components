@@ -70,11 +70,19 @@ export const fetchLdflexDocument = async documentUri => {
 export const getBasicPod = async webId => {
   try {
     if (webId) {
-      const nameData = await data[webId]['vcard:fn'];
-      const imageData = await data[webId]['vcard:hasPhoto'];
-      const name = nameData ? nameData.value : webId;
-      const image = imageData ? imageData.value : null;
-      return { name, image, webId };
+      try {
+        const nameData = await data[webId]['vcard:fn'];
+        const imageData = await data[webId]['vcard:hasPhoto'];
+        const name = nameData ? nameData.value : webId;
+        const image = imageData ? imageData.value : null;
+        return { name, image, webId };
+      } catch (ex) {
+        // If we can't fetch the data for some reason, like a CORS issue or no valid data, just use the webId as the name
+        console.log(ex);
+        const name = webId;
+        const image = null;
+        return { name, image, webId };
+      }
     }
     return {};
   } catch (e) {
