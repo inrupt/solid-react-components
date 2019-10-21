@@ -8,6 +8,7 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
   const type = rest['rdf:type'];
   const label = rest['ui:label'] || '';
   const maxLength = rest['ui:maxLength'] || 256;
+  const valid = rest['ui:valid'];
   const size = rest['ui:size'] || 40;
   const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
   const onChange = ({ target }) => {
@@ -29,6 +30,7 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
             onBlur={autoSave && onSave}
             {...{ maxLength, size, value: actualValue || '', onChange }}
           />
+          {!valid && <p>{rest['ui:requiredError'] || 'Field is required'}</p>}
         </InputGroup>
       )}
     </FormModelConfig.Consumer>
