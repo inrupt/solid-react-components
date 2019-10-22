@@ -90,7 +90,6 @@ const App = () => {
       const inboxUrl = await discoverInbox(userWebID);
       // The actor in this case is the current application, so we can use the current URL
       const actor = window.location.href;
-
       if (!inboxUrl) {
         throw new Error('Inbox not found');
       }

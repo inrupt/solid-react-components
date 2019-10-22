@@ -283,10 +283,9 @@ export class Notification {
              */
             value = item.label === 'published' ? new Date().toISOString() : value;
             /**
-             * Check if object from schema is a literal or node value, and if it requires a data type
+             * Check if object from schema is a literal or node value, and if it requires a datetime type
              */
             let typedValue = null;
-
             if (item.type === 'NamedNode') {
               typedValue = namedNode(value);
             } else {
