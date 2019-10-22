@@ -106,19 +106,20 @@ const FormModel = memo(
         e.preventDefault();
       }
       try {
-        let updatedFormObject = null;
+        if (Object.keys(formObject).length > 0) {
+          let updatedFormObject = null;
 
-        if (newUpdate) {
-          updatedFormObject = await formUi.mapFormObjectWidthData(formObject, podPath);
+          if (newUpdate) {
+            updatedFormObject = await formUi.mapFormObjectWidthData(formObject, podPath);
+          }
+
+          const updatedFormModel = await formActions.saveData(updatedFormObject);
+
+          setNewUpdate(false);
+          setFormModel(updatedFormModel);
+          setFormObject({});
+          onSave(solidResponse(200, 'New field successfully saved'));
         }
-
-        console.log('updated', updatedFormObject);
-
-        const updatedFormModel = await formActions.saveData(updatedFormObject);
-
-        setNewUpdate(false);
-        setFormModel(updatedFormModel);
-        onSave(solidResponse(200, 'New field successfully saved'));
       } catch (error) {
         onError(new SolidError(error, 'Error saving form', 500));
       }
@@ -127,8 +128,6 @@ const FormModel = memo(
     useEffect(() => {
       init();
     }, []);
-
-    console.log(formModel);
 
     useEffect(() => {
       if (timestamp) onUpdate();
