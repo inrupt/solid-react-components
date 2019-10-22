@@ -5,6 +5,7 @@ import { FormModel as FormModelClass } from 'solid-forms';
 import SolidImg from '../assets/solid_logo.png';
 import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '@lib';
 import { AccessControlList } from '@classes';
+import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -85,7 +86,10 @@ const App = () => {
 
   const sendSampleNotification = async () => {
     try {
+      // Discover the inbox url from the resource, using ldp:inbox predicate
       const inboxUrl = await discoverInbox(userWebID);
+      // The actor in this case is the current application, so we can use the current URL
+      const actor = window.location.href;
 
       if (!inboxUrl) {
         throw new Error('Inbox not found');
@@ -94,9 +98,11 @@ const App = () => {
       createNotification(
         {
           title: 'Notification Example',
-          summary: 'This is a basic solid notification example.'
+          summary: 'This is a basic solid notification example.',
+          actor
         },
-        inboxUrl
+        inboxUrl,
+        NotificationTypes.ANNOUNCE
       );
     } catch (ex) {
       // eslint-disable-next-line no-console

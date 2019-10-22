@@ -4,6 +4,7 @@ import solidLDflex from '@solid/query-ldflex';
 import { solidResponse, SolidError, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
+import { NotificationTypes } from '@constants';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',
@@ -217,12 +218,21 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (content = {}, to, options = {}) => {
+  create = async (content = {}, to, type, options = {}) => {
     try {
       const currentShape = this.buildShapeObject(options && options.shape);
       const { name, shape: defaultShape } = currentShape;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
+
+      const fileName = Date.now();
+      const filePath = `${to + fileName}.ttl`;
+
+      // This should be in a constant, but we may shift to use solid/context instead
+      const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+
+      // If a type has not been set, default to Announce type
+      const notificationType = type || NotificationTypes.ANNOUNCE;
 
       if (!this.schema || (this.schema && !this.schema[name])) {
         /**
@@ -235,6 +245,8 @@ export class Notification {
       }
 
       const { '@context': context, shape } = this.schema[name];
+      // Add local filename as a prefix for cleaner ttl generation
+      const fullContext = { ...context, ':': filePath };
 
       /**
        * N3 is an implementation of the RDF.js low-level specification that lets you handle RDF in JavaScript easily.
@@ -243,9 +255,12 @@ export class Notification {
        * @type {N3Writer}
        */
       const writer = new N3.Writer({
-        prefixes: context,
+        prefixes: fullContext,
         format: 'text/turtle'
       });
+
+      // Add the notification type to the node
+      writer.addQuad(namedNode(filePath), namedNode(rdfType), namedNode(notificationType));
 
       shape.forEach(item => {
         if (item.property && item.property.includes(':')) {
@@ -268,9 +283,10 @@ export class Notification {
              */
             value = item.label === 'published' ? new Date().toISOString() : value;
             /**
-             * Check if object from schema is a literal or node value, and if it requires a datetime type
+             * Check if object from schema is a literal or node value, and if it requires a data type
              */
             let typedValue = null;
+
             if (item.type === 'NamedNode') {
               typedValue = namedNode(value);
             } else {
@@ -289,7 +305,7 @@ export class Notification {
             }
 
             writer.addQuad(
-              namedNode(''),
+              namedNode(filePath),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
               typedValue
             );
@@ -316,6 +332,7 @@ export class Notification {
           body: result,
           headers: {
             'Content-Type': 'text/turtle',
+            slug: fileName,
             ...optionsHeader
           }
         });
