@@ -106,22 +106,23 @@ const FormModel = memo(
         e.preventDefault();
       }
       try {
-        let updatedFormObject = null;
+        if (Object.keys(formObject).length > 0) {
+          let updatedFormObject = null;
 
-        /*
-        Checks if an update happened in the podPath document while the form was being updated   
-        */
+          /*
+          Checks if an update happened in the podPath document while the form was being updated   
+          */
+          if (newUpdate) {
+            updatedFormObject = await formUi.mapFormObjectWidthData(formObject, podPath);
+          }
 
-        if (newUpdate) {
-          // If the podPath document was updated, the inputed values are checked against the new values
-          updatedFormObject = await formUi.mapFormObjectWithData(formObject, podPath);
+          const updatedFormModel = await formActions.saveData(updatedFormObject);
+
+          setNewUpdate(false);
+          setFormModel(updatedFormModel);
+          setFormObject({});
+          onSave(solidResponse(200, 'New field successfully saved'));
         }
-
-        const updatedFormModel = await formActions.saveData(updatedFormObject);
-
-        setNewUpdate(false);
-        setFormModel(updatedFormModel);
-        onSave(solidResponse(200, 'New field successfully saved'));
       } catch (error) {
         onError(new SolidError(error, 'Error saving form', 500));
       }
