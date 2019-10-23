@@ -4,7 +4,7 @@ import { FormModelConfig } from '@context';
 
 import { InputGroup } from './input.styles';
 
-const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...rest }) => {
+const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
   const type = rest['rdf:type'];
   const label = rest['ui:label'] || '';
   const maxLength = rest['ui:maxLength'] || 256;
@@ -26,8 +26,7 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...r
             id={id}
             name={id}
             type={InputTextTypes[type]}
-            onBlur={autoSave && onSave}
-            {...{ maxLength, size, value: actualValue || '', onChange }}
+            {...{ maxLength, size, value: actualValue || '', onChange, onBlur }}
           />
         </InputGroup>
       )}

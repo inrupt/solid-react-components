@@ -26,7 +26,7 @@ const getDateFormat = type => {
 };
 
 const DateTimePicker = React.memo(
-  ({ id, value, modifyFormObject, formObject, onSave, autoSave, ...rest }) => {
+  ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
     const [selectedDate, setDate] = useState(null);
     const [invalidate, setInvalid] = useState(null);
     const { DateTimePicker, TimeField } = UITypes;
@@ -81,7 +81,7 @@ const DateTimePicker = React.memo(
                 maxDate: maxValue,
                 onChangeRaw: e => handleChangeRaw(e),
                 className: theme && theme.inputText,
-                onBlur: autoSave && onSave,
+                onBlur,
                 showTimeSelect,
                 showTimeSelectOnly,
                 dateFormat

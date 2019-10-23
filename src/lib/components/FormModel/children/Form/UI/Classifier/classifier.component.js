@@ -8,6 +8,7 @@ type Props = {
   retrieveNewFormObject: Function,
   modifyFormObject: Function,
   onSave: Function,
+  onBlur: Function,
   autoSave: boolean,
   formObject: object
 };
@@ -19,6 +20,7 @@ const Classifier = ({
   formObject,
   onSave,
   autoSave,
+  onBlur,
   ...rest
 }: Props) => {
   const [options, setOptions] = useState([]);
@@ -56,7 +58,7 @@ const Classifier = ({
 
   return (
     <div>
-      <select name={id} onBlur={autoSave && onSave} onChange={onChange} value={actualValue}>
+      <select name={id} onBlur={onBlur} onChange={onChange} value={actualValue}>
         {options.map(option => (
           <option key={unique()} value={option}>
             {getDropDownLabel(option)}
