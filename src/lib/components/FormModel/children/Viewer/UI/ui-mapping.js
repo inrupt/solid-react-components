@@ -40,10 +40,10 @@ const UIMapping = type => {
       component = SingleLine;
       break;
     case UITypes.DateField:
-      component = props => <DateLine format="D M, YYYY" {...props} />;
+      component = props => <DateLine format="Do MMM, YYYY" {...props} />;
       break;
     case UITypes.DateTimeField:
-      component = props => <DateLine format="HH:mm a - Do M, YYYY" {...props} />;
+      component = props => <DateLine format="HH:mm a - Do MMM, YYYY" {...props} />;
       break;
     case UITypes.TimeField:
       component = props => <DateLine format="HH:mm a" {...props} />;
