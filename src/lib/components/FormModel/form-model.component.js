@@ -121,10 +121,14 @@ const FormModel = memo(
           setNewUpdate(false);
           setFormModel(updatedFormModel);
           setFormObject({});
-          onSave(solidResponse(200, 'New field successfully saved'));
+          const response = solidResponse(200, 'New field successfully saved');
+          onSave(response);
+          return response;
         }
       } catch (error) {
-        onError(new SolidError(error, 'Error saving form', 500));
+        const e = new SolidError(error, 'Error saving form', 500);
+        onError(e);
+        return e;
       }
     });
 
