@@ -3,7 +3,14 @@ import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import { FormModel as FormModelClass } from 'solid-forms';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '@lib';
+import {
+  ProviderLogin,
+  Uploader,
+  ProfileUploader,
+  useNotification,
+  FormModel,
+  AutoSaveDefaultSpinner
+} from '@lib';
 import { AccessControlList } from '@classes';
 
 const HeaderWrapper = styled.section`
@@ -103,7 +110,8 @@ const App = () => {
             theme: {
               inputText: 'sdk-input',
               inputCheckbox: 'sdk-checkbox'
-            }
+            },
+            savingComponent: AutoSaveDefaultSpinner
           },
           onError: error => {
             // eslint-disable-next-line no-console
