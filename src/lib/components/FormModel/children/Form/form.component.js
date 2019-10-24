@@ -110,6 +110,7 @@ const Form = ({
               formObject={formObject}
               autoSave={autoSave}
               onSave={onSave}
+              savingComponent={settings && settings.savingComponent}
             />
           );
         })}

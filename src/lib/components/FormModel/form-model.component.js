@@ -22,7 +22,8 @@ type Props = {
   settings: {
     theme: object,
     languageTheme: object,
-    config: object
+    config: object,
+    savingComponent: React.ReactNode
   }
 };
 

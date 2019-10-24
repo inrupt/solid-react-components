@@ -15,7 +15,8 @@ import {
   ProfileUploader,
   ShexForm,
   ShexFormBuilder,
-  FormModel
+  FormModel,
+  AutoSaveDefaultSpinner
 } from '@components';
 
 import { useNotification } from '@hooks';
@@ -40,5 +41,6 @@ export {
   useNotification,
   AccessControlList,
   AppPermission,
-  FormModel
+  FormModel,
+  AutoSaveDefaultSpinner
 };

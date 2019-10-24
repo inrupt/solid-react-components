@@ -1,7 +1,6 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ErrorMessage from './Form/UI/ErrorMessage';
-import AutoSaveDefaultSpinner from './autosave-default-spinner.component';
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,7 +35,7 @@ const ControlGroup = ({
     <>
       <Wrapper>
         <Component {...{ ...fieldData, onBlur, ...rest }} />
-        {savingProcess && (
+        {SavingComponent && savingProcess && (
           <SavingComponent
             inProgress={isSaving}
             result={result}
@@ -49,9 +48,4 @@ const ControlGroup = ({
     </>
   );
 };
-
-ControlGroup.defaultProps = {
-  savingComponent: AutoSaveDefaultSpinner
-};
-
 export default ControlGroup;
