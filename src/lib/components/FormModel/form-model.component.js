@@ -57,7 +57,10 @@ const FormModel = memo(
         const model = await formUi.convertFormModel(modelPath, podPath);
         setFormModel(model);
         if (onLoaded) onLoaded();
-        onSuccess(solidResponse(200, 'Init Render Success', { type: 'init' }));
+
+        if (onSuccess) {
+          onSuccess(solidResponse(200, 'Init Render Success', { type: 'init' }));
+        }
       } catch (error) {
         onError(new SolidError(error, 'Error on render', 500));
       }
