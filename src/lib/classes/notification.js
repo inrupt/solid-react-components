@@ -1,5 +1,5 @@
 import solid from 'solid-auth-client';
-import N3 from 'n3';
+import * as N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
 import { solidResponse, SolidError, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
