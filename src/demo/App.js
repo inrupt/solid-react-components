@@ -67,17 +67,17 @@ const App = () => {
   });
 
   const init = async () => {
-    const formModel = new FormModelClass(
-      'https://jmartin.inrupt.net/public/shapes/book.shex',
-      'https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot'
+    /* const formModel = new FormModelClass(
+      'https://jcampos.inrupt.net/public/shex/book.shex',
+      'https://jcampos.inrupt.net/public/formModel/book.ttl'
     );
     const schema = await formModel.parseSchema(
-      'https://jmartin.inrupt.net/public/shapes/book.shex'
+      'https://jcampos.inrupt.net/public/shex/book.shex'
     );
     const formModelOutput = await formModel.parseShEx(schema);
 
     // eslint-disable-next-line no-console
-    console.log(formModelOutput, 'model new');
+    console.log(formModelOutput, 'model new'); */
   };
 
   const createAcl = async () => {
@@ -131,9 +131,8 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath:
-            'https://solidsdk.inrupt.net/private/FormLanguage/Form%20Model/UserProfileFormModel(NoLabels).ttl#formRoot',
-          podPath: 'https://jcampos.inrupt.net/profile/card#me',
+          modelPath: 'https://jcampos.inrupt.net/public/formModel/dateTime.ttl#form1',
+          podPath: 'https://jcampos.inrupt.net/public/data/dates.ttl',
           settings: {
             theme: {
               inputText: 'sdk-input',
@@ -141,9 +140,10 @@ const App = () => {
             },
             savingComponent: AutoSaveDefaultSpinner
           },
+          viewer: false,
           onError: error => {
             // eslint-disable-next-line no-console
-            console.log(error);
+            console.log(error, 'error');
           },
           onSuccess: success => {
             // eslint-disable-next-line no-console
