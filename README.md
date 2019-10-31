@@ -2,7 +2,9 @@
 
 React components for building your own [Solid](https://solid.inrupt.com/") applications. Part of the [React SDK for Solid](https://github.com/inrupt-inc/solid-react-sdk).
 
-## External Dependencies
+## Dependencies
+
+The following is a list of some of the major dependencies of the solid-react-components library. These packages are all installed as part of the `npm install` step of setup. 
 
 1.  [solid-auth-client](https://github.com/solid/solid-auth-client) - Solid authentication library.
 2.  [ldflex-for-solid](https://github.com/solid/query-ldflex) - Solid library to read and manipulate data.
