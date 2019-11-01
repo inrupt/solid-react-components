@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { n3Helper } from 'solid-forms';
 import unique from 'unique';
 import { SelectWrapper } from './classifier.style';
+import { FormModelConfig } from '@context';
 
 type Props = {
   id: string,
@@ -59,16 +60,20 @@ const Classifier = ({
   }, []);
 
   return (
-    <SelectWrapper>
-      <label htmlFor={id}>{label}</label>
-      <select name={id} onBlur={onBlur} onChange={onChange} value={actualValue}>
-        {options.map(option => (
-          <option key={unique()} value={option}>
-            {getDropDownLabel(option)}
-          </option>
-        ))}
-      </select>
-    </SelectWrapper>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <SelectWrapper className={theme && theme.inputText}>
+          <label htmlFor={id}>{label}</label>
+          <select name={id} onBlur={onBlur} onChange={onChange} value={actualValue}>
+            {options.map(option => (
+              <option key={unique()} value={option}>
+                {getDropDownLabel(option)}
+              </option>
+            ))}
+          </select>
+        </SelectWrapper>
+      )}
+    </FormModelConfig.Consumer>
   );
 };
 
