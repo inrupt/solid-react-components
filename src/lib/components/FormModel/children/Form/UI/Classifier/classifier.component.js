@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { n3Helper } from 'solid-forms';
 import unique from 'unique';
+import { SelectWrapper } from './classifier.style';
 
 type Props = {
   id: string,
@@ -25,6 +26,7 @@ const Classifier = ({
 }: Props) => {
   const [options, setOptions] = useState([]);
   const from = rest['ui:from'] || null;
+  const label = rest['ui:label'] || '';
 
   const init = async () => {
     const values = rest['ui:values'];
@@ -57,7 +59,8 @@ const Classifier = ({
   }, []);
 
   return (
-    <div>
+    <SelectWrapper>
+      <label htmlFor={id}>{label}</label>
       <select name={id} onBlur={onBlur} onChange={onChange} value={actualValue}>
         {options.map(option => (
           <option key={unique()} value={option}>
@@ -65,7 +68,7 @@ const Classifier = ({
           </option>
         ))}
       </select>
-    </div>
+    </SelectWrapper>
   );
 };
 

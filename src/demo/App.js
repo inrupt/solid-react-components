@@ -132,8 +132,9 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/string-exactly1.ttl#formRoot',
-          podPath: 'https://khoward.dev.inrupt.net/profile/card#me',
+          modelPath:
+            'https://solidsdk.inrupt.net/private/FormLanguage/Form%20Model/UserProfileFormModel(NoLabels).ttl#formRoot',
+          podPath: 'https://jmartin.inrupt.net/profile/card#me',
           settings: {
             theme: {
               inputText: 'sdk-input',
