@@ -132,8 +132,8 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath: 'https://jcampos.inrupt.net/public/formModel/dateTime.ttl#form1',
-          podPath: 'https://jcampos.inrupt.net/public/data/dates.ttl',
+          modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/string-exactly1.ttl#formRoot',
+          podPath: 'https://khoward.dev.inrupt.net/profile/card#me',
           settings: {
             theme: {
               inputText: 'sdk-input',
