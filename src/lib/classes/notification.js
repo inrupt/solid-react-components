@@ -246,7 +246,7 @@ export class Notification {
 
       const { '@context': context, shape } = this.schema[name];
       // Add local filename as a prefix for cleaner ttl generation
-      const fullContext = { ...context, ':': filePath };
+      const fullContext = { ...context, '': filePath };
 
       /**
        * N3 is an implementation of the RDF.js low-level specification that lets you handle RDF in JavaScript easily.

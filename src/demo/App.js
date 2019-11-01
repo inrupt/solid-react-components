@@ -96,7 +96,8 @@ const App = () => {
       // Discover the inbox url from the resource, using ldp:inbox predicate
       const inboxUrl = await discoverInbox(userWebID);
       // The actor in this case is the current application, so we can use the current URL
-      const actor = window.location.href;
+      // Removing actor temporarily until we figure out how to link applications
+      // const actor = window.location.href;
 
       if (!inboxUrl) {
         throw new Error('Inbox not found');
@@ -106,7 +107,7 @@ const App = () => {
         {
           title: 'Notification Example',
           summary: 'This is a basic solid notification example.',
-          actor
+          actor: 'https://solidsdk.inrupt.net/profile/card#me'
         },
         inboxUrl,
         NotificationTypes.ANNOUNCE
