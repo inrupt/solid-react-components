@@ -69,7 +69,7 @@ const App = () => {
   const init = async () => {
     const formModel = new FormModelClass(
       'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex',
-      'https://jcampos.inrupt.net/public/formModel/book.ttl'
+      'https://jmartin.inrupt.net/profile/card#me'
     );
     const schema = await formModel.parseSchema(
       'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex'
@@ -132,8 +132,7 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath:
-            'https://solidsdk.inrupt.net/private/FormLanguage/Form%20Model/UserProfileFormModel(NoLabels).ttl#formRoot',
+          modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/emails-hardcode.ttl#formRoot',
           podPath: 'https://jmartin.inrupt.net/profile/card#me',
           settings: {
             theme: {
