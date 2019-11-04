@@ -67,17 +67,17 @@ const App = () => {
   });
 
   const init = async () => {
-    /* const formModel = new FormModelClass(
-      'https://jcampos.inrupt.net/public/shex/book.shex',
+    const formModel = new FormModelClass(
+      'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex',
       'https://jcampos.inrupt.net/public/formModel/book.ttl'
     );
     const schema = await formModel.parseSchema(
-      'https://jcampos.inrupt.net/public/shex/book.shex'
+      'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex'
     );
     const formModelOutput = await formModel.parseShEx(schema);
 
     // eslint-disable-next-line no-console
-    console.log(formModelOutput, 'model new'); */
+    console.log(formModelOutput, 'model new');
   };
 
   const createAcl = async () => {
