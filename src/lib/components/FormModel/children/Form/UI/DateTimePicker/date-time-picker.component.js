@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import DatePicker from 'react-datepicker';
 
 import moment from 'moment';
-import { setHours, setMinutes, addDays, addSeconds, parse } from 'date-fns';
 
 import { FormModelConfig } from '@context';
 import { UITypes, FromModelUI } from '@constants';
@@ -53,7 +52,7 @@ const DateTimePicker = React.memo(
     const label = rest[UI_LABEL] || '';
     const type = rest[RDF_TYPE];
 
-    const showTimeSelect = type === UITypes.DateTimePicker || type === UITypes.TimeField || false;
+    const showTimeSelect = type === UITypes.DateTimeField || type === UITypes.TimeField || false;
     const showTimeSelectOnly = type === UITypes.TimeField || false;
     const dateFormat = getDateFormat(type);
 
@@ -91,6 +90,7 @@ const DateTimePicker = React.memo(
     let maxDate;
     let minTime;
     let maxTime;
+    let dateOptions;
 
     /* Transform the incoming values depending on the type of element to display */
     if (type === UITypes.TimeField) {
@@ -98,23 +98,53 @@ const DateTimePicker = React.memo(
       const [minHours, minMinutes] = minValue.split(':');
       const [maxHours, maxMinutes] = maxValue.split(':');
 
-      minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
-      maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
-    } else if (type === UITypes.DateTimePicker) {
-      /* min, max Values are datetimes and offset is in seconds */
-      minDate = parse(minValue) || addSeconds(new Date(), mindatetimeOffset);
-      maxDate = parse(maxValue) || addSeconds(new Date(), maxdatetimeOffset);
-    } else if (type === UITypes.DatePicker) {
-      /* min, max values are dates and offset is in days */
-      minDate = parse(minValue) || addDays(new Date(), mindateOffset);
-      maxDate = parse(maxValue) || addDays(new Date(), maxdateOffset);
-    }
+      minTime = moment()
+        .hours(minHours)
+        .minutes(minMinutes)
+        .toDate();
+      maxTime = moment()
+        .hours(maxHours)
+        .minutes(maxMinutes)
+        .toDate();
 
-    console.log(`type: ${type}`);
-    console.log(`minDate: ${minDate}`);
-    console.log(`maxDate: ${maxDate}`);
-    console.log(`minTime: ${minTime}`);
-    console.log(`maxTime: ${maxTime}`);
+      dateOptions = { minTime, maxTime };
+    }
+    if (type === UITypes.DateTimeField) {
+      /* min, max Values are datetimes and offset is in seconds */
+
+      if (!Number.isNaN(mindatetimeOffset))
+        minDate = moment(new Date())
+          .add(mindatetimeOffset, 'seconds')
+          .toDate();
+      if (!Number.isNaN(maxdatetimeOffset))
+        maxDate = moment(new Date())
+          .add(maxdatetimeOffset, 'seconds')
+          .toDate();
+
+      /* min,maxValue take priority over the offsets if both values are provided */
+      if (minValue) minDate = moment(minValue).toDate();
+      if (maxValue) maxDate = moment(maxValue).toDate();
+
+      dateOptions = { minDate, maxDate };
+    }
+    if (type === UITypes.DateField) {
+      /* min,maxValue are dates and offset is in days */
+
+      if (!Number.isNaN(mindateOffset))
+        minDate = moment(new Date())
+          .add(mindateOffset, 'days')
+          .toDate();
+      if (!Number.isNaN(maxdateOffset))
+        maxDate = moment(new Date())
+          .add(maxdateOffset, 'days')
+          .toDate();
+
+      /* min,maxValue take priority over the offsets if both values are provided */
+      if (minValue) minDate = moment(minValue).toDate();
+      if (maxValue) maxDate = moment(maxValue).toDate();
+
+      dateOptions = { minDate, maxDate };
+    }
 
     return (
       <FormModelConfig.Consumer>
@@ -126,10 +156,7 @@ const DateTimePicker = React.memo(
                 id,
                 selected: selectedDate,
                 onChange,
-                minDate,
-                maxDate,
-                minTime,
-                maxTime,
+                ...dateOptions,
                 onChangeRaw: e => handleChangeRaw(e),
                 className: theme && theme.inputText,
                 onBlur,
