@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
 import { FormModelConfig } from '@context';
-import { UITypes, FromModelUI } from '@constants';
+import { UITypes, FormModelUI } from '@constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -41,7 +41,7 @@ const DateTimePicker = React.memo(
       MAX_DATE_OFFSET,
       MIN_DATETIME_OFFSET,
       MAX_DATETIME_OFFSET
-    } = FromModelUI;
+    } = FormModelUI;
 
     const minValue = rest[MIN_VALUE];
     const maxValue = rest[MAX_VALUE];

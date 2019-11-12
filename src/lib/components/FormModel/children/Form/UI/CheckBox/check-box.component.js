@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormModelConfig } from '@context';
-import { FromModelUI } from '@constants';
+import { FormModelUI } from '@constants';
 
 type Props = {
   formObject: any,
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const CheckBox = ({ id, modifyFormObject, formObject, onSave, autoSave, ...rest }: Props) => {
-  const { UI_VALUE, UI_DEFAULT, UI_LABEL, UI_NAME } = FromModelUI;
+  const { UI_VALUE, UI_DEFAULT, UI_LABEL, UI_NAME } = FormModelUI;
   const valueFromPod = rest[UI_VALUE] ? JSON.parse(rest[UI_VALUE]) : Number(rest[UI_DEFAULT]);
   const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : valueFromPod;
   const label = rest[UI_LABEL] || '';
