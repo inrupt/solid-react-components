@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { n3Helper } from 'solid-forms';
 import unique from 'unique';
+import { SelectWrapper } from './classifier.style';
+import { FormModelConfig } from '@context';
 
 type Props = {
   id: string,
@@ -8,6 +10,7 @@ type Props = {
   retrieveNewFormObject: Function,
   modifyFormObject: Function,
   onSave: Function,
+  onBlur: Function,
   autoSave: boolean,
   formObject: object
 };
@@ -19,10 +22,12 @@ const Classifier = ({
   formObject,
   onSave,
   autoSave,
+  onBlur,
   ...rest
 }: Props) => {
   const [options, setOptions] = useState([]);
   const from = rest['ui:from'] || null;
+  const label = rest['ui:label'] || '';
 
   const init = async () => {
     const values = rest['ui:values'];
@@ -55,15 +60,20 @@ const Classifier = ({
   }, []);
 
   return (
-    <div>
-      <select name={id} onBlur={autoSave && onSave} onChange={onChange} value={actualValue}>
-        {options.map(option => (
-          <option key={unique()} value={option}>
-            {getDropDownLabel(option)}
-          </option>
-        ))}
-      </select>
-    </div>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <SelectWrapper className={theme && theme.inputText}>
+          <label htmlFor={id}>{label}</label>
+          <select name={id} onBlur={onBlur} onChange={onChange} value={actualValue}>
+            {options.map(option => (
+              <option key={unique()} value={option}>
+                {getDropDownLabel(option)}
+              </option>
+            ))}
+          </select>
+        </SelectWrapper>
+      )}
+    </FormModelConfig.Consumer>
   );
 };
 

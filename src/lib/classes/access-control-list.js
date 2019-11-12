@@ -1,6 +1,6 @@
 import { namedNode } from '@rdfjs/data-model';
 import solid from 'solid-auth-client';
-import N3 from 'n3';
+import * as N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
 import { SolidError } from '@utils';

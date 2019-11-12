@@ -3,9 +3,17 @@ import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 import { FormModel as FormModelClass } from 'solid-forms';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader, useNotification, FormModel } from '@lib';
+import {
+  ProviderLogin,
+  Uploader,
+  ProfileUploader,
+  useNotification,
+  FormModel,
+  AutoSaveDefaultSpinner
+} from '@lib';
 import { AccessControlList } from '@classes';
 import { ProfileViewer } from '../lib/components';
+import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -49,22 +57,23 @@ const Header = () => {
 };
 
 const App = () => {
-  const [userInbox, setUserInbox] = useState('');
-  const webId = useWebId();
-  const { notification, createNotification } = useNotification(webId);
+  const [userWebID, setUserWebID] = useState('');
 
-  const onChange = useCallback((event: Event) => {
+  const webId = useWebId();
+  const { notification, createNotification, discoverInbox } = useNotification(webId);
+
+  const onWebIDChange = useCallback((event: Event) => {
     const { target } = event;
-    setUserInbox(target.value);
+    setUserWebID(target.value);
   });
 
   const init = async () => {
     const formModel = new FormModelClass(
-      'https://jmartin.inrupt.net/public/shapes/book.shex',
-      'https://jcampos.inrupt.net/public/formModel/book.ttl#formRoot'
+      'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex',
+      'https://jmartin.inrupt.net/profile/card#me'
     );
     const schema = await formModel.parseSchema(
-      'https://jmartin.inrupt.net/public/shapes/book.shex'
+      'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex'
     );
     const formModelOutput = await formModel.parseShEx(schema);
 
@@ -80,6 +89,33 @@ const App = () => {
       const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
       const aclInstance = new AccessControlList(webId, documentURI);
       await aclInstance.createACL(permissions);
+    }
+  };
+
+  const sendSampleNotification = async () => {
+    try {
+      // Discover the inbox url from the resource, using ldp:inbox predicate
+      const inboxUrl = await discoverInbox(userWebID);
+      // The actor in this case is the current application, so we can use the current URL
+      // Removing actor temporarily until we figure out how to link applications
+      // const actor = window.location.href;
+
+      if (!inboxUrl) {
+        throw new Error('Inbox not found');
+      }
+
+      createNotification(
+        {
+          title: 'Notification Example',
+          summary: 'This is a basic solid notification example.',
+          actor: 'https://solidsdk.inrupt.net/profile/card#me'
+        },
+        inboxUrl,
+        NotificationTypes.ANNOUNCE
+      );
+    } catch (ex) {
+      // eslint-disable-next-line no-console
+      console.log(ex);
     }
   };
 
@@ -113,18 +149,19 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath:
-            'https://solidsdk.inrupt.net/private/FormLanguage/Form%20Model/UserProfileFormModel(NoLabels).ttl#formRoot',
+          modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/emails-hardcode.ttl#formRoot',
           podPath: 'https://jmartin.inrupt.net/profile/card#me',
           settings: {
             theme: {
               inputText: 'sdk-input',
               inputCheckbox: 'sdk-checkbox'
-            }
+            },
+            savingComponent: AutoSaveDefaultSpinner
           },
+          viewer: false,
           onError: error => {
             // eslint-disable-next-line no-console
-            console.log(error);
+            console.log(error, 'error');
           },
           onSuccess: success => {
             // eslint-disable-next-line no-console
@@ -144,6 +181,7 @@ const App = () => {
           }
         }}
         autoSave
+        liveUpdate
       />
       <Uploader
         {...{
@@ -163,27 +201,15 @@ const App = () => {
         }}
       />
       <NotificationSection>
-        <h3>Create notification example using your inbox</h3>
+        <h3>Create notification example using a WebID or Resource path</h3>
         <input
           type="text"
-          placeholder="Inbox Path"
-          name="userInbox"
-          onChange={onChange}
-          value={userInbox}
+          placeholder="WebID or Resource"
+          name="userWebID"
+          onChange={onWebIDChange}
+          value={userWebID}
         />
-        <button
-          type="button"
-          disabled={!userInbox}
-          onClick={() =>
-            createNotification(
-              {
-                title: 'Notification Example',
-                summary: 'This is a basic solid notification example.'
-              },
-              userInbox
-            )
-          }
-        >
+        <button type="button" disabled={!userWebID} onClick={sendSampleNotification}>
           Create notification
         </button>
       </NotificationSection>

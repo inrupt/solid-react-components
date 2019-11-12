@@ -1,5 +1,5 @@
 import solid from 'solid-auth-client';
-import N3 from 'n3';
+import * as N3 from 'n3';
 
 /**
  * class to handle app permissions into the pod.

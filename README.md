@@ -2,7 +2,9 @@
 
 React components for building your own [Solid](https://solid.inrupt.com/") applications. Part of the [React SDK for Solid](https://github.com/inrupt-inc/solid-react-sdk).
 
-## External Dependencies
+## Dependencies
+
+The following is a list of some of the major dependencies of the solid-react-components library. These packages are all installed as part of the `npm install` step of setup. 
 
 1.  [solid-auth-client](https://github.com/solid/solid-auth-client) - Solid authentication library.
 2.  [ldflex-for-solid](https://github.com/solid/query-ldflex) - Solid library to read and manipulate data.
@@ -102,12 +104,12 @@ The component will check to see if the user is logged in, using the withWebId co
 
 In Solid, people are identified by a WebID, which is essentially a URL link that points to them and leads to their data.
 
-By wrapping your component definition with withWebId, the WebID property will automatically be set on your component's instances whenever the login status changes.
+By wrapping your component definition with withWebId, the `webId` property will automatically be set on your component's instances whenever the login status changes.
 
 We re-expose this component from [@solid/react](https://github.com/solid/react-components) library.
 
 ```javascript
-const MyComponent = withWebId(props => <p>Hey user, your WebID is {props.webID}.</p>);
+const MyComponent = withWebId(props => <p>Hey user, your WebID is {props.webId}.</p>);
 ```
 
 ### withAuthorization
