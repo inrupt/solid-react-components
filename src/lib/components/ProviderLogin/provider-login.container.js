@@ -85,7 +85,12 @@ export default class LoginComponent extends Component<Props> {
         storage: localStorage
       });
 
-      if (!session) {
+      /**
+       * This condition checks if the session is null or undefined, we can have those 2 kind of values in return
+       * Null would be the validation for the non existing pod provider
+       * undefined will be session doesn't existing and/or the request is still pending
+       */
+      if (!session && session === null) {
         throw new SolidError(errorsText.unknown, 'unknown');
       }
       return session;
@@ -96,10 +101,7 @@ export default class LoginComponent extends Component<Props> {
       if (onError) {
         onError(error);
       }
-      // Show form error messsage when idp is null
-      if (error.name !== 'unknown') {
-        this.setState({ error });
-      }
+      this.setState({ error });
     }
   };
 
