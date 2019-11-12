@@ -18,6 +18,7 @@ import {
   FormModel,
   AutoSaveDefaultSpinner
 } from '@components';
+import { NotificationTypes } from '@constants';
 
 import { useNotification } from '@hooks';
 
@@ -42,5 +43,6 @@ export {
   AccessControlList,
   AppPermission,
   FormModel,
-  AutoSaveDefaultSpinner
+  AutoSaveDefaultSpinner,
+  NotificationTypes
 };

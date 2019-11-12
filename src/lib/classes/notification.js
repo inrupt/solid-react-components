@@ -1,7 +1,7 @@
 import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
-import { solidResponse, SolidError, getBasicPod } from '@utils';
+import { solidResponse, SolidError, getBasicPod, shexUtil } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import { NotificationTypes } from '@constants';
@@ -218,7 +218,7 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (content = {}, to, type, options = {}) => {
+  create = async (content = {}, to, type, license, options = {}) => {
     try {
       const currentShape = this.buildShapeObject(options && options.shape);
       const { name, shape: defaultShape } = currentShape;
@@ -230,9 +230,13 @@ export class Notification {
 
       // This should be in a constant, but we may shift to use solid/context instead
       const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+      const licenseType = 'http://schema.org/license';
 
       // If a type has not been set, default to Announce type
       const notificationType = type || NotificationTypes.ANNOUNCE;
+
+      // If a license has not been set, default to the CC license
+      const licenseLink = license || 'https://creativecommons.org/licenses/by-sa/4.0/';
 
       if (!this.schema || (this.schema && !this.schema[name])) {
         /**
@@ -261,6 +265,9 @@ export class Notification {
 
       // Add the notification type to the node
       writer.addQuad(namedNode(filePath), namedNode(rdfType), namedNode(notificationType));
+
+      // Add the license to the node
+      writer.addQuad(namedNode(filePath), namedNode(licenseType), namedNode(licenseLink));
 
       shape.forEach(item => {
         if (item.property && item.property.includes(':')) {
@@ -292,7 +299,7 @@ export class Notification {
             } else {
               switch (item.datatype) {
                 case 'datetime':
-                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}datetime`));
+                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}dateTime`));
                   break;
                 case 'boolean':
                   typedValue = literal(value, namedNode(`${PREFIXES.xsd}boolean`));
@@ -444,15 +451,27 @@ export class Notification {
         }
 
         /**
+         * Validate the list of notification IRIs and return a list of valid ones
+         */
+        const coreNotificationShape =
+          'https://shexshapes.inrupt.net/public/notifications/core-notification.shex';
+        const validNotificationPaths = await shexUtil.validateList(
+          notificationPaths,
+          coreNotificationShape
+        );
+
+        /**
          * Get notifications files from contains links
          */
-        for await (const path of notificationPaths) {
+        for await (const path of validNotificationPaths) {
+          // let isValid = true;
           const turtleNotification = await solidLDflex[path];
           const id = path
             .split('/')
             .pop()
             .split('.')[0];
           let notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
+
           /**
            * Run over the shape schema to build notification object
            */

@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.4.4-rc.28",
+  "version": "0.4.4-notification.2",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
@@ -51,6 +51,7 @@
     "@babel/runtime": "^7.1.2",
     "@rdfjs/data-model": "^1.1.1",
     "@shexjs/core": "^1.0.0-alpha.4",
+    "@shexjs/loader": "^1.0.0-alpha.5",
     "@shexjs/parser": "^1.0.0-alpha.4",
     "@solid/query-ldflex": "^2.6.0",
     "@solid/react": "^1.8.0",
@@ -67,6 +68,7 @@
     "react-datepicker": "^2.9.6",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.2.0",
+    "request-promise": "^4.2.5",
     "solid-auth-client": "^2.3.0",
     "solid-forms": "0.0.4-debug",
     "unique": "0.0.1",

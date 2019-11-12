@@ -65,7 +65,7 @@ export const useNotification = owner => {
         if (notify) {
           let notificationList = await notify.fetch(inboxes);
           notificationList = notificationList.sort(
-            (a, b) => new Date(b.datetime) - new Date(a.datetime)
+            (a, b) => new Date(b.published) - new Date(a.published)
           );
 
           // TODO: Filter the notification list by which pass a shex.js validation

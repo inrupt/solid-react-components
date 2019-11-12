@@ -2,6 +2,9 @@
 import ldflex from '@solid/query-ldflex';
 import { namedNode } from '@rdfjs/data-model';
 import unique from 'unique-string';
+import solid from 'solid-auth-client';
+import { Validator, Util } from '@shexjs/core';
+import Loader from '@shexjs/loader';
 
 /**
  * Cache timestamp seed to avoid issues on build form
@@ -295,6 +298,43 @@ const cleanValue = (value: String) => {
 };
 
 /**
+ * Takes a list of notification IRIs and uses ShEx to validate the notifications
+ * are compatible with the the core notification shape
+ * @param paths
+ * @returns {Promise<Array>}
+ */
+const validateList = async (paths, shape) => {
+  /**
+   * A temporary hack to replace the fetch method with the solid-specific solid-auth-client version
+   * This is necessary until the ShEx Validator either uses the solid-auth-client fetch
+   * or allows us to pass in authorization headers or a fetcher
+   */
+  window.fetch = solid.fetch;
+
+  const validPaths = [];
+
+  // Load the notification shape using the ShEx Loader
+  await Loader.load([shape], [], paths, []).then(loaded => {
+    // Once the shape and paths are loaded, construct a validator from the loaded schema
+    const db = Util.makeN3DB(loaded.data);
+    const validator = Validator.construct(loaded.schema, { results: 'api' });
+
+    // Loop over each notification found and attempt to validate it against the core notification shape
+    paths.forEach(path => {
+      const result = validator.validate(db, [{ node: path, shape: Validator.start }]);
+      if (result && result.length > 0) {
+        // If the result is a success and the shape matches the data, add it to an array
+        if (result.filter(r => r.status === 'conformant').length > 0) {
+          validPaths.push(path);
+        }
+      }
+    });
+  });
+  // Return a list of the valid notification paths
+  return validPaths;
+};
+
+/**
  * Add field value prefix to send over POD
  * @param value
  * @param prefix
@@ -318,5 +358,6 @@ export {
   renderFieldValue,
   cleanValue,
   setFieldValue,
-  createField
+  createField,
+  validateList
 };
