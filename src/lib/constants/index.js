@@ -44,14 +44,18 @@ export const InputTextTypes = {
   'http://www.w3.org/ns/ui#IntegerField': 'number'
 };
 
-export const FromModelUI = {
+export const FormModelUI = {
   UI_VALUE: 'ui:value',
   UI_LABEL: 'ui:label',
   UI_NAME: 'ui:name',
   UI_DEFAULT: 'ui:default',
   RDF_TYPE: 'rdf:type',
   MIN_VALUE: 'ui:minValue',
-  MAX_VALUE: 'ui:maxValue'
+  MAX_VALUE: 'ui:maxValue',
+  MAX_DATE_OFFSET: 'ui:maxdateOffset',
+  MIN_DATE_OFFSET: 'ui:mindateOffset',
+  MAX_DATETIME_OFFSET: 'ui:maxdatetimeOffset',
+  MIN_DATETIME_OFFSET: 'ui:mindatetimeOffset'
 };
 
 export const NotificationTypes = {
