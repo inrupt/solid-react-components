@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.4.4-notification.2",
+  "version": "0.4.4-test.1",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/Inrupt-inc/solid-react-components"
   },
-  "homepage": "https://solid.inrupt.com/docs",
+  "homepage": "https://solidproject.org",
   "contributors": [
     {
       "name": "Justin Bingham",
@@ -35,20 +35,29 @@
     },
     {
       "name": "Pablo Rodriguez",
-      "email": "pablo.rodriguez@janeirodigital.com"
+      "email": ""
     },
     {
       "name": "Jairo Campos",
-      "email": "jairo.campos@janeirodigital.com"
+      "email": ""
     },
     {
       "name": "Arne Hassel",
       "email": "arneh@inrupt.com"
+    },
+    {
+      "name": "Angel Araya",
+      "email": "angel.araya@janeirodigital.com"
+    },
+    {
+      "name": "Eliamar Agüero",
+      "email": "eliamar.aguero@janeirodigital.com"
     }
   ],
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
+    "@inrupt/solid-sdk-forms": "0.0.1-dev.0",
     "@rdfjs/data-model": "^1.1.1",
     "@shexjs/core": "^1.0.0-alpha.4",
     "@shexjs/loader": "^1.0.0-alpha.5",
@@ -70,7 +79,6 @@
     "react-select": "^2.2.0",
     "request-promise": "^4.2.5",
     "solid-auth-client": "^2.3.0",
-    "solid-forms": "0.0.4-debug",
     "unique": "0.0.1",
     "unique-string": "^1.0.0"
   },
