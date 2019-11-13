@@ -95,6 +95,8 @@ export default class LoginComponent extends Component<Props> {
       // Error callback for custom error handling
       if (onError) {
         onError(error);
+      } else {
+        window.alert(error.message);
       }
       // Show form error messsage when idp is null
       if (error.name !== 'unknown') {
