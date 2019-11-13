@@ -34,6 +34,19 @@ In our library, a component consists of two major pieces: A _Container Component
 
 This pattern is typically referred to as _Presentational and Container Components_.
 
+## Development
+
+This library is currently in a temporary state on the develop branch (which will be the default after you `git clone`),
+so you need to:
+```sh
+git clone https://github.com/inrupt/solid-react-components
+cd solid-react-components
+git checkout master
+npm install
+npm start
+```
+After that, you can work on these components as you would with any other React components library.
+
 ## What makes a good Component?
 
 A good component is reusable. It should be versatile and support a range of applicable use cases. Typically, this means it contains its own data management and/or takes a set or props that are used internally.
