@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { n3Helper } from 'solid-forms';
+import { n3Helper } from '@inrupt/solid-sdk-forms';
 import unique from 'unique';
 import { SelectWrapper } from './classifier.style';
 import { FormModelConfig } from '@context';

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, memo, Fragment } from 'react';
 import { useLiveUpdate } from '@solid/react';
-import { FormActions, formUi } from 'solid-forms';
+import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
 import { FormModelConfig } from '@context';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { solidResponse, SolidError } from '@utils';
@@ -48,6 +48,7 @@ const FormModel = memo(
     const [formObject, setFormObject] = useState({});
     const [newUpdate, setNewUpdate] = useState(false);
     const formActions = new FormActions(formModel, formObject);
+
     const { timestamp } = useLiveUpdate();
     const { languageTheme } = settings;
 
@@ -114,13 +115,15 @@ const FormModel = memo(
           let updatedFormObject = null;
 
           /*
-          Checks if an update happened in the podPath document while the form was being updated   
+          Checks if an update happened in the podPath document while the form was being updated
           */
           if (newUpdate) {
             updatedFormObject = await formUi.mapFormObjectWidthData(formObject, podPath);
           }
 
+          console.log(updatedFormObject);
           const updatedFormModel = await formActions.saveData(updatedFormObject);
+          console.log('saved');
 
           setNewUpdate(false);
           setFormModel(updatedFormModel);
