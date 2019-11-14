@@ -36,12 +36,10 @@ This pattern is typically referred to as _Presentational and Container Component
 
 ## Development
 
-This library is currently in a temporary state on the develop branch (which will be the default after you `git clone`),
-so you need to:
+As of November 2019 this library is in a temporary state on the develop branch (which will be the default after you `git clone`), so please make your pull requests against that branch, and not against master. You need to:
 ```sh
 git clone https://github.com/inrupt/solid-react-components
 cd solid-react-components
-git checkout master
 npm install
 npm start
 ```
