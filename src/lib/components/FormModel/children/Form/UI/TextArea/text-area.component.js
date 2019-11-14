@@ -38,14 +38,11 @@ const TextArea = ({
   ...rest
 }: Props) => {
   const name = '';
-  const inputName = inputData && inputData.name;
   const defaultValue = fieldData && fieldData._formFocus.value;
-  const currentValue = inputData && inputData.value;
   const disabled = inputData && inputData.disabled;
 
   const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
   const onChange = ({ target }) => {
-    value = target.value;
     const obj = { value: target.value, ...rest };
     modifyFormObject(id, obj);
   };
@@ -53,7 +50,7 @@ const TextArea = ({
     <label htmlFor={name}>
       <textarea
         id={name}
-        value={value}
+        value={actualValue}
         onChange={onChange}
         disable={disabled}
         data-predicate={predicate}

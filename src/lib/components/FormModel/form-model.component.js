@@ -118,12 +118,10 @@ const FormModel = memo(
           Checks if an update happened in the podPath document while the form was being updated
           */
           if (newUpdate) {
-            updatedFormObject = await formUi.mapFormObjectWidthData(formObject, podPath);
+            updatedFormObject = await formUi.mapFormObjectWithData(formObject, podPath);
           }
 
-          console.log(updatedFormObject);
           const updatedFormModel = await formActions.saveData(updatedFormObject);
-          console.log('saved');
 
           setNewUpdate(false);
           setFormModel(updatedFormModel);
