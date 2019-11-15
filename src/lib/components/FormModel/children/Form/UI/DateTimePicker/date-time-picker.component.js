@@ -54,7 +54,6 @@ const DateTimePicker = React.memo(
 
     const showTimeSelect = type === UITypes.DateTimeField || type === UITypes.TimeField || false;
     const showTimeSelectOnly = type === UITypes.TimeField || false;
-    const dateFormat = getDateFormat(type);
 
     const updateDate = useCallback(() => {
       const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
@@ -65,21 +64,15 @@ const DateTimePicker = React.memo(
     }, [formObject]);
 
     const onChange = useCallback(date => {
-      const obj = { value: date.toString(), ...rest };
+      let obj = {};
+
+      /* User wants to remove the date */
+      if (!date) obj = { value: '', ...rest };
+      else obj = { value: date.toString(), ...rest };
 
       modifyFormObject(id, obj);
       setDate(date);
     });
-
-    const handleChangeRaw = useCallback(
-      date => {
-        const s = document.getElementById(id);
-        s.value = moment(date.target.value).format(dateFormat);
-
-        setInvalid(s.value);
-      },
-      [value, formObject]
-    );
 
     useEffect(() => {
       updateDate();
@@ -157,12 +150,10 @@ const DateTimePicker = React.memo(
                 selected: selectedDate,
                 onChange,
                 ...dateOptions,
-                onChangeRaw: e => handleChangeRaw(e),
                 className: theme && theme.inputText,
                 onBlur,
                 showTimeSelect,
-                showTimeSelectOnly,
-                dateFormat
+                showTimeSelectOnly
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
