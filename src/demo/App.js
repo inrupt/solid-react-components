@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
-import { FormModel as FormModelClass } from 'solid-forms';
+// import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
 import SolidImg from '../assets/solid_logo.png';
 import {
   ProviderLogin,
@@ -68,7 +68,7 @@ const App = () => {
   });
 
   const init = async () => {
-    const formModel = new FormModelClass(
+    /* const formModel = new FormModelClass(
       'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex',
       'https://jmartin.inrupt.net/profile/card#me'
     );
@@ -78,7 +78,7 @@ const App = () => {
     const formModelOutput = await formModel.parseShEx(schema);
 
     // eslint-disable-next-line no-console
-    console.log(formModelOutput, 'model new');
+    console.log(formModelOutput, 'model new'); */
   };
 
   const createAcl = async () => {
@@ -149,7 +149,7 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/emails-hardcode.ttl#formRoot',
+          modelPath: 'https://jmartin.inrupt.net/public/shapes/multiline.ttl#formRoot',
           podPath: 'https://jmartin.inrupt.net/profile/card#me',
           settings: {
             theme: {
