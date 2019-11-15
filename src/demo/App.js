@@ -154,7 +154,7 @@ const App = () => {
           settings: {
             theme: {
               inputText: 'sdk-input',
-              inputCheckbox: 'sdk-checkbox'
+              inputCheckbox: 'sdk-checkbox checkbox'
             },
             savingComponent: AutoSaveDefaultSpinner
           },
