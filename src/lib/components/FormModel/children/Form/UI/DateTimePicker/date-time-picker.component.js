@@ -5,32 +5,11 @@ import moment from 'moment';
 
 import { FormModelConfig } from '@context';
 import { UITypes, FormModelUI } from '@constants';
+import { getLocale } from '@utils';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { ErrorMessage } from './date-time.styles';
-
-const getDateFormat = type => {
-  let format = '';
-
-  switch (type) {
-    case UITypes.DateTimePicker:
-      format = 'MM/dd/yyyy hh:mm:ss';
-      break;
-    case UITypes.TimeField:
-      format = 'hh:mm:ss';
-      break;
-    default:
-      format = 'MM/dd/yyyy';
-  }
-
-  return format;
-};
-
-const getLang: string = () => {
-  if (navigator.languages !== undefined) return navigator.languages[0];
-  return navigator.language ? navigator.language : 'en-US';
-};
 
 const DateTimePicker = React.memo(
   ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
@@ -154,7 +133,7 @@ const DateTimePicker = React.memo(
                 onChange,
                 className: theme && theme.inputText,
                 onBlur,
-                locale: getLang()
+                locale: getLocale()
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
