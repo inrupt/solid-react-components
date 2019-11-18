@@ -15,6 +15,11 @@ const getFileName = path => {
   return path.replace(/^.*[\\\/]/, '');
 };
 
+const getLocale = () => {
+  if (navigator.languages !== undefined) return navigator.languages[0];
+  return navigator.language ? navigator.language : 'en-US';
+};
+
 export {
   shexUtil,
   SolidError,
@@ -25,5 +30,6 @@ export {
   fetchLdflexDocument,
   ShexFormValidator,
   getFileName,
-  getBasicPod
+  getBasicPod,
+  getLocale
 };

@@ -5,27 +5,11 @@ import moment from 'moment';
 
 import { FormModelConfig } from '@context';
 import { UITypes, FormModelUI } from '@constants';
+import { getLocale } from '@utils';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { ErrorMessage } from './date-time.styles';
-
-const getDateFormat = type => {
-  let format = '';
-
-  switch (type) {
-    case UITypes.DateTimePicker:
-      format = 'MM/dd/yyyy hh:mm:ss';
-      break;
-    case UITypes.TimeField:
-      format = 'hh:mm:ss';
-      break;
-    default:
-      format = 'MM/dd/yyyy';
-  }
-
-  return format;
-};
 
 const DateTimePicker = React.memo(
   ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
@@ -52,9 +36,6 @@ const DateTimePicker = React.memo(
     const label = rest[UI_LABEL] || '';
     const type = rest[RDF_TYPE];
 
-    const showTimeSelect = type === UITypes.DateTimeField || type === UITypes.TimeField || false;
-    const showTimeSelectOnly = type === UITypes.TimeField || false;
-
     const updateDate = useCallback(() => {
       const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
 
@@ -68,7 +49,7 @@ const DateTimePicker = React.memo(
 
       /* User wants to remove the date */
       if (!date) obj = { value: '', ...rest };
-      else obj = { value: date.toString(), ...rest };
+      else obj = { value: date.toUTCString(), ...rest };
 
       modifyFormObject(id, obj);
       setDate(date);
@@ -100,7 +81,7 @@ const DateTimePicker = React.memo(
         .minutes(maxMinutes)
         .toDate();
 
-      dateOptions = { minTime, maxTime };
+      dateOptions = { minTime, maxTime, dateFormat: 'p', showTimeSelectOnly: true };
     }
     if (type === UITypes.DateTimeField) {
       /* min, max Values are datetimes and offset is in seconds */
@@ -118,7 +99,7 @@ const DateTimePicker = React.memo(
       if (minValue) minDate = moment(minValue).toDate();
       if (maxValue) maxDate = moment(maxValue).toDate();
 
-      dateOptions = { minDate, maxDate };
+      dateOptions = { minDate, maxDate, dateFormat: 'Pp', showTimeSelect: true };
     }
     if (type === UITypes.DateField) {
       /* min,maxValue are dates and offset is in days */
@@ -136,7 +117,7 @@ const DateTimePicker = React.memo(
       if (minValue) minDate = moment(minValue).toDate();
       if (maxValue) maxDate = moment(maxValue).toDate();
 
-      dateOptions = { minDate, maxDate };
+      dateOptions = { minDate, maxDate, dateFormat: 'P' };
     }
 
     return (
@@ -147,13 +128,12 @@ const DateTimePicker = React.memo(
             <DatePicker
               {...{
                 id,
+                ...dateOptions,
                 selected: selectedDate,
                 onChange,
-                ...dateOptions,
                 className: theme && theme.inputText,
                 onBlur,
-                showTimeSelect,
-                showTimeSelectOnly
+                locale: getLocale()
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
