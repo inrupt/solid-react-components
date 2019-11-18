@@ -100,7 +100,7 @@ const DateTimePicker = React.memo(
         .minutes(maxMinutes)
         .toDate();
 
-      dateOptions = { minTime, maxTime };
+      dateOptions = { minTime, maxTime, timeFormat: 'p', showTimeSelectOnly };
     }
     if (type === UITypes.DateTimeField) {
       /* min, max Values are datetimes and offset is in seconds */
@@ -118,7 +118,7 @@ const DateTimePicker = React.memo(
       if (minValue) minDate = moment(minValue).toDate();
       if (maxValue) maxDate = moment(maxValue).toDate();
 
-      dateOptions = { minDate, maxDate };
+      dateOptions = { minDate, maxDate, timeFormat: 'p', showTimeSelect };
     }
     if (type === UITypes.DateField) {
       /* min,maxValue are dates and offset is in days */
@@ -139,6 +139,11 @@ const DateTimePicker = React.memo(
       dateOptions = { minDate, maxDate };
     }
 
+    const getLang: string = () => {
+      if (navigator.languages !== undefined) return navigator.languages[0];
+      return navigator.language ? navigator.language : 'en-US';
+    };
+
     return (
       <FormModelConfig.Consumer>
         {({ theme }) => (
@@ -147,13 +152,12 @@ const DateTimePicker = React.memo(
             <DatePicker
               {...{
                 id,
+                ...dateOptions,
                 selected: selectedDate,
                 onChange,
-                ...dateOptions,
                 className: theme && theme.inputText,
                 onBlur,
-                showTimeSelect,
-                showTimeSelectOnly
+                locale: getLang()
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
