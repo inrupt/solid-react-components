@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 
 import moment from 'moment';
+import * as locales from 'date-fns/locale';
 
 import { FormModelConfig } from '@context';
 import { UITypes, FormModelUI } from '@constants';
@@ -120,6 +121,9 @@ const DateTimePicker = React.memo(
       dateOptions = { minDate, maxDate, dateFormat: 'P' };
     }
 
+    const locale = getLocale();
+    registerLocale(locale, locales[getLocale()]);
+
     return (
       <FormModelConfig.Consumer>
         {({ theme }) => (
@@ -133,7 +137,7 @@ const DateTimePicker = React.memo(
                 onChange,
                 className: theme && theme.inputText,
                 onBlur,
-                locale: getLocale()
+                locale
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
