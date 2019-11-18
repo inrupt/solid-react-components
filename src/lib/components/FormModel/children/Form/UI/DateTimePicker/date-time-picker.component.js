@@ -70,15 +70,10 @@ const DateTimePicker = React.memo(
 
       /* User wants to remove the date */
       if (!date) obj = { value: '', ...rest };
-      else obj = { value: date.toString(), ...rest };
+      else obj = { value: date.toUTCString(), ...rest };
 
       modifyFormObject(id, obj);
       setDate(date);
-
-      // eslint-disable-next-line no-console
-      console.log(`selected date: ${date.toUTCString()}`);
-      // eslint-disable-next-line no-console
-      console.log(`locale: ${getLang()}`);
     });
 
     useEffect(() => {
