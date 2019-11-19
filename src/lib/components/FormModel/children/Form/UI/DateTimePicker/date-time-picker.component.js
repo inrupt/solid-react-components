@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 
-import moment from 'moment';
+import { addDays, addSeconds, setHours, setMinutes } from 'date-fns';
+import * as locales from 'date-fns/locale';
 
 import { FormModelConfig } from '@context';
 import { UITypes, FormModelUI } from '@constants';
@@ -72,53 +73,47 @@ const DateTimePicker = React.memo(
       const [minHours, minMinutes] = minValue.split(':');
       const [maxHours, maxMinutes] = maxValue.split(':');
 
-      minTime = moment()
-        .hours(minHours)
-        .minutes(minMinutes)
-        .toDate();
-      maxTime = moment()
-        .hours(maxHours)
-        .minutes(maxMinutes)
-        .toDate();
+      minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
+      maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
 
       dateOptions = { minTime, maxTime, dateFormat: 'p', showTimeSelectOnly: true };
     }
     if (type === UITypes.DateTimeField) {
       /* min, max Values are datetimes and offset is in seconds */
 
-      if (!Number.isNaN(mindatetimeOffset))
-        minDate = moment(new Date())
-          .add(mindatetimeOffset, 'seconds')
-          .toDate();
-      if (!Number.isNaN(maxdatetimeOffset))
-        maxDate = moment(new Date())
-          .add(maxdatetimeOffset, 'seconds')
-          .toDate();
+      if (!Number.isNaN(mindatetimeOffset)) minDate = addSeconds(new Date(), mindatetimeOffset);
+
+      if (!Number.isNaN(maxdatetimeOffset)) maxDate = addSeconds(new Date(), maxdatetimeOffset);
 
       /* min,maxValue take priority over the offsets if both values are provided */
-      if (minValue) minDate = moment(minValue).toDate();
-      if (maxValue) maxDate = moment(maxValue).toDate();
+      if (minValue) minDate = new Date(minValue);
+      if (maxValue) maxDate = new Date(maxValue);
 
       dateOptions = { minDate, maxDate, dateFormat: 'Pp', showTimeSelect: true };
     }
     if (type === UITypes.DateField) {
       /* min,maxValue are dates and offset is in days */
 
-      if (!Number.isNaN(mindateOffset))
-        minDate = moment(new Date())
-          .add(mindateOffset, 'days')
-          .toDate();
-      if (!Number.isNaN(maxdateOffset))
-        maxDate = moment(new Date())
-          .add(maxdateOffset, 'days')
-          .toDate();
+      if (!Number.isNaN(mindateOffset)) minDate = addDays(new Date(), mindateOffset);
+      if (!Number.isNaN(maxdateOffset)) maxDate = addDays(new Date(), maxdateOffset);
 
       /* min,maxValue take priority over the offsets if both values are provided */
-      if (minValue) minDate = moment(minValue).toDate();
-      if (maxValue) maxDate = moment(maxValue).toDate();
+      if (minValue) minDate = new Date(minValue);
+      if (maxValue) maxDate = new Date(maxValue);
 
       dateOptions = { minDate, maxDate, dateFormat: 'P' };
     }
+
+    /* transform the browser  locale code to match the date-fns format */
+    let locale = getLocale().split('-');
+    if (locale[2]) {
+      locale[2] = locale[2].toUpperCase();
+      locale = `${locale[0]}${locale[2]}`;
+    } else {
+      locale = `${locale[0]}`;
+    }
+
+    registerLocale(locale, locales[locale]);
 
     return (
       <FormModelConfig.Consumer>
@@ -133,7 +128,7 @@ const DateTimePicker = React.memo(
                 onChange,
                 className: theme && theme.inputText,
                 onBlur,
-                locale: getLocale()
+                locale
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
