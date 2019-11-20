@@ -76,7 +76,13 @@ const DateTimePicker = React.memo(
       minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
       maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
 
-      dateOptions = { minTime, maxTime, dateFormat: 'p', showTimeSelectOnly: true };
+      dateOptions = {
+        minTime,
+        maxTime,
+        dateFormat: 'p',
+        showTimeSelect: true,
+        showTimeSelectOnly: true
+      };
     }
     if (type === UITypes.DateTimeField) {
       /* min, max Values are datetimes and offset is in seconds */
@@ -104,7 +110,9 @@ const DateTimePicker = React.memo(
       dateOptions = { minDate, maxDate, dateFormat: 'P' };
     }
 
-    /* transform the browser  locale code to match the date-fns format */
+    /* transform the browser  locale code to match the date-fns format
+       browser format samples: 'es', 'en-US', 'en-GB'
+       date-fns format samples: 'es', 'enUS', 'enGB' */
     let locale = getLocale().split('-');
     if (locale[2]) {
       locale[2] = locale[2].toUpperCase();
