@@ -239,6 +239,24 @@ LanguageTheme object:
 
 A set of example shapes can be found [here](https://shexshapes.inrupt.net/public/), which show various ShEx shapes.
 
+### ShexForm, FormModel
+See https://github.com/inrupt/solid-react-components#shexformbuilder
+
+### LiveUpdate, useLiveUpdate
+See https://github.com/solid/react-components#automatically-refresh-when-data-is-updated
+
+### useWebId
+See https://github.com/solid/react-components#identify-the-user
+
+### Image
+See https://github.com/solid/react-components#load-data-from-the-user-and-from-the-web
+
+### UpdateContext
+See https://github.com/solid/react-components/blob/master/src/UpdateContext.js
+
+### AutoSaveDefaultSpinner
+A spinner for letting the user know when a form field was auto-saved.
+
 ## Class List
 
 Included in this library are a series of helper classes to make certain functionality easier for Solid developers. Each of these classes covers a specific functional area.
