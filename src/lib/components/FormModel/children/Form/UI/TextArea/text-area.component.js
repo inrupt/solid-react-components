@@ -1,4 +1,7 @@
 import React from 'react';
+import { FormModelConfig } from '@context';
+
+import { TextAreaGroup } from './text-area.styles';
 
 type Props = {
   id: String,
@@ -37,7 +40,9 @@ const TextArea = ({
   value,
   ...rest
 }: Props) => {
-  const name = '';
+  const label = rest['ui:label'] || '';
+  const name = rest['ui:name'] || '';
+  const maxLength = rest['ui:maxLength'] || 10000;
   const defaultValue = fieldData && fieldData._formFocus.value;
   const disabled = inputData && inputData.disabled;
 
@@ -47,22 +52,31 @@ const TextArea = ({
     modifyFormObject(id, obj);
   };
   return (
-    <label htmlFor={name}>
-      <textarea
-        id={name}
-        value={actualValue}
-        onChange={onChange}
-        disable={disabled}
-        data-predicate={predicate}
-        data-subject={fieldData && fieldData._formFocus.parentSubject}
-        data-default={defaultValue}
-        data-parent-predicate={parentPredicate}
-        data-valuexpr={JSON.stringify(valueExpr)}
-        data-parent-subject={parentSubject}
-        data-parent-name={parent && parent._formFocus ? parent._formFocus.name : null}
-        onBlur={onBlur}
-      />
-    </label>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <TextAreaGroup className={theme && theme.inputTextArea}>
+          <label htmlFor={name}>
+            {label}
+            <textarea
+              id={name}
+              name={name}
+              value={actualValue}
+              onChange={onChange}
+              disabled={disabled}
+              maxLength={maxLength}
+              data-predicate={predicate}
+              data-subject={fieldData && fieldData._formFocus.parentSubject}
+              data-default={defaultValue}
+              data-parent-predicate={parentPredicate}
+              data-valuexpr={JSON.stringify(valueExpr)}
+              data-parent-subject={parentSubject}
+              data-parent-name={parent && parent._formFocus ? parent._formFocus.name : null}
+              onBlur={onBlur}
+            />
+          </label>
+        </TextAreaGroup>
+      )}
+    </FormModelConfig.Consumer>
   );
 };
 
