@@ -1,0 +1,31 @@
+import { parseInitialValue } from './datetimes';
+import { UITypes } from '@constants';
+
+describe('Parser should return the expected values', () => {
+  const time = '19:00:34';
+  const date = '2012-12-12';
+  const dateTime = '2019-11-29T04:00:00.000Z';
+
+  it('should parse times correctly', () => {
+    const [hours, minutes, seconds] = time.split(':').map(i => parseInt(i, 10));
+    const result = parseInitialValue(time, UITypes.TimeField);
+
+    expect(result.getHours()).toBe(hours);
+    expect(result.getMinutes()).toBe(minutes);
+    expect(result.getSeconds()).toBe(seconds);
+  });
+
+  it('should parse dates correctly', () => {
+    const [year, month, day] = date.split('-').map(i => parseInt(i, 10));
+    const result = parseInitialValue(date, UITypes.DateField);
+
+    expect(result.getFullYear()).toEqual(year);
+    // Months start at 0
+    expect(result.getMonth()).toEqual(month - 1);
+    expect(result.getDate()).toEqual(day);
+  });
+
+  it('should parse datetimes correctly', () => {
+    expect(parseInitialValue(dateTime, UITypes.DateTimeField)).toEqual(new Date(dateTime));
+  });
+});
