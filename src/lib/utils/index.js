@@ -2,7 +2,7 @@ import SolidError from './error';
 import * as shexUtil from './shex';
 import solidResponse from './statusMessage';
 import ShexFormValidator from './shexFormValidator';
-import { parseInitialValue, getLocale } from './datetimes';
+import { parseInitialValue, getLocale, isValidDate } from './datetimes';
 
 import {
   fetchSchema,
@@ -29,5 +29,6 @@ export {
   getFileName,
   getBasicPod,
   getLocale,
-  parseInitialValue
+  parseInitialValue,
+  isValidDate
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { addDays, addSeconds, setHours, setMinutes, format } from 'date-fns';
+import { addDays, addSeconds, setHours, setMinutes, format, isDate } from 'date-fns';
 import * as locales from 'date-fns/locale';
 
 import DatePicker, { registerLocale } from 'react-datepicker';
@@ -9,7 +9,7 @@ import { ErrorMessage } from './date-time.styles';
 
 import { FormModelConfig } from '@context';
 import { UITypes, FormModelUI, DATE_FORMAT } from '@constants';
-import { getLocale, parseInitialValue } from '@utils';
+import { getLocale, parseInitialValue, isValidDate } from '@utils';
 
 const DateTimePicker = React.memo(
   ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
@@ -137,7 +137,7 @@ const DateTimePicker = React.memo(
               {...{
                 id,
                 ...dateOptions,
-                selected: selectedDate,
+                selected: isValidDate(selectedDate) ? selectedDate : null,
                 onChange,
                 className: theme && theme.inputText,
                 onBlur,

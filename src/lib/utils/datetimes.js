@@ -21,11 +21,30 @@ export const parseInitialValue = (value: string, type: string): Date => {
     /* date constructor interprets `value` as a UTC time, instead of a local time.
       To convert that we apply the offset in hours.
      */
-    const date = new Date(value);
+    let date = new Date(value);
     const offset = date.getTimezoneOffset();
-    return addHours(date, offset / 60);
+
+    date = addHours(date, offset / 60);
+    return date;
   }
-  if (type === UITypes.DateTimeField) return new Date(value);
+  if (type === UITypes.DateTimeField) {
+    return new Date(value);
+  }
+
+  throw new Error(`Error: Unsupported type: ${type}`);
+};
+
+/**
+ * @param value: value to check
+ * @returns {boolean} true if @value is a Date object and not "Invalid date"
+ */
+export const isValidDate = (value: any): boolean => {
+  if (Object.prototype.toString.call(value) === '[object Date]') {
+    // see https://stackoverflow.com/a/1353711
+    return !Number.isNaN(value.getTime());
+  }
+  // Not a date
+  return false;
 };
 
 /**

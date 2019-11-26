@@ -1,4 +1,4 @@
-import { parseInitialValue } from './datetimes';
+import { parseInitialValue, isValidDate } from './datetimes';
 import { UITypes } from '@constants';
 
 describe('Parser should return the expected values', () => {
@@ -27,5 +27,23 @@ describe('Parser should return the expected values', () => {
 
   it('should parse datetimes correctly', () => {
     expect(parseInitialValue(dateTime, UITypes.DateTimeField)).toEqual(new Date(dateTime));
+  });
+});
+
+describe('Datetime checker should validate values', () => {
+  it('should validate now as a date', () => {
+    expect(isValidDate(new Date())).toEqual(true);
+  });
+
+  it('should fail with anything not a date object', () => {
+    expect(isValidDate('string')).toEqual(false);
+    expect(isValidDate(123)).toEqual(false);
+    expect(isValidDate({})).toEqual(false);
+    expect(isValidDate([new Date()])).toEqual(false);
+    expect(isValidDate({ date: new Date() })).toEqual(false);
+  });
+
+  it('should return false with a "Invalid date" Date object', () => {
+    expect(isValidDate(new Date('not a date representation'))).toBe(false);
   });
 });
