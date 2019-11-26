@@ -151,7 +151,7 @@ LoginComponent.defaultProps = {
   btnTxtProvider: 'Log In with Provider',
   errorsText: {
     unknown: 'Something is wrong, please try again...',
-    webIdNotValid: 'WeibID is not valid',
+    webIdNotValid: 'WebID is not valid',
     emptyProvider: 'Solid Provider is required',
     emptyWebId: 'Valid WebID is required'
   },
