@@ -1,6 +1,9 @@
 import SolidError from './error';
 import * as shexUtil from './shex';
 import solidResponse from './statusMessage';
+import ShexFormValidator from './shexFormValidator';
+import { parseInitialValue, getLocale, isValidDate } from './datetimes';
+
 import {
   fetchSchema,
   existDocument,
@@ -8,16 +11,10 @@ import {
   fetchLdflexDocument,
   getBasicPod
 } from './solidFetch';
-import ShexFormValidator from './shexFormValidator';
 
 const getFileName = path => {
   // eslint-disable-next-line no-useless-escape
   return path.replace(/^.*[\\\/]/, '');
-};
-
-const getLocale = (): string => {
-  if (navigator.languages !== undefined) return navigator.languages[0];
-  return navigator.language ? navigator.language : 'en-US';
 };
 
 export {
@@ -31,5 +28,7 @@ export {
   ShexFormValidator,
   getFileName,
   getBasicPod,
-  getLocale
+  getLocale,
+  parseInitialValue,
+  isValidDate
 };

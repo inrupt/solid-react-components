@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import DatePicker, { registerLocale } from 'react-datepicker';
-
-import { addDays, addSeconds, setHours, setMinutes } from 'date-fns';
+import { addDays, addSeconds, setHours, setMinutes, format, isDate } from 'date-fns';
 import * as locales from 'date-fns/locale';
 
-import { FormModelConfig } from '@context';
-import { UITypes, FormModelUI } from '@constants';
-import { getLocale } from '@utils';
-
+import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { ErrorMessage } from './date-time.styles';
+
+import { FormModelConfig } from '@context';
+import { UITypes, FormModelUI, DATE_FORMAT } from '@constants';
+import { getLocale, parseInitialValue, isValidDate } from '@utils';
 
 const DateTimePicker = React.memo(
   ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
@@ -37,28 +36,33 @@ const DateTimePicker = React.memo(
     const label = rest[UI_LABEL] || '';
     const type = rest[RDF_TYPE];
 
-    const updateDate = useCallback(() => {
-      const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
+    useEffect(() => {
+      /* if there is an updated value on the server, use that otherwise use the prop */
+      let actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
+      actualValue = parseInitialValue(actualValue, type);
 
-      if (actualValue) {
-        setDate(new Date(actualValue));
-      }
+      setDate(actualValue);
     }, [formObject]);
 
     const onChange = useCallback(date => {
       let obj = {};
 
       /* User wants to remove the date */
-      if (!date) obj = { value: '', ...rest };
-      else obj = { value: date.toUTCString(), ...rest };
+      if (!date) {
+        obj = { value: '', ...rest };
+        setDate(null);
+        return;
+      }
 
+      /* assign the format to save based on the type */
+      if (type === UITypes.TimeField) obj.value = format(date, DATE_FORMAT.TIME);
+      if (type === UITypes.DateField) obj.value = format(date, DATE_FORMAT.DATE);
+      if (type === UITypes.DateTimeField) obj.value = date.toISOString();
+
+      obj = { ...obj, ...rest };
       modifyFormObject(id, obj);
       setDate(date);
     });
-
-    useEffect(() => {
-      updateDate();
-    }, [value, formObject]);
 
     /* set the date ranges based on the UI Element to display */
     let minDate;
@@ -86,9 +90,7 @@ const DateTimePicker = React.memo(
     }
     if (type === UITypes.DateTimeField) {
       /* min, max Values are datetimes and offset is in seconds */
-
       if (!Number.isNaN(mindatetimeOffset)) minDate = addSeconds(new Date(), mindatetimeOffset);
-
       if (!Number.isNaN(maxdatetimeOffset)) maxDate = addSeconds(new Date(), maxdatetimeOffset);
 
       /* min,maxValue take priority over the offsets if both values are provided */
@@ -99,7 +101,6 @@ const DateTimePicker = React.memo(
     }
     if (type === UITypes.DateField) {
       /* min,maxValue are dates and offset is in days */
-
       if (!Number.isNaN(mindateOffset)) minDate = addDays(new Date(), mindateOffset);
       if (!Number.isNaN(maxdateOffset)) maxDate = addDays(new Date(), maxdateOffset);
 
@@ -121,7 +122,11 @@ const DateTimePicker = React.memo(
       locale = `${locale[0]}`;
     }
 
-    registerLocale(locale, locales[locale]);
+    try {
+      registerLocale(locale, locales[locale]);
+    } catch (e) {
+      registerLocale(locale, locales.enUS);
+    }
 
     return (
       <FormModelConfig.Consumer>
@@ -132,7 +137,7 @@ const DateTimePicker = React.memo(
               {...{
                 id,
                 ...dateOptions,
-                selected: selectedDate,
+                selected: isValidDate(selectedDate) ? selectedDate : null,
                 onChange,
                 className: theme && theme.inputText,
                 onBlur,

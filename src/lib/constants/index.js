@@ -88,3 +88,9 @@ export const NotificationTypes = {
   UPDATE: 'https://www.w3.org/ns/activitystreams#Update',
   VIEW: 'https://www.w3.org/ns/activitystreams#View'
 };
+
+/* See <https://date-fns.org/v2.8.1/docs/format> for format explanations */
+export const DATE_FORMAT = {
+  DATE: 'yyyy-MM-dd',
+  TIME: 'kk:mm:ss'
+};
