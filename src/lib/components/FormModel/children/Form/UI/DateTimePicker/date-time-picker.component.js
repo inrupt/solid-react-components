@@ -37,6 +37,7 @@ const DateTimePicker = React.memo(
     const type = rest[RDF_TYPE];
 
     useEffect(() => {
+      /* if there is an updated value on the server, use that otherwise use the prop */
       let actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
       actualValue = parseInitialValue(actualValue, type);
 
