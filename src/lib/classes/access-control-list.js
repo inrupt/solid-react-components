@@ -51,7 +51,7 @@ export default class AccessControlList {
     const originalPredicates = [
       this.createQuad(subject, `${a}`, namedNode(`${acl}Authorization`)),
       this.createQuad(subject, `${acl}accessTo`, namedNode(documentUri)),
-      this.createQuad(subject, `${acl}defaultForNew`, namedNode(documentUri))
+      this.createQuad(subject, `${acl}default`, namedNode(documentUri))
     ];
     let predicates = [];
     if (agents) {
