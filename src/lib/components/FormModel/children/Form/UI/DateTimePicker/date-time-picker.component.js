@@ -119,7 +119,7 @@ const DateTimePicker = React.memo(
       locale[1] = locale[1].toUpperCase();
       locale = `${locale[0]}${locale[1]}`;
     } else {
-      locale = `${locale[1]}`;
+      locale = `${locale[0]}`;
     }
 
     try {
