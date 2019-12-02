@@ -115,12 +115,14 @@ const DateTimePicker = React.memo(
        browser format samples: 'es', 'en-US', 'en-GB'
        date-fns format samples: 'es', 'enUS', 'enGB' */
     let locale = getLocale().split('-');
-    if (locale[2]) {
-      locale[2] = locale[2].toUpperCase();
-      locale = `${locale[0]}${locale[2]}`;
+    if (locale[1]) {
+      locale[1] = locale[1].toUpperCase();
+      locale = `${locale[0]}${locale[1]}`;
     } else {
-      locale = `${locale[0]}`;
+      locale = `${locale[1]}`;
     }
+    console.log(getLocale().split('-'));
+    console.log(locale);
 
     try {
       registerLocale(locale, locales[locale]);
