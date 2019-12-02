@@ -1,21 +1,26 @@
-/* eslint-disable react/destructuring-assignment */
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 
 const ColorPicker = ({ id, modifyFormObject, formObject, ...rest }) => {
-  const [show, setShow] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [color, setColor] = useState(formObject.value || null);
 
-  const handleChange = (color, event) => {
-    const obj = { value: color, ...rest };
+  const handleChange = color => {
+    setColor(color.hex);
+  };
+
+  const handleChangeComplete = color => {
+    setColor(color.hex);
+    const obj = { value: color.hex, ...rest };
     modifyFormObject(id, obj);
   };
 
   const handleClick = () => {
-    setShow(!show);
+    setPickerVisible(!pickerVisible);
   };
 
   const handleClose = () => {
-    setShow(false);
+    setPickerVisible(false);
   };
 
   const popover = {
@@ -33,12 +38,17 @@ const ColorPicker = ({ id, modifyFormObject, formObject, ...rest }) => {
   return (
     <div>
       <button type="button" onClick={handleClick}>
-        Pick Color
+        {color ? JSON.stringify(color) : 'Pick Color'}
       </button>
-      {show ? (
+      {pickerVisible ? (
         <div style={popover}>
-          <button type="button" style={cover} onClick={handleClose} />
-          <ChromePicker onChange={handleChange} />
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+          <div style={cover} onClick={handleClose} />
+          <ChromePicker
+            color={color}
+            onChangeComplete={handleChangeComplete}
+            onChange={handleChange}
+          />
         </div>
       ) : null}
     </div>

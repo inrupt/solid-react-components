@@ -6,6 +6,7 @@ import Select from './Select';
 import TextArea from './TextArea';
 import CheckBoxList from './CheckBoxList';
 import RadioButtonList from './RadioButtonList';
+import ColorPicker from './ColorPicker';
 
 export {
   CheckBox,
@@ -15,5 +16,6 @@ export {
   RadioButton,
   RadioButtonList,
   Select,
-  TextArea
+  TextArea,
+  ColorPicker
 };
