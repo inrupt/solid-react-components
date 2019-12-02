@@ -121,8 +121,6 @@ const DateTimePicker = React.memo(
     } else {
       locale = `${locale[1]}`;
     }
-    console.log(getLocale().split('-'));
-    console.log(locale);
 
     try {
       registerLocale(locale, locales[locale]);
