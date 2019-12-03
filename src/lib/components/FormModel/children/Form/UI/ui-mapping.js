@@ -6,6 +6,9 @@ import TextArea from './TextArea';
 import RadioButton from './RadioButton';
 import CheckBox from './CheckBox';
 import DateTimePicker from './DateTimePicker';
+import Decimal from './Decimal';
+import Integer from './Integer';
+import Float from './Float';
 
 import { UITypes } from '@constants';
 
@@ -34,6 +37,15 @@ const UIMapping = type => {
     case UITypes.TimeField:
     case UITypes.DateField:
       component = DateTimePicker;
+      break;
+    case UITypes.DecimalField:
+      component = Decimal;
+      break;
+    case UITypes.IntegerField:
+      component = Integer;
+      break;
+    case UITypes.FloatField:
+      component = Float;
       break;
     default:
       component = Input;
