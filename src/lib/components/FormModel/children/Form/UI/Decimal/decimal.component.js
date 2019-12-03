@@ -2,7 +2,7 @@ import React from 'react';
 import { InputTextTypes } from '@constants';
 import { FormModelConfig } from '@context';
 
-import { InputGroup } from './decimal.styles';
+import { InputGroup } from '../Input/input.styles';
 
 const Decimal = ({
   id,

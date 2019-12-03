@@ -2,7 +2,7 @@ import React from 'react';
 import { InputTextTypes } from '@constants';
 import { FormModelConfig } from '@context';
 
-import { InputGroup } from './float.styles';
+import { InputGroup } from '../Input/input.styles';
 
 const Float = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
   const type = rest['rdf:type'];
