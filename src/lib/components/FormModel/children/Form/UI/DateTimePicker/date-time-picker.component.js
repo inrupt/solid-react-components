@@ -83,11 +83,15 @@ const DateTimePicker = React.memo(
       if (minValue) {
         [minHours, minMinutes] = minValue.split(':');
         minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
+      } else {
+        minTime = setHours(setMinutes(new Date(), 0), 0);
       }
 
       if (maxValue) {
         [maxHours, maxMinutes] = maxValue.split(':');
         maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
+      } else {
+        maxTime = setHours(setMinutes(new Date(), 59), 23);
       }
 
       dateOptions = {
