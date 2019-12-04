@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 
 import { FormModelUI } from '@constants';
+import { FormModelConfig } from '@context';
+
 import { PickerGroup, ColorSwatch, Cover, Popover } from './color-picker.styles';
 
 const ColorPicker = ({
@@ -45,21 +47,25 @@ const ColorPicker = ({
   };
 
   return (
-    <PickerGroup>
-      <label htmlFor={id}>{label}</label>
-      <ColorSwatch color={color} onClick={handleClick} />
-      {pickerVisible ? (
-        <Popover>
-          <Cover onClick={handleClose} />
-          <ChromePicker
-            id
-            color={color}
-            onChangeComplete={handleChangeComplete}
-            onChange={handleChange}
-          />
-        </Popover>
-      ) : null}
-    </PickerGroup>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <PickerGroup className={theme && theme.colorPicker}>
+          <label htmlFor={id}>{label}</label>
+          <ColorSwatch color={color} onClick={handleClick} />
+          {pickerVisible ? (
+            <Popover>
+              <Cover onClick={handleClose} />
+              <ChromePicker
+                id
+                color={color}
+                onChangeComplete={handleChangeComplete}
+                onChange={handleChange}
+              />
+            </Popover>
+          ) : null}
+        </PickerGroup>
+      )}
+    </FormModelConfig.Consumer>
   );
 };
 
