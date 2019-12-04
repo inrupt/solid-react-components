@@ -9,6 +9,10 @@ export const PickerGroup = styled.div`
     padding: 0.5em;
     margin-right: 1em;
   }
+  & div {
+    padding: 0.5em;
+    margin-right: 1em;
+  }
 `;
 
 export const ColorSwatch = styled.div`

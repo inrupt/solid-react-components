@@ -51,6 +51,7 @@ const ColorPicker = ({
       {({ theme }) => (
         <PickerGroup className={theme && theme.colorPicker}>
           <label htmlFor={id}>{label}</label>
+          <div>{color}</div>
           <ColorSwatch color={color} onClick={handleClick} />
           {pickerVisible ? (
             <Popover>
