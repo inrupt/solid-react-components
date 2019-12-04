@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { addDays, addSeconds, setHours, setMinutes, format, isDate } from 'date-fns';
+import { addDays, addSeconds, setHours, setMinutes, format } from 'date-fns';
 import * as locales from 'date-fns/locale';
 
 import DatePicker, { registerLocale } from 'react-datepicker';
@@ -74,11 +74,27 @@ const DateTimePicker = React.memo(
     /* Transform the incoming values depending on the type of element to display */
     if (type === UITypes.TimeField) {
       /* min, max Values are times */
-      const [minHours, minMinutes] = minValue.split(':');
-      const [maxHours, maxMinutes] = maxValue.split(':');
+      let minHours;
+      let minMinutes;
+      let maxHours;
+      let maxMinutes;
 
-      minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
-      maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
+      const timeFormat = /ˆ\d{1,2}:\d{2}$/;
+
+      /* we make the assumption that min,maxValue are in the HH:mm format */
+      if (minValue && timeFormat.test(minValue)) {
+        [minHours, minMinutes] = minValue.split(':');
+        minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
+      } else {
+        minTime = setHours(setMinutes(new Date(), 0), 0);
+      }
+
+      if (maxValue && timeFormat.test(maxValue)) {
+        [maxHours, maxMinutes] = maxValue.split(':');
+        maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
+      } else {
+        maxTime = setHours(setMinutes(new Date(), 59), 23);
+      }
 
       dateOptions = {
         minTime,
@@ -88,6 +104,7 @@ const DateTimePicker = React.memo(
         showTimeSelectOnly: true
       };
     }
+
     if (type === UITypes.DateTimeField) {
       /* min, max Values are datetimes and offset is in seconds */
       if (!Number.isNaN(mindatetimeOffset)) minDate = addSeconds(new Date(), mindatetimeOffset);
@@ -99,6 +116,7 @@ const DateTimePicker = React.memo(
 
       dateOptions = { minDate, maxDate, dateFormat: 'Pp', showTimeSelect: true };
     }
+
     if (type === UITypes.DateField) {
       /* min,maxValue are dates and offset is in days */
       if (!Number.isNaN(mindateOffset)) minDate = addDays(new Date(), mindateOffset);
