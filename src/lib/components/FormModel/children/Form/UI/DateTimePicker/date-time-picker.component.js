@@ -79,15 +79,17 @@ const DateTimePicker = React.memo(
       let maxHours;
       let maxMinutes;
 
+      const timeFormat = /ˆ\d{1,2}:\d{2}$/;
+
       /* we make the assumption that min,maxValue are in the HH:mm format */
-      if (minValue) {
+      if (minValue && timeFormat.test(minValue)) {
         [minHours, minMinutes] = minValue.split(':');
         minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
       } else {
         minTime = setHours(setMinutes(new Date(), 0), 0);
       }
 
-      if (maxValue) {
+      if (maxValue && timeFormat.test(maxValue)) {
         [maxHours, maxMinutes] = maxValue.split(':');
         maxTime = setHours(setMinutes(new Date(), maxMinutes), maxHours);
       } else {
