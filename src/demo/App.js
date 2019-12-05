@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
-// import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
+import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
 import SolidImg from '../assets/solid_logo.png';
 import {
   ProviderLogin,
@@ -68,17 +68,17 @@ const App = () => {
   });
 
   const init = async () => {
-    /* const formModel = new FormModelClass(
-      'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex',
+    const formModel = new FormModelClass(
+      'https://solidsdk.inrupt.net/public/FormLanguage/examples/ShEx/decimal.shex',
       'https://jmartin.inrupt.net/profile/card#me'
     );
     const schema = await formModel.parseSchema(
-      'https://shexshapes.inrupt.net/public/shapes/emails-hardcode.shex'
+      'https://solidsdk.inrupt.net/public/FormLanguage/examples/ShEx/decimal.shex'
     );
     const formModelOutput = await formModel.parseShEx(schema);
 
     // eslint-disable-next-line no-console
-    console.log(formModelOutput, 'model new'); */
+    console.log(formModelOutput, 'model new');
   };
 
   const createAcl = async () => {
