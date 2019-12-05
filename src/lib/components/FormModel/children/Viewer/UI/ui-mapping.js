@@ -5,6 +5,7 @@ import SingleLine from './SingleLine';
 import MultiLine from './MultiLine';
 import DateLine from './DateLine';
 import BoolLine from './BoolLine';
+import ColorLine from './ColorLine';
 
 const UIMapping = type => {
   let component;
@@ -37,16 +38,16 @@ const UIMapping = type => {
       component = BoolLine;
       break;
     case UITypes.ColorField:
-      component = SingleLine;
+      component = ColorLine;
       break;
     case UITypes.DateField:
-      component = props => <DateLine format="Do MMM, YYYY" {...props} />;
+      component = props => <DateLine {...props} />;
       break;
     case UITypes.DateTimeField:
-      component = props => <DateLine format="HH:mm a - Do MMM, YYYY" {...props} />;
+      component = props => <DateLine {...props} />;
       break;
     case UITypes.TimeField:
-      component = props => <DateLine format="HH:mm a" {...props} />;
+      component = props => <DateLine {...props} />;
       break;
     case UITypes.Classifier:
       component = SingleLine;
