@@ -21,7 +21,7 @@ const BoolLine = ({ value, ...rest }: Props) => {
             readOnly
             className="input-value"
           />
-          <span className="label-text">{rest['ui:label'] || 'Label'}</span>
+          <span className="label-text">{rest[FormModelUI.UI_LABEL] || 'Label'}</span>
         </Label>
       )}
     </FormModelConfig.Consumer>
