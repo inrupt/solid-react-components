@@ -10,13 +10,17 @@ const DateLine = ({ value, ...rest }: { value: String }) => {
   const type = rest[FormModelUI.RDF_TYPE];
 
   let renderValue;
-  if (type === UITypes.DateTimeField) {
-    renderValue = format(new Date(value), 'Pp');
+  if (value) {
+    if (type === UITypes.DateTimeField) {
+      renderValue = format(new Date(value), 'Pp');
+    } else {
+      renderValue = value;
+    }
   } else {
-    renderValue = value;
+    renderValue = '';
   }
 
-  return value ? (
+  return (
     <FormModelConfig.Consumer>
       {({ theme }) => (
         <Wrapper className={theme && theme.dateLineViewerClass}>
@@ -25,7 +29,7 @@ const DateLine = ({ value, ...rest }: { value: String }) => {
         </Wrapper>
       )}
     </FormModelConfig.Consumer>
-  ) : null;
+  );
 };
 
 export default DateLine;
