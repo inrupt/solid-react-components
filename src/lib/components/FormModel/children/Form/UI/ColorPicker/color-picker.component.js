@@ -12,7 +12,7 @@ const ColorPicker = ({
   formObject,
   value,
   onSave,
-  autosave,
+  autoSave,
   onBlur,
   ...rest
 }) => {
@@ -25,16 +25,13 @@ const ColorPicker = ({
   const [color, setColor] = useState(actualValue);
 
   const label = rest[FormModelUI.UI_LABEL] || '';
-  const handleChange = (color, event) => {
-    event.preventDefault();
+  const handleChange = color => {
     setColor(color.hex);
   };
 
-  const handleChangeComplete = (color, event) => {
-    event.preventDefault();
+  const handleChangeComplete = color => {
     const obj = { ...rest, value: color.hex };
     modifyFormObject(id, obj);
-    onSave();
     setColor(color.hex);
   };
 
@@ -44,6 +41,9 @@ const ColorPicker = ({
 
   const handleClose = () => {
     setPickerVisible(false);
+
+    console.log('autosave: ', autoSave);
+    if (autoSave) onSave();
   };
 
   return (
