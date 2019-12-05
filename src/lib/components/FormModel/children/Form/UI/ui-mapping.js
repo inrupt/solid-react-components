@@ -9,6 +9,7 @@ import DateTimePicker from './DateTimePicker';
 import Decimal from './Decimal';
 import Integer from './Integer';
 import Float from './Float';
+import ColorPicker from './ColorPicker';
 
 import { UITypes } from '@constants';
 
@@ -46,6 +47,9 @@ const UIMapping = type => {
       break;
     case UITypes.FloatField:
       component = Float;
+      break;
+    case UITypes.ColorField:
+      component = ColorPicker;
       break;
     default:
       component = Input;

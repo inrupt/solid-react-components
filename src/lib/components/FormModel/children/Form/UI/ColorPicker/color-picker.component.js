@@ -1,47 +1,71 @@
-/* eslint-disable react/destructuring-assignment */
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 
-const ColorPicker = ({ id, modifyFormObject, formObject, ...rest }) => {
-  const [show, setShow] = useState(false);
+import { FormModelUI } from '@constants';
+import { FormModelConfig } from '@context';
 
-  const handleChange = (color, event) => {
-    const obj = { value: color, ...rest };
+import { PickerGroup, ColorSwatch, Cover, Popover } from './color-picker.styles';
+
+const ColorPicker = ({
+  id,
+  modifyFormObject,
+  formObject,
+  value,
+  onSave,
+  autoSave,
+  onBlur,
+  ...rest
+}) => {
+  let actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
+
+  /* default value for the color */
+  if (!actualValue) actualValue = '#3498ef';
+
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [color, setColor] = useState(actualValue);
+
+  const label = rest[FormModelUI.UI_LABEL] || '';
+  const handleChange = color => {
+    setColor(color.hex);
+  };
+
+  const handleChangeComplete = color => {
+    const obj = { ...rest, value: color.hex };
     modifyFormObject(id, obj);
+    setColor(color.hex);
   };
 
   const handleClick = () => {
-    setShow(!show);
+    setPickerVisible(!pickerVisible);
   };
 
   const handleClose = () => {
-    setShow(false);
-  };
+    setPickerVisible(false);
 
-  const popover = {
-    position: 'absolute',
-    zIndex: '2'
-  };
-  const cover = {
-    position: 'fixed',
-    top: '0px',
-    right: '0px',
-    bottom: '0px',
-    left: '0px'
+    if (autoSave) onSave();
   };
 
   return (
-    <div>
-      <button type="button" onClick={handleClick}>
-        Pick Color
-      </button>
-      {show ? (
-        <div style={popover}>
-          <button type="button" style={cover} onClick={handleClose} />
-          <ChromePicker onChange={handleChange} />
-        </div>
-      ) : null}
-    </div>
+    <FormModelConfig.Consumer>
+      {({ theme }) => (
+        <PickerGroup className={theme && theme.colorPicker}>
+          <label htmlFor={id}>{label}</label>
+          <div>{color}</div>
+          <ColorSwatch color={color} onClick={handleClick} />
+          {pickerVisible ? (
+            <Popover>
+              <Cover onClick={handleClose} />
+              <ChromePicker
+                id
+                color={color}
+                onChangeComplete={handleChangeComplete}
+                onChange={handleChange}
+              />
+            </Popover>
+          ) : null}
+        </PickerGroup>
+      )}
+    </FormModelConfig.Consumer>
   );
 };
 
