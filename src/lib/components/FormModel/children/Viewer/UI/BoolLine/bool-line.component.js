@@ -2,18 +2,20 @@ import React from 'react';
 import { FormModelConfig } from '@context';
 import { Label } from './bool-line.style';
 
+import { FormModelUI } from '@constants';
+
 type Props = {
   value: Object
 };
 
 const BoolLine = ({ value, ...rest }: Props) => {
-  return value ? (
+  return (
     <FormModelConfig.Consumer>
       {({ theme }) => (
-        <Label htmlFor={rest['ui:name']} className={theme && theme.boolLine}>
+        <Label htmlFor={rest[FormModelUI.UI_NAME]} className={theme && theme.boolLine}>
           <input
             type="checkbox"
-            name={rest['ui:name']}
+            name={rest[FormModelUI.UI_NAME]}
             defaultValue={value === 'true'}
             checked={value === 'true'}
             readOnly
@@ -23,7 +25,7 @@ const BoolLine = ({ value, ...rest }: Props) => {
         </Label>
       )}
     </FormModelConfig.Consumer>
-  ) : null;
+  );
 };
 
 export default BoolLine;
