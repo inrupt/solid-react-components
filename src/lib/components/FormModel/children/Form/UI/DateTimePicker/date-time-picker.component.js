@@ -39,7 +39,6 @@ const DateTimePicker = React.memo(
     useEffect(() => {
       /* if there is an updated value on the server, use that otherwise use the prop */
       let actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
-      console.log(rest);
       actualValue = parseInitialValue(actualValue, type);
 
       setDate(actualValue);
