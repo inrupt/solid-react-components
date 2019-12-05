@@ -6,9 +6,11 @@ export const Group = styled.div`
     !parent
       ? `
   
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
+  // grid-template-rows: auto;
+  display: flex;
+  flex-direction: column;
   `
       : `
   display: flex;
