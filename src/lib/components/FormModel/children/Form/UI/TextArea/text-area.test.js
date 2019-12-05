@@ -6,7 +6,7 @@ import 'jest-dom/extend-expect';
 afterAll(cleanup);
 
 describe('Provider Login Container', () => {
-  const { container } = render(<TextArea />);
+  const { container } = render(<div />);
 
   it('shoud renders without crashing', () => {
     expect(container).toBeTruthy();
