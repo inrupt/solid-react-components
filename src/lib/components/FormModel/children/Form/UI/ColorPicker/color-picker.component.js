@@ -42,7 +42,6 @@ const ColorPicker = ({
   const handleClose = () => {
     setPickerVisible(false);
 
-    console.log('autosave: ', autoSave);
     if (autoSave) onSave();
   };
 
