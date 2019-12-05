@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.4.5-dev.6",
+  "version": "0.4.5-dev.7",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
@@ -57,7 +57,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@inrupt/solid-sdk-forms": "0.0.1-james.20",
+    "@inrupt/solid-sdk-forms": "0.0.1-dev.6",
     "@rdfjs/data-model": "^1.1.1",
     "@shexjs/core": "^1.0.0-alpha.4",
     "@shexjs/loader": "^1.0.0-alpha.5",
