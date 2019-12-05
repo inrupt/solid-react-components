@@ -8,6 +8,7 @@ import { UITypes } from '@constants';
  */
 export const parseInitialValue = (value: string, type: string): Date => {
   if (type === UITypes.TimeField) {
+    if (!value) return '';
     const tokens = value.split(':');
 
     let date = new Date();
@@ -18,6 +19,7 @@ export const parseInitialValue = (value: string, type: string): Date => {
     return date;
   }
   if (type === UITypes.DateField) {
+    if (!value) return '';
     /* date constructor interprets `value` as a UTC time, instead of a local time.
       To convert that we apply the offset in hours.
      */
