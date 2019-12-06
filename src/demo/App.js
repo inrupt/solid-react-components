@@ -9,10 +9,10 @@ import {
   ProfileUploader,
   useNotification,
   FormModel,
-  AutoSaveDefaultSpinner
+  AutoSaveDefaultSpinner,
+  ProfileViewer
 } from '@lib';
 import { AccessControlList } from '@classes';
-import { ProfileViewer } from '../lib/components';
 import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
