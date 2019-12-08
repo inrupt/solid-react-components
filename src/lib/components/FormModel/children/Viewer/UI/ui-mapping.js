@@ -6,6 +6,8 @@ import MultiLine from './MultiLine';
 import DateLine from './DateLine';
 import BoolLine from './BoolLine';
 import ColorLine from './ColorLine';
+import Heading from '../../Form/UI/Heading';
+import Comment from '../../Form/UI/Comment';
 
 const UIMapping = type => {
   let component;
@@ -53,10 +55,10 @@ const UIMapping = type => {
       component = SingleLine;
       break;
     case UITypes.Heading:
-      component = SingleLine;
+      component = Heading;
       break;
     case UITypes.Comment:
-      component = MultiLine;
+      component = Comment;
       break;
     default:
       component = null;

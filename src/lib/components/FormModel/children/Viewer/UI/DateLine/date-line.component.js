@@ -6,8 +6,10 @@ import { UITypes, FormModelUI } from '@constants';
 
 import { Wrapper, Label, Value } from './date-line.style';
 
-const DateLine = ({ value, ...rest }: { value: String }) => {
-  const type = rest[FormModelUI.RDF_TYPE];
+const { RDF_TYPE, UI_VALUE, UI_LABEL } = FormModelUI;
+
+const DateLine = props => {
+  const { [RDF_TYPE]: type, [UI_VALUE]: value, [UI_LABEL]: label } = props;
 
   let renderValue;
   if (value) {
@@ -24,7 +26,7 @@ const DateLine = ({ value, ...rest }: { value: String }) => {
     <FormModelConfig.Consumer>
       {({ theme }) => (
         <Wrapper className={theme && theme.dateLineViewerClass}>
-          <Label className="label">{rest[FormModelUI.UI_LABEL]}</Label>
+          <Label className="label">{label}</Label>
           <Value className="value">{renderValue}</Value>
         </Wrapper>
       )}

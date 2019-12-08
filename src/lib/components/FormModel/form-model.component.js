@@ -6,6 +6,7 @@ import { FormModelConfig } from '@context';
 import { solidResponse, SolidError } from '@utils';
 import Form from './children/Form';
 import Viewer from './children/Viewer';
+import { FormViewer } from './children/FormViewer';
 
 type Props = {
   modelPath: String,
@@ -173,7 +174,8 @@ const FormModel = memo(
       </FormModelConfig.Provider>
     ) : (
       <FormModelConfig.Provider value={settings}>
-        <Viewer {...{ formModel }} />
+        {/* <Viewer {...{ formModel }} /> */}
+        {<FormViewer {...{ formModel }} />}
       </FormModelConfig.Provider>
     );
   }
