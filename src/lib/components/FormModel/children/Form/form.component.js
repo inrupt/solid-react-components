@@ -53,10 +53,8 @@ const Form = ({
     if (typeof formModel === 'object' && parts) setFormFields(Object.keys(parts));
   }, [formModel]);
 
-  // TODO: expand and document this.
-  const classes = `${parent && theme && theme.childGroup ? theme.childGroup : ''} ${
-    theme && theme.form ? theme.form : ''
-  }`;
+  let classes = theme.form || '';
+  if (parent) classes += theme.childGroup || '';
 
   return (
     <Group className={classes} parent={parent}>
