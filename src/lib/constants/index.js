@@ -58,6 +58,10 @@ export const FormModelUI = {
   MIN_DATETIME_OFFSET: 'ui:mindatetimeOffset'
 };
 
+export const CORE_ELEMENTS = {
+  TITLE: 'dc:title'
+};
+
 export const NotificationTypes = {
   ACCEPT: 'https://www.w3.org/ns/activitystreams#Accept',
   ADD: 'https://www.w3.org/ns/activitystreams#',

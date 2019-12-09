@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
+import { FormModelUI, CORE_ELEMENTS } from '@constants';
+import { FormModelConfig } from '@context';
+
 import { Group } from './form.style';
 import ControlGroup from '../control-group.component';
 import UIMapping from './UI/ui-mapping';
 import Multiple from './UI/Multiple';
 import DeleteButton from './UI/DeleteButton';
 
-const UI_PARTS = 'ui:parts';
+const { UI_PARTS, RDF_TYPE, UI_LABEL, UI_NAME } = FormModelUI;
+const { TITLE } = CORE_ELEMENTS;
 
 type Props = {
   formModel: Object,
@@ -21,8 +26,9 @@ type Props = {
 };
 
 const ParentLabel = ({ formModel }: Props.formModel) => {
-  return formModel['rdf:type'] && formModel['rdf:type'].includes('Multiple') ? (
-    <p>{formModel['ui:label']}</p>
+  // TODO: check for the explicit 'multiple' object instead of using includes.
+  return formModel[RDF_TYPE] && formModel[RDF_TYPE].includes('Multiple') ? (
+    <p>{formModel[UI_LABEL]}</p>
   ) : null;
 };
 
@@ -35,41 +41,40 @@ const Form = ({
   addNewField,
   autoSave,
   children,
-  onSave,
-  settings
+  onSave
 }: Props) => {
   const [formFields, setFormFields] = useState([]);
-  const parts = formModel[UI_PARTS];
-  const getArrayFields = () => {
-    if (typeof formModel === 'object' && parts) {
-      setFormFields(Object.keys(parts));
-    }
-  };
+  const { theme, savingComponent } = useContext(FormModelConfig);
 
+  const parts = formModel[UI_PARTS];
+
+  /* keep our data in sync with the form model */
   useEffect(() => {
-    getArrayFields();
+    if (typeof formModel === 'object' && parts) setFormFields(Object.keys(parts));
   }, [formModel]);
-  const classes = `${
-    parent && settings.theme && settings.theme.childGroup ? settings.theme.childGroup : ''
-  } ${settings.theme && settings.theme.form ? settings.theme.form : ''}`;
+
+  // TODO: expand and document this.
+  const classes = `${parent && theme && theme.childGroup ? theme.childGroup : ''} ${
+    theme && theme.form ? theme.form : ''
+  }`;
 
   return (
     <Group className={classes} parent={parent}>
-      {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
+      {formModel[TITLE] && <h2>{formModel[TITLE]}</h2>}
       <ParentLabel formModel={formModel} />
       {formFields.length > 0 &&
         formFields.map(item => {
           const field = parts[item];
           const fieldParts = field && field[UI_PARTS];
-          const component = field && UIMapping(field['rdf:type']);
-          const id = (field && field['ui:name']) || item;
+          const component = field && UIMapping(field[RDF_TYPE]);
+          const id = (field && field[UI_NAME]) || item;
           /**
            * Return null when field doesn't exists
            * this avoid to crash app using recursive component
            */
           if (!field) return null;
           /* eslint no-useless-computed-key: "off" */
-          const { ['ui:parts']: deleted, ...updatedField } = field;
+          const { [UI_PARTS]: deleted, ...updatedField } = field;
 
           return fieldParts ? (
             <Form
@@ -81,15 +86,14 @@ const Form = ({
                 parent: updatedField,
                 deleteField,
                 onSave,
-                autoSave,
-                settings
+                autoSave
               }}
             >
               <Multiple
                 {...{
                   field,
                   addNewField,
-                  className: settings.theme && settings.theme.multiple
+                  className: theme && theme.multiple
                 }}
               />
               <DeleteButton
@@ -97,7 +101,7 @@ const Form = ({
                   type: field['rdf:type'],
                   action: deleteField,
                   id: field['ui:name'],
-                  className: settings.theme && settings.theme.deleteButton
+                  className: theme && theme.deleteButton
                 }}
               />
             </Form>
@@ -111,7 +115,7 @@ const Form = ({
               formObject={formObject}
               autoSave={autoSave}
               onSave={onSave}
-              savingComponent={settings && settings.savingComponent}
+              savingComponent={savingComponent}
             />
           );
         })}
