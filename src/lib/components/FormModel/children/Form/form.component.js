@@ -21,8 +21,7 @@ type Props = {
   deleteField: id => Object,
   addNewField: id => Object,
   children: Node,
-  autoSave: boolean,
-  settings: Object
+  autoSave: boolean
 };
 
 const Form = ({
@@ -57,63 +56,62 @@ const Form = ({
     <Group className={classes} parent={parent}>
       <FormTitle />
       <ParentLabel />
-      {formFields.length > 0 &&
-        formFields.map(item => {
-          const field = parts[item];
-          const fieldParts = field && field[UI_PARTS];
-          const component = field && UIMapping(field[RDF_TYPE]);
-          const id = (field && field[UI_NAME]) || item;
-          /**
-           * Return null when field doesn't exists
-           * this avoid to crash app using recursive component
-           */
-          if (!field) return null;
-          /* eslint no-useless-computed-key: "off" */
-          const { [UI_PARTS]: deleted, ...updatedField } = field;
+      {formFields.map(item => {
+        const field = parts[item];
+        const fieldParts = field && field[UI_PARTS];
+        const component = field && UIMapping(field[RDF_TYPE]);
+        const id = (field && field[UI_NAME]) || item;
+        /**
+         * Return null when field doesn't exists
+         * this avoid to crash app using recursive component
+         */
+        if (!field) return null;
+        /* eslint no-useless-computed-key: "off" */
+        const { [UI_PARTS]: deleted, ...updatedField } = field;
 
-          return fieldParts ? (
-            <Form
-              key={item}
-              formModel={field}
+        return fieldParts ? (
+          <Form
+            key={item}
+            formModel={field}
+            {...{
+              formObject,
+              modifyFormObject,
+              parent: updatedField,
+              deleteField,
+              onSave,
+              autoSave
+            }}
+          >
+            <Multiple
               {...{
-                formObject,
-                modifyFormObject,
-                parent: updatedField,
-                deleteField,
-                onSave,
-                autoSave
+                field,
+                addNewField,
+                className: theme && theme.multiple
               }}
-            >
-              <Multiple
-                {...{
-                  field,
-                  addNewField,
-                  className: theme && theme.multiple
-                }}
-              />
-              <DeleteButton
-                {...{
-                  type: field['rdf:type'],
-                  action: deleteField,
-                  id: field['ui:name'],
-                  className: theme && theme.deleteButton
-                }}
-              />
-            </Form>
-          ) : (
-            <ControlGroup
-              key={item}
-              component={component}
-              value={field['ui:value']}
-              fieldData={{ id, ...field, parent }}
-              modifyFormObject={modifyFormObject}
-              formObject={formObject}
-              autoSave={autoSave}
-              onSave={onSave}
-              savingComponent={savingComponent}
             />
-          );
-        })}
+            <DeleteButton
+              {...{
+                type: field['rdf:type'],
+                action: deleteField,
+                id: field['ui:name'],
+                className: theme && theme.deleteButton
+              }}
+            />
+          </Form>
+        ) : (
+          <ControlGroup
+            key={item}
+            component={component}
+            value={field['ui:value']}
+            fieldData={{ id, ...field, parent }}
+            modifyFormObject={modifyFormObject}
+            formObject={formObject}
+            autoSave={autoSave}
+            onSave={onSave}
+            savingComponent={savingComponent}
+          />
+        );
+      })}
       {children}
     </Group>
   );
