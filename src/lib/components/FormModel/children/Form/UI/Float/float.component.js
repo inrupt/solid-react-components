@@ -12,10 +12,8 @@ const Float = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBl
   const size = rest['ui:size'] || 40;
   const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
   const onChange = ({ target }) => {
-    if (target.value.length < 8) {
-      const obj = { value: target.value, ...rest };
-      modifyFormObject(id, obj);
-    }
+    const obj = { value: target.value, ...rest };
+    modifyFormObject(id, obj);
   };
 
   return (
