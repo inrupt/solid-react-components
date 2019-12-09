@@ -7,7 +7,6 @@ export const Wrapper = styled.div`
 `;
 
 export const Label = styled.span`
-  font-weight: bold;
   font-size: 16px;
   letter-spacing: 0.4px;
 `;
