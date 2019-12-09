@@ -9,7 +9,7 @@ import UIMapping from './UI/ui-mapping';
 import Multiple from './UI/Multiple';
 import DeleteButton from './UI/DeleteButton';
 
-const { UI_PARTS, RDF_TYPE, UI_LABEL, UI_NAME } = FormModelUI;
+const { UI_PARTS, RDF_TYPE, UI_LABEL, UI_NAME, UI_MULTIPLE } = FormModelUI;
 const { TITLE } = CORE_ELEMENTS;
 
 type Props = {
@@ -23,13 +23,6 @@ type Props = {
   children: Node,
   autoSave: boolean,
   settings: Object
-};
-
-const ParentLabel = ({ formModel }: Props.formModel) => {
-  // TODO: check for the explicit 'multiple' object instead of using includes.
-  return formModel[RDF_TYPE] && formModel[RDF_TYPE].includes('Multiple') ? (
-    <p>{formModel[UI_LABEL]}</p>
-  ) : null;
 };
 
 const Form = ({
@@ -56,10 +49,14 @@ const Form = ({
   let classes = theme.form || '';
   if (parent) classes += theme.childGroup || '';
 
+  const FormTitle = () => <h2>{formModel[TITLE] || ''}</h2>;
+  const ParentLabel = () =>
+    formModel[RDF_TYPE] === UI_MULTIPLE ? <p>{formModel[UI_LABEL]}</p> : null;
+
   return (
     <Group className={classes} parent={parent}>
-      {formModel[TITLE] && <h2>{formModel[TITLE]}</h2>}
-      <ParentLabel formModel={formModel} />
+      <FormTitle />
+      <ParentLabel />
       {formFields.length > 0 &&
         formFields.map(item => {
           const field = parts[item];

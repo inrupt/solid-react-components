@@ -48,6 +48,7 @@ export const FormModelUI = {
   UI_VALUE: 'ui:value',
   UI_LABEL: 'ui:label',
   UI_NAME: 'ui:name',
+  UI_MULTIPLE: 'ui:Multiple',
   UI_DEFAULT: 'ui:default',
   RDF_TYPE: 'rdf:type',
   MIN_VALUE: 'ui:minValue',
