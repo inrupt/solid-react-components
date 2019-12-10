@@ -9,7 +9,7 @@ import UIMapping from './UI/ui-mapping';
 import Multiple from './UI/Multiple';
 import DeleteButton from './UI/DeleteButton';
 
-const { UI_PARTS, RDF_TYPE, UI_LABEL, UI_NAME, UI_MULTIPLE } = FormModelUI;
+const { UI_PARTS, RDF_TYPE, UI_LABEL, UI_NAME, UI_MULTIPLE, UI_VALUE } = FormModelUI;
 const { TITLE } = CORE_ELEMENTS;
 
 type Props = {
@@ -64,21 +64,25 @@ const Form = ({
       const { [UI_PARTS]: deleted, ...updatedField } = field;
       return (
         <Form
-          key={item}
-          formModel={field}
-          formObject
-          modifyFormObject
-          parent={updatedField}
-          deleteField
-          onSave
-          autoSave
+          {...{
+            key: item,
+            formModel: field,
+            formObject,
+            modifyFormObject,
+            parent: updatedField,
+            deleteField,
+            onSave,
+            autoSave
+          }}
         >
-          <Multiple field addNewField={addNewField} className={theme.multiple} />
+          <Multiple {...{ field, addNewField, className: theme.multiple }} />
           <DeleteButton
-            type={field[RDF_TYPE]}
-            action={deleteField}
-            id={field[UI_NAME]}
-            className={theme.deleteButton}
+            {...{
+              type: field[RDF_TYPE],
+              action: deleteField,
+              id: field[UI_NAME],
+              className: theme.deleteButton
+            }}
           />
         </Form>
       );
@@ -89,15 +93,17 @@ const Form = ({
 
     return (
       <ControlGroup
-        key={item}
-        component={component}
-        value={field['ui:value']}
-        fieldData={{ id, ...field, parent }}
-        modifyFormObject={modifyFormObject}
-        formObject={formObject}
-        autoSave={autoSave}
-        onSave={onSave}
-        savingComponent={savingComponent}
+        {...{
+          key: item,
+          component,
+          value: field[UI_VALUE],
+          fieldData: { id, ...field, parent },
+          modifyFormObject,
+          formObject,
+          autoSave,
+          onSave,
+          savingComponent
+        }}
       />
     );
   };
