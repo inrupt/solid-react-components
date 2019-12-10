@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FormModelConfig } from '@context';
 
@@ -15,19 +15,30 @@ const context = {
     inputCheckbox: 'sdk-checkbox checkbox',
     inputTextArea: 'sdk-textarea'
   },
+  languageTheme: {},
   savingComponent: AutoSaveDefaultSpinner
 };
 
+const MODE = {
+  VIEW: 'view',
+  EDIT: 'edit'
+};
+
 const App = () => {
+  const [mode, setMode] = useState(MODE.EDIT);
+
   return (
     <FormModelConfig.Provider value={context}>
+      <button type="submit" onClick={() => setMode(mode === MODE.VIEW ? MODE.EDIT : MODE.VIEW)}>
+        {mode} mode
+      </button>
       <DemoWrapper>
         <ProviderLogin callbackUri={`${window.location.origin}/`} />
         <FormModel
           {...{
             modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/datetime.ttl#formRoot',
-            podPath: 'https://jmartin.inrupt.net/profile/card#me',
-            viewer: false,
+            podPath: 'https://angelaraya.inrupt.net/profile/card#me',
+            viewer: mode === MODE.VIEW,
             onError: error => {
               // eslint-disable-next-line no-console
               console.log(error, 'error');

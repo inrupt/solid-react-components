@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, memo, Fragment } from 'react';
+import React, { useState, useCallback, useEffect, memo, Fragment, useContext } from 'react';
 import { useLiveUpdate } from '@solid/react';
 import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
 import { FormModelConfig } from '@context';
@@ -18,13 +18,7 @@ type Props = {
   onSuccess: () => void,
   onSave: () => void,
   onAddNewField: () => void,
-  onDelete: () => void,
-  settings: {
-    theme: object,
-    languageTheme: object,
-    config: object,
-    savingComponent: React.ReactNode
-  }
+  onDelete: () => void
 };
 
 const FormModel = memo(
@@ -32,7 +26,6 @@ const FormModel = memo(
     modelPath,
     podPath,
     autoSave,
-    settings = {},
     title,
     viewer,
     onInit,
@@ -47,10 +40,10 @@ const FormModel = memo(
     const [formModel, setFormModel] = useState({});
     const [formObject, setFormObject] = useState({});
     const [newUpdate, setNewUpdate] = useState(false);
+    const { languageTheme } = useContext(FormModelConfig);
     const formActions = new FormActions(formModel, formObject);
 
     const { timestamp } = useLiveUpdate();
-    const { languageTheme } = settings;
 
     const init = useCallback(async () => {
       try {
@@ -146,35 +139,30 @@ const FormModel = memo(
     }, [timestamp]);
 
     return !viewer ? (
-      <FormModelConfig.Provider value={settings}>
-        <form onSubmit={onSave}>
-          {title && <h1>Form Model</h1>}
-          <Form
-            {...{
-              formModel,
-              formObject,
-              modifyFormObject,
-              deleteField,
-              addNewField,
-              onSave: save,
-              autoSave,
-              settings
-            }}
-          />
-          {!autoSave && (
-            <Fragment>
-              <button type="submit">{(languageTheme && languageTheme.save) || 'Save'}</button>
-              <button type="button" onClick={onCancelOrReset}>
-                {(languageTheme && languageTheme.cancel) || 'Cancel'}
-              </button>
-            </Fragment>
-          )}
-        </form>
-      </FormModelConfig.Provider>
+      <form onSubmit={onSave}>
+        {title && <h1>Form Model</h1>}
+        <Form
+          {...{
+            formModel,
+            formObject,
+            modifyFormObject,
+            deleteField,
+            addNewField,
+            onSave: save,
+            autoSave
+          }}
+        />
+        {!autoSave && (
+          <Fragment>
+            <button type="submit">{languageTheme.save || 'Save'}</button>
+            <button type="button" onClick={onCancelOrReset}>
+              {languageTheme.cancel || 'Cancel'}
+            </button>
+          </Fragment>
+        )}
+      </form>
     ) : (
-      <FormModelConfig.Provider value={settings}>
-        <Viewer {...{ formModel }} />
-      </FormModelConfig.Provider>
+      <Viewer {...{ formModel }} />
     );
   }
 );
