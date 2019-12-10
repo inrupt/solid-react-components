@@ -37,13 +37,15 @@ const Form = ({
 }: Props) => {
   const [formFields, setFormFields] = useState([]);
   const { theme, savingComponent } = useContext(FormModelConfig);
-
   const parts = formModel[UI_PARTS];
 
   /* keep our data in sync with the form model */
   useEffect(() => {
-    if (typeof formModel === 'object' && parts) setFormFields(Object.keys(parts));
+    if (parts) setFormFields(Object.keys(parts));
   }, [formModel]);
+
+  /* all ui:forms have to have a parts predicate/object */
+  if (!parts) return null;
 
   let classes = theme.form || '';
   if (parent) classes += theme.childGroup || '';
@@ -58,47 +60,38 @@ const Form = ({
       <ParentLabel />
       {formFields.map(item => {
         const field = parts[item];
-        const fieldParts = field && field[UI_PARTS];
-        const component = field && UIMapping(field[RDF_TYPE]);
-        const id = (field && field[UI_NAME]) || item;
-        /**
-         * Return null when field doesn't exists
-         * this avoid to crash app using recursive component
-         */
-        if (!field) return null;
-        /* eslint no-useless-computed-key: "off" */
-        const { [UI_PARTS]: deleted, ...updatedField } = field;
 
-        return fieldParts ? (
-          <Form
-            key={item}
-            formModel={field}
-            {...{
-              formObject,
-              modifyFormObject,
-              parent: updatedField,
-              deleteField,
-              onSave,
+        if (!field) return null;
+
+        /* there is a inner form/group */
+        if (field[UI_PARTS]) {
+          const { [UI_PARTS]: deleted, ...updatedField } = field;
+          return (
+            <Form
+              key={item}
+              formModel={field}
+              formObject
+              modifyFormObject
+              parent={updatedField}
+              deleteField
+              onSave
               autoSave
-            }}
-          >
-            <Multiple
-              {...{
-                field,
-                addNewField,
-                className: theme && theme.multiple
-              }}
-            />
-            <DeleteButton
-              {...{
-                type: field['rdf:type'],
-                action: deleteField,
-                id: field['ui:name'],
-                className: theme && theme.deleteButton
-              }}
-            />
-          </Form>
-        ) : (
+            >
+              <Multiple field addNewField={addNewField} className={theme.multiple} />
+              <DeleteButton
+                type={field[RDF_TYPE]}
+                action={deleteField}
+                id={field[UI_NAME]}
+                className={theme.deleteButton}
+              />
+            </Form>
+          );
+        }
+
+        const component = UIMapping(field[RDF_TYPE]);
+        const id = field[UI_NAME] || item;
+
+        return (
           <ControlGroup
             key={item}
             component={component}
