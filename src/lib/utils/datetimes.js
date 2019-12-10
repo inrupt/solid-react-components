@@ -1,4 +1,6 @@
 import { addHours, setHours, setMinutes, setSeconds } from 'date-fns';
+import * as locales from 'date-fns/locale';
+
 import { UITypes } from '@constants';
 
 /**
@@ -71,4 +73,21 @@ export const getFormattedLocale = (): string => {
     return `${locale[0]}${locale[1]}`;
   }
   return `${locale[0]}`;
+};
+
+/**
+ * tries to get the closest locale object based on the browser locale
+ * e.g.: `en-US` -> locales[`enUS`]
+ *       `es-CR` -> locales[`es`]
+ * @returns {Locale | enUS} the closest found locale object
+ */
+export const getClosestLocale = (): string => {
+  const firstOption = locales[getFormattedLocale()];
+  if (firstOption) return firstOption;
+
+  const browserLocale = getLocale();
+  const secondOption = locales[browserLocale.split('-')[0]];
+  if (secondOption) return secondOption;
+
+  return locales.enUS;
 };
