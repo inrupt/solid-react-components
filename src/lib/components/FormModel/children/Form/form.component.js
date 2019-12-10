@@ -54,57 +54,59 @@ const Form = ({
   const ParentLabel = () =>
     formModel[RDF_TYPE] === UI_MULTIPLE ? <p>{formModel[UI_LABEL]}</p> : null;
 
+  const renderItem = item => {
+    const field = parts[item];
+
+    if (!field) return null;
+
+    /* there is a inner form/group */
+    if (field[UI_PARTS]) {
+      const { [UI_PARTS]: deleted, ...updatedField } = field;
+      return (
+        <Form
+          key={item}
+          formModel={field}
+          formObject
+          modifyFormObject
+          parent={updatedField}
+          deleteField
+          onSave
+          autoSave
+        >
+          <Multiple field addNewField={addNewField} className={theme.multiple} />
+          <DeleteButton
+            type={field[RDF_TYPE]}
+            action={deleteField}
+            id={field[UI_NAME]}
+            className={theme.deleteButton}
+          />
+        </Form>
+      );
+    }
+
+    const component = UIMapping(field[RDF_TYPE]);
+    const id = field[UI_NAME] || item;
+
+    return (
+      <ControlGroup
+        key={item}
+        component={component}
+        value={field['ui:value']}
+        fieldData={{ id, ...field, parent }}
+        modifyFormObject={modifyFormObject}
+        formObject={formObject}
+        autoSave={autoSave}
+        onSave={onSave}
+        savingComponent={savingComponent}
+      />
+    );
+  };
+
   return (
     <Group className={classes} parent={parent}>
       <FormTitle />
       <ParentLabel />
-      {formFields.map(item => {
-        const field = parts[item];
-
-        if (!field) return null;
-
-        /* there is a inner form/group */
-        if (field[UI_PARTS]) {
-          const { [UI_PARTS]: deleted, ...updatedField } = field;
-          return (
-            <Form
-              key={item}
-              formModel={field}
-              formObject
-              modifyFormObject
-              parent={updatedField}
-              deleteField
-              onSave
-              autoSave
-            >
-              <Multiple field addNewField={addNewField} className={theme.multiple} />
-              <DeleteButton
-                type={field[RDF_TYPE]}
-                action={deleteField}
-                id={field[UI_NAME]}
-                className={theme.deleteButton}
-              />
-            </Form>
-          );
-        }
-
-        const component = UIMapping(field[RDF_TYPE]);
-        const id = field[UI_NAME] || item;
-
-        return (
-          <ControlGroup
-            key={item}
-            component={component}
-            value={field['ui:value']}
-            fieldData={{ id, ...field, parent }}
-            modifyFormObject={modifyFormObject}
-            formObject={formObject}
-            autoSave={autoSave}
-            onSave={onSave}
-            savingComponent={savingComponent}
-          />
-        );
-      })}
+      {formFields.map(item => renderItem(item))}
       {children}
     </Group>
   );
