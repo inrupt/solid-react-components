@@ -1,30 +1,34 @@
-import React from 'react';
-import { FormModelConfig } from '@context';
-import { Label } from './bool-line.style';
+import React, { useContext } from 'react';
 
+import { FormModelConfig } from '@context';
 import { FormModelUI } from '@constants';
 
+const { UI_NAME, UI_LABEL } = FormModelUI;
+
 type Props = {
-  value: Object
+  value: string,
+  [UI_NAME]: string,
+  [UI_LABEL]: string
 };
 
-const BoolLine = ({ value, ...rest }: Props) => {
+const BoolLine = (props: Props) => {
+  const { theme } = useContext(FormModelConfig);
+  const { value, [UI_NAME]: name, [UI_LABEL]: label } = props;
+
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <Label htmlFor={rest[FormModelUI.UI_NAME]} className={theme && theme.boolLine}>
-          <input
-            type="checkbox"
-            name={rest[FormModelUI.UI_NAME]}
-            defaultValue={value === 'true'}
-            checked={value === 'true'}
-            readOnly
-            className="input-value"
-          />
-          <span className="label-text">{rest[FormModelUI.UI_LABEL] || 'Label'}</span>
-        </Label>
-      )}
-    </FormModelConfig.Consumer>
+    <label {...{ htmlFor: name, className: theme.boolLine }}>
+      <input
+        {...{
+          type: 'checkbox',
+          name,
+          defaultValue: value === 'true',
+          checked: value === 'true',
+          readOnly: true,
+          className: 'input-value'
+        }}
+      />
+      <span {...{ className: theme.boolFieldLabel }}>{label}</span>
+    </label>
   );
 };
 
