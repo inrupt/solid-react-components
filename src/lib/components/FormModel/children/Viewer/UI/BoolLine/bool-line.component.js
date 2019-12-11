@@ -15,20 +15,25 @@ const BoolLine = (props: Props) => {
   const { theme } = useContext(FormModelConfig);
   const { value, [UI_NAME]: name, [UI_LABEL]: label } = props;
 
+  const checked = value === 'true';
+
+  if (!name) return null;
+
   return (
-    <label {...{ htmlFor: name, className: theme.boolLine }}>
+    <>
       <input
         {...{
+          id: name,
+          className: theme.checkbox,
           type: 'checkbox',
           name,
-          defaultValue: value === 'true',
-          checked: value === 'true',
-          readOnly: true,
-          className: 'input-value'
+          defaultValue: false,
+          checked,
+          readOnly: true
         }}
       />
-      <span {...{ className: theme.boolFieldLabel }}>{label}</span>
-    </label>
+      <label {...{ htmlFor: name, className: theme.label }}>{label}</label>
+    </>
   );
 };
 
