@@ -51,6 +51,12 @@ const UIMapping = type => {
     case UITypes.ColorField:
       component = ColorPicker;
       break;
+    case UITypes.EmailField:
+      component = Input;
+      break;
+    case UITypes.PhoneField:
+      component = Input;
+      break;
     default:
       component = Input;
   }

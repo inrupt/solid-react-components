@@ -9,6 +9,7 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBl
   const label = rest['ui:label'] || '';
   const maxLength = rest['ui:maxLength'] || 256;
   const size = rest['ui:size'] || 40;
+  const pattern = rest['ui:pattern'] || '';
   const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
   const onChange = ({ target }) => {
     const obj = { value: target.value, ...rest };
@@ -26,6 +27,7 @@ const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBl
             id={id}
             name={id}
             type={InputTextTypes[type]}
+            pattern={pattern}
             {...{ maxLength, size, value: actualValue || '', onChange, onBlur }}
           />
         </InputGroup>
