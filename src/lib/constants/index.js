@@ -55,7 +55,10 @@ export const FormModelUI = {
   MAX_DATE_OFFSET: 'ui:maxdateOffset',
   MIN_DATE_OFFSET: 'ui:mindateOffset',
   MAX_DATETIME_OFFSET: 'ui:maxdatetimeOffset',
-  MIN_DATETIME_OFFSET: 'ui:mindatetimeOffset'
+  MIN_DATETIME_OFFSET: 'ui:mindatetimeOffset',
+  MAX_LENGTH: 'ui:maxLength',
+  MIN_LENGTH: 'ui:minLength',
+  SIZE: 'ui:size'
 };
 
 export const NotificationTypes = {
