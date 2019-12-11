@@ -45,11 +45,11 @@ export default class AccessControlList {
    * @param {Array<String> | null} agents Array of webId or null if for everyone
    */
   createQuadList = (modes: Array<String>, agents: Array<String> | null) => {
-    const { acl, foaf, a } = ACL_PREFIXES;
+    const { acl, foaf, rdf } = ACL_PREFIXES;
     const subject = `${this.aclUri}#${modes.join('')}`;
     const { documentUri } = this;
     const originalPredicates = [
-      this.createQuad(subject, `${a}`, namedNode(`${acl}Authorization`)),
+      this.createQuad(subject, `${rdf}type`, namedNode(`${acl}Authorization`)),
       this.createQuad(subject, `${acl}accessTo`, namedNode(documentUri)),
       this.createQuad(subject, `${acl}default`, namedNode(documentUri))
     ];
@@ -243,9 +243,9 @@ export default class AccessControlList {
    */
   createMode = async ({ modes, agents }) => {
     try {
-      const { acl, foaf, a } = ACL_PREFIXES;
+      const { acl, foaf } = ACL_PREFIXES;
       const subject = `${this.aclUri}#${modes.join('')}`;
-      await ldflex[subject][a].add(namedNode(`${acl}Authorization`));
+      await ldflex[subject].type.add(namedNode(`${acl}Authorization`));
       const path = namedNode(this.documentUri);
       await ldflex[subject]['acl:accessTo'].add(path);
       await ldflex[subject]['acl:default'].add(path);
