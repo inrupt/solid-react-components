@@ -68,7 +68,7 @@ export const getLocale = (): string => {
  */
 export const getFormattedLocale = (): string => {
   const locale = getLocale().split('-');
-  if (locale[1]) {
+  if (locale.length > 1) {
     locale[1] = locale[1].toUpperCase();
     return `${locale[0]}${locale[1]}`;
   }
