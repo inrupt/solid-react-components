@@ -16,7 +16,7 @@ const CheckBox = ({
   id,
   modifyFormObject,
   formObject,
-  onSave: save,
+  onSave,
   autoSave,
   value,
   ...rest
@@ -43,7 +43,7 @@ const CheckBox = ({
   }, [checked]);
 
   useEffect(() => {
-    if (autoSave) save();
+    if (autoSave) onSave();
   }, [formObject]);
 
   return (
