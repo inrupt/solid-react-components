@@ -5,6 +5,7 @@ import { solidResponse, SolidError, getBasicPod, shexUtil } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import { NotificationTypes } from '@constants';
+import { ensureSlash } from '../utils/solidFetch';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',
@@ -99,14 +100,17 @@ export class Notification {
     let resultPut = { ok: false };
 
     await writer.end(async (error, result) => {
-      resultPut = await solid.fetch(path, {
+      resultPut = await solid.fetch(ensureSlash(path, true) + fileName, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'text/turtle',
-          slug: fileName
+          'Content-Type': 'text/turtle'
         },
         body: result
       });
+
+      if (resultPut.status < 200 || resultPut.status >= 300) {
+        throw new SolidError('Something has gone wrong');
+      }
     });
 
     return resultPut;
@@ -226,7 +230,7 @@ export class Notification {
       const { namedNode, literal } = termFactory;
 
       const fileName = Date.now();
-      const filePath = `${to + fileName}.ttl`;
+      const filePath = `${ensureSlash(to, true) + fileName}`;
 
       // This should be in a constant, but we may shift to use solid/context instead
       const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
@@ -334,16 +338,24 @@ export class Notification {
          */
         const optionsHeader = options && options.header;
 
-        await solid.fetch(to, {
-          method: 'POST',
+        const response = await solid.fetch(filePath, {
+          method: 'PUT',
           body: result,
           headers: {
             'Content-Type': 'text/turtle',
-            slug: fileName,
             ...optionsHeader
           }
         });
+
+        /**
+         * If the response is something besides a 2XX code, throw an error. I am not sure if this
+         *  would actually get called or not, as I think an error is thrown by the fetch in many cases like 404
+         */
+        if (response.status < 200 || response.status >= 300) {
+          throw new SolidError('Something has gone wrong');
+        }
       });
+
       return solidResponse(200, 'Notification was created');
     } catch (error) {
       throw new SolidError(error.message, 'Notification', error.status);
