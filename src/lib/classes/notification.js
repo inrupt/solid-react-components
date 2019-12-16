@@ -230,7 +230,7 @@ export class Notification {
       const { namedNode, literal } = termFactory;
 
       const fileName = Date.now();
-      const filePath = `${ensureSlash(to, true) + fileName}`;
+      const filePath = `${to + fileName}.ttl`;
 
       // This should be in a constant, but we may shift to use solid/context instead
       const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
@@ -338,24 +338,16 @@ export class Notification {
          */
         const optionsHeader = options && options.header;
 
-        const response = await solid.fetch(filePath, {
-          method: 'PUT',
+        await solid.fetch(to, {
+          method: 'POST',
           body: result,
           headers: {
             'Content-Type': 'text/turtle',
+            slug: fileName,
             ...optionsHeader
           }
         });
-
-        /**
-         * If the response is something besides a 2XX code, throw an error. I am not sure if this
-         *  would actually get called or not, as I think an error is thrown by the fetch in many cases like 404
-         */
-        if (response.status < 200 || response.status >= 300) {
-          throw new SolidError('Something has gone wrong');
-        }
       });
-
       return solidResponse(200, 'Notification was created');
     } catch (error) {
       throw new SolidError(error.message, 'Notification', error.status);

@@ -68,8 +68,6 @@ export const useNotification = owner => {
             (a, b) => new Date(b.published) - new Date(a.published)
           );
 
-          // TODO: Filter the notification list by which pass a shex.js validation
-
           /**
            * Get unread notifications
            * @type {number}

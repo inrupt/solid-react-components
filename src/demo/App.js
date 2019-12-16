@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
-import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
+// import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
 import SolidImg from '../assets/solid_logo.png';
 import {
   ProviderLogin,
@@ -60,7 +60,9 @@ const App = () => {
   const [userWebID, setUserWebID] = useState('');
 
   const webId = useWebId();
-  const { notification, createNotification, discoverInbox } = useNotification(webId);
+  const { notification, createNotification, discoverInbox, fetchNotification } = useNotification(
+    webId
+  );
 
   const onWebIDChange = useCallback((event: Event) => {
     const { target } = event;
@@ -68,6 +70,21 @@ const App = () => {
   });
 
   const init = async () => {
+    /*
+     * This code snippet will fetch notifications of a given inbox, running the full ShEx validation and everything
+     * Comment out if you want to speed up App.js rendering
+     */
+    /*
+    const inboxes = [{ path: 'https://jmartin.inrupt.net/public/games/tictactoe/inbox/', inboxName: 'Global Inbox', shape: 'default' }];
+    await fetchNotification(inboxes);
+    console.log(notification);
+    */
+    /*
+     * This code snippet will run a form model conversion on a given shex shape.
+     * Comment this out if you want to increase App.js performance. To enable, uncomment this
+     * section and also the import statement for FormModelClass
+     */
+    /*
     const formModel = new FormModelClass(
       'https://solidsdk.inrupt.net/public/FormLanguage/examples/ShEx/decimal.shex',
       'https://jmartin.inrupt.net/profile/card#me'
@@ -79,6 +96,7 @@ const App = () => {
 
     // eslint-disable-next-line no-console
     console.log(formModelOutput, 'model new');
+     */
   };
 
   const createAcl = async () => {
