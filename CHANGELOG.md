@@ -4,14 +4,14 @@
 
 ### Added
 
-- FormModel component
+- FormModel component:
   - New component that renders a form from a Form Model
   - New components added to support the form model. The following list of components are all compatible with the Form Model:
     - Textbox
     - TextArea
     - Date / DateTime / Time fields, using [react-datepicker](https://reactdatepicker.com/)
     - Dropdown
-    - Checkbox
+    - Checkbox (Boolean, not tri-state)
     - ColorPicker, using [react-color](https://casesandberg.github.io/react-color/)
     - Header (an `<h2>` tag rendered inside of the form)
     - Comment (a `<p>` tag rendered inside of the form)
@@ -19,10 +19,11 @@
     - Email field
     - Phone field
     - Multiple, a custom Form Model field that indicates the child element is repeatable
+    - Group, an ordered set of fields that can be treated as a single sub-form
 
 ### Updated
 
-- Notification class was updated to validate notifications when being read from an inbox. This way only compatible notifications are retrieved and the data is more predicatble for display purposes
+- Notification class was updated to validate notifications when being read from an inbox. This way only compatible notifications are retrieved and the data is more predictable for display purposes
 - Updated ACL class predicate from `acl:defaultForNew`, which is deprecated, to `acl:default`
 - Renamed the rdf predicate prefix from `a` to `rdf` to align with standard convention
 

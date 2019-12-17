@@ -164,17 +164,17 @@ We currently re-expose withWebId and LogoutButton so you can use the basic compo
 
 ### FormModel
 
-This component takes a FormModel (build using the Form Language and [UI ontology](https://www.w3.org/ns/ui#)). A properly formatted FormModel will render a form, complete with constraints. Some things are not yet supported, such as ui:arc links, FormForms, and more. This component is still being improved and worked on.
+This component takes a FormModel (build using the Form Language and [UI ontology](https://www.w3.org/ns/ui#)). A properly formatted FormModel will render a form, complete with constraints. Some things are not yet supported, such as ui:arc links, ui:Choice, ui:Options, and more. This component is still being improved and worked on.
 
 #### Supported Field Types:
 
 ##### Textbox
 
-Textboxes are the default input type for each field in a shape, and represented in the FormModel by SingleLineTextFields. It can have common constraints like maxLength, as defined in the Form Language
+Textboxes are the default input type for each field in a shape, and represented in the FormModel by SingleLineTextFields. It can have common constraints like maxLength, as defined in the Form Language.
 
 ##### Textarea
 
-A Textarea is represented in the FormModel by a MultiLineTextField, and similar to textbox has constraints defined by the Form Language
+A Textarea is represented in the FormModel by a MultiLineTextField, and similar to textbox has constraints defined by the Form Language.
 
 ##### Select / Dropdown
 
@@ -198,7 +198,7 @@ A checkbox is rendered by a BooleanField in the Form Model, representing a binar
 
 ##### Email / Phone field
 
-Email and Phone Number fields are custom textboxes, similar to the Number fields. They each take a regex pattern from the form model and
+Email and Phone Number fields are custom textboxes, similar to the Number fields. They each take a regex pattern from the form model and apply it to the input field.
 
 #### Validation
 
@@ -226,27 +226,27 @@ The most basic usage only requires two parameters, modelPath and podPath, as dem
 <FormModel modelPath={formModelUrl} podPath={dataUrl}  />
 ```
 
-| Props         | Type     | Default                                           | Description                                                                                                                       |
-| ------------- | -------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| podPath       | string   | null                                              | Required. The URL representing the root subject to save the form data to, for example a WebID or file in the user's Pod.          |
-| modelPath     | string   | null                                              | Required. The URL to the form model used to render the form                                                                       |
-| settings      | Object   | null                                              | Optional. An object (defined below) allowing custom overrides to the look and feel of the form.                                   |
-| onSuccess     | Function | Function that writes a success message to console | Optional. Overrides the existing success callback and allows custom onSuccess functions.                                          |
-| onError       | Function | Function that writes the error message to console | Optional. Overrides the existing error callback function.                                                                         |
-| onInit        | Function | null                                              | Optional. Overrides the existing initialization callback, and fires after initialization is complete                              |
-| onSave        | Function | null                                              | Optional. A callback that executes when the save function is called                                                               |
-| onLoaded      | Function | null                                              | Optional. A callback that executes when the form is loaded. An example of what this can be used for is removing a loading spinner |
-| onAddNewField | Function | null                                              | Optional. A callback that executes after a new field is added to a multiple field                                                 |
-| onDelete      | Function | null                                              | Optional. A callback that executes after a field is removed/deleted                                                               |
-| autoSave      | Boolean  | false                                             | Optional. Determines of the form will autosave or have a save/cancel button. Default is save/cancel button.                       |
+| Props         | Type     | Default                                           | Description                                                                                                                        |
+| ------------- | -------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| podPath       | string   | null                                              | Required. The URL representing the root subject to save the form data to, for example a WebID or file in the user's Pod.           |
+| modelPath     | string   | null                                              | Required. The URL to the form model used to render the form.                                                                       |
+| settings      | Object   | null                                              | Optional. An object (defined below) allowing custom overrides to the look and feel of the form.                                    |
+| onSuccess     | Function | Function that writes a success message to console | Optional. Overrides the existing success callback and allows custom onSuccess functions.                                           |
+| onError       | Function | Function that writes the error message to console | Optional. Overrides the existing error callback function.                                                                          |
+| onInit        | Function | null                                              | Optional. Overrides the existing initialization callback, and fires after initialization is complete.                              |
+| onSave        | Function | null                                              | Optional. A callback that executes when the save function is called.                                                               |
+| onLoaded      | Function | null                                              | Optional. A callback that executes when the form is loaded. An example of what this can be used for is removing a loading spinner. |
+| onAddNewField | Function | null                                              | Optional. A callback that executes after a new field is added to a multiple field.                                                 |
+| onDelete      | Function | null                                              | Optional. A callback that executes after a field is removed/deleted.                                                               |
+| autoSave      | Boolean  | false                                             | Optional. Determines of the form will autosave or have a save/cancel button. Default is save/cancel button.                        |
 
 The settings parameter takes several subproperties:
 
-| Key             | Type      | Default | Description                                                                                                                                                  |
-| --------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| theme           | Object    | {}      | An object, defined below, that contains different class overrides for custom theming                                                                         |
-| languageTheme   | Object    | {}      | An object, defined below, that contains override text for the form buttons and controls                                                                      |
-| savingComponent | Component | null    | If provided, this component will display when autosave is triggered. An example of this is loading spinners and validatione errors for the autosave function |
+| Key             | Type      | Default | Description                                                                                                                                                   |
+| --------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| theme           | Object    | {}      | An object, defined below, that contains different class overrides for custom theming.                                                                         |
+| languageTheme   | Object    | {}      | An object, defined below, that contains override text for the form buttons and controls.                                                                      |
+| savingComponent | Component | null    | If provided, this component will display when autosave is triggered. An example of this is loading spinners and validatione errors for the autosave function. |
 
 Theme object:
 
@@ -259,14 +259,14 @@ Theme object:
 
 LanguageTheme object:
 
-| Key                 | Type   | Default      | Description                                                       |
-| ------------------- | ------ | ------------ | ----------------------------------------------------------------- |
-| language            | string | 'en'         | String representing the language code to use for the translations |
-| saveBtn             | string | 'Save'       | String representing the save button text                          |
-| resetBtn            | string | 'Reset'      | String representing the reset button text                         |
-| addButtonText       | string | '+ Add new'  | String representing the add new item button text                  |
-| deleteButton        | string | 'Delete'     | String representing the delete button text                        |
-| dropdownDefaultText | string | '- Select -' | String representing the default text for a dropdown menu          |
+| Key                 | Type   | Default      | Description                                                        |
+| ------------------- | ------ | ------------ | ------------------------------------------------------------------ |
+| language            | string | 'en'         | String representing the language code to use for the translations. |
+| saveBtn             | string | 'Save'       | String representing the save button text.                          |
+| resetBtn            | string | 'Reset'      | String representing the reset button text.                         |
+| addButtonText       | string | '+ Add new'  | String representing the add new item button text.                  |
+| deleteButton        | string | 'Delete'     | String representing the delete button text.                        |
+| dropdownDefaultText | string | '- Select -' | String representing the default text for a dropdown menu.          |
 
 ## Class List
 
