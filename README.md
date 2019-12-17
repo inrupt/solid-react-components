@@ -250,12 +250,16 @@ The settings parameter takes several subproperties:
 
 Theme object:
 
-| Key          | Type   | Default                            | Description                                      |
-| ------------ | ------ | ---------------------------------- | ------------------------------------------------ |
-| input        | string | solid-input-shex                   | Custom class name for input fields in the form.  |
-| select       | string | solid-input-shex solid-select-shex | Custom class name for select fields in the form. |
-| deleteButton | string | solid-button-shex                  | Custom class name for the delete button.         |
-| form         | string | solid-shex-form                    | Custom class name for the form.                  |
+| Key           | Type   | Default | Description                                                                                                                |
+| ------------- | ------ | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| input         | string |         | Custom class name for input fields in the form.                                                                            |
+| select        | string |         | Custom class name for select fields in the form.                                                                           |
+| deleteButton  | string |         | Custom class name for the delete button.                                                                                   |
+| form          | string |         | Custom class name for the form.                                                                                            |
+| multiple      | string |         | Custom class name for `<Mulitple>`                                                                                         |
+| inputText     | string |         | Custom class name for `<Classifier>`, `<DatePicker>`, `<Decimal>`, `<Email>`, `<Float>`, `<Input>`, `<Integer>`, `<Phone>` |
+| colorPicker   | string |         | Custom class name for the `<ColorPicker>`                                                                                  |
+| inputTextArea | string |         | Custom class name for `<TextArea>`                                                                                         |
 
 LanguageTheme object:
 
