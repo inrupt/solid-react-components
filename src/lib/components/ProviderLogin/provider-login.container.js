@@ -14,7 +14,7 @@ type Props = {
   providers?: Array<Provider>,
   callbackUri: String,
   selectPlaceholder?: String,
-  inputPlaholder?: String,
+  inputPlaceholder?: String,
   formButtonText?: String,
   btnTxtWebId?: String,
   btnTxtProvider?: String,
@@ -55,9 +55,10 @@ export default class LoginComponent extends Component<Props> {
   isWebIdValid = webId => {
     const regex = new RegExp(
       // eslint-disable-next-line no-useless-escape
-      /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:\/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+      /((https?:\/\/)?(?:localhost|[\w-]+(?:\.[\w-]+)+)(:\d+)?(\/\S*)?)/,
       'i',
-      'g'
+      'g',
+      'A'
     );
     return regex.test(webId);
   };
@@ -85,7 +86,12 @@ export default class LoginComponent extends Component<Props> {
         storage: localStorage
       });
 
-      if (!session) {
+      /**
+       * This condition checks if the session is null or undefined, we can have those 2 kind of values in return
+       * Null would be the validation for the non existing pod provider
+       * undefined will be session doesn't existing and/or the request is still pending
+       */
+      if (!session && session === null) {
         throw new SolidError(errorsText.unknown, 'unknown');
       }
       return session;
@@ -96,10 +102,7 @@ export default class LoginComponent extends Component<Props> {
       if (onError) {
         onError(error);
       }
-      // Show form error messsage when idp is null
-      if (error.name !== 'unknown') {
-        this.setState({ error });
-      }
+      this.setState({ error });
     }
   };
 
@@ -142,13 +145,13 @@ export default class LoginComponent extends Component<Props> {
 
 LoginComponent.defaultProps = {
   selectPlaceholder: 'Select ID Provider',
-  inputPlaholder: 'WebID',
+  inputPlaceholder: 'WebID',
   formButtonText: 'Log In',
   btnTxtWebId: 'Log In with WebId',
   btnTxtProvider: 'Log In with Provider',
   errorsText: {
     unknown: 'Something is wrong, please try again...',
-    webIdNotValid: 'WeibID is not valid',
+    webIdNotValid: 'WebID is not valid',
     emptyProvider: 'Solid Provider is required',
     emptyWebId: 'Valid WebID is required'
   },

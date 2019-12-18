@@ -1,10 +1,19 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
+// import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
 import SolidImg from '../assets/solid_logo.png';
-import { ProviderLogin, Uploader, ProfileUploader, useNotification } from '../lib';
+import {
+  ProviderLogin,
+  Uploader,
+  ProfileUploader,
+  useNotification,
+  FormModel,
+  AutoSaveDefaultSpinner,
+  ProfileViewer
+} from '@lib';
 import { AccessControlList } from '@classes';
-import HandleShexForm from './components';
+import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -21,17 +30,6 @@ const Headline = styled.h1`
   color: #333;
   font-size: 36px;
   font-weight: 300;
-`;
-
-const ShexFormComponent = styled.div`
-    border-top: 1px solid black;
-    
-    input {
-      margin: 20px 0;
-      padding: 10px;
-      width: 100%
-      box-sizing: border-box;
-   }
 `;
 
 const NotificationSection = styled.div`
@@ -59,21 +57,46 @@ const Header = () => {
 };
 
 const App = () => {
-  const [userInbox, setUserInbox] = useState(null);
+  const [userWebID, setUserWebID] = useState('');
+
   const webId = useWebId();
-  const { fetchNotification, notification, createNotification, discoverInbox } = useNotification(
+  const { notification, createNotification, discoverInbox, fetchNotification } = useNotification(
     webId
   );
 
-  const onChange = useCallback((event: Event) => {
+  const onWebIDChange = useCallback((event: Event) => {
     const { target } = event;
-    setUserInbox(target.value);
+    setUserWebID(target.value);
   });
 
   const init = async () => {
-    const result = await discoverInbox(webId);
+    /*
+     * This code snippet will fetch notifications of a given inbox, running the full ShEx validation and everything
+     * Comment out if you want to speed up App.js rendering
+     */
+    /*
+    const inboxes = [{ path: 'https://jmartin.inrupt.net/public/games/tictactoe/inbox/', inboxName: 'Global Inbox', shape: 'default' }];
+    await fetchNotification(inboxes);
+    console.log(notification);
+    */
+    /*
+     * This code snippet will run a form model conversion on a given shex shape.
+     * Comment this out if you want to increase App.js performance. To enable, uncomment this
+     * section and also the import statement for FormModelClass
+     */
+    /*
+    const formModel = new FormModelClass(
+      'https://solidsdk.inrupt.net/public/FormLanguage/examples/ShEx/decimal.shex',
+      'https://jmartin.inrupt.net/profile/card#me'
+    );
+    const schema = await formModel.parseSchema(
+      'https://solidsdk.inrupt.net/public/FormLanguage/examples/ShEx/decimal.shex'
+    );
+    const formModelOutput = await formModel.parseShEx(schema);
 
-    fetchNotification([{ path: result, inboxName: 'Global App' }]);
+    // eslint-disable-next-line no-console
+    console.log(formModelOutput, 'model new');
+     */
   };
 
   const createAcl = async () => {
@@ -87,6 +110,33 @@ const App = () => {
     }
   };
 
+  const sendSampleNotification = async () => {
+    try {
+      // Discover the inbox url from the resource, using ldp:inbox predicate
+      const inboxUrl = await discoverInbox(userWebID);
+      // The actor in this case is the current application, so we can use the current URL
+      // Removing actor temporarily until we figure out how to link applications
+      // const actor = window.location.href;
+
+      if (!inboxUrl) {
+        throw new Error('Inbox not found');
+      }
+
+      createNotification(
+        {
+          title: 'Notification Example',
+          summary: 'This is a basic solid notification example.',
+          actor: 'https://solidsdk.inrupt.net/profile/card#me'
+        },
+        inboxUrl,
+        NotificationTypes.ANNOUNCE
+      );
+    } catch (ex) {
+      // eslint-disable-next-line no-console
+      console.log(ex);
+    }
+  };
+
   useEffect(() => {
     if (webId) init();
   }, [notification.notify, webId]);
@@ -94,11 +144,64 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
+      <ProfileViewer
+        {...{
+          webId: 'https://jmartin.inrupt.net/profile/card#me',
+          direction: 'down',
+          viewMoreText: 'See Profile',
+          onError: error => {
+            // eslint-disable-next-line no-console
+            console.log('ERROR', error.statusText);
+          },
+          onClick: false
+        }}
+      >
+        <span>James</span>
+      </ProfileViewer>
+
+      <br />
       <button type="button" onClick={createAcl}>
         Create ACL
       </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
+      <FormModel
+        {...{
+          modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/datetime.ttl#formRoot',
+          podPath: 'https://jmartin.inrupt.net/profile/card#me',
+          settings: {
+            theme: {
+              inputText: 'sdk-input',
+              inputCheckbox: 'sdk-checkbox checkbox',
+              inputTextArea: 'sdk-textarea'
+            },
+            savingComponent: AutoSaveDefaultSpinner
+          },
+          viewer: false,
+          onError: error => {
+            // eslint-disable-next-line no-console
+            console.log(error, 'error');
+          },
+          onSuccess: success => {
+            // eslint-disable-next-line no-console
+            console.log(success);
+          },
+          onSave: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onAddNewField: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onDelete: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          }
+        }}
+        autoSave
+        liveUpdate
+      />
       <Uploader
         {...{
           fileBase: 'Your POD folder here',
@@ -116,34 +219,16 @@ const App = () => {
           render: props => <ProfileUploader {...{ ...props }} />
         }}
       />
-      {webId && (
-        <ShexFormComponent>
-          <HandleShexForm {...{ webId }} />
-        </ShexFormComponent>
-      )}
       <NotificationSection>
-        <h3>Create notification example using your inbox</h3>
+        <h3>Create notification example using a WebID or Resource path</h3>
         <input
           type="text"
-          placeholder="Inbox Path"
-          name="userInbox"
-          defaultValue=""
-          onChange={onChange}
-          value={userInbox}
+          placeholder="WebID or Resource"
+          name="userWebID"
+          onChange={onWebIDChange}
+          value={userWebID}
         />
-        <button
-          type="button"
-          disabled={!userInbox}
-          onClick={() =>
-            createNotification(
-              {
-                title: 'Notification Example',
-                summary: 'This is a basic solid notification example.'
-              },
-              userInbox
-            )
-          }
-        >
+        <button type="button" disabled={!userWebID} onClick={sendSampleNotification}>
           Create notification
         </button>
       </NotificationSection>

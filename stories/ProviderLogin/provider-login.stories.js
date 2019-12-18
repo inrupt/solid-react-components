@@ -16,7 +16,7 @@ storiesOf('Provider Login', module)
   .add('default', () => (
     <ProviderLogin
       selectPlaceholder={text('selectPlaceholder', 'Provider')}
-      inputPlaholder={text('inputPlaceholder', 'WebId')}
+      inputPlaceholder={text('inputPlaceholder', 'WebId')}
       formButtonText={text('formButtonText', 'Login')}
       btnTxtWebId={text('btnTxtWebId', 'Enter WebId')}
       btnTxtProvider={text('btnTxtProvider', 'Select provider')}

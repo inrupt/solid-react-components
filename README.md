@@ -2,7 +2,9 @@
 
 React components for building your own [Solid](https://solid.inrupt.com/") applications. Part of the [React SDK for Solid](https://github.com/inrupt-inc/solid-react-sdk).
 
-## External Dependencies
+## Dependencies
+
+The following is a list of some of the major dependencies of the solid-react-components library. These packages are all installed as part of the `npm install` step of setup.
 
 1.  [solid-auth-client](https://github.com/solid/solid-auth-client) - Solid authentication library.
 2.  [ldflex-for-solid](https://github.com/solid/query-ldflex) - Solid library to read and manipulate data.
@@ -69,18 +71,19 @@ For now, the list of Providers is passed in as a parameter. In the future, this 
 <ProviderLogin />
 ```
 
-| Props             | Type                                                                     | Default                                                                                                                                                                           | Description                               |
-| ----------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| providers         | Array of Providers (label, image, value, register link, and description) | Solid and Inrupt Providers.                                                                                                                                                       |
-| callback          | Function                                                                 | null                                                                                                                                                                              | Will call after login.                    |
-| className         | String                                                                   | null                                                                                                                                                                              | Custom class for component.               |
-| OnError           | Function                                                                 | null                                                                                                                                                                              | If an error occurs, this will fire.       |
-| selectPlaceholder | String                                                                   | Select ID Provider                                                                                                                                                                |
-| inputPlaholder    | String                                                                   | WebID                                                                                                                                                                             |
-| formButtonText    | String                                                                   | Log In                                                                                                                                                                            |
-| btnTxtWebId       | String                                                                   | Log In with WebID                                                                                                                                                                 |
-| btnTxtProvider    | String                                                                   | Log In with Provider                                                                                                                                                              |
-| errorsText        | Object                                                                   | `{ unknown: "Something is wrong, please try again...", webIdNotValid: "WeibID is not valid" emptyProvider: "Solid Provider is required", emptyWebId: "Valid WebID is required" }` | An object with the error messages to show |
+| Props             | Type                                                                     | Default                                                                                                                                                                          | Description                               |
+| ----------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| providers         | Array of Providers (label, image, value, register link, and description) | Solid and Inrupt Providers.                                                                                                                                                      |
+| callback          | Function                                                                 | null                                                                                                                                                                             | Will call after login.                    |
+| callbackUri       | String                                                                   | null                                                                                                                                                                             | URL to return to after a successful login |
+| className         | String                                                                   | null                                                                                                                                                                             | Custom class for component.               |
+| OnError           | Function                                                                 | null                                                                                                                                                                             | If an error occurs, this will fire.       |
+| selectPlaceholder | String                                                                   | Select ID Provider                                                                                                                                                               |
+| inputPlaceholder  | String                                                                   | WebID                                                                                                                                                                            |
+| formButtonText    | String                                                                   | Log In                                                                                                                                                                           |
+| btnTxtWebId       | String                                                                   | Log In with WebID                                                                                                                                                                |
+| btnTxtProvider    | String                                                                   | Log In with Provider                                                                                                                                                             |
+| errorsText        | Object                                                                   | `{ unknown: "Something is wrong, please try again...", webIdNotValid: "WebID is not valid" emptyProvider: "Solid Provider is required", emptyWebId: "Valid WebID is required" }` | An object with the error messages to show |
 
 ### PrivateRoute
 
@@ -101,12 +104,12 @@ The component will check to see if the user is logged in, using the withWebId co
 
 In Solid, people are identified by a WebID, which is essentially a URL link that points to them and leads to their data.
 
-By wrapping your component definition with withWebId, the WebID property will automatically be set on your component's instances whenever the login status changes.
+By wrapping your component definition with withWebId, the `webId` property will automatically be set on your component's instances whenever the login status changes.
 
 We re-expose this component from [@solid/react](https://github.com/solid/react-components) library.
 
 ```javascript
-const MyComponent = withWebId(props => <p>Hey user, your WebID is {props.webID}.</p>);
+const MyComponent = withWebId(props => <p>Hey user, your WebID is {props.webId}.</p>);
 ```
 
 ### withAuthorization
@@ -159,25 +162,47 @@ Here's an example of a basic ProfileUploader component, demonstrating how to add
 
 We currently re-expose withWebId and LogoutButton so you can use the basic components without installing other libraries.
 
-### ShExFormBuilder
+### FormModel
 
-**Note**: This is an early preview build of a work-in-progress component and subject to large-scale changes in future releases.
-
-This component allows you to create a fully functional form, complete with submit, cancel, and validation rules, from a [ShEx](http://shex.io/shex-primer/index.html) Shape.
+This component takes a FormModel (build using the Form Language and [UI ontology](https://www.w3.org/ns/ui#)). A properly formatted FormModel will render a form, complete with constraints. Some things are not yet supported, such as ui:arc links, ui:Choice, ui:Options, and more. This component is still being improved and worked on.
 
 #### Supported Field Types:
 
 ##### Textbox
 
-Textboxes are the default input type for each field in a shape. In future versions, there will be a way to determine if you want a textbox vs a textarea based on properties such as maxlength.
+Textboxes are the default input type for each field in a shape, and represented in the FormModel by SingleLineTextFields. It can have common constraints like maxLength, as defined in the Form Language.
+
+##### Textarea
+
+A Textarea is represented in the FormModel by a MultiLineTextField, and similar to textbox has constraints defined by the Form Language.
 
 ##### Select / Dropdown
 
-Dropdowns are displayed when the shape has a reference to another shape that is only a list of values. The values are displayed in the dropdown.
+Dropdowns are displayed based on the Classifier field in the FormModel. Currently, the control will load a list of items from a Class, loading the subclasses as options in the dropdown. An example of this is the Types for Email and Phone number in the userprofile form mode.
+
+##### Date / Time / DateTime picker
+
+Using the react-datetime library, the appropriate picker is displayed according to the Form Model. There are several types of constraints, including max/minValue and a valid date range offset from "today".
+
+##### Color Picker
+
+Using the react-color library, a color picker is displayed when appropriate, saving the value as a six-digit RGB hex value.
+
+##### Integer / Decimal / Float field
+
+Numbers are represented in the form as a textbox with special custom constraints in place, enforcing that the textbox is an integer, float, or decimal depending on the Form Model definition.
+
+##### Checkbox
+
+A checkbox is rendered by a BooleanField in the Form Model, representing a binary yes/no choice. Tri-state checkboxes are not yet supported.
+
+##### Email / Phone field
+
+Email and Phone Number fields are custom textboxes, similar to the Number fields. They each take a regex pattern from the form model and apply it to the input field.
 
 #### Validation
 
-Validation is done using ShEx constraints. You can read more about these constraints on the [ShEx website](http://shex.io/). Examples include:
+Validation is done using properties in the Form Model. An example of the types of validation that are enabled are:
 
 - Required vs Optional fields.
 - Repeatable fields, and the min/max number of times they can be repeated.
@@ -189,52 +214,63 @@ Validation is done using ShEx constraints. You can read more about these constra
 
 Currently, labels are assigned to a field by either:
 
-- Adding an rdfs:label annotation to the field in the ShEx shape (see [example shapes](https://shexshapes.inrupt.net/public/) for examples).
-- Parsing the name of the predicate assigned to that field.
-
-In the future, labels will be generated more dynamically.
+- Adding a `ui:label` predicate to the FormModel
+- If no label is found, the vocabulary is loaded and a `rdfs:label` predicate is searched for, to see if the vocabulary has a label to use
+- If neither of the above works, the fallback is parsing the name of the predicate assigned to that field, e.g. if the predicate is `foaf:givenName`, the label would be `givenName`
 
 #### Usage
 
+The most basic usage only requires two parameters, modelPath and podPath, as demonstrated below. However, this will produce a very barebones and unstyled form. For a full list of parameters, see the table below.
+
 ```
-<ShexFormBuilder documentUri={url} shexUri={}  />
+<FormModel modelPath={formModelUrl} podPath={dataUrl}  />
 ```
 
-| Props             | Type     | Default                                           | Description                                                                                                                                 |
-| ----------------- | -------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| documentUri       | string   | null                                              | Required. The URL representing the root subject to save the form data to, for example a WebID or file in the user's Pod.                    |
-| shexUri           | string   | null                                              | Required. The URL to the ShEx shape to use to render the form.                                                                              |
-| rootShape         | string   | null                                              | Optional. The shape in the shexUri file to begin parsing. If a START shape is defined in the shape, this is not necessary.                  |
-| theme             | Object   | null                                              | Optional. An object (defined below) allowing custom overrides to the look and feel of the form.                                             |
-| languageTheme     | Object   | null                                              | Optional. An object (defined below) allowing customization of the text of the form. Can be used in combination with i18n in the parent app. |
-| successCallback   | Function | Function that writes a success message to console | Optional. Overrides the existing success callback and allows custom success functions.                                                      |
-| errorCallback     | Function | Function that writes the error message to console | Optional. Overrides the existing error callback function.                                                                                   |
-| messageValidation | Object   | null                                              | An Object containing an array of error strings. The error strings will be used in most non-validation situations.                           |
-| autoSaveMode      | Boolean  | false                                             | Optional. Determines of the form will autosave or have a save/cancel button. Default is save/cancel button.                                 |
+| Props         | Type     | Default                                           | Description                                                                                                                        |
+| ------------- | -------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| podPath       | string   | null                                              | Required. The URL representing the root subject to save the form data to, for example a WebID or file in the user's Pod.           |
+| modelPath     | string   | null                                              | Required. The URL to the form model used to render the form.                                                                       |
+| settings      | Object   | null                                              | Optional. An object (defined below) allowing custom overrides to the look and feel of the form.                                    |
+| onSuccess     | Function | Function that writes a success message to console | Optional. Overrides the existing success callback and allows custom onSuccess functions.                                           |
+| onError       | Function | Function that writes the error message to console | Optional. Overrides the existing error callback function.                                                                          |
+| onInit        | Function | null                                              | Optional. Overrides the existing initialization callback, and fires after initialization is complete.                              |
+| onSave        | Function | null                                              | Optional. A callback that executes when the save function is called.                                                               |
+| onLoaded      | Function | null                                              | Optional. A callback that executes when the form is loaded. An example of what this can be used for is removing a loading spinner. |
+| onAddNewField | Function | null                                              | Optional. A callback that executes after a new field is added to a multiple field.                                                 |
+| onDelete      | Function | null                                              | Optional. A callback that executes after a field is removed/deleted.                                                               |
+| autoSave      | Boolean  | false                                             | Optional. Determines of the form will autosave or have a save/cancel button. Default is save/cancel button.                        |
+
+The settings parameter takes several subproperties:
+
+| Key             | Type      | Default | Description                                                                                                                                                   |
+| --------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| theme           | Object    | {}      | An object, defined below, that contains different class overrides for custom theming.                                                                         |
+| languageTheme   | Object    | {}      | An object, defined below, that contains override text for the form buttons and controls.                                                                      |
+| savingComponent | Component | null    | If provided, this component will display when autosave is triggered. An example of this is loading spinners and validatione errors for the autosave function. |
 
 Theme object:
 
-| Key          | Type   | Default                            | Description                                      |
-| ------------ | ------ | ---------------------------------- | ------------------------------------------------ |
-| input        | string | solid-input-shex                   | Custom class name for input fields in the form.  |
-| select       | string | solid-input-shex solid-select-shex | Custom class name for select fields in the form. |
-| deleteButton | string | solid-button-shex                  | Custom class name for the delete button.         |
-| form         | string | solid-shex-form                    | Custom class name for the form.                  |
+| Key           | Type   | Default | Description                                                                                                                |
+| ------------- | ------ | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| input         | string |         | Custom class name for input fields in the form.                                                                            |
+| select        | string |         | Custom class name for select fields in the form.                                                                           |
+| deleteButton  | string |         | Custom class name for the delete button.                                                                                   |
+| form          | string |         | Custom class name for the form.                                                                                            |
+| multiple      | string |         | Custom class name for `<Mulitple>`                                                                                         |
+| inputText     | string |         | Custom class name for `<Classifier>`, `<DatePicker>`, `<Decimal>`, `<Email>`, `<Float>`, `<Input>`, `<Integer>`, `<Phone>` |
+| colorPicker   | string |         | Custom class name for the `<ColorPicker>`                                                                                  |
+| inputTextArea | string |         | Custom class name for `<TextArea>`                                                                                         |
 
 LanguageTheme object:
 
-| Key                 | Type   | Default      | Description                                                       |
-| ------------------- | ------ | ------------ | ----------------------------------------------------------------- |
-| language            | string | 'en'         | String representing the language code to use for the translations |
-| saveBtn             | string | 'Save'       | String representing the save button text                          |
-| resetBtn            | string | 'Reset'      | String representing the reset button text                         |
-| addButtonText       | string | '+ Add new'  | String representing the add new item button text                  |
-| deleteButton        | string | 'Delete'     | String representing the delete button text                        |
-| dropdownDefaultText | string | '- Select -' | String representing the default text for a dropdown menu          |
-
-##### Shapes
-
-A set of example shapes can be found [here](https://shexshapes.inrupt.net/public/), which show various ShEx shapes.
+| Key                 | Type   | Default      | Description                                                        |
+| ------------------- | ------ | ------------ | ------------------------------------------------------------------ |
+| language            | string | 'en'         | String representing the language code to use for the translations. |
+| saveBtn             | string | 'Save'       | String representing the save button text.                          |
+| resetBtn            | string | 'Reset'      | String representing the reset button text.                         |
+| addButtonText       | string | '+ Add new'  | String representing the add new item button text.                  |
+| deleteButton        | string | 'Delete'     | String representing the delete button text.                        |
+| dropdownDefaultText | string | '- Select -' | String representing the default text for a dropdown menu.          |
 
 ## Class List
 

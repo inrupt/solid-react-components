@@ -5,8 +5,7 @@ import {
   LiveUpdate,
   useWebId,
   UpdateContext,
-  useLiveUpdate,
-  useLatestUpdate
+  useLiveUpdate
 } from '@solid/react';
 import {
   ProviderLogin,
@@ -15,8 +14,12 @@ import {
   Uploader,
   ProfileUploader,
   ShexForm,
-  ShexFormBuilder
+  ShexFormBuilder,
+  FormModel,
+  AutoSaveDefaultSpinner,
+  ProfileViewer
 } from '@components';
+import { NotificationTypes } from '@constants';
 
 import { useNotification } from '@hooks';
 
@@ -35,10 +38,13 @@ export {
   useWebId,
   UpdateContext,
   useLiveUpdate,
-  useLatestUpdate,
   ShexForm,
   ShexFormBuilder,
   useNotification,
   AccessControlList,
-  AppPermission
+  AppPermission,
+  FormModel,
+  AutoSaveDefaultSpinner,
+  NotificationTypes,
+  ProfileViewer
 };

@@ -1,9 +1,11 @@
 import solid from 'solid-auth-client';
-import N3 from 'n3';
+import * as N3 from 'n3';
 import solidLDflex from '@solid/query-ldflex';
-import { solidResponse, SolidError, getBasicPod } from '@utils';
+import { solidResponse, SolidError, getBasicPod, shexUtil } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
+import { NotificationTypes } from '@constants';
+import { ensureSlash } from '../utils/solidFetch';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',
@@ -12,7 +14,8 @@ const PREFIXES = {
   ns: 'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
   foaf: 'http://xmlns.com/foaf/0.1/',
   acl: 'http://www.w3.org/ns/auth/acl#',
-  ldp: 'http://www.w3.org/ns/ldp#'
+  ldp: 'http://www.w3.org/ns/ldp#',
+  xsd: 'http://www.w3.org/2001/XMLSchema#'
 };
 
 /**
@@ -97,14 +100,17 @@ export class Notification {
     let resultPut = { ok: false };
 
     await writer.end(async (error, result) => {
-      resultPut = await solid.fetch(path, {
+      resultPut = await solid.fetch(ensureSlash(path, true) + fileName, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'text/turtle',
-          slug: fileName
+          'Content-Type': 'text/turtle'
         },
         body: result
       });
+
+      if (resultPut.status < 200 || resultPut.status >= 300) {
+        throw new SolidError('Something has gone wrong');
+      }
     });
 
     return resultPut;
@@ -216,12 +222,25 @@ export class Notification {
    * @returns {Promise<*>}
    */
 
-  create = async (content = {}, to, options = {}) => {
+  create = async (content = {}, to, type, license, options = {}) => {
     try {
       const currentShape = this.buildShapeObject(options && options.shape);
       const { name, shape: defaultShape } = currentShape;
       const termFactory = N3.DataFactory;
       const { namedNode, literal } = termFactory;
+
+      const fileName = Date.now();
+      const filePath = `${to + fileName}.ttl`;
+
+      // This should be in a constant, but we may shift to use solid/context instead
+      const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+      const licenseType = 'http://schema.org/license';
+
+      // If a type has not been set, default to Announce type
+      const notificationType = type || NotificationTypes.ANNOUNCE;
+
+      // If a license has not been set, default to the CC license
+      const licenseLink = license || 'https://creativecommons.org/licenses/by-sa/4.0/';
 
       if (!this.schema || (this.schema && !this.schema[name])) {
         /**
@@ -234,6 +253,8 @@ export class Notification {
       }
 
       const { '@context': context, shape } = this.schema[name];
+      // Add local filename as a prefix for cleaner ttl generation
+      const fullContext = { ...context, '': filePath };
 
       /**
        * N3 is an implementation of the RDF.js low-level specification that lets you handle RDF in JavaScript easily.
@@ -242,9 +263,15 @@ export class Notification {
        * @type {N3Writer}
        */
       const writer = new N3.Writer({
-        prefixes: context,
+        prefixes: fullContext,
         format: 'text/turtle'
       });
+
+      // Add the notification type to the node
+      writer.addQuad(namedNode(filePath), namedNode(rdfType), namedNode(notificationType));
+
+      // Add the license to the node
+      writer.addQuad(namedNode(filePath), namedNode(licenseType), namedNode(licenseLink));
 
       shape.forEach(item => {
         if (item.property && item.property.includes(':')) {
@@ -254,7 +281,7 @@ export class Notification {
             content[item.label] ||
             defaultValue ||
             item.label === 'read' ||
-            item.label === 'datetime'
+            item.label === 'published'
           ) {
             /**
              * Add read by default on notification document
@@ -265,14 +292,31 @@ export class Notification {
              * Add datetime time by default on notification document
              * @type {string}
              */
-            value = item.label === 'datetime' ? new Date().toISOString() : value;
+            value = item.label === 'published' ? new Date().toISOString() : value;
             /**
-             * Check if object from schema is a literal or node value
+             * Check if object from schema is a literal or node value, and if it requires a data type
              */
-            const typedValue = item.type === 'NamedNode' ? namedNode(value) : literal(value);
+            let typedValue = null;
+
+            if (item.type === 'NamedNode') {
+              typedValue = namedNode(value);
+            } else {
+              switch (item.datatype) {
+                case 'datetime':
+                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}dateTime`));
+                  break;
+                case 'boolean':
+                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}boolean`));
+                  break;
+                case 'string':
+                default:
+                  typedValue = literal(value);
+                  break;
+              }
+            }
 
             writer.addQuad(
-              namedNode(''),
+              namedNode(filePath),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
               typedValue
             );
@@ -299,6 +343,7 @@ export class Notification {
           body: result,
           headers: {
             'Content-Type': 'text/turtle',
+            slug: fileName,
             ...optionsHeader
           }
         });
@@ -410,15 +455,27 @@ export class Notification {
         }
 
         /**
+         * Validate the list of notification IRIs and return a list of valid ones
+         */
+        const coreNotificationShape =
+          'https://shexshapes.inrupt.net/public/notifications/core-notification.shex';
+        const validNotificationPaths = await shexUtil.validateList(
+          notificationPaths,
+          coreNotificationShape
+        );
+
+        /**
          * Get notifications files from contains links
          */
-        for await (const path of notificationPaths) {
+        for await (const path of validNotificationPaths) {
+          // let isValid = true;
           const turtleNotification = await solidLDflex[path];
           const id = path
             .split('/')
             .pop()
             .split('.')[0];
           let notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
+
           /**
            * Run over the shape schema to build notification object
            */

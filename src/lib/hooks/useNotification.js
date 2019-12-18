@@ -42,10 +42,10 @@ export const useNotification = owner => {
    * @param {String} to path of the notification receiver's user
    */
   const createNotification = useCallback(
-    async (content, to, options) => {
+    async (content, to, type, options) => {
       try {
         const { notify } = notification;
-        await notify.create(content, to, options);
+        await notify.create(content, to, type, options);
       } catch (error) {
         throw new SolidError(error.message, 'Create notification', error.status);
       }
@@ -65,8 +65,9 @@ export const useNotification = owner => {
         if (notify) {
           let notificationList = await notify.fetch(inboxes);
           notificationList = notificationList.sort(
-            (a, b) => new Date(b.datetime) - new Date(a.datetime)
+            (a, b) => new Date(b.published) - new Date(a.published)
           );
+
           /**
            * Get unread notifications
            * @type {number}

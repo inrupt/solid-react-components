@@ -1,6 +1,6 @@
 import { namedNode } from '@rdfjs/data-model';
 import solid from 'solid-auth-client';
-import N3 from 'n3';
+import * as N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
 import { SolidError } from '@utils';
@@ -45,13 +45,13 @@ export default class AccessControlList {
    * @param {Array<String> | null} agents Array of webId or null if for everyone
    */
   createQuadList = (modes: Array<String>, agents: Array<String> | null) => {
-    const { acl, foaf, a } = ACL_PREFIXES;
+    const { acl, foaf, rdf } = ACL_PREFIXES;
     const subject = `${this.aclUri}#${modes.join('')}`;
     const { documentUri } = this;
     const originalPredicates = [
-      this.createQuad(subject, `${a}`, namedNode(`${acl}Authorization`)),
+      this.createQuad(subject, `${rdf}type`, namedNode(`${acl}Authorization`)),
       this.createQuad(subject, `${acl}accessTo`, namedNode(documentUri)),
-      this.createQuad(subject, `${acl}defaultForNew`, namedNode(documentUri))
+      this.createQuad(subject, `${acl}default`, namedNode(documentUri))
     ];
     let predicates = [];
     if (agents) {
@@ -243,12 +243,12 @@ export default class AccessControlList {
    */
   createMode = async ({ modes, agents }) => {
     try {
-      const { acl, foaf, a } = ACL_PREFIXES;
+      const { acl, foaf } = ACL_PREFIXES;
       const subject = `${this.aclUri}#${modes.join('')}`;
-      await ldflex[subject][a].add(namedNode(`${acl}Authorization`));
+      await ldflex[subject].type.add(namedNode(`${acl}Authorization`));
       const path = namedNode(this.documentUri);
       await ldflex[subject]['acl:accessTo'].add(path);
-      await ldflex[subject]['acl:defaultForNew'].add(path);
+      await ldflex[subject]['acl:default'].add(path);
       /* If agents is null then it will be added to the default permission (acl:agentClass) for 'everyone' */
       if (agents) {
         for await (const agent of agents) {

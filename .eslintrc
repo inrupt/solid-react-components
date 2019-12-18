@@ -16,7 +16,8 @@
     "import/no-cycle": [0],
     "quotes": [1, "single"],
     "react/no-array-index-key": [1],
-    "react/jsx-one-expression-per-line": [0]
+    "react/jsx-one-expression-per-line": [0],
+    "jsx-a11y/label-has-for": [0]
   },
   "settings": {
     "import/resolver": { "babel-module": {} }
