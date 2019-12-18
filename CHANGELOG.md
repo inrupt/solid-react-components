@@ -1,5 +1,36 @@
 # Solid React Components Library
 
+## 0.5.0 ( December 17, 2019 )
+
+### Added
+
+- FormModel component:
+  - New component that renders a form from a Form Model
+  - New components added to support the form model. The following list of components are all compatible with the Form Model:
+    - Textbox
+    - TextArea
+    - Date / DateTime / Time fields, using [react-datepicker](https://reactdatepicker.com/)
+    - Dropdown
+    - Checkbox (Boolean, not tri-state)
+    - ColorPicker, using [react-color](https://casesandberg.github.io/react-color/)
+    - Header (an `<h2>` tag rendered inside of the form)
+    - Comment (a `<p>` tag rendered inside of the form)
+    - Decimal / Float / Integer fields
+    - Email field
+    - Phone field
+    - Multiple, a custom Form Model field that indicates the child element is repeatable
+    - Group, an ordered set of fields that can be treated as a single sub-form
+
+### Updated
+
+- Notification class was updated to validate notifications when being read from an inbox. This way only compatible notifications are retrieved and the data is more predictable for display purposes
+- Updated ACL class predicate from `acl:defaultForNew`, which is deprecated, to `acl:default`
+- Renamed the rdf predicate prefix from `a` to `rdf` to align with standard convention
+
+### Deprecated
+
+- The ShExFormBuilder component is now deprecated in favor of the new FormModel component. The component remains in the library for now, but the documentation has been removed
+
 ## 0.4.4 ( August 14, 2019 )
 
 ### Added
