@@ -10,6 +10,8 @@ import Decimal from './Decimal';
 import Integer from './Integer';
 import Float from './Float';
 import ColorPicker from './ColorPicker';
+import Email from './Email';
+import Phone from './Phone';
 
 import { UITypes } from '@constants';
 
@@ -50,6 +52,12 @@ const UIMapping = type => {
       break;
     case UITypes.ColorField:
       component = ColorPicker;
+      break;
+    case UITypes.EmailField:
+      component = Email;
+      break;
+    case UITypes.PhoneField:
+      component = Phone;
       break;
     default:
       component = Input;

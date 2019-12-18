@@ -5,6 +5,7 @@ import { solidResponse, SolidError, getBasicPod, shexUtil } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import { NotificationTypes } from '@constants';
+import { ensureSlash } from '../utils/solidFetch';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',
@@ -99,14 +100,17 @@ export class Notification {
     let resultPut = { ok: false };
 
     await writer.end(async (error, result) => {
-      resultPut = await solid.fetch(path, {
+      resultPut = await solid.fetch(ensureSlash(path, true) + fileName, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'text/turtle',
-          slug: fileName
+          'Content-Type': 'text/turtle'
         },
         body: result
       });
+
+      if (resultPut.status < 200 || resultPut.status >= 300) {
+        throw new SolidError('Something has gone wrong');
+      }
     });
 
     return resultPut;

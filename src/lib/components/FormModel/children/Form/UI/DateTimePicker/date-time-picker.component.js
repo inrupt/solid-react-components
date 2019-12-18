@@ -9,7 +9,7 @@ import { ErrorMessage } from './date-time.styles';
 
 import { FormModelConfig } from '@context';
 import { UITypes, FormModelUI, DATE_FORMAT } from '@constants';
-import { getLocale, parseInitialValue, isValidDate } from '@utils';
+import { parseInitialValue, isValidDate, getClosestLocale } from '@utils';
 
 const DateTimePicker = React.memo(
   ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
@@ -129,21 +129,11 @@ const DateTimePicker = React.memo(
       dateOptions = { minDate, maxDate, dateFormat: 'P' };
     }
 
-    /* transform the browser  locale code to match the date-fns format
-       browser format samples: 'es', 'en-US', 'en-GB'
-       date-fns format samples: 'es', 'enUS', 'enGB' */
-    let locale = getLocale().split('-');
-    if (locale[1]) {
-      locale[1] = locale[1].toUpperCase();
-      locale = `${locale[0]}${locale[1]}`;
-    } else {
-      locale = `${locale[0]}`;
-    }
-
+    const locale = getClosestLocale();
     try {
-      registerLocale(locale, locales[locale]);
+      registerLocale(locale.code, locale);
     } catch (e) {
-      registerLocale(locale, locales.enUS);
+      registerLocale('en-US', locales.enUS);
     }
 
     return (
@@ -159,7 +149,7 @@ const DateTimePicker = React.memo(
                 onChange,
                 className: theme && theme.inputText,
                 onBlur,
-                locale
+                locale: locale.code
               }}
             />
             {invalidate && <ErrorMessage>{invalidate}</ErrorMessage>}
