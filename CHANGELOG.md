@@ -1,6 +1,6 @@
 # Solid React Components Library
 
-## 0.5.0 ( December 17, 2019 )
+## 0.5.0 ( December 18, 2019 )
 
 ### Added
 
