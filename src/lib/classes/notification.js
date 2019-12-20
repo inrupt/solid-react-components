@@ -230,7 +230,7 @@ export class Notification {
       const { namedNode, literal } = termFactory;
 
       const fileName = Date.now();
-      const filePath = `${to + fileName}.ttl`;
+      const filePath = `${to + fileName}`;
 
       // This should be in a constant, but we may shift to use solid/context instead
       const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
@@ -268,10 +268,10 @@ export class Notification {
       });
 
       // Add the notification type to the node
-      writer.addQuad(namedNode(filePath), namedNode(rdfType), namedNode(notificationType));
+      writer.addQuad(namedNode(''), namedNode(rdfType), namedNode(notificationType));
 
       // Add the license to the node
-      writer.addQuad(namedNode(filePath), namedNode(licenseType), namedNode(licenseLink));
+      writer.addQuad(namedNode(''), namedNode(licenseType), namedNode(licenseLink));
 
       shape.forEach(item => {
         if (item.property && item.property.includes(':')) {
@@ -316,7 +316,7 @@ export class Notification {
             }
 
             writer.addQuad(
-              namedNode(filePath),
+              namedNode(''),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
               typedValue
             );
