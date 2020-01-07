@@ -26,7 +26,7 @@ const Classifier = ({
   ...rest
 }: Props) => {
   const [options, setOptions] = useState([]);
-  const from = rest['ui:from'] || null;
+  const from = rest['ui:category'] || null;
   const label = rest['ui:label'] || '';
 
   const init = async () => {
