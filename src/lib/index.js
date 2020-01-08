@@ -16,7 +16,6 @@ import {
   ShexForm,
   ShexFormBuilder,
   FormModel,
-  AutoSaveDefaultSpinner,
   ProfileViewer
 } from '@components';
 import { NotificationTypes } from '@constants';
@@ -44,7 +43,6 @@ export {
   AccessControlList,
   AppPermission,
   FormModel,
-  AutoSaveDefaultSpinner,
   NotificationTypes,
   ProfileViewer
 };

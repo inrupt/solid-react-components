@@ -7,7 +7,7 @@ import ProfileUploader from './ProfileUploader';
 import ShexForm from './ShexForm';
 import ShexFormBuilder from './ShexFormBuilder';
 import ProfileViewer from './ProfileViewer';
-import FormModel, { AutoSaveDefaultSpinner } from './FormModel';
+import FormModel from './FormModel';
 
 export {
   ProviderSelect,
@@ -19,6 +19,5 @@ export {
   ShexForm,
   ShexFormBuilder,
   ProfileViewer,
-  FormModel,
-  AutoSaveDefaultSpinner
+  FormModel
 };

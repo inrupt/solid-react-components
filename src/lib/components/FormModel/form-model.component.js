@@ -1,182 +1,124 @@
-import React, { useState, useCallback, useEffect, memo, Fragment } from 'react';
-import { useLiveUpdate } from '@solid/react';
-import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
-import { FormModelConfig } from '@context';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { solidResponse, SolidError } from '@utils';
-import Form from './children/Form';
-import Viewer from './children/Viewer';
+import React, { useState, useEffect } from 'react';
 
-type Props = {
-  modelPath: String,
-  podPath: String,
-  title: String,
-  autoSave: boolean,
-  onInit: () => void,
-  onLoaded: () => void,
-  onError: () => void,
-  onSuccess: () => void,
-  onSave: () => void,
-  onAddNewField: () => void,
-  onDelete: () => void,
-  settings: {
-    theme: object,
-    languageTheme: object,
-    config: object,
-    savingComponent: React.ReactNode
+import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
+import { useLiveUpdate } from '@solid/react';
+
+import { ThemeContext } from '@context';
+import { UI, RDF } from '@constants';
+import { SolidError } from '@utils';
+
+import { Mapping } from './children/Form/UI/component-mapping';
+
+type FormProps = {
+  modelSource: string,
+  dataSource: string,
+  customComponents: {},
+  options: {
+    autosave: boolean,
+    theme: object
   }
 };
 
-const FormModel = memo(
-  ({
-    modelPath,
-    podPath,
-    autoSave,
-    settings = {},
-    title,
-    viewer,
-    onInit,
-    onLoaded,
-    onError,
-    onCancel,
-    onSuccess,
-    onAddNewField,
-    onDelete,
-    onSave
-  }: Props) => {
-    const [formModel, setFormModel] = useState({});
-    const [formObject, setFormObject] = useState({});
-    const [newUpdate, setNewUpdate] = useState(false);
-    const formActions = new FormActions(formModel, formObject);
+/**
+ *
+ * @param props
+ *    @prop {string} modelSource route to the form definition
+ *    @prop {string?} dataSource route to the form date
+ *    @prop {object} customComponents key-value pairs of field names-react component. Can be used to override
+ *                                    standard components or to add new ones
+ *    @prop {object} options different options controlling the form behaviour
+ *      {boolean} autosave if true save as soon as any change is detected, if false will display a set of buttons
+ *                         to allow manual initiation of the save process
+ */
+export const FormModel = (props: FormProps) => {
+  const { modelSource, dataSource, customComponents, options } = props;
 
-    const { timestamp } = useLiveUpdate();
-    const { languageTheme } = settings;
+  const { autosave, theme } = options;
 
-    const init = useCallback(async () => {
-      try {
-        if (onInit) onInit();
-        const model = await formUi.convertFormModel(modelPath, podPath);
-        setFormModel(model);
-        if (onLoaded) onLoaded();
+  const [formModel, setFormModel] = useState({});
+  const [pendingChanges, setPendingChanges] = useState({});
 
-        if (onSuccess) {
-          onSuccess(solidResponse(200, 'Init Render Success', { type: 'init' }));
-        }
-      } catch (error) {
-        onError(new SolidError(error, 'Error on render', 500));
-      }
-    });
+  /* actions keep a copy of the model and updated parts */
+  const actions = new FormActions(formModel, {});
+  const timestamp = useLiveUpdate();
 
-    const onUpdate = useCallback(async () => {
-      // checking if formObject is an empty object (if something has been updated in the form)
-      if (Object.keys(formObject).length !== 0) setNewUpdate(true);
-      else {
-        const newData = await formUi.mapFormModelWithData(formModel, podPath);
-        setFormModel(newData);
-      }
-    }, [formModel, formObject, podPath]);
+  /**
+   * Updates the list of values changed by the user and that are yet to update in the pod
+   * @param {string} id unique identifier for this part ('ui:name')
+   * @param {string} value the new 'ui:value' for this part
+   */
+  const updateData = (id, value) => {
+    setPendingChanges({ ...pendingChanges, [id]: value });
+  };
 
-    const addNewField = useCallback(id => {
-      try {
-        const updatedFormModelObject = formActions.addNewField(id);
-        setFormModel(updatedFormModelObject);
-        onAddNewField(solidResponse(200, 'New field successfully added'));
-      } catch (error) {
-        onError(new SolidError(error, 'Error adding new field', 500));
-      }
-    });
+  /**
+   * Builds a 'formObject' (list of parts with updated values) for 'actions' to use as an input for
+   * saving the data back into the pod
+   */
+  const saveChanges = () => {
+    if (Object.keys(pendingChanges).length === 0) return;
 
-    const deleteField = useCallback(async id => {
-      try {
-        const updatedFormModelObject = await formActions.deleteField(id);
-        setFormModel(updatedFormModelObject);
-        onDelete(solidResponse(200, 'Field successfully deleted'));
-      } catch (error) {
-        onError(new SolidError(error, 'Error deleting field', 500));
-      }
-    });
+    for (const [id, value] of Object.entries(pendingChanges)) {
+      const name = formModel[UI.PARTS][id][UI.NAME];
+      const updatedPart = { ...formModel[UI.PARTS][id] };
+      updatedPart.value = value;
 
-    const modifyFormObject = useCallback((id, obj) => {
-      const formObject = formActions.retrieveNewFormObject(id, obj);
-      setFormObject(formObject);
-    });
+      /* besides retrieving the updated parts ('formObject') also adds the new part to the formObject */
+      actions.retrieveNewFormObject(name, updatedPart);
+    }
 
-    const onCancelOrReset = useCallback(() => {
-      if (onCancel) onCancel(formModel, formObject);
-      else setFormObject({});
-    });
+    actions
+      .saveData()
+      .then(updatedModel => {
+        setFormModel(updatedModel);
+        setPendingChanges({});
+      })
+      .catch(e => new SolidError('Error while saving data', e, 500));
+  };
 
-    const save = useCallback(async e => {
-      if (e) {
-        e.preventDefault();
-      }
-      try {
-        if (Object.keys(formObject).length > 0) {
-          let updatedFormObject = null;
+  /* Create a new model if any of the sources changes */
+  useEffect(() => {
+    formUi.convertFormModel(modelSource, dataSource).then(model => setFormModel(model));
+  }, [modelSource, dataSource]);
 
-          /*
-          Checks if an update happened in the podPath document while the form was being updated
-          */
-          if (newUpdate) {
-            updatedFormObject = await formUi.mapFormObjectWithData(formObject, podPath);
-          }
+  useEffect(() => {
+    if (autosave) saveChanges();
+  }, [pendingChanges]);
 
-          const updatedFormModel = await formActions.saveData(updatedFormObject);
+  /**
+   * //TODO: handle conflict resolution when the data is changed externally,
+   * for now it discards the current model and places the one updated externally
+   */
+  useEffect(() => {
+    formUi
+      .mapFormModelWithData(formModel, modelSource)
+      .then(model => setFormModel(model))
+      .catch(e => new SolidError('Error while saving data', e, 500));
+  }, [timestamp]);
 
-          setNewUpdate(false);
-          setFormModel(updatedFormModel);
-          setFormObject({});
-          const response = solidResponse(200, 'New field successfully saved');
-          onSave(response);
-          return response;
-        }
-      } catch (error) {
-        const e = new SolidError(error, 'Error saving form', 500);
-        onError(e);
-        return e;
-      }
-    });
+  const mapper = { ...Mapping, ...customComponents };
 
-    useEffect(() => {
-      init();
-    }, []);
+  return (
+    <React.Fragment>
+      {formModel[UI.PARTS] &&
+        Object.entries(formModel[UI.PARTS]).map(([id, data]) => {
+          const Component = mapper[data[RDF.TYPE]];
 
-    useEffect(() => {
-      if (timestamp) onUpdate();
-    }, [timestamp]);
+          if (!Component) return;
 
-    return !viewer ? (
-      <FormModelConfig.Provider value={settings}>
-        <form onSubmit={onSave}>
-          {title && <h1>Form Model</h1>}
-          <Form
-            {...{
-              formModel,
-              formObject,
-              modifyFormObject,
-              deleteField,
-              addNewField,
-              onSave: save,
-              autoSave,
-              settings
-            }}
-          />
-          {!autoSave && (
-            <Fragment>
-              <button type="submit">{(languageTheme && languageTheme.save) || 'Save'}</button>
-              <button type="button" onClick={onCancelOrReset}>
-                {(languageTheme && languageTheme.cancel) || 'Cancel'}
-              </button>
-            </Fragment>
-          )}
-        </form>
-      </FormModelConfig.Provider>
-    ) : (
-      <FormModelConfig.Provider value={settings}>
-        <Viewer {...{ formModel }} />
-      </FormModelConfig.Provider>
-    );
-  }
-);
-
-export default FormModel;
+          return (
+            <ThemeContext.Provider key={id} value={{ theme }}>
+              <Component
+                {...{
+                  key: id,
+                  id,
+                  data,
+                  updateData
+                }}
+              />
+            </ThemeContext.Provider>
+          );
+        })}
+    </React.Fragment>
+  );
+};

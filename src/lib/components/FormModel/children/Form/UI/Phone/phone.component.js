@@ -1,39 +1,47 @@
-import React from 'react';
-import { InputTextTypes } from '@constants';
-import { FormModelConfig } from '@context';
+import React, { useState, useContext } from 'react';
+import { InputTextTypes, UI, RDF } from '@constants';
+import { ThemeContext } from '@context';
 
-import { InputGroup } from '../Input/input.styles';
-
-const Phone = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
-  const type = rest['rdf:type'];
-  const label = rest['ui:label'] || '';
-  const maxLength = rest['ui:maxLength'] || 256;
-  const size = rest['ui:size'] || 40;
-  const pattern = rest['ui:pattern'] || '';
-  const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
-  const onChange = ({ target }) => {
-    const obj = { value: target.value, ...rest };
-    modifyFormObject(id, obj);
-  };
-
-  return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <InputGroup className={theme && theme.inputText}>
-          <label htmlFor={id} id={id}>
-            {label}
-          </label>
-          <input
-            id={id}
-            name={id}
-            type={InputTextTypes[type]}
-            pattern={pattern}
-            {...{ maxLength, size, value: actualValue || '', onChange, onBlur }}
-          />
-        </InputGroup>
-      )}
-    </FormModelConfig.Consumer>
-  );
+type Props = {
+  id: string,
+  data: object,
+  updateData: (string, string) => void
 };
 
-export default Phone;
+export const Phone = (props: Props) => {
+  const { id, data, updateData } = props;
+  const { theme } = useContext(ThemeContext);
+
+  const {
+    [RDF.TYPE]: type,
+    [UI.LABEL]: label,
+    [UI.MAX_LENGTH]: maxLength,
+    [UI.SIZE]: size,
+    [UI.PATTERN]: pattern,
+    [UI.VALUE]: initialValue
+  } = data;
+
+  const [value, setValue] = useState(initialValue);
+
+  const onChange = event => setValue(event.target.value);
+
+  const onBlur = () => updateData(id, value);
+
+  return (
+    <div className={theme.phoneField}>
+      <label htmlFor={id}>{label}</label>
+      <input
+        {...{
+          id,
+          type: InputTextTypes[type],
+          pattern,
+          maxLength,
+          size,
+          value,
+          onChange,
+          onBlur
+        }}
+      />
+    </div>
+  );
+};

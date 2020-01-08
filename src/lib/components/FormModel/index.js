@@ -1,5 +1,3 @@
-import FormModel from './live-form-model.component';
-import AutoSaveDefaultSpinner from './children/autosave-default-spinner.component';
+import { FormModel } from './form-model.component';
 
 export default FormModel;
-export { AutoSaveDefaultSpinner };

@@ -1,1 +1,3 @@
-export { default } from './heading.component';
+import { Heading } from './heading.component';
+
+export { Heading };

@@ -1,71 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import { FormModelConfig } from '@context';
-import { FormModelUI } from '@constants';
+import React, { useEffect, useState, useContext, Fragment } from 'react';
+import { ThemeContext } from '@context';
+import { UI } from '@constants';
 
 type Props = {
-  formObject: any,
-  id: String,
-  autoSave: Boolean,
-  onSave: () => void,
-  modifyFormObject: (id: String, object: any) => void
+  id: string,
+  data: object,
+  updateData: (string, string) => void
 };
 
-const { UI_VALUE, UI_DEFAULT, UI_LABEL, UI_NAME } = FormModelUI;
+export const CheckBox = (props: Props) => {
+  const { id, data, updateData } = props;
+  const { theme } = useContext(ThemeContext);
 
-const CheckBox = ({
-  id,
-  modifyFormObject,
-  formObject,
-  onSave,
-  autoSave,
-  value,
-  ...rest
-}: Props) => {
-  let podValue;
-  try {
-    podValue = JSON.parse(formObject[id] || formObject[id] === '' ? formObject[id].value : value);
-  } catch (e) {
-    podValue = false;
-  }
+  const [checked, setChecked] = useState(false);
 
-  const [checked, setChecked] = useState(podValue);
+  useEffect(() => {
+    try {
+      const podValue = data[UI.VALUE];
+      if (podValue === 'false') {
+        setChecked(null);
+      } else {
+        setChecked(true);
+      }
+    } catch (e) {
+      setChecked(false);
+    }
+  }, [data[UI.VALUE]]);
 
-  const label = rest[UI_LABEL];
-  const name = rest[UI_NAME];
+  const { [UI.LABEL]: label } = data;
 
-  const onChange = () => {
-    setChecked(!checked);
+  const onChange = event => {
+    updateData(id, String(event.target.checked));
   };
 
-  useEffect(() => {
-    const obj = { ...rest, value: checked.toString() };
-    modifyFormObject(id, obj);
-  }, [checked]);
-
-  useEffect(() => {
-    if (autoSave) onSave();
-  }, [formObject]);
-
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <div className="input-wrap">
-          <label htmlFor={name} className={theme && theme.inputCheckbox}>
-            <input
-              {...{
-                type: 'checkbox',
-                name,
-                id: name,
-                onChange,
-                checked
-              }}
-            />
-            {label || 'Label'}
-          </label>
-        </div>
-      )}
-    </FormModelConfig.Consumer>
+    <Fragment>
+      <label htmlFor={id} className={theme.inputLabel}>
+        {label}
+      </label>
+      <input
+        {...{
+          type: 'checkbox',
+          id,
+          onChange,
+          checked
+        }}
+      />
+    </Fragment>
   );
 };
-
-export default CheckBox;

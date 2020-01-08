@@ -1,31 +1,30 @@
-import React from 'react';
-import { FormModelConfig } from '@context';
-import { Label } from './bool-line.style';
+import React, { useContext } from 'react';
+import { ThemeContext } from '@context';
 
-import { FormModelUI } from '@constants';
+import { UI } from '@constants';
 
 type Props = {
-  value: Object
+  id: string,
+  data: object
 };
 
-const BoolLine = ({ value, ...rest }: Props) => {
+export const BoolLine = (props: Props) => {
+  const { id, data } = props;
+  const { theme } = useContext(ThemeContext);
+
+  const { [UI.VALUE]: value, [UI.LABEL]: label } = data;
+
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <Label htmlFor={rest[FormModelUI.UI_NAME]} className={theme && theme.boolLine}>
-          <input
-            type="checkbox"
-            name={rest[FormModelUI.UI_NAME]}
-            defaultValue={value === 'true'}
-            checked={value === 'true'}
-            readOnly
-            className="input-value"
-          />
-          <span className="label-text">{rest[FormModelUI.UI_LABEL] || 'Label'}</span>
-        </Label>
-      )}
-    </FormModelConfig.Consumer>
+    <div className={theme.boolLine}>
+      <label htmlFor={id}>{label}</label>
+      <input
+        {...{
+          type: 'checkbox',
+          defaultValue: value === 'true',
+          checked: value === 'true',
+          readOnly: true
+        }}
+      />
+    </div>
   );
 };
-
-export default BoolLine;
