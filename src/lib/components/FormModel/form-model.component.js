@@ -16,7 +16,7 @@ type FormProps = {
   options: {
     autosave: boolean,
     theme: object,
-    spinner: React.Component
+    autosaveIndicator: React.Component
   }
 };
 
@@ -36,7 +36,7 @@ type FormProps = {
 export const FormModel = (props: FormProps) => {
   const { modelSource, dataSource, customComponents, options } = props;
 
-  const { autosave, theme, spinner: Spinner } = options;
+  const { autosave, theme, autosaveIndicator } = options;
 
   const [formModel, setFormModel] = useState({});
   const [pendingChanges, setPendingChanges] = useState({});
@@ -64,7 +64,7 @@ export const FormModel = (props: FormProps) => {
    * Builds a 'formObject' (list of parts with updated values) for 'actions' to use as an input for
    * saving the data back into the pod
    */
-  const saveChanges = async() => {
+  const saveChanges = async () => {
     if (Object.keys(pendingChanges).length === 0) return;
 
     for (const [id, value] of Object.entries(pendingChanges)) {
@@ -109,16 +109,22 @@ export const FormModel = (props: FormProps) => {
 
   const mapper = { ...Mapping, ...customComponents };
 
+  // Not finished loading/parsing
+  if (!formModel[UI.PARTS]) return null;
+
   return (
     <ThemeContext.Provider value={{ theme }}>
-      <Spinner {...savingState} />
-      {formModel[UI.PARTS] &&
-        Object.entries(formModel[UI.PARTS]).map(([id, data]) => {
-          const Component = mapper[data[RDF.TYPE]];
+      {Object.entries(formModel[UI.PARTS]).map(([id, data]) => {
+        const Component = mapper[data[RDF.TYPE]];
+        if (!Component) return;
 
-          if (!Component) return;
+        let AutoSaveIndicator = () => null;
+        if (autosave && Object.keys(pendingChanges).includes(id)) {
+          AutoSaveIndicator = autosaveIndicator;
+        }
 
-          return (
+        return (
+          <div className={theme.componentGroup}>
             <Component
               {...{
                 key: id,
@@ -128,8 +134,10 @@ export const FormModel = (props: FormProps) => {
                 mapper
               }}
             />
-          );
-        })}
+            <AutoSaveIndicator key={`indicator+${id}`} {...savingState} />
+          </div>
+        );
+      })}
     </ThemeContext.Provider>
   );
 };
