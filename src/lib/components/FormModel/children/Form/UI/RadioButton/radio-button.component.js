@@ -8,7 +8,7 @@ type Props = {
   updateData: (string, string) => void
 };
 
-const RadioButton = (props: Props) => {
+export const RadioButton = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
@@ -35,5 +35,3 @@ const RadioButton = (props: Props) => {
     </div>
   );
 };
-
-export default RadioButton;

@@ -1,3 +1,4 @@
 import { FormModel } from './form-model.component';
+import { Spinner } from './children/Spinner';
 
-export default FormModel;
+export { FormModel, Spinner };

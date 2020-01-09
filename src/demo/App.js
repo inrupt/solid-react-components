@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ProviderLogin, FormModel } from '@lib';
+import { ProviderLogin, FormModel, Spinner } from '@lib';
 
 const DemoWrapper = styled.div`
   max-width: 900px;
@@ -13,10 +13,13 @@ const App = () => {
       <FormModel
         {...{
           modelSource: 'https://angelaraya.inrupt.net/public/forms/simple.ttl#formRoot',
+          // modelSource:
+            // 'https://solidsdk.inrupt.net/public/FormLanguage/examples/FormModel/Multiple.ttl#formRoot',
           dataSource: 'https://angelaraya.inrupt.net/public/sources/assorted.ttl#data',
           options: {
             autosave: true,
-            theme: {}
+            theme: {},
+            spinner: Spinner
           }
         }}
       />

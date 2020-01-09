@@ -10,10 +10,9 @@ import { TextArea } from './TextArea';
 import { Float } from './Float';
 import { Email } from './Email';
 import { Phone } from './Phone';
-import { RadioButton } from './RadioButton';
 import { Integer } from './Integer';
 import { ColorPicker } from './ColorPicker';
-
+import { Multiple } from '../../Multiple/multiple.component';
 
 export const Mapping = {
   [VOCAB.UI.Heading]: Heading,
@@ -29,6 +28,6 @@ export const Mapping = {
   [VOCAB.UI.FloatField]: Float,
   [VOCAB.UI.EmailField]: Email,
   [VOCAB.UI.PhoneField]: Phone,
-  [VOCAB.UI.TriStateField]: RadioButton,
-  [VOCAB.UI.ColorField]: ColorPicker
+  [VOCAB.UI.ColorField]: ColorPicker,
+  [VOCAB.UI.Multiple]: Multiple
 };

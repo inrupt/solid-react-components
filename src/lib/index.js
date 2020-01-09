@@ -16,7 +16,8 @@ import {
   ShexForm,
   ShexFormBuilder,
   FormModel,
-  ProfileViewer
+  ProfileViewer,
+  Spinner
 } from '@components';
 import { NotificationTypes } from '@constants';
 
@@ -43,6 +44,7 @@ export {
   AccessControlList,
   AppPermission,
   FormModel,
+  Spinner,
   NotificationTypes,
   ProfileViewer
 };

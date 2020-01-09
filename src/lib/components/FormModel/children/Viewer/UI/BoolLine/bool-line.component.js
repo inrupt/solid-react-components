@@ -15,7 +15,7 @@ export const BoolLine = (props: Props) => {
   const { [UI.VALUE]: value, [UI.LABEL]: label } = data;
 
   return (
-    <div className={theme.boolLine}>
+    <div className={theme.boolField}>
       <label htmlFor={id}>{label}</label>
       <input
         {...{

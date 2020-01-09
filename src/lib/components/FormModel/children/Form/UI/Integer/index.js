@@ -1,4 +1,3 @@
-import Integer from './integer.component';
+import { Integer } from './integer.component';
 
-export default Integer;
 export { Integer };

@@ -15,7 +15,8 @@ type FormProps = {
   customComponents: {},
   options: {
     autosave: boolean,
-    theme: object
+    theme: object,
+    spinner: React.Component
   }
 };
 
@@ -23,20 +24,28 @@ type FormProps = {
  *
  * @param props
  *    @prop {string} modelSource route to the form definition
- *    @prop {string?} dataSource route to the form date
+ *    @prop {string?} dataSource route to the form data
  *    @prop {object} customComponents key-value pairs of field names-react component. Can be used to override
  *                                    standard components or to add new ones
  *    @prop {object} options different options controlling the form behaviour
  *      {boolean} autosave if true save as soon as any change is detected, if false will display a set of buttons
  *                         to allow manual initiation of the save process
+ *      {object} theme object with the value for the classes of the different components
+ *      {React.Component} spinner component indicating whether the saving process has been completed or nor
  */
 export const FormModel = (props: FormProps) => {
   const { modelSource, dataSource, customComponents, options } = props;
 
-  const { autosave, theme } = options;
+  const { autosave, theme, spinner: Spinner } = options;
 
   const [formModel, setFormModel] = useState({});
   const [pendingChanges, setPendingChanges] = useState({});
+
+  /**
+   * {boolean} errored: is the current form out of sync with stored data (errored when saving)
+   * {boolean} running: is the saving process running at this time
+   */
+  const [savingState, setSavingState] = useState({ errored: false, running: false });
 
   /* actions keep a copy of the model and updated parts */
   const actions = new FormActions(formModel, {});
@@ -55,7 +64,7 @@ export const FormModel = (props: FormProps) => {
    * Builds a 'formObject' (list of parts with updated values) for 'actions' to use as an input for
    * saving the data back into the pod
    */
-  const saveChanges = () => {
+  const saveChanges = async() => {
     if (Object.keys(pendingChanges).length === 0) return;
 
     for (const [id, value] of Object.entries(pendingChanges)) {
@@ -67,13 +76,15 @@ export const FormModel = (props: FormProps) => {
       actions.retrieveNewFormObject(name, updatedPart);
     }
 
-    actions
-      .saveData()
-      .then(updatedModel => {
-        setFormModel(updatedModel);
-        setPendingChanges({});
-      })
-      .catch(e => new SolidError('Error while saving data', e, 500));
+    try {
+      setSavingState({ errored: false, running: true });
+      const updatedModel = await actions.saveData();
+      setFormModel(updatedModel);
+      setPendingChanges({});
+      setSavingState({ errored: false, running: false });
+    } catch (e) {
+      setSavingState({ errored: true, running: false });
+    }
   };
 
   /* Create a new model if any of the sources changes */
@@ -99,7 +110,8 @@ export const FormModel = (props: FormProps) => {
   const mapper = { ...Mapping, ...customComponents };
 
   return (
-    <React.Fragment>
+    <ThemeContext.Provider value={{ theme }}>
+      <Spinner {...savingState} />
       {formModel[UI.PARTS] &&
         Object.entries(formModel[UI.PARTS]).map(([id, data]) => {
           const Component = mapper[data[RDF.TYPE]];
@@ -107,18 +119,17 @@ export const FormModel = (props: FormProps) => {
           if (!Component) return;
 
           return (
-            <ThemeContext.Provider key={id} value={{ theme }}>
-              <Component
-                {...{
-                  key: id,
-                  id,
-                  data,
-                  updateData
-                }}
-              />
-            </ThemeContext.Provider>
+            <Component
+              {...{
+                key: id,
+                id,
+                data,
+                updateData,
+                mapper
+              }}
+            />
           );
         })}
-    </React.Fragment>
+    </ThemeContext.Provider>
   );
 };

@@ -8,7 +8,7 @@ type Props = {
   updateData: (string, string) => void
 };
 
-const Integer = (props: Props) => {
+export const Integer = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
@@ -45,5 +45,3 @@ const Integer = (props: Props) => {
     </div>
   );
 };
-
-export default Integer;

@@ -28,6 +28,7 @@ export const VOCAB = {
     EmailField: 'http://www.w3.org/ns/ui#EmailField',
     PhoneField: 'http://www.w3.org/ns/ui#PhoneField',
     TriStateField: 'http://www.w3.org/ns/ui#TriStateField',
+    Multiple: 'http://www.w3.org/ns/ui#Multiple'
   }
 };
 
@@ -39,6 +40,7 @@ export const RDF = {
 const uiBase = 'ui:';
 export const UI = {
   PARTS: `${uiBase}parts`,
+  PART: `${uiBase}part`,
   VALUE: `${uiBase}value`,
   CONTENTS: `${uiBase}contents`,
   NAME: `${uiBase}name`,
