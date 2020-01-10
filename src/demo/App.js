@@ -102,10 +102,11 @@ const App = () => {
   const createAcl = async () => {
     if (webId) {
       const uri = new URL(webId);
-      const documentURI = `${uri.origin}/public/container`;
+      const documentURI = `${uri.origin}/public/file.ttl`;
       const { MODES } = AccessControlList;
       const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
       const aclInstance = new AccessControlList(webId, documentURI);
+      await aclInstance.setAclUriFromHeader();
       await aclInstance.createACL(permissions);
     }
   };
@@ -165,43 +166,7 @@ const App = () => {
       </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
-      <FormModel
-        {...{
-          modelPath: 'https://jmartin.inrupt.net/public/formmodel/multiple.ttl#formRoot',
-          podPath: 'https://jmartin.inrupt.net/profile/card#me',
-          settings: {
-            theme: {
-              inputText: 'sdk-input',
-              inputCheckbox: 'sdk-checkbox checkbox',
-              inputTextArea: 'sdk-textarea'
-            },
-            savingComponent: AutoSaveDefaultSpinner
-          },
-          viewer: false,
-          onError: error => {
-            // eslint-disable-next-line no-console
-            console.log(error, 'error');
-          },
-          onSuccess: success => {
-            // eslint-disable-next-line no-console
-            console.log(success);
-          },
-          onSave: response => {
-            // eslint-disable-next-line no-console
-            console.log(response);
-          },
-          onAddNewField: response => {
-            // eslint-disable-next-line no-console
-            console.log(response);
-          },
-          onDelete: response => {
-            // eslint-disable-next-line no-console
-            console.log(response);
-          }
-        }}
-        autoSave
-        liveUpdate
-      />
+
       <Uploader
         {...{
           fileBase: 'Your POD folder here',

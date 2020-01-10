@@ -3,6 +3,7 @@ import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
+import * as parse from 'parse-link-header';
 import { SolidError } from '@utils';
 import { PERMISSIONS, ACL_PREFIXES } from '@constants';
 
@@ -26,6 +27,17 @@ export default class AccessControlList {
   static get MODES() {
     return PERMISSIONS;
   }
+
+  setAclUriFromHeader = async () => {
+    try {
+      const response = await solid.fetch(this.documentUri, { method: 'OPTIONS' });
+      const parsedLinks = parse(response.headers.get('Link'));
+      const aclFile = parsedLinks.acl ? parsedLinks.acl.url : '';
+      this.aclUri = new URL(aclFile, this.documentUri).href;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   /**
    * @function createsQuad Creates a simple quad object
