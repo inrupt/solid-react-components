@@ -28,7 +28,8 @@ export const VOCAB = {
     EmailField: 'http://www.w3.org/ns/ui#EmailField',
     PhoneField: 'http://www.w3.org/ns/ui#PhoneField',
     TriStateField: 'http://www.w3.org/ns/ui#TriStateField',
-    Multiple: 'http://www.w3.org/ns/ui#Multiple'
+    Multiple: 'http://www.w3.org/ns/ui#Multiple',
+    Group: 'http://www.w3.org/ns/ui#Group'
   }
 };
 

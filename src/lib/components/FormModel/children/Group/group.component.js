@@ -41,7 +41,8 @@ export const Group = (props: Props) => {
                 id: name,
                 data: part,
                 updateData,
-                mapper
+                mapper,
+                savingData
               }}
             />
             <Indicator {...{ errored: savingData.error, running: savingData.running }} />

@@ -12,9 +12,9 @@ const App = () => {
     <DemoWrapper>
       <FormModel
         {...{
-          modelSource: 'https://angelaraya.inrupt.net/public/forms/simple.ttl#formRoot',
-          // modelSource:
-          // 'https://solidsdk.inrupt.net/public/FormLanguage/examples/FormModel/Multiple.ttl#formRoot',
+          // modelSource: 'https://angelaraya.inrupt.net/public/forms/simple.ttl#formRoot',
+          modelSource:
+            'https://solidsdk.inrupt.net/public/FormLanguage/examples/FormModel/Multiple.ttl#formRoot',
           dataSource: 'https://angelaraya.inrupt.net/public/sources/assorted.ttl#data',
           options: {
             autosave: true,
