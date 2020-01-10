@@ -1,3 +1,3 @@
-import Float from './float.component';
+import { Float } from './float.component';
 
-export default Float;
+export { Float };

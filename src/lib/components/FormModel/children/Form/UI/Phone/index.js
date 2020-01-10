@@ -1,3 +1,3 @@
-import Phone from './phone.component';
+import { Phone } from './phone.component';
 
-export default Phone;
+export { Phone };

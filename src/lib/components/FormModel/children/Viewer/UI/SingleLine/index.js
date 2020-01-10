@@ -1,1 +1,3 @@
-export { default } from './single-line.component';
+import { SingleLine } from './single-line.component';
+
+export { SingleLine };

@@ -1,1 +1,4 @@
-export { default } from './bool-line.component';
+import { BoolLine } from './bool-line.component';
+
+export default BoolLine;
+export { BoolLine };
