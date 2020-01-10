@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
+import { UI } from '@constants';
+import { ThemeContext } from '@context';
 
 type Props = {
-  'ui:contents': any
+  data: object
 };
 
 export const Comment = (props: Props) => {
-  // eslint-disable-next-line react/destructuring-assignment
-  const contents = props['ui:contents'];
-  return <p>{contents}</p>;
+  const { data } = props;
+  const { [UI.VALUE]: comment } = data;
+
+  const { theme } = useContext(ThemeContext);
+
+  return <p className={theme.comment}>{comment}</p>;
 };

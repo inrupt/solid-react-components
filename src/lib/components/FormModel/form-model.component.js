@@ -4,10 +4,11 @@ import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
 import { useLiveUpdate } from '@solid/react';
 
 import { ThemeContext } from '@context';
-import { UI, RDF } from '@constants';
+import { UI } from '@constants';
 import { SolidError } from '@utils';
 
 import { Mapping } from './children/Form/UI/component-mapping';
+import { Group } from './children/Group';
 
 type FormProps = {
   modelSource: string,
@@ -53,11 +54,13 @@ export const FormModel = (props: FormProps) => {
 
   /**
    * Updates the list of values changed by the user and that are yet to update in the pod
-   * @param {string} id unique identifier for this part ('ui:name')
-   * @param {string} value the new 'ui:value' for this part
+   * @param {string} name unique identifier for this part ('ui:name')
+   * @param {string} self the part as it has been updated
+   * //TODO: Check if it would be possible for a component to modify its own restrictions,
+   *         e.g.: changes it's minValue property
    */
-  const updateData = (id, value) => {
-    setPendingChanges({ ...pendingChanges, [id]: value });
+  const updateData = (name, self) => {
+    setPendingChanges({ ...pendingChanges, [name]: self });
   };
 
   /**
@@ -67,13 +70,10 @@ export const FormModel = (props: FormProps) => {
   const saveChanges = async () => {
     if (Object.keys(pendingChanges).length === 0) return;
 
-    for (const [id, value] of Object.entries(pendingChanges)) {
+    for (const [id, self] of Object.entries(pendingChanges)) {
       const name = formModel[UI.PARTS][id][UI.NAME];
-      const updatedPart = { ...formModel[UI.PARTS][id] };
-      updatedPart.value = value;
-
       /* besides retrieving the updated parts ('formObject') also adds the new part to the formObject */
-      actions.retrieveNewFormObject(name, updatedPart);
+      actions.retrieveNewFormObject(name, self);
     }
 
     try {
@@ -114,30 +114,19 @@ export const FormModel = (props: FormProps) => {
 
   return (
     <ThemeContext.Provider value={{ theme }}>
-      {Object.entries(formModel[UI.PARTS]).map(([id, data]) => {
-        const Component = mapper[data[RDF.TYPE]];
-        if (!Component) return;
-
-        let AutoSaveIndicator = () => null;
-        if (autosave && Object.keys(pendingChanges).includes(id)) {
-          AutoSaveIndicator = autosaveIndicator;
-        }
-
-        return (
-          <div className={theme.componentGroup}>
-            <Component
-              {...{
-                key: id,
-                id,
-                data,
-                updateData,
-                mapper
-              }}
-            />
-            <AutoSaveIndicator key={`indicator+${id}`} {...savingState} />
-          </div>
-        );
-      })}
+      <Group
+        {...{
+          data: formModel[UI.PARTS],
+          updateData,
+          mapper,
+          savingData: {
+            autosaveIndicator,
+            running: savingState.running,
+            error: savingState.errored,
+            names: Object.keys(pendingChanges)
+          }
+        }}
+      />
     </ThemeContext.Provider>
   );
 };
