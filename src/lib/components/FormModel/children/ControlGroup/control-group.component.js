@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import ErrorMessage from './Form/UI/ErrorMessage';
+import ErrorMessage from '../Form/UI/ErrorMessage';
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
+type Props = {
+  id: string,
+  data: object,
+  updateData: Function,
+  mapper: object,
+  status: object
+};
 
-const ControlGroup = ({
+export const ControlGroup = ({
   component: Component,
   fieldData,
   savingComponent: SavingComponent,
@@ -32,20 +34,18 @@ const ControlGroup = ({
   };
 
   return (
-    <>
-      <Wrapper>
-        <Component {...{ ...fieldData, onBlur, ...rest }} />
-        {SavingComponent && savingProcess && (
-          <SavingComponent
-            inProgress={isSaving}
-            result={result}
-            setResult={setResult}
-            setSavingProcess={setSavingProcess}
-          />
-        )}
-      </Wrapper>
+    <React.Fragment>
+      <Component {...{ ...fieldData, onBlur, ...rest }} />
+      {SavingComponent && savingProcess && (
+        <SavingComponent
+          inProgress={isSaving}
+          result={result}
+          setResult={setResult}
+          setSavingProcess={setSavingProcess}
+        />
+      )}
       <ErrorMessage {...{ valid, errorMessage }} />
-    </>
+    </React.Fragment>
   );
 };
 export default ControlGroup;

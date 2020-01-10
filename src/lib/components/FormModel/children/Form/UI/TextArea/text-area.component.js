@@ -1,83 +1,37 @@
-import React from 'react';
-import { FormModelConfig } from '@context';
+import React, { useState, useContext } from 'react';
+import { ThemeContext } from '@context';
 
-import { TextAreaGroup } from './text-area.styles';
+import { UI } from '@constants';
 
 type Props = {
-  id: String,
-  modifyFormObject: () => void,
-  formObject: Object,
-  autoSaveMode: boolean,
-  onSubmitSave: () => void,
-  onBlur: () => void,
-  predicate: String,
-  isValueChanged: boolean,
-  inputData: Object,
-  fieldData: Object,
-  parentPredicate: String,
-  parent: any,
-  parentSubject: String,
-  valueExpr: String,
-  value: String,
-  rest: any
+  id: string,
+  data: object,
+  updateData: (string, string) => void
 };
 
-const TextArea = ({
-  id,
-  modifyFormObject,
-  formObject,
-  autoSaveMode,
-  predicate,
-  onSubmitSave,
-  onBlur,
-  isValueChanged,
-  inputData,
-  fieldData,
-  parentPredicate,
-  parent,
-  parentSubject,
-  valueExpr,
-  value,
-  ...rest
-}: Props) => {
-  const label = rest['ui:label'] || '';
-  const name = rest['ui:name'] || '';
-  const maxLength = rest['ui:maxLength'] || 10000;
-  const defaultValue = fieldData && fieldData._formFocus.value;
-  const disabled = inputData && inputData.disabled;
+export const TextArea = (props: Props) => {
+  const { id, data, updateData } = props;
+  const { theme } = useContext(ThemeContext);
 
-  const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
-  const onChange = ({ target }) => {
-    const obj = { value: target.value, ...rest };
-    modifyFormObject(id, obj);
-  };
+  const { [UI.LABEL]: label, [UI.MAX_LENGTH]: maxLength, [UI.VALUE]: initialValue } = data;
+
+  const [value, setValue] = useState(initialValue);
+
+  const onChange = event => setValue(event.target.value);
+
+  const onBlur = () => updateData(id, value);
+
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <TextAreaGroup className={theme && theme.inputTextArea}>
-          <label htmlFor={name}>
-            {label}
-            <textarea
-              id={name}
-              name={name}
-              value={actualValue}
-              onChange={onChange}
-              disabled={disabled}
-              maxLength={maxLength}
-              data-predicate={predicate}
-              data-subject={fieldData && fieldData._formFocus.parentSubject}
-              data-default={defaultValue}
-              data-parent-predicate={parentPredicate}
-              data-valuexpr={JSON.stringify(valueExpr)}
-              data-parent-subject={parentSubject}
-              data-parent-name={parent && parent._formFocus ? parent._formFocus.name : null}
-              onBlur={onBlur}
-            />
-          </label>
-        </TextAreaGroup>
-      )}
-    </FormModelConfig.Consumer>
+    <div className={theme.textArea}>
+      <label htmlFor={id}>{label}</label>
+      <textarea
+        {...{
+          id,
+          value,
+          onChange,
+          onBlur
+        }}
+      />
+    </div>
   );
 };
-
-export default TextArea;

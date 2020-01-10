@@ -1,51 +1,47 @@
-import React, { useState } from 'react';
-import { InputTextTypes } from '@constants';
-import { FormModelConfig } from '@context';
+import React, { useState, useContext } from 'react';
+import { UI } from '@constants';
+import { ThemeContext } from '@context';
 
-import { InputGroup } from '../Input/input.styles';
-
-const Integer = ({
-  id,
-  value,
-  modifyFormObject,
-  formObject,
-  onSave,
-  autoSave,
-  onBlur,
-  ...rest
-}) => {
-  const type = rest['rdf:type'];
-  const label = rest['ui:label'] || '';
-  const maxLength = rest['ui:maxLength'] || 256;
-  const minValue = rest['ui:ui:minValue'] || 0;
-  const size = rest['ui:size'] || 40;
-  const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
-  const onChange = ({ target }) => {
-    const re = /^[0-9]+$/;
-    if (target.value === '' || re.test(target.value)) {
-      const obj = { value: target.value, ...rest };
-      modifyFormObject(id, obj);
-    }
-  };
-
-  return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <InputGroup className={theme && theme.inputText}>
-          <label htmlFor={id} id={id}>
-            {label}
-          </label>
-          <input
-            id={id}
-            name={id}
-            min={minValue}
-            step="1"
-            {...{ maxLength, size, value: actualValue || '', onChange, onBlur }}
-          />
-        </InputGroup>
-      )}
-    </FormModelConfig.Consumer>
-  );
+type Props = {
+  id: string,
+  data: object,
+  updateData: (string, string) => void
 };
 
-export default Integer;
+export const Integer = (props: Props) => {
+  const { id, data, updateData } = props;
+  const { theme } = useContext(ThemeContext);
+
+  const {
+    [UI.LABEL]: label,
+    [UI.MIN_VALUE]: minValue,
+    [UI.SIZE]: size,
+    [UI.VALUE]: initialValue
+  } = data;
+
+  const [value, setValue] = useState(initialValue);
+
+  const onChange = event => {
+    const re = /^[0-9]+$/;
+    if (event.target.value === '' || re.test(event.target.value)) setValue(event.target.value);
+  };
+
+  const onBlur = () => updateData(id, value);
+
+  return (
+    <div className={theme && theme.integerField}>
+      <label htmlFor={id}>{label}</label>
+      <input
+        {...{
+          id,
+          min: minValue,
+          step: '1',
+          size,
+          value,
+          onChange,
+          onBlur
+        }}
+      />
+    </div>
+  );
+};

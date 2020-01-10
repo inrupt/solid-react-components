@@ -12,6 +12,51 @@ export const ACL_PREFIXES = {
   rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 };
 
+export const VOCAB = {
+  UI: {
+    Heading: 'http://www.w3.org/ns/ui#Heading',
+    ColorField: 'http://www.w3.org/ns/ui#ColorField',
+    SingleLineTextField: 'http://www.w3.org/ns/ui#SingleLineTextField',
+    IntegerField: 'http://www.w3.org/ns/ui#IntegerField',
+    DateField: 'http://www.w3.org/ns/ui#DateField',
+    DateTimeField: 'http://www.w3.org/ns/ui#DateTimeField',
+    TimeField: 'http://www.w3.org/ns/ui#TimeField',
+    BooleanField: 'http://www.w3.org/ns/ui#BooleanField',
+    DecimalField: 'http://www.w3.org/ns/ui#DecimalField',
+    MultiLineTextField: 'http://www.w3.org/ns/ui#MultiLineTextField',
+    FloatField: 'http://www.w3.org/ns/ui#FloatField',
+    EmailField: 'http://www.w3.org/ns/ui#EmailField',
+    PhoneField: 'http://www.w3.org/ns/ui#PhoneField',
+    TriStateField: 'http://www.w3.org/ns/ui#TriStateField',
+    Multiple: 'http://www.w3.org/ns/ui#Multiple',
+    Group: 'http://www.w3.org/ns/ui#Group'
+  }
+};
+
+const rdfBase = 'rdf:';
+export const RDF = {
+  TYPE: `${rdfBase}type`
+};
+
+const uiBase = 'ui:';
+export const UI = {
+  PARTS: `${uiBase}parts`,
+  PART: `${uiBase}part`,
+  VALUE: `${uiBase}value`,
+  CONTENTS: `${uiBase}contents`,
+  NAME: `${uiBase}name`,
+  LABEL: `${uiBase}label`,
+  MAX_LENGTH: `${uiBase}maxLength`,
+  MIN_LENGTH: `${uiBase}minLength`,
+  MAX_VALUE: `${uiBase}maxValue`,
+  MIN_VALUE: `${uiBase}minValue`,
+  MAX_DATE_OFFSET: `${uiBase}maxdateOffset`,
+  MIN_DATE_OFFSET: `${uiBase}mindateOffset`,
+  MAX_DATETIME_OFFSET: `${uiBase}maxdatetimeOffset`,
+  MIN_DATETIME_OFFSET: `${uiBase}mindatetimeOffset`,
+  PATTERN: `${uiBase}pattern`,
+  DEFAULT: `${uiBase}default`
+};
 export const FORM_MODEL = {
   MULTIPLE_TYPE: 'http://www.w3.org/ns/ui#Multiple'
 };

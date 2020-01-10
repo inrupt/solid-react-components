@@ -1,3 +1,3 @@
-import DateTimePicker from './date-time-picker.component';
+import { DateTimePicker } from './date-time-picker.component';
 
-export default DateTimePicker;
+export { DateTimePicker };
