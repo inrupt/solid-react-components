@@ -22,7 +22,8 @@ export const Input = props => {
   };
 
   const onBlur = () => {
-    updateData(id, value);
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
   };
 
   return (

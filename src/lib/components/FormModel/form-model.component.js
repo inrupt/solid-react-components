@@ -70,8 +70,7 @@ export const FormModel = (props: FormProps) => {
   const saveChanges = async () => {
     if (Object.keys(pendingChanges).length === 0) return;
 
-    for (const [id, self] of Object.entries(pendingChanges)) {
-      const name = formModel[UI.PARTS][id][UI.NAME];
+    for (const [name, self] of Object.entries(pendingChanges)) {
       /* besides retrieving the updated parts ('formObject') also adds the new part to the formObject */
       actions.retrieveNewFormObject(name, self);
     }

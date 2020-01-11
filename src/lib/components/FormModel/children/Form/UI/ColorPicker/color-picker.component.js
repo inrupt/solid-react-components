@@ -25,7 +25,8 @@ const ColorPicker = (props: Props) => {
 
   const handleChangeComplete = color => {
     setColor(color.hex);
-    updateData(id, color.hex);
+    const updatedPart = { ...data, value: color.hex };
+    updateData(id, updatedPart);
   };
 
   const handleClick = () => {

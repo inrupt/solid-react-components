@@ -25,7 +25,10 @@ export const Phone = (props: Props) => {
 
   const onChange = event => setValue(event.target.value);
 
-  const onBlur = () => updateData(id, value);
+  const onBlur = () => {
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
+  };
 
   return (
     <div className={theme.phoneField}>

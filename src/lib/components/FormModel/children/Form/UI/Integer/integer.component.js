@@ -26,7 +26,10 @@ export const Integer = (props: Props) => {
     if (event.target.value === '' || re.test(event.target.value)) setValue(event.target.value);
   };
 
-  const onBlur = () => updateData(id, value);
+  const onBlur = () => {
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
+  };
 
   return (
     <div className={theme && theme.integerField}>
