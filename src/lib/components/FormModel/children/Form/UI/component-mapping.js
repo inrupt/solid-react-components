@@ -31,5 +31,5 @@ export const Mapping = {
   [VOCAB.UI.PhoneField]: Phone,
   [VOCAB.UI.ColorField]: ColorPicker,
   [VOCAB.UI.Multiple]: Multiple,
-  [VOCAB.UI.Group]: Group
+  [VOCAB.UI.Group]: Multiple
 };

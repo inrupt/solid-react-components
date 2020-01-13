@@ -5,6 +5,7 @@ import { ThemeContext } from '@context';
 import { UI, RDF, InputTextTypes } from '@constants';
 
 export const Input = props => {
+  console.log(props);
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
@@ -23,6 +24,8 @@ export const Input = props => {
 
   const onBlur = () => {
     const updatedPart = { ...data, value };
+    console.log(id);
+    console.log(updatedPart);
     updateData(id, updatedPart);
   };
 

@@ -19,12 +19,12 @@ export const Group = (props: Props) => {
   const { data, updateData, mapper, savingData } = props;
   const { theme } = useContext(ThemeContext);
 
+  console.log(data);
   return (
     <div className={theme.group}>
       {Object.entries(data).map(([, part]) => {
         const { [RDF.TYPE]: type, [UI.NAME]: name } = part;
         const Component = mapper[type];
-
         if (!Component) return null;
 
         /* if this component is being saved right now */

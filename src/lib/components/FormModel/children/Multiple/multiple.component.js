@@ -20,12 +20,14 @@ type Props = {
 export const Multiple = (props: Props) => {
   const { id, data, updateData, mapper, savingData } = props;
   const { theme } = useContext(ThemeContext);
-
   /**
    * A multiple should **not** have a 'parts' predicate, however the current implementation
    * links the data in it.
    */
-  const { [UI.LABEL]: label, [UI.PARTS]: parts } = data;
+  const {
+    [UI.LABEL]: label,
+    [data[RDF.TYPE].includes('Group') ? UI.PARTS : UI.PART]: parts
+  } = data;
 
   /**
    * TODO: check if this is the right behaviour for when the pod does not have data
