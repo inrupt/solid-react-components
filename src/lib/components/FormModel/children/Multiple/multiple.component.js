@@ -55,7 +55,7 @@ export const Multiple = (props: Props) => {
         const key = item[UI.NAME];
         const type = VOCAB.UI.Group;
         return (
-          <div key={key}>
+          <div key={key} className={classes}>
             <Group
               className={theme && theme.childGroup}
               {...{

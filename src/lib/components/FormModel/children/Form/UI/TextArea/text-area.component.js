@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ThemeContext } from '@context';
-
 import { UI } from '@constants';
+import { TextAreaGroup } from './text-area.styles';
 
 type Props = {
   id: string,
@@ -25,7 +25,7 @@ export const TextArea = (props: Props) => {
   };
 
   return (
-    <div className={theme.textArea}>
+    <TextAreaGroup className={theme && theme.inputText}>
       <label htmlFor={id}>{label}</label>
       <textarea
         {...{
@@ -36,6 +36,6 @@ export const TextArea = (props: Props) => {
           maxLength
         }}
       />
-    </div>
+    </TextAreaGroup>
   );
 };
