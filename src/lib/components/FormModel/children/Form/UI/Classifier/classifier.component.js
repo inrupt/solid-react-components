@@ -57,7 +57,6 @@ export const Classifier = props => {
   useEffect(() => {
     if (value !== initialValue) {
       const updatedPart = { ...data, value };
-      console.log('updatedPart', updatedPart);
       updateData(id, updatedPart);
     }
   }, [value]);
