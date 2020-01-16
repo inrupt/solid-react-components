@@ -5,7 +5,7 @@ import { useLiveUpdate } from '@solid/react';
 
 import { ThemeContext } from '@context';
 import { UI } from '@constants';
-import { SolidError } from '@utils';
+import { SolidError, solidResponse } from '@utils';
 
 import { Mapping } from './children/Form/UI/component-mapping';
 import { Group } from './children/Group';
@@ -18,7 +18,14 @@ type FormProps = {
     autosave: boolean,
     theme: object,
     autosaveIndicator: React.Component
-  }
+  },
+  onInit: () => void,
+  onLoaded: () => void,
+  onError: () => void,
+  onSuccess: () => void,
+  onSave: () => void,
+  onAddNewField: () => void,
+  onDelete: () => void
 };
 
 /**
@@ -35,7 +42,19 @@ type FormProps = {
  *      {React.Component} spinner component indicating whether the saving process has been completed or nor
  */
 export const FormModel = (props: FormProps) => {
-  const { modelSource, dataSource, customComponents, options } = props;
+  const {
+    modelSource,
+    dataSource,
+    customComponents,
+    options,
+    onAddNewField,
+    onDelete,
+    onError,
+    onSave,
+    onInit,
+    onLoaded,
+    onSuccess
+  } = props;
 
   const { autosave, theme, autosaveIndicator } = options;
 
@@ -52,6 +71,10 @@ export const FormModel = (props: FormProps) => {
   const actions = new FormActions(formModel, {});
   const timestamp = useLiveUpdate();
 
+  const init = async () => {
+    if (onInit) onInit();
+  };
+
   /**
    * Updates the list of values changed by the user and that are yet to update in the pod
    * @param {string} name unique identifier for this part ('ui:name')
@@ -64,14 +87,41 @@ export const FormModel = (props: FormProps) => {
   };
 
   /**
+   * Create a new set of fields, for when a user wants to add a new set of fields in a Multiple, e.g. Address fields
+   * @param id
+   */
+  const addNewField = id => {
+    try {
+      const updatedFormModelObject = actions.addNewField(id);
+      setFormModel(updatedFormModelObject);
+      onAddNewField(solidResponse(200, 'New field successfully added'));
+    } catch (error) {
+      onError(new SolidError(error, 'Error adding new field', 500));
+    }
+  };
+
+  /**
+   * Delete an existing set of fields, such as an Address. This currently only supports deleting Groups
+   * @param id
+   */
+  const deleteField = async id => {
+    try {
+      const updatedFormModelObject = await actions.deleteField(id);
+      setFormModel(updatedFormModelObject);
+      onDelete(solidResponse(200, 'Field successfully deleted'));
+    } catch (error) {
+      onError(new SolidError(error, 'Error deleting field', 500));
+    }
+  };
+
+  /**
    * Builds a 'formObject' (list of parts with updated values) for 'actions' to use as an input for
    * saving the data back into the pod
    */
   const saveChanges = async () => {
     if (Object.keys(pendingChanges).length === 0) return;
 
-    for (const [id, self] of Object.entries(pendingChanges)) {
-      const name = formModel[UI.PARTS][id][UI.NAME];
+    for (const [name, self] of Object.entries(pendingChanges)) {
       /* besides retrieving the updated parts ('formObject') also adds the new part to the formObject */
       actions.retrieveNewFormObject(name, self);
     }
@@ -82,14 +132,26 @@ export const FormModel = (props: FormProps) => {
       setFormModel(updatedModel);
       setPendingChanges({});
       setSavingState({ errored: false, running: false });
+      onSave();
     } catch (e) {
       setSavingState({ errored: true, running: false });
+      onError(new SolidError(e, 'Error saving form', 500));
     }
   };
 
+  /**
+   * Initialize the form, and execute the onInit callback
+   */
+  useEffect(() => {
+    init();
+  }, []);
+
   /* Create a new model if any of the sources changes */
   useEffect(() => {
-    formUi.convertFormModel(modelSource, dataSource).then(model => setFormModel(model));
+    formUi.convertFormModel(modelSource, dataSource).then(model => {
+      setFormModel(model);
+      if (onLoaded) onLoaded();
+    });
   }, [modelSource, dataSource]);
 
   useEffect(() => {
@@ -102,8 +164,10 @@ export const FormModel = (props: FormProps) => {
    */
   useEffect(() => {
     formUi
-      .mapFormModelWithData(formModel, modelSource)
-      .then(model => setFormModel(model))
+      .mapFormModelWithData(modelSource, dataSource)
+      .then(model => {
+        setFormModel(model);
+      })
       .catch(e => new SolidError('Error while saving data', e, 500));
   }, [timestamp]);
 
@@ -114,19 +178,23 @@ export const FormModel = (props: FormProps) => {
 
   return (
     <ThemeContext.Provider value={{ theme }}>
-      <Group
-        {...{
-          data: formModel[UI.PARTS],
-          updateData,
-          mapper,
-          savingData: {
-            autosaveIndicator,
-            running: savingState.running,
-            error: savingState.errored,
-            names: Object.keys(pendingChanges)
-          }
-        }}
-      />
+      <div className={theme && theme.form}>
+        <Group
+          {...{
+            data: formModel[UI.PARTS],
+            updateData,
+            addNewField,
+            deleteField,
+            mapper,
+            savingData: {
+              autosaveIndicator,
+              running: savingState.running,
+              error: savingState.errored,
+              names: Object.keys(pendingChanges)
+            }
+          }}
+        />
+      </div>
     </ThemeContext.Provider>
   );
 };

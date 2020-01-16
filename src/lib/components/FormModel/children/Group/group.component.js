@@ -1,12 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { UI, RDF } from '@constants';
-import { ThemeContext } from '@context';
 
 type Props = {
   data: object,
   updateData: (string, string) => void,
   mapper: object,
+  addNewField: string => void,
+  deleteField: string => void,
   savingData: {
     autosaveIndicator: React.Component,
     running: boolean,
@@ -16,11 +17,10 @@ type Props = {
 };
 
 export const Group = (props: Props) => {
-  const { data, updateData, mapper, savingData } = props;
-  const { theme } = useContext(ThemeContext);
+  const { data, updateData, mapper, savingData, addNewField, deleteField } = props;
 
   return (
-    <div className={theme.group}>
+    <div>
       {Object.entries(data).map(([, part]) => {
         const { [RDF.TYPE]: type, [UI.NAME]: name } = part;
         const Component = mapper[type];
@@ -34,13 +34,15 @@ export const Group = (props: Props) => {
         if (savingData.running && savingThis) Indicator = savingData.autosaveIndicator;
 
         return (
-          <div className={theme.savingGroup}>
+          <div key={name}>
             <Component
               {...{
                 key: name,
                 id: name,
                 data: part,
                 updateData,
+                addNewField,
+                deleteField,
                 mapper,
                 savingData
               }}

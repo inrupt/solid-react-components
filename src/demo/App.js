@@ -9,7 +9,7 @@ import {
   ProfileUploader,
   useNotification,
   FormModel,
-  AutoSaveDefaultSpinner,
+  Spinner,
   ProfileViewer
 } from '@lib';
 import { AccessControlList } from '@classes';
@@ -167,15 +167,18 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath: 'https://jmartin.inrupt.net/public/formmodel/multiple.ttl#formRoot',
-          podPath: 'https://jmartin.inrupt.net/profile/card#me',
-          settings: {
+          modelSource:
+            'https://solidsdk.inrupt.net/public/FormLanguage/examples/FormModel/Classifier-subtypes.ttl#formRoot',
+          dataSource: 'https://jmartin.inrupt.net/profile/card#id1561921875000',
+          options: {
             theme: {
               inputText: 'sdk-input',
               inputCheckbox: 'sdk-checkbox checkbox',
-              inputTextArea: 'sdk-textarea'
+              inputTextArea: 'sdk-textarea',
+              multiple: 'sdk-multiple-button'
             },
-            savingComponent: AutoSaveDefaultSpinner
+            autosaveIndicator: Spinner,
+            autosave: true
           },
           viewer: false,
           onError: error => {
@@ -199,7 +202,6 @@ const App = () => {
             console.log(response);
           }
         }}
-        autoSave
         liveUpdate
       />
       <Uploader

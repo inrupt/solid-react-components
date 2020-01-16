@@ -34,7 +34,8 @@ export const DateTimePicker = props => {
   const onChange = date => {
     /* User wants to remove the date */
     if (!date) {
-      updateData(id, '');
+      const updatedPart = { ...data, value: '' };
+      updateData(id, updatedPart);
       setDate(null);
       return;
     }
@@ -45,7 +46,8 @@ export const DateTimePicker = props => {
     if (type === UITypes.DateField) value = format(date, DATE_FORMAT.DATE);
     if (type === UITypes.DateTimeField) value = date.toISOString();
 
-    updateData(id, value);
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
     setDate(date);
   };
 

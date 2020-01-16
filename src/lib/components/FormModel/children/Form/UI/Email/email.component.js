@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { InputTextTypes, UI, RDF } from '@constants';
 import { ThemeContext } from '@context';
+import { InputGroup } from '../Input/input.styles';
 
 type Props = {
   id: string,
@@ -25,10 +26,13 @@ export const Email = (props: Props) => {
 
   const onChange = event => setValue(event.target.value);
 
-  const onBlur = () => updateData(id, value);
+  const onBlur = () => {
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
+  };
 
   return (
-    <div className={theme.emailField}>
+    <InputGroup className={theme && theme.inputText}>
       <label htmlFor={id}>{label}</label>
       <input
         {...{
@@ -42,6 +46,6 @@ export const Email = (props: Props) => {
           onBlur
         }}
       />
-    </div>
+    </InputGroup>
   );
 };

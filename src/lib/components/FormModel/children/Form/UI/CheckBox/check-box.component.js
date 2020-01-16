@@ -30,7 +30,8 @@ export const CheckBox = (props: Props) => {
   const { [UI.LABEL]: label } = data;
 
   const onChange = event => {
-    updateData(id, String(event.target.checked));
+    const updatedPart = { ...data, value: String(event.target.checked) };
+    updateData(id, updatedPart);
   };
 
   return (
@@ -39,6 +40,7 @@ export const CheckBox = (props: Props) => {
         {label}
       </label>
       <input
+        className={theme && theme.inputCheckbox}
         {...{
           type: 'checkbox',
           id,

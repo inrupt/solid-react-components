@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
-
+import { InputGroup } from './input.styles';
 import { ThemeContext } from '@context';
-
 import { UI, RDF, InputTextTypes } from '@constants';
 
 export const Input = props => {
@@ -22,11 +21,12 @@ export const Input = props => {
   };
 
   const onBlur = () => {
-    updateData(id, value);
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
   };
 
   return (
-    <div className={theme && theme.inputText}>
+    <InputGroup className={theme && theme.inputText}>
       <label htmlFor={id}>{label}</label>
       <input
         {...{
@@ -38,6 +38,6 @@ export const Input = props => {
           onBlur
         }}
       />
-    </div>
+    </InputGroup>
   );
 };
