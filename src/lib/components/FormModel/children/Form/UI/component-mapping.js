@@ -14,6 +14,7 @@ import { Integer } from './Integer';
 import { ColorPicker } from './ColorPicker';
 import { Multiple } from '../../Multiple';
 import { Group } from '../../Group';
+import Classifier from './Classifier';
 
 export const Mapping = {
   [VOCAB.UI.Heading]: Heading,
@@ -31,5 +32,6 @@ export const Mapping = {
   [VOCAB.UI.PhoneField]: Phone,
   [VOCAB.UI.ColorField]: ColorPicker,
   [VOCAB.UI.Multiple]: Multiple,
-  [VOCAB.UI.Group]: Multiple
+  [VOCAB.UI.Group]: Group,
+  [VOCAB.UI.Classifier]: Classifier
 };

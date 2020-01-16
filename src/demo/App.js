@@ -167,13 +167,15 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelSource: 'https://jordanf.inrupt.net/public/models/multiple.ttl#formRoot',
-          dataSource: 'https://jordanf.inrupt.net/profile/card#me',
+          modelSource:
+            'https://solidsdk.inrupt.net/public/FormLanguage/examples/FormModel/Classifier-subtypes.ttl#formRoot',
+          dataSource: 'https://jmartin.inrupt.net/profile/card#id1561921875000',
           options: {
             theme: {
               inputText: 'sdk-input',
               inputCheckbox: 'sdk-checkbox checkbox',
-              inputTextArea: 'sdk-textarea'
+              inputTextArea: 'sdk-textarea',
+              multiple: 'sdk-multiple-button'
             },
             autosaveIndicator: Spinner,
             autosave: true

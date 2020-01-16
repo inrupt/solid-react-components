@@ -40,6 +40,7 @@ export const CheckBox = (props: Props) => {
         {label}
       </label>
       <input
+        className={theme && theme.inputCheckbox}
         {...{
           type: 'checkbox',
           id,

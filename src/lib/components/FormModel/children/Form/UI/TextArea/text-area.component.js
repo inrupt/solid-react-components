@@ -32,7 +32,8 @@ export const TextArea = (props: Props) => {
           id,
           value,
           onChange,
-          onBlur
+          onBlur,
+          maxLength
         }}
       />
     </div>

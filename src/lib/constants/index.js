@@ -29,7 +29,8 @@ export const VOCAB = {
     PhoneField: 'http://www.w3.org/ns/ui#PhoneField',
     TriStateField: 'http://www.w3.org/ns/ui#TriStateField',
     Multiple: 'http://www.w3.org/ns/ui#Multiple',
-    Group: 'http://www.w3.org/ns/ui#Group'
+    Group: 'http://www.w3.org/ns/ui#Group',
+    Classifier: 'http://www.w3.org/ns/ui#Classifier'
   }
 };
 
@@ -43,7 +44,9 @@ export const UI = {
   PARTS: `${uiBase}parts`,
   PART: `${uiBase}part`,
   VALUE: `${uiBase}value`,
+  VALUES: `${uiBase}values`,
   CONTENTS: `${uiBase}contents`,
+  CATEGORY: `${uiBase}category`,
   NAME: `${uiBase}name`,
   LABEL: `${uiBase}label`,
   MAX_LENGTH: `${uiBase}maxLength`,

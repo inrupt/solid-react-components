@@ -1,11 +1,9 @@
 import React, { useContext, useState } from 'react';
-
+import { InputGroup } from './input.styles';
 import { ThemeContext } from '@context';
-
 import { UI, RDF, InputTextTypes } from '@constants';
 
 export const Input = props => {
-  console.log(props);
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
@@ -24,13 +22,11 @@ export const Input = props => {
 
   const onBlur = () => {
     const updatedPart = { ...data, value };
-    console.log(id);
-    console.log(updatedPart);
     updateData(id, updatedPart);
   };
 
   return (
-    <div className={theme && theme.inputText}>
+    <InputGroup className={theme && theme.inputText}>
       <label htmlFor={id}>{label}</label>
       <input
         {...{
@@ -42,6 +38,6 @@ export const Input = props => {
           onBlur
         }}
       />
-    </div>
+    </InputGroup>
   );
 };

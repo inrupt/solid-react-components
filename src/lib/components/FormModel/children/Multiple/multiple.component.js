@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
 
 import { ThemeContext } from '@context';
-import { UI, RDF } from '@constants';
+import { UI, VOCAB } from '@constants';
 import { Group } from '../Group';
+import { DeleteButton } from '../Form/UI/DeleteButton/delete-button.component';
 
 type Props = {
   id: string,
   data: object,
   updateData: (string, string) => void,
   mapper: object,
+  addNewField: string => void,
+  deleteField: string => void,
   savingData: {
     autosaveIndicator: React.Component,
     running: boolean,
@@ -18,45 +21,65 @@ type Props = {
 };
 
 export const Multiple = (props: Props) => {
-  const { id, data, updateData, mapper, savingData } = props;
+  const { id, data, updateData, mapper, savingData, addNewField, deleteField } = props;
   const { theme } = useContext(ThemeContext);
-  /**
-   * A multiple should **not** have a 'parts' predicate, however the current implementation
-   * links the data in it.
-   */
-  const {
-    [UI.LABEL]: label,
-    [data[RDF.TYPE].includes('Group') ? UI.PARTS : UI.PART]: parts
-  } = data;
+  const { [UI.LABEL]: label, [UI.PART]: part } = data;
 
-  /**
-   * TODO: check if this is the right behaviour for when the pod does not have data
-   */
-  if (!parts) {
-    const { [UI.PART]: part } = data;
-    const { [RDF.TYPE]: partType } = part;
-    const Component = mapper[partType];
+  const parts = [];
 
-    if (!Component) return null;
+  // Get list of parts for the
+  Object.keys(part).forEach(item => {
+    parts.push(part[item]);
+  });
 
-    return (
-      <div>
-        <Component data={part} updateData={updateData} mapper={mapper} savingData={savingData} />
-      </div>
-    );
-  } // TODO: should render the single 'ui:part'?
+  // Quick and dirty setup of custom classes.
+  // TODO: Refactor this
+  let classes = '';
+  if (theme) {
+    if (theme.form) {
+      classes += theme.form;
+    }
+    if (theme.childGroup) {
+      if (classes.length > 0) {
+        classes += ' ';
+      }
+      classes += theme.childGroup;
+    }
+  }
 
   return (
-    <div id={id} className={theme.multiple}>
+    <div id={id} className={classes} key={id}>
       <p>{label}</p>
-      <Group
-        {...{
-          data: parts,
-          updateData,
-          mapper,
-          savingData
-        }}
-      />
+      {parts.map(item => {
+        // Fetch the name from the object for a unique key
+        const key = item[UI.NAME];
+        const type = VOCAB.UI.Group;
+        return (
+          <div key={key}>
+            <Group
+              className={theme && theme.childGroup}
+              {...{
+                data: item[UI.PARTS],
+                updateData,
+                mapper,
+                savingData
+              }}
+            />
+            <DeleteButton
+              {...{
+                type,
+                action: deleteField,
+                id: key,
+                className: theme && theme.deleteButton
+              }}
+            />
+          </div>
+        );
+      })}
+
+      <button type="button" onClick={() => addNewField(id)} className={theme && theme.multiple}>
+        Add new field
+      </button>
     </div>
   );
 };
