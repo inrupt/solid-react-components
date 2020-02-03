@@ -96,16 +96,18 @@ class Uploader extends Component<Props> {
           }
 
           // Check if file has extension and add suffix string
-          if (file.type && file.type !== '') {
-            if (file.type !== lookup(file.name)) {
-              suffix = `${extension(file.type)}`;
+          if (accept !== '*/*') {
+            if (file.type && file.type !== '') {
+              if (file.type !== lookup(file.name)) {
+                suffix = `${extension(file.type)}`;
+              }
+            } else {
+              throw new SolidError(errorsText.unsupported, 'file', 415);
             }
-          } else {
-            throw new SolidError(errorsText.unsupported, 'file', 415);
-          }
 
-          if (accept && !this.validateAcceptFiles(accept, file.type)) {
-            throw new SolidError(errorsText.unsupported, 'file', 415);
+            if (accept && !this.validateAcceptFiles(accept, file.type)) {
+              throw new SolidError(errorsText.unsupported, 'file', 415);
+            }
           }
 
           const newFileName = this.renameFile(file, suffix);
