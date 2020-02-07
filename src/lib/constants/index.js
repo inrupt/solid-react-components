@@ -80,7 +80,8 @@ export const UITypes = {
   TimeField: 'http://www.w3.org/ns/ui#TimeField',
   Classifier: 'http://www.w3.org/ns/ui#Classifier',
   Heading: 'http://www.w3.org/ns/ui#Heading',
-  Comment: 'http://www.w3.org/ns/ui#Comment'
+  Comment: 'http://www.w3.org/ns/ui#Comment',
+  Multiple: 'http://www.w3.org/ns/ui#Multiple'
 };
 
 export const InputTextTypes = {

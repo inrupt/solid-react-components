@@ -9,6 +9,7 @@ import { SolidError, solidResponse } from '@utils';
 
 import { Mapping } from './children/Form/UI/component-mapping';
 import { Group } from './children/Group';
+import Viewer from './children/Viewer';
 
 type FormProps = {
   modelSource: string,
@@ -17,7 +18,8 @@ type FormProps = {
   options: {
     autosave: boolean,
     theme: object,
-    autosaveIndicator: React.Component
+    autosaveIndicator: React.Component,
+    viewer: boolean
   },
   onInit: () => void,
   onLoaded: () => void,
@@ -56,7 +58,7 @@ export const FormModel = (props: FormProps) => {
     onSuccess
   } = props;
 
-  const { autosave, theme, autosaveIndicator } = options;
+  const { autosave, theme, autosaveIndicator, viewer } = options;
 
   const [formModel, setFormModel] = useState({});
   const [pendingChanges, setPendingChanges] = useState({});
@@ -179,21 +181,26 @@ export const FormModel = (props: FormProps) => {
   return (
     <ThemeContext.Provider value={{ theme }}>
       <div className={theme && theme.form}>
-        <Group
-          {...{
-            data: formModel[UI.PARTS],
-            updateData,
-            addNewField,
-            deleteField,
-            mapper,
-            savingData: {
-              autosaveIndicator,
-              running: savingState.running,
-              error: savingState.errored,
-              names: Object.keys(pendingChanges)
-            }
-          }}
-        />
+        {!viewer && (
+          <Group
+            {...{
+              data: formModel[UI.PARTS],
+              updateData,
+              addNewField,
+              deleteField,
+              mapper,
+              savingData: {
+                autosaveIndicator,
+                running: savingState.running,
+                error: savingState.errored,
+                names: Object.keys(pendingChanges)
+              }
+            }}
+          />
+        )}
+        {viewer && (
+          <Viewer formModel={formModel} data={formModel[UI.PARTS] || formModel[UI.PART]} />
+        )}
       </div>
     </ThemeContext.Provider>
   );

@@ -1,5 +1,5 @@
 import CheckBox from './CheckBox';
-import DateTimePicker from './DateTimePicker';
+import { DateTimePicker } from './DateTimePicker';
 import Input from './Input';
 import RadioButton from './RadioButton';
 import Select from './Select';

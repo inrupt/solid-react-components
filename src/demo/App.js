@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
+import data from '@solid/query-ldflex';
+
 // import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
 import SolidImg from '../assets/solid_logo.png';
 import {
@@ -167,20 +169,21 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelSource:
-            'https://solidsdk.inrupt.net/public/FormLanguage/examples/FormModel/Classifier-subtypes.ttl#formRoot',
-          dataSource: 'https://jmartin.inrupt.net/profile/card#id1561921875000',
+          modelSource: 'https://solidsdk.inrupt.net/sdk/userprofile.ttl#formRoot',
+          dataSource: 'https://jmartin.inrupt.net/profile/card#me',
           options: {
             theme: {
               inputText: 'sdk-input',
               inputCheckbox: 'sdk-checkbox checkbox',
               inputTextArea: 'sdk-textarea',
-              multiple: 'sdk-multiple-button'
+              multiple: 'sdk-multiple-button',
+              form: 'inrupt-sdk-form',
+              childGroup: 'inrupt-form-group'
             },
             autosaveIndicator: Spinner,
-            autosave: true
+            autosave: true,
+            viewer: true
           },
-          viewer: false,
           onError: error => {
             // eslint-disable-next-line no-console
             console.log(error, 'error');

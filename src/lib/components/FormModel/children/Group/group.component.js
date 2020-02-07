@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { UI, RDF } from '@constants';
+import { UI, RDF, UITypes, VOCAB } from '@constants';
 
 type Props = {
   data: object,
@@ -29,6 +29,7 @@ export const Group = (props: Props) => {
 
         /* if this component is being saved right now */
         const savingThis = savingData.names.some((componentName: string) => name === componentName);
+        const componentData = type === VOCAB.UI.Group ? part[UI.PARTS] : part;
 
         let Indicator = () => null;
         if (savingData.running && savingThis) Indicator = savingData.autosaveIndicator;
@@ -39,7 +40,7 @@ export const Group = (props: Props) => {
               {...{
                 key: name,
                 id: name,
-                data: part,
+                data: componentData,
                 updateData,
                 addNewField,
                 deleteField,
