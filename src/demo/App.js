@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
-import data from '@solid/query-ldflex';
-
 // import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
 import SolidImg from '../assets/solid_logo.png';
 import {
@@ -182,7 +180,7 @@ const App = () => {
             },
             autosaveIndicator: Spinner,
             autosave: true,
-            viewer: true
+            viewer: false
           },
           onError: error => {
             // eslint-disable-next-line no-console
