@@ -25,4 +25,3 @@ export const SingleLine = (props: Props) => {
     </div>
   );
 };
-
