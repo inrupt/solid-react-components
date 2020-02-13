@@ -1,5 +1,5 @@
 import { Notification } from './notification';
-import AccessControlList from './access-control-list';
+import AccessControlList, { ACLFactory } from './access-control-list';
 import AppPermission from './app-permissions';
 
-export { Notification, AccessControlList, AppPermission };
+export { Notification, AccessControlList, AppPermission, ACLFactory };

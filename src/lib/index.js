@@ -23,7 +23,7 @@ import { NotificationTypes } from '@constants';
 
 import { useNotification } from '@hooks';
 
-import { AccessControlList, AppPermission } from '@classes';
+import { AccessControlList, AppPermission, ACLFactory } from '@classes';
 
 export {
   ProviderLogin,
@@ -42,6 +42,7 @@ export {
   ShexFormBuilder,
   useNotification,
   AccessControlList,
+  ACLFactory,
   AppPermission,
   FormModel,
   AutoSaveDefaultSpinner,
