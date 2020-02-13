@@ -28,9 +28,11 @@ export const Multiple = (props: Props) => {
   const parts = [];
 
   // Get list of parts for the
-  Object.keys(part).forEach(item => {
-    parts.push(part[item]);
-  });
+  if (part) {
+    Object.keys(part).forEach(item => {
+      parts.push(part[item]);
+    });
+  }
 
   // Quick and dirty setup of custom classes.
   // TODO: Refactor this

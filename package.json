@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.5.1-dev.5",
+  "version": "0.5.1-dev.8",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
