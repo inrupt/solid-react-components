@@ -14,6 +14,8 @@ import {
 } from '@lib';
 import { AccessControlList } from '@classes';
 import { NotificationTypes } from '@constants';
+import { ACLFactory } from '../lib/classes/access-control-list';
+import { getPodStoragePath } from '../lib/utils/storage';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -100,14 +102,20 @@ const App = () => {
   };
 
   const createAcl = async () => {
-    if (webId) {
-      const uri = new URL(webId);
-      const documentURI = `${uri.origin}/public/file.ttl`;
-      const { MODES } = AccessControlList;
-      const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
-      const aclInstance = new AccessControlList(webId, documentURI);
-      await aclInstance.setAclUriFromHeader();
-      await aclInstance.createACL(permissions);
+    try {
+      if (webId) {
+        console.log('webid', webId);
+
+        const podStoragePathValue = await getPodStoragePath(webId);
+        const documentURI = `${podStoragePathValue}public/games/tictactoe/settings.ttl`;
+        const { MODES } = AccessControlList;
+        const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
+        const aclFactory = new ACLFactory();
+        const aclInstance = await aclFactory.createNewAcl(webId, documentURI);
+        await aclInstance.createACL(permissions);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

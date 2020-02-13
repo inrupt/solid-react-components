@@ -13,10 +13,10 @@ type Permissions = {
 };
 
 export default class AccessControlList {
-  constructor(owner, documentUri) {
+  constructor(owner, documentUri, aclUrl) {
     this.owner = owner;
     this.documentUri = documentUri;
-    this.aclUri = `${this.documentUri}.acl`;
+    this.aclUri = aclUrl;
     this.acl = null;
   }
 
@@ -27,17 +27,6 @@ export default class AccessControlList {
   static get MODES() {
     return PERMISSIONS;
   }
-
-  setAclUriFromHeader = async () => {
-    try {
-      const response = await solid.fetch(this.documentUri, { method: 'OPTIONS' });
-      const parsedLinks = parse(response.headers.get('Link'));
-      const aclFile = parsedLinks.acl ? parsedLinks.acl.url : '';
-      this.aclUri = new URL(aclFile, this.documentUri).href;
-    } catch (error) {
-      throw error;
-    }
-  };
 
   /**
    * @function createsQuad Creates a simple quad object
@@ -340,6 +329,29 @@ export default class AccessControlList {
       }
     } catch (e) {
       throw e;
+    }
+  };
+}
+
+/**
+ * This factory will create and return a new ACL object while also fetching the Link
+ * Header and returning the acl file location
+ */
+export class ACLFactory {
+  createNewAcl = async (owner, documentUri) => {
+    const aclUrl = await this.getAclUriFromHeader(documentUri);
+    const aclUrlValidated = new URL(aclUrl, documentUri).href;
+    return new AccessControlList(owner, documentUri, aclUrlValidated);
+  };
+
+  getAclUriFromHeader = async documentUri => {
+    try {
+      const response = await solid.fetch(documentUri, { method: 'OPTIONS' });
+      const parsedLinks = parse(response.headers.get('Link'));
+      console.log('acl parsed link', parsedLinks);
+      return parsedLinks.acl ? parsedLinks.acl.url : '';
+    } catch (error) {
+      throw error;
     }
   };
 }
