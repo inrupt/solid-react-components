@@ -19,8 +19,9 @@ const Viewer = (props: Props) => {
   const { formModel, parent } = props;
   const [formFields, setFormFields] = useState([]);
   const viewerType = formModel['rdf:type'];
-  const partsKey = viewerType === VOCAB.UI.Multiple ? UI.PART : UI.PARTS;
+  const partsKey = UI.PARTS;
   const parts = formModel[partsKey];
+  // console.log('formModel', formModel)
 
   const getArrayFields = () => {
     if (typeof formModel === 'object' && parts) {
@@ -41,6 +42,7 @@ const Viewer = (props: Props) => {
           // Grabs the field from the parent list of parts, and checks if we have parts in the new field as well
           const field = parts[item];
           let fieldParts = field[UI.PARTS];
+
           const type = field['rdf:type'];
 
           // Fetch the component from the Viewer-specific mapper
@@ -52,8 +54,8 @@ const Viewer = (props: Props) => {
           if (type === VOCAB.UI.GROUP) {
             componentData = field[UI.PARTS];
           } else if (type === VOCAB.UI.Multiple) {
-            componentData = field[UI.PART];
-            fieldParts = field[UI.PART];
+            componentData = field[UI.PARTS];
+            fieldParts = field[UI.PARTS];
           }
 
           /**

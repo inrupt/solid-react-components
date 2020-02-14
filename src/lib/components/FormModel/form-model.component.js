@@ -198,9 +198,7 @@ export const FormModel = (props: FormProps) => {
             }}
           />
         )}
-        {viewer && (
-          <Viewer formModel={formModel} data={formModel[UI.PARTS] || formModel[UI.PART]} />
-        )}
+        {viewer && <Viewer formModel={formModel} data={formModel[UI.PARTS]} />}
       </div>
     </ThemeContext.Provider>
   );

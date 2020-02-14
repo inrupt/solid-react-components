@@ -23,7 +23,7 @@ type Props = {
 export const Multiple = (props: Props) => {
   const { id, data, updateData, mapper, savingData, addNewField, deleteField } = props;
   const { theme } = useContext(ThemeContext);
-  const { [UI.LABEL]: label, [UI.PART]: part } = data;
+  const { [UI.LABEL]: label, [UI.PARTS]: part } = data;
 
   const parts = [];
 
