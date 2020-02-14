@@ -18,10 +18,8 @@ const Viewer = (props: Props) => {
   const { theme } = useContext(ThemeContext);
   const { formModel, parent } = props;
   const [formFields, setFormFields] = useState([]);
-  const viewerType = formModel['rdf:type'];
   const partsKey = UI.PARTS;
   const parts = formModel[partsKey];
-  // console.log('formModel', formModel)
 
   const getArrayFields = () => {
     if (typeof formModel === 'object' && parts) {
