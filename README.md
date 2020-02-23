@@ -1,6 +1,6 @@
 ## Solid React Components Library
 
-React components for building your own [Solid](https://solid.inrupt.com/") applications. Part of the [React SDK for Solid](https://github.com/inrupt-inc/solid-react-sdk).
+React components for building your own [Solid](https://solid.inrupt.com/) applications. Part of the [React SDK for Solid](https://github.com/inrupt-inc/solid-react-sdk).
 
 ## Dependencies
 
