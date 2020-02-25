@@ -144,20 +144,22 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
-      <ProfileViewer
-        {...{
-          webId: 'https://jmartin.inrupt.net/profile/card#me',
-          direction: 'down',
-          viewMoreText: 'See Profile',
-          onError: error => {
-            // eslint-disable-next-line no-console
-            console.log('ERROR', error.statusText);
-          },
-          onClick: false
-        }}
-      >
-        <span>James</span>
-      </ProfileViewer>
+      {webId && (
+        <ProfileViewer
+          {...{
+            webId,
+            direction: 'down',
+            viewMoreText: 'See Profile',
+            onError: error => {
+              // eslint-disable-next-line no-console
+              console.log('ERROR', error.statusText);
+            },
+            onClick: false
+          }}
+        >
+          <span>James</span>
+        </ProfileViewer>
+      )}
 
       <br />
       <button type="button" onClick={createAcl}>
@@ -180,7 +182,7 @@ const App = () => {
             },
             autosaveIndicator: Spinner,
             autosave: true,
-            viewer: false
+            viewer: true
           },
           onError: error => {
             // eslint-disable-next-line no-console
