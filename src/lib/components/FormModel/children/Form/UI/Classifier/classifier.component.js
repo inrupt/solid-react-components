@@ -61,21 +61,6 @@ export const Classifier = props => {
     }
   }, [value]);
 
-  /*
-  const getValueFromObject = useCallback(value => {
-    return typeof value === 'object' ? value.value : value;
-  });
-
-  const onChange = ({ target }) => {
-    const obj = { value: target.value, ...rest };
-    modifyFormObject(id, obj);
-  };
-  console.log(formObject);
-  const actualValue =
-    formObject[id] || formObject[id] === '' ? getValueFromObject(formObject[id].value) : value;
-
-*/
-
   return (
     <SelectWrapper className={theme && theme.inputText}>
       <label htmlFor={id}>{label}</label>
