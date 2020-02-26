@@ -167,7 +167,46 @@ const App = () => {
       </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
-
+      <FormModel
+        {...{
+          modelSource: 'https://solidsdk.inrupt.net/sdk/userprofile.ttl#formRoot',
+          dataSource: 'https://jmartin.inrupt.net/profile/card#me',
+          options: {
+            theme: {
+              inputText: 'sdk-input',
+              inputCheckbox: 'sdk-checkbox checkbox',
+              inputTextArea: 'sdk-textarea',
+              multiple: 'sdk-multiple-button',
+              form: 'inrupt-sdk-form',
+              childGroup: 'inrupt-form-group'
+            },
+            autosaveIndicator: Spinner,
+            autosave: true,
+            viewer: true
+          },
+          onError: error => {
+            // eslint-disable-next-line no-console
+            console.log(error, 'error');
+          },
+          onSuccess: success => {
+            // eslint-disable-next-line no-console
+            console.log(success);
+          },
+          onSave: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onAddNewField: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          },
+          onDelete: response => {
+            // eslint-disable-next-line no-console
+            console.log(response);
+          }
+        }}
+        liveUpdate
+      />
       <Uploader
         {...{
           fileBase: 'Your POD folder here',
@@ -203,46 +242,3 @@ const App = () => {
 };
 
 export default App;
-
-/*
- <FormModel
- {...{
- modelSource: 'https://solidsdk.inrupt.net/sdk/userprofile.ttl#formRoot',
- dataSource: 'https://jmartin.inrupt.net/profile/card#me',
- options: {
- theme: {
- inputText: 'sdk-input',
- inputCheckbox: 'sdk-checkbox checkbox',
- inputTextArea: 'sdk-textarea',
- multiple: 'sdk-multiple-button',
- form: 'inrupt-sdk-form',
- childGroup: 'inrupt-form-group'
- },
- autosaveIndicator: Spinner,
- autosave: true,
- viewer: true
- },
- onError: error => {
- // eslint-disable-next-line no-console
- console.log(error, 'error');
- },
- onSuccess: success => {
- // eslint-disable-next-line no-console
- console.log(success);
- },
- onSave: response => {
- // eslint-disable-next-line no-console
- console.log(response);
- },
- onAddNewField: response => {
- // eslint-disable-next-line no-console
- console.log(response);
- },
- onDelete: response => {
- // eslint-disable-next-line no-console
- console.log(response);
- }
- }}
- liveUpdate
- />
- */
