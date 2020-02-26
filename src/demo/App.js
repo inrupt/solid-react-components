@@ -12,7 +12,7 @@ import {
   Spinner,
   ProfileViewer
 } from '@lib';
-import { AccessControlList } from '@classes';
+import { AccessControlList, ACLFactory } from '@classes';
 import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
@@ -105,7 +105,7 @@ const App = () => {
       const documentURI = `${uri.origin}/public/container`;
       const { MODES } = AccessControlList;
       const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
-      const aclInstance = new AccessControlList(webId, documentURI);
+      const aclInstance = await ACLFactory.createNewAcl(webId, documentURI);
       await aclInstance.createACL(permissions);
     }
   };
@@ -157,7 +157,7 @@ const App = () => {
             onClick: false
           }}
         >
-          <span>James</span>
+          <span>Hover over me!</span>
         </ProfileViewer>
       )}
 
@@ -167,46 +167,7 @@ const App = () => {
       </button>
       <p>{JSON.stringify(notification && notification.notifications)}</p>
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
-      <FormModel
-        {...{
-          modelSource: 'https://solidsdk.inrupt.net/sdk/userprofile.ttl#formRoot',
-          dataSource: 'https://jmartin.inrupt.net/profile/card#me',
-          options: {
-            theme: {
-              inputText: 'sdk-input',
-              inputCheckbox: 'sdk-checkbox checkbox',
-              inputTextArea: 'sdk-textarea',
-              multiple: 'sdk-multiple-button',
-              form: 'inrupt-sdk-form',
-              childGroup: 'inrupt-form-group'
-            },
-            autosaveIndicator: Spinner,
-            autosave: true,
-            viewer: true
-          },
-          onError: error => {
-            // eslint-disable-next-line no-console
-            console.log(error, 'error');
-          },
-          onSuccess: success => {
-            // eslint-disable-next-line no-console
-            console.log(success);
-          },
-          onSave: response => {
-            // eslint-disable-next-line no-console
-            console.log(response);
-          },
-          onAddNewField: response => {
-            // eslint-disable-next-line no-console
-            console.log(response);
-          },
-          onDelete: response => {
-            // eslint-disable-next-line no-console
-            console.log(response);
-          }
-        }}
-        liveUpdate
-      />
+
       <Uploader
         {...{
           fileBase: 'Your POD folder here',
@@ -242,3 +203,46 @@ const App = () => {
 };
 
 export default App;
+
+/*
+ <FormModel
+ {...{
+ modelSource: 'https://solidsdk.inrupt.net/sdk/userprofile.ttl#formRoot',
+ dataSource: 'https://jmartin.inrupt.net/profile/card#me',
+ options: {
+ theme: {
+ inputText: 'sdk-input',
+ inputCheckbox: 'sdk-checkbox checkbox',
+ inputTextArea: 'sdk-textarea',
+ multiple: 'sdk-multiple-button',
+ form: 'inrupt-sdk-form',
+ childGroup: 'inrupt-form-group'
+ },
+ autosaveIndicator: Spinner,
+ autosave: true,
+ viewer: true
+ },
+ onError: error => {
+ // eslint-disable-next-line no-console
+ console.log(error, 'error');
+ },
+ onSuccess: success => {
+ // eslint-disable-next-line no-console
+ console.log(success);
+ },
+ onSave: response => {
+ // eslint-disable-next-line no-console
+ console.log(response);
+ },
+ onAddNewField: response => {
+ // eslint-disable-next-line no-console
+ console.log(response);
+ },
+ onDelete: response => {
+ // eslint-disable-next-line no-console
+ console.log(response);
+ }
+ }}
+ liveUpdate
+ />
+ */

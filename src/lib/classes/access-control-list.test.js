@@ -3,6 +3,7 @@ import ldflex from '../../test/__mocks__/@solid/query-ldflex';
 
 const webIdExample = 'https://example.org/#me';
 const fileExample = 'https://example.org/public/test.ttl';
+const aclExample = 'https://example.org/public/test.ttl.acl';
 
 describe('Access Control List test', () => {
   beforeAll(() => {
@@ -16,7 +17,7 @@ describe('Access Control List test', () => {
     CONTROL: 'Control'
   };
 
-  const ACLInstance = new AccessControlList(webIdExample, fileExample);
+  const ACLInstance = new AccessControlList(webIdExample, fileExample, aclExample);
 
   it('Modes are correct', async () => {
     expect(AccessControlList.MODES).toEqual(PERMISSIONS);
