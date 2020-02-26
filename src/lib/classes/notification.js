@@ -4,6 +4,7 @@ import solidLDflex from '@solid/query-ldflex';
 import { solidResponse, SolidError, getBasicPod, shexUtil } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
+import ACLFactory from './access-control-factory';
 import { NotificationTypes } from '@constants';
 import { ensureSlash } from '../utils/solidFetch';
 
@@ -118,9 +119,10 @@ export class Notification {
 
   /**
    * Create inbox container with default permissions in the pod from a specific path
-   * @param inboxRoot
-   * @param owner
    * @returns {Promise<*>}
+   * @param inboxPath
+   * @param appPath
+   * @param settingFileName
    */
   createInbox = async (inboxPath, appPath, settingFileName = 'settings.ttl') => {
     try {
@@ -167,7 +169,7 @@ export class Notification {
 
       await solid.fetch(`${newInboxPath}.dummy`, { method: 'DELETE' });
       const permissions = [{ agents: null, modes: [AccessControlList.MODES.APPEND] }];
-      const aclContainer = new AccessControlList(this.owner, newInboxPath);
+      const aclContainer = await ACLFactory.createNewAcl(this.owner, newInboxPath);
       await aclContainer.createACL(permissions);
 
       return solidResponse(200, 'Inbox was created');

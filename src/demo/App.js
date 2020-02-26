@@ -12,7 +12,7 @@ import {
   Spinner,
   ProfileViewer
 } from '@lib';
-import { AccessControlList } from '@classes';
+import { AccessControlList, ACLFactory } from '@classes';
 import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
@@ -105,7 +105,7 @@ const App = () => {
       const documentURI = `${uri.origin}/public/container`;
       const { MODES } = AccessControlList;
       const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
-      const aclInstance = new AccessControlList(webId, documentURI);
+      const aclInstance = await ACLFactory.createNewAcl(webId, documentURI);
       await aclInstance.createACL(permissions);
     }
   };
@@ -157,7 +157,7 @@ const App = () => {
             onClick: false
           }}
         >
-          <span>James</span>
+          <span>Hover over me!</span>
         </ProfileViewer>
       )}
 

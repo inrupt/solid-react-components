@@ -72,6 +72,7 @@
     "lodash": "^4.17.15",
     "mime-types": "^2.1.24",
     "n3": "^1.1.1",
+    "parse-link-header": "^1.0.1",
     "react-color": "^2.17.3",
     "react-datepicker": "^2.9.6",
     "react-router-dom": "^4.3.1",

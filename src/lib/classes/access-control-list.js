@@ -12,10 +12,10 @@ type Permissions = {
 };
 
 export default class AccessControlList {
-  constructor(owner, documentUri) {
+  constructor(owner, documentUri, aclUrl) {
     this.owner = owner;
     this.documentUri = documentUri;
-    this.aclUri = `${this.documentUri}.acl`;
+    this.aclUri = aclUrl;
     this.acl = null;
   }
 

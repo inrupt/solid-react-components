@@ -23,7 +23,7 @@ import { NotificationTypes } from '@constants';
 
 import { useNotification } from '@hooks';
 
-import { AccessControlList, AppPermission } from '@classes';
+import { AccessControlList, ACLFactory, AppPermission } from '@classes';
 
 export {
   ProviderLogin,
@@ -46,5 +46,6 @@ export {
   FormModel,
   Spinner,
   NotificationTypes,
-  ProfileViewer
+  ProfileViewer,
+  ACLFactory
 };
