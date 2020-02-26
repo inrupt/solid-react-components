@@ -19,6 +19,7 @@ import {
   ProfileViewer,
   Spinner
 } from '@components';
+import { shexUtil } from '@utils';
 import { NotificationTypes } from '@constants';
 
 import { useNotification } from '@hooks';
@@ -47,5 +48,6 @@ export {
   Spinner,
   NotificationTypes,
   ProfileViewer,
-  ACLFactory
+  ACLFactory,
+  shexUtil
 };
