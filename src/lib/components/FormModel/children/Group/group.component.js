@@ -32,7 +32,7 @@ export const Group = (props: Props) => {
         const componentData = type === VOCAB.UI.Group ? part[UI.PARTS] : part;
 
         let Indicator = () => null;
-        if (savingData.running && savingThis) Indicator = savingData.autosaveIndicator;
+        if (savingData && savingThis) Indicator = savingData.autosaveIndicator;
 
         return (
           <div key={name}>
