@@ -1,6 +1,5 @@
 import React from 'react';
 import { withWebId } from '@solid/react';
-import { Redirect } from 'react-router-dom';
 
 export const withAuthorization = (Component, Loader) =>
   withWebId(
@@ -11,7 +10,8 @@ export const withAuthorization = (Component, Loader) =>
           case undefined:
             return Loader || null;
           case null:
-            return <Redirect to="/login" />;
+            window.location.href = '/login';
+            return null;
           default:
             return <Component {...this.props} />;
         }

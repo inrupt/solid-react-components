@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.5.1-dev.12",
+  "version": "0.5.1-dev.14",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
@@ -75,7 +75,7 @@
     "parse-link-header": "^1.0.1",
     "react-color": "^2.17.3",
     "react-datepicker": "^2.9.6",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^5.1.2",
     "react-select": "^2.2.0",
     "request-promise": "^4.2.5",
     "solid-auth-client": "^2.3.0",
