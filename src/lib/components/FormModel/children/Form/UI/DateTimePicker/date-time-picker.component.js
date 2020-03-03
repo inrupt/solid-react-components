@@ -14,7 +14,6 @@ export const DateTimePicker = props => {
   const { id, data, updateData } = props;
 
   const [selectedDate, setDate] = useState(null);
-  const [invalidate, setInvalid] = useState(null);
 
   const { theme } = useContext(ThemeContext);
 
@@ -22,8 +21,9 @@ export const DateTimePicker = props => {
     setDate(parseInitialValue(data[UI.VALUE], data[RDF.TYPE]));
   }, [data[UI.VALUE]]);
 
-  const minValue = data[UI.MINVALUE];
-  const maxValue = data[UI.MAXVALUE];
+  // Fetch relevant values from the data prop, which represents the properties in the form model
+  const minValue = data[UI.MIN_VALUE];
+  const maxValue = data[UI.MAX_VALUE];
   const mindateOffset = parseInt(data[UI.MIN_DATE_OFFSET], 10);
   const maxdateOffset = parseInt(data[UI.MAX_DATE_OFFSET], 10);
   const mindatetimeOffset = parseInt(data[UI.MIN_DATETIME_OFFSET], 10);
@@ -66,9 +66,10 @@ export const DateTimePicker = props => {
     let maxHours;
     let maxMinutes;
 
-    const timeFormat = /ˆ\d{1,2}:\d{2}$/;
+    // Regex to match the format "12:##:##"
+    const timeFormat = /\d{1,2}:\d{2}:\d{2}$/;
 
-    /* we make the assumption that min,maxValue are in the HH:mm format */
+    /* we make the assumption that min,maxValue are in the HH:mm:ss format */
     if (minValue && timeFormat.test(minValue)) {
       [minHours, minMinutes] = minValue.split(':');
       minTime = setHours(setMinutes(new Date(), minMinutes), minHours);
