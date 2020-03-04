@@ -66,8 +66,8 @@ export const DateTimePicker = props => {
     let maxHours;
     let maxMinutes;
 
-    // Regex to match the format "12:##:##"
-    const timeFormat = /\d{1,2}:\d{2}:\d{2}$/;
+    // Regex to match the format "##:##:##" or "#:##:##"
+    const timeFormat = /^\d{1,2}:\d{2}:\d{2}$/;
 
     /* we make the assumption that min,maxValue are in the HH:mm:ss format */
     if (minValue && timeFormat.test(minValue)) {
