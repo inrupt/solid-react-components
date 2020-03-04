@@ -28,7 +28,7 @@ const Viewer = (props: Props) => {
   }, [formModel]);
 
   return (
-    <Group parent={parent} className={parent && theme && theme.childGroup}>
+    <Group parent={parent} className={formModel[UI.PART] && theme && theme.childGroup}>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
       {formFields.length > 0 &&
         formFields.map(item => {

@@ -39,7 +39,7 @@ export const MultipleViewer = (props: Props) => {
   }
 
   return (
-    <div id={key} key={key}>
+    <div id={key} className={classes} key={key}>
       <p>{label}</p>
       {parts.map(item => {
         // Fetch the name from the object for a unique key
