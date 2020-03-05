@@ -150,10 +150,15 @@ export const FormModel = (props: FormProps) => {
 
   /* Create a new model if any of the sources changes */
   useEffect(() => {
-    formUi.convertFormModel(modelSource, dataSource).then(model => {
-      setFormModel(model);
-      if (onLoaded) onLoaded();
-    });
+    formUi
+      .convertFormModel(modelSource, dataSource)
+      .then(model => {
+        setFormModel(model);
+        if (onLoaded) onLoaded();
+      })
+      .catch(err => {
+        onError(err);
+      });
   }, [modelSource, dataSource]);
 
   useEffect(() => {
