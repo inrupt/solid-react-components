@@ -19,7 +19,8 @@ type FormProps = {
     autosave: boolean,
     theme: object,
     autosaveIndicator: React.Component,
-    viewer: boolean
+    viewer: boolean,
+    language: string
   },
   onInit: () => void,
   onLoaded: () => void,
@@ -150,7 +151,7 @@ export const FormModel = (props: FormProps) => {
 
   /* Create a new model if any of the sources changes */
   useEffect(() => {
-    formUi.convertFormModel(modelSource, dataSource).then(model => {
+    formUi.convertFormModel(modelSource, dataSource, options.language).then(model => {
       setFormModel(model);
       if (onLoaded) onLoaded();
     });
