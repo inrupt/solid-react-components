@@ -9,7 +9,7 @@ type Props = {
 
 export const Comment = (props: Props) => {
   const { data } = props;
-  const { [UI.VALUE]: comment } = data;
+  const { [UI.CONTENTS]: comment } = data;
 
   const { theme } = useContext(ThemeContext);
 

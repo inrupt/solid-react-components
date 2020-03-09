@@ -1,25 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import UIMapping from './UI/ui-mapping';
-import { Group, Label } from './viewer.style';
+import { Group } from './viewer.style';
 import { UI, VOCAB } from '@constants';
 import { ThemeContext } from '@context';
+import { MultipleViewer } from './UI/MultipleViewer/multiple-viewer.component';
 
 type Props = {
   formModel: Object,
   parent?: any
 };
 
-const ParentLabel = ({ formModel }: { formModel: Object }) =>
-  formModel['rdf:type'] && formModel['rdf:type'].includes('Multiple') ? (
-    <Label>{formModel['ui:label']}</Label>
-  ) : null;
-
 const Viewer = (props: Props) => {
   const { theme } = useContext(ThemeContext);
   const { formModel, parent } = props;
   const [formFields, setFormFields] = useState([]);
-  const viewerType = formModel['rdf:type'];
-  const partsKey = viewerType === VOCAB.UI.Multiple ? UI.PART : UI.PARTS;
+  const partsKey = UI.PARTS;
   const parts = formModel[partsKey];
 
   const getArrayFields = () => {
@@ -33,28 +28,17 @@ const Viewer = (props: Props) => {
   }, [formModel]);
 
   return (
-    <Group parent={parent} className={parent && theme && theme.childGroup}>
+    <Group parent={parent} className={formModel[UI.PART] && theme && theme.childGroup}>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
-      <ParentLabel formModel={formModel} />
       {formFields.length > 0 &&
         formFields.map(item => {
           // Grabs the field from the parent list of parts, and checks if we have parts in the new field as well
           const field = parts[item];
-          let fieldParts = field[UI.PARTS];
           const type = field['rdf:type'];
 
           // Fetch the component from the Viewer-specific mapper
           const Component = field && UIMapping(type);
-          const id = (field && field['ui:name']) || item;
-          let componentData = field;
-
-          // If we have a group or mutliple, instead of sending the field we send the list of parts (or part)
-          if (type === VOCAB.UI.GROUP) {
-            componentData = field[UI.PARTS];
-          } else if (type === VOCAB.UI.Multiple) {
-            componentData = field[UI.PART];
-            fieldParts = field[UI.PART];
-          }
+          const id = (field && field[UI.NAME]) || item;
 
           /**
            * Return null when field doesn't exists
@@ -64,24 +48,38 @@ const Viewer = (props: Props) => {
           /* eslint no-useless-computed-key: "off" */
           const { ['ui:parts']: deleted, ...updatedField } = field;
 
-          return fieldParts ? (
-            <Viewer
-              {...{
-                key: item,
-                formModel: field,
-                parent: updatedField
-              }}
-            />
-          ) : (
-            <Component
-              {...{
-                key: id,
-                name: id,
-                formModel: field,
-                parent: updatedField,
-                data: componentData
-              }}
-            />
+          return (
+            <div>
+              {type === VOCAB.UI.Group && (
+                <Viewer
+                  {...{
+                    key: item,
+                    formModel: field,
+                    parent: updatedField
+                  }}
+                />
+              )}
+              {type === VOCAB.UI.Multiple && (
+                <MultipleViewer
+                  {...{
+                    key: item,
+                    formModel: field,
+                    parent: updatedField
+                  }}
+                />
+              )}
+              {type !== VOCAB.UI.Group && type !== VOCAB.UI.Multiple && (
+                <Component
+                  {...{
+                    key: id,
+                    name: id,
+                    formModel: field,
+                    parent: updatedField,
+                    data: field
+                  }}
+                />
+              )}
+            </div>
           );
         })}
     </Group>

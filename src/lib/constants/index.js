@@ -30,7 +30,8 @@ export const VOCAB = {
     TriStateField: 'http://www.w3.org/ns/ui#TriStateField',
     Multiple: 'http://www.w3.org/ns/ui#Multiple',
     Group: 'http://www.w3.org/ns/ui#Group',
-    Classifier: 'http://www.w3.org/ns/ui#Classifier'
+    Classifier: 'http://www.w3.org/ns/ui#Classifier',
+    Comment: 'http://www.w3.org/ns/ui#Comment'
   }
 };
 

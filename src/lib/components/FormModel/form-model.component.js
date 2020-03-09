@@ -150,10 +150,15 @@ export const FormModel = (props: FormProps) => {
 
   /* Create a new model if any of the sources changes */
   useEffect(() => {
-    formUi.convertFormModel(modelSource, dataSource).then(model => {
-      setFormModel(model);
-      if (onLoaded) onLoaded();
-    });
+    formUi
+      .convertFormModel(modelSource, dataSource)
+      .then(model => {
+        setFormModel(model);
+        if (onLoaded) onLoaded();
+      })
+      .catch(err => {
+        onError(err);
+      });
   }, [modelSource, dataSource]);
 
   useEffect(() => {
@@ -198,9 +203,7 @@ export const FormModel = (props: FormProps) => {
             }}
           />
         )}
-        {viewer && (
-          <Viewer formModel={formModel} data={formModel[UI.PARTS] || formModel[UI.PART]} />
-        )}
+        {viewer && <Viewer formModel={formModel} data={formModel[UI.PARTS]} />}
       </div>
     </ThemeContext.Provider>
   );

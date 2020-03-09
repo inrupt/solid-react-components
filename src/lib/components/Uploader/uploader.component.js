@@ -118,10 +118,10 @@ class Uploader extends Component<Props> {
             method: 'PUT',
             force: true,
             headers: {
-              'content-type': file.type,
-              credentials: 'include'
+              'content-type': file.type
             },
-            body: data
+            body: data,
+            credentials: 'include'
           });
           // If everything is fine, we add new files into the uploadedFiles array
           if (response.ok) {
