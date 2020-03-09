@@ -148,7 +148,6 @@
     "react-hooks-testing-library": "^0.5.0",
     "react-json-view": "^1.19.1",
     "react-test-renderer": "^16.8.6",
-    "react-testing-library": "^6.0.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "storybook-addon-jsx": "^7.1.0",
