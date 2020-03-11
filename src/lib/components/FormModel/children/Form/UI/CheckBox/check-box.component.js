@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, Fragment } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { ThemeContext } from '@context';
 import { UI } from '@constants';
 import { InputGroup } from '../Input/input.styles';
