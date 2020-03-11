@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { UI } from '@constants';
+import { UI, RDF, InputTextTypes } from '@constants';
 import { ThemeContext } from '@context';
+import { InputGroup } from '../Input/input.styles';
 
 type Props = {
   id: string,
@@ -13,6 +14,7 @@ export const Integer = (props: Props) => {
   const { theme } = useContext(ThemeContext);
 
   const {
+    [RDF.TYPE]: type,
     [UI.LABEL]: label,
     [UI.MIN_VALUE]: minValue,
     [UI.SIZE]: size,
@@ -32,11 +34,12 @@ export const Integer = (props: Props) => {
   };
 
   return (
-    <div className={theme && theme.integerField}>
+    <InputGroup className={theme && theme.integerField}>
       <label htmlFor={id}>{label}</label>
       <input
         {...{
           id,
+          type: InputTextTypes[type],
           min: minValue,
           step: '1',
           size,
@@ -45,6 +48,6 @@ export const Integer = (props: Props) => {
           onBlur
         }}
       />
-    </div>
+    </InputGroup>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { InputTextTypes, UI, RDF } from '@constants';
 import { ThemeContext } from '@context';
+import { InputGroup } from '../Input/input.styles';
 
 type Props = {
   id: string,
@@ -31,7 +32,7 @@ export const Float = (props: Props) => {
   };
 
   return (
-    <div className={theme.floatField}>
+    <InputGroup className={theme.floatField}>
       <label htmlFor={id}>{label}</label>
       <input
         {...{
@@ -45,6 +46,6 @@ export const Float = (props: Props) => {
           onBlur
         }}
       />
-    </div>
+    </InputGroup>
   );
 };
