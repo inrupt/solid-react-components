@@ -23,23 +23,8 @@ export const MultipleViewer = (props: Props) => {
     });
   }
 
-  // Quick and dirty setup of custom classes.
-  // TODO: Refactor this
-  let classes = '';
-  if (theme) {
-    if (theme.form) {
-      classes += theme.form;
-    }
-    if (theme.childGroup) {
-      if (classes.length > 0) {
-        classes += ' ';
-      }
-      classes += theme.childGroup;
-    }
-  }
-
   return (
-    <div id={key} className={classes} key={key}>
+    <div id={key} className={theme && theme.multipleField} key={key}>
       <p>{label}</p>
       {parts.map(item => {
         // Fetch the name from the object for a unique key
@@ -48,7 +33,7 @@ export const MultipleViewer = (props: Props) => {
           <div key={key}>
             <Viewer
               {...{
-                formModel: item,
+                formModel: item[UI.PARTS][Object.keys(item[UI.PARTS])[0]],
                 parent
               }}
             />

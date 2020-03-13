@@ -1,6 +1,6 @@
-import React from 'react';
-
-import { UI, RDF, UITypes, VOCAB } from '@constants';
+import React, { useContext } from 'react';
+import { ThemeContext } from '@context';
+import { UI, RDF, VOCAB } from '@constants';
 
 type Props = {
   data: object,
@@ -18,9 +18,10 @@ type Props = {
 
 export const Group = (props: Props) => {
   const { data, updateData, mapper, savingData, addNewField, deleteField } = props;
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <div>
+    <div className={theme && theme.groupField}>
       {Object.entries(data).map(([, part]) => {
         const { [RDF.TYPE]: type, [UI.NAME]: name } = part;
         const Component = mapper[type];
