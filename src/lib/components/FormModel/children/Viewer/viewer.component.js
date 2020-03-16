@@ -28,7 +28,7 @@ const Viewer = (props: Props) => {
   }, [formModel]);
 
   return (
-    <Group parent={parent} className={formModel[UI.PART] && theme && theme.childGroup}>
+    <Group parent={parent} className={theme && theme.groupField}>
       {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
       {formFields.length > 0 &&
         formFields.map(item => {
@@ -45,6 +45,7 @@ const Viewer = (props: Props) => {
            * this avoid to crash app using recursive component
            */
           if (!field) return null;
+
           /* eslint no-useless-computed-key: "off" */
           const { ['ui:parts']: deleted, ...updatedField } = field;
 

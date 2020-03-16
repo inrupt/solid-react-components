@@ -34,34 +34,29 @@ export const Multiple = (props: Props) => {
     });
   }
 
-  // Quick and dirty setup of custom classes.
-  // TODO: Refactor this
-  let classes = '';
-  if (theme) {
-    if (theme.form) {
-      classes += theme.form;
-    }
-    if (theme.childGroup) {
-      if (classes.length > 0) {
-        classes += ' ';
-      }
-      classes += theme.childGroup;
-    }
-  }
-
   return (
-    <div id={id} className={classes} key={id}>
+    <div id={id} className={theme && theme.multipleField} key={id}>
       <p>{label}</p>
       {parts.map(item => {
         // Fetch the name from the object for a unique key
         const key = item[UI.NAME];
         const type = VOCAB.UI.Group;
+
+        // For now we only support Multiples containing Groups. Once that restriction goes away we need more checks
+        // to see if the type is a part or another Component. This groupParts is a temporary fix until we add support
+        // for more Component types in Multiples
+        const groupPartsKey = Object.keys(item[UI.PARTS])[0];
+        const groupParts = item[UI.PARTS][groupPartsKey][UI.PARTS];
+
+        // If the group doesn't contain parts, exit gracefully. This shouldn't get hit with a valid form model.
+        if (!groupParts) {
+          return <div />;
+        }
         return (
-          <div key={key} className={classes}>
+          <div key={key}>
             <Group
-              className={theme && theme.childGroup}
               {...{
-                data: item[UI.PARTS],
+                data: groupParts,
                 updateData,
                 mapper,
                 savingData
