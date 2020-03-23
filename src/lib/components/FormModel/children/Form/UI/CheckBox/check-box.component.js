@@ -33,6 +33,7 @@ export const CheckBox = (props: Props) => {
   const onChange = event => {
     const updatedPart = { ...data, value: String(event.target.checked) };
     updateData(id, updatedPart);
+    setChecked(event.target.checked);
   };
 
   return (
