@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { InputTextTypes, UI, RDF } from '@constants';
 import { ThemeContext } from '@context';
+import { InputGroup } from '../Input/input.styles';
 
 export const Decimal = props => {
   const { id, data, updateData } = props;
@@ -27,7 +28,7 @@ export const Decimal = props => {
   };
 
   return (
-    <div className={theme.decimalInput}>
+    <InputGroup className={theme.decimalInput}>
       <label htmlFor={id}>{label}</label>
       <input
         {...{
@@ -41,6 +42,6 @@ export const Decimal = props => {
           onBlur
         }}
       />
-    </div>
+    </InputGroup>
   );
 };

@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext, Fragment } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { ThemeContext } from '@context';
 import { UI } from '@constants';
+import { InputGroup } from '../Input/input.styles';
 
 type Props = {
   id: string,
@@ -32,10 +33,11 @@ export const CheckBox = (props: Props) => {
   const onChange = event => {
     const updatedPart = { ...data, value: String(event.target.checked) };
     updateData(id, updatedPart);
+    setChecked(event.target.checked);
   };
 
   return (
-    <Fragment>
+    <InputGroup className={theme && theme.checkboxField}>
       <label htmlFor={id} className={theme.inputLabel}>
         {label}
       </label>
@@ -48,6 +50,6 @@ export const CheckBox = (props: Props) => {
           checked
         }}
       />
-    </Fragment>
+    </InputGroup>
   );
 };

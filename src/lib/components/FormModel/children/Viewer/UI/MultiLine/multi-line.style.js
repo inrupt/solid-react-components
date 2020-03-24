@@ -12,4 +12,6 @@ export const Label = styled.span`
   letter-spacing: 0.4px;
 `;
 
-export const Value = styled.p``;
+export const Value = styled.p`
+  white-space: pre-wrap;
+`;

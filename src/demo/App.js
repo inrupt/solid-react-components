@@ -169,7 +169,7 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelSource: 'https://solidsdk.inrupt.net/sdk/userprofile.ttl#formRoot',
+          modelSource: 'https://jmartin.inrupt.net/public/formmodel/float.ttl#formRoot',
           dataSource: 'https://jmartin.inrupt.net/profile/card#me',
           options: {
             theme: {
@@ -182,7 +182,8 @@ const App = () => {
             },
             autosaveIndicator: Spinner,
             autosave: true,
-            viewer: true
+            viewer: false,
+            language: 'en'
           },
           onError: error => {
             // eslint-disable-next-line no-console
