@@ -1,6 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen } from '@testing-library/react';
+import { getByLabelText } from '@testing-library/dom';
 
 import { UI } from '@constants';
 import { BoolLine } from './bool-line.component';
@@ -21,5 +22,5 @@ test('Renders without a label', async () => {
 test('Renders without a value', async () => {
   const data = { [UI.LABEL]: 'Label for the bool' };
   const { container } = render(<BoolLine id="123" data={data} />);
-  expect(container.lastChild).toBeEmpty();
+  expect(getByLabelText(container, 'Label for the bool').checked).toBeFalsy();
 });

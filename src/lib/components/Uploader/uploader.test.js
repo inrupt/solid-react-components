@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from 'react-testing-library';
+import { render, cleanup } from '@testing-library/react';
 import Uploader from './uploader.component';
 
 const BasicComponent = () => <div data-testid="render-component">Basic Component</div>;

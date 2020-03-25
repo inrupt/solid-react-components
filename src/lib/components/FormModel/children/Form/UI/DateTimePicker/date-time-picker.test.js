@@ -1,91 +1,73 @@
 import React from 'react';
-import { render, cleanup } from 'react-testing-library';
-import DateTimePicker from './date-time-picker.component';
+import { render, cleanup } from '@testing-library/react';
+import { DateTimePicker } from './date-time-picker.component';
 import 'jest-dom/extend-expect';
 import { UITypes } from '@constants';
 
 afterAll(cleanup);
 
-describe('Time picker should render', () => {
-  const props = {
+test('Time picker should render', () => {
+  const data = {
     formObject: {},
     value: '11:00:15',
     'rdf:type': UITypes.TimeField
   };
 
-  const { container } = render(<DateTimePicker {...props} />);
-
-  it('should render without crashing', () => {
-    expect(container).toBeTruthy();
-  });
+  const { container } = render(<DateTimePicker data={data} />);
+  expect(container).toBeTruthy();
 });
 
-describe('Date picker should render', () => {
-  const props = {
+test('Date picker should render', () => {
+  const data = {
     formObject: {},
     value: '2011-06-06',
     'rdf:type': UITypes.DateField
   };
 
-  const { container } = render(<DateTimePicker {...props} />);
-
-  it('should render without crashing', () => {
-    expect(container).toBeTruthy();
-  });
+  const { container } = render(<DateTimePicker data={data} />);
+  expect(container).toBeTruthy();
 });
 
-describe('Datetime picker should render', () => {
-  const props = {
+test('Datetime picker should render', () => {
+  const data = {
     formObject: {},
     value: '2019-11-29T04:00:00.000Z',
     'rdf:type': UITypes.DateTimeField
   };
 
-  const { container } = render(<DateTimePicker {...props} />);
-
-  it('should render without crashing', () => {
-    expect(container).toBeTruthy();
-  });
+  const { container } = render(<DateTimePicker data={data} />);
+  expect(container).toBeTruthy();
 });
 
-describe('Datetime picker should render with undefined value', () => {
-  const props = {
+test('Datetime picker should render with undefined value', () => {
+  const data = {
     formObject: {},
     value: undefined,
     'rdf:type': UITypes.DateTimeField
   };
 
-  const { container } = render(<DateTimePicker {...props} />);
-
-  it('should render without crashing', () => {
-    expect(container).toBeTruthy();
-  });
+  const { container } = render(<DateTimePicker data={data} />);
+  expect(container).toBeTruthy();
 });
 
-describe('Timepicker should render with undefined value', () => {
-  const props = {
+test('Timepicker should render with undefined value', () => {
+  const data = {
     formObject: {},
     value: undefined,
     'rdf:type': UITypes.TimeField
   };
 
-  const { container } = render(<DateTimePicker {...props} />);
-
-  it('should render without crashing', () => {
-    expect(container).toBeTruthy();
-  });
+  const { container } = render(<DateTimePicker data={data} />);
+  expect(container).toBeTruthy();
 });
 
-describe('Date picker should render with undefined value', () => {
-  const props = {
+test('Date picker should render with undefined value', () => {
+  const data = {
     formObject: {},
     value: undefined,
     'rdf:type': UITypes.DateField
   };
 
-  const { container } = render(<DateTimePicker {...props} />);
-
-  it('should render without crashing', () => {
-    expect(container).toBeTruthy();
-  });
+  const { container } = render(<DateTimePicker data={data} />);
+  expect(container).toBeTruthy();
 });

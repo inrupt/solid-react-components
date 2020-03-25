@@ -1,7 +1,7 @@
 import React from 'react';
 import auth from 'solid-auth-client';
 import { MemoryRouter } from 'react-router-dom';
-import { render, cleanup } from 'react-testing-library';
+import { render, cleanup } from '@testing-library/react';
 import { withAuthorization } from '@components';
 import 'jest-dom/extend-expect';
 

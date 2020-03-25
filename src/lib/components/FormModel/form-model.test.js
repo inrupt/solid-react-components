@@ -1,17 +1,12 @@
 import React from 'react';
-import { render, cleanup } from 'react-testing-library';
+import { render, cleanup } from '@testing-library/react';
 import FormModel from './form-model.component';
 import 'jest-dom/extend-expect';
 
 afterAll(cleanup);
 
-const setup = () => <FormModel model={{}} formValues={{}} />;
-
-describe('FormModel Component', () => {
-  const component = setup();
-  const { container } = render(component);
-
-  it('should renders without crashing', () => {
-    expect(container).toBeTruthy();
-  });
-});
+/**
+ * Form model wires all the functionality together. Logic for the individual
+ * components should be in their respective tests
+ */
+test('FormModel Component', () => {});

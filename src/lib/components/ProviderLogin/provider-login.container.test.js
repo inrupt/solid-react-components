@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from 'react-testing-library';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import auth from 'solid-auth-client';
 import ProviderLogin from './provider-login.container';
 import 'jest-dom/extend-expect';

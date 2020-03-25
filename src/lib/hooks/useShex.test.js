@@ -1,6 +1,6 @@
 import { useShex } from '@hooks';
-import { renderHook } from 'react-hooks-testing-library';
-import { cleanup } from 'react-testing-library';
+import { renderHook } from '@testing-library/react-hooks';
+import { cleanup } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 const setup = () => {

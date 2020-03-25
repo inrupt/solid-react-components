@@ -1,6 +1,6 @@
 import React from 'react';
 import { ShexConfig } from '@context';
-import { cleanup, render } from 'react-testing-library';
+import { cleanup, render } from '@testing-library/react';
 import AddButton from './add-button.component';
 import 'jest-dom/extend-expect';
 

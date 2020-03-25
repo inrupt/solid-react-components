@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render } from 'react-testing-library';
+import { cleanup, render } from '@testing-library/react';
 import ShexFormLive from './shex-form-live.component';
 import { act } from 'react-dom/test-utils';
 import 'jest-dom/extend-expect';
