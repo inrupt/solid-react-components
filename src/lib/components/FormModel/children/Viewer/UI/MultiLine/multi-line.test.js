@@ -29,5 +29,6 @@ test('Renders the value', () => {
   };
 
   const { container } = render(<MultiLine id="testid" data={data} />);
-  expect(getByText(container, 'multi').value).toBe(`test\nvalue`);
+  const multiLineContainer = getByLabelText(container, 'multi');
+  expect(multiLineContainer.textContent).toBe('test\nvalue');
 });

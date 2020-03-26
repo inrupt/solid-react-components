@@ -25,9 +25,9 @@ test('Renders the label', () => {
 test('Renders the value', () => {
   const data = {
     [UI.LABEL]: 'single',
-    [UI.VALUE]: `test value`
+    [UI.VALUE]: 'test value'
   };
 
   const { container } = render(<SingleLine id="testid" data={data} />);
-  expect(getByLabelText(container, 'single').value).toBe(`test value`);
+  expect(getByLabelText(container, 'single').textContent).toBe('test value');
 });
