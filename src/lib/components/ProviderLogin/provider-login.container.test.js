@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, cleanup, fireEvent, getByTestId } from '@testing-library/react';
 import auth from 'solid-auth-client';
 import ProviderLogin from './provider-login.container';
 import 'jest-dom/extend-expect';
@@ -7,19 +7,20 @@ import 'jest-dom/extend-expect';
 afterAll(cleanup);
 
 describe('Provider Login Container', () => {
-  const { container, getByTestId } = render(<ProviderLogin />);
-
   it('shoud renders without crashing', () => {
+    const { container } = render(<ProviderLogin />);
     expect(container).toBeTruthy();
   });
 
   it('should render WebId by default', () => {
-    const selectEl = document.querySelector('[data-testid="input-webid"]');
+    const { getByTestId } = render(<ProviderLogin />);
+    const selectEl = getByTestId('input-webid');
 
     expect(selectEl).toBeInTheDocument();
   });
 
   it('clicking link button should render Provider Select', () => {
+    const { container, getByTestId } = render(<ProviderLogin />);
     const button = getByTestId('change-mode-button');
 
     fireEvent.click(button);
@@ -28,7 +29,8 @@ describe('Provider Login Container', () => {
   });
 
   it('should not call login without webId or provider', async () => {
-    const formButtonEl = document.querySelector('[data-testid="provider-form-button"]');
+    const { getByTestId } = render(<ProviderLogin />);
+    const formButtonEl = getByTestId('provider-form-button');
 
     fireEvent.click(formButtonEl);
 

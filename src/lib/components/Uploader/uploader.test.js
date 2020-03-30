@@ -8,18 +8,19 @@ afterAll(cleanup);
 
 describe('Solid Uploader', () => {
   describe('render without crashing', () => {
-    const { container, getByTestId } = render(<Uploader render={() => <BasicComponent />} />);
-
     it('should render uploader component', () => {
+      const { container } = render(<Uploader render={() => <BasicComponent />} />);
       expect(container).toBeTruthy();
     });
 
     it('should render component by prop', () => {
+      const { getByTestId } = render(<Uploader render={() => <BasicComponent />} />);
       const childComponent = getByTestId('render-component');
       expect(childComponent).toBeTruthy();
     });
 
     it('should render input file', () => {
+      const { getByTestId } = render(<Uploader render={() => <BasicComponent />} />);
       const inputEl = getByTestId('input-file');
       expect(inputEl).toBeTruthy();
     });
