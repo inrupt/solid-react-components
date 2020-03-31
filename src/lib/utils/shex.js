@@ -4,6 +4,7 @@ import { namedNode } from '@rdfjs/data-model';
 import unique from 'unique-string';
 import solid from 'solid-auth-client';
 import { Validator, Util } from '@shexjs/core';
+import * as N3 from 'n3';
 import Loader from '@shexjs/loader';
 
 /**
@@ -311,27 +312,32 @@ const validateList = async (paths, shape) => {
    */
   window.fetch = solid.fetch;
 
-  const validPaths = [];
+  let validQuads = [];
 
   // Load the notification shape using the ShEx Loader
-  await Loader.load([shape], [], paths, []).then(loaded => {
+  const loaded = await Loader.load([shape], [], paths, []);
+  try {
     // Once the shape and paths are loaded, construct a validator from the loaded schema
     const db = Util.makeN3DB(loaded.data);
     const validator = Validator.construct(loaded.schema, { results: 'api' });
 
-    // Loop over each notification found and attempt to validate it against the core notification shape
-    paths.forEach(path => {
-      const result = validator.validate(db, [{ node: path, shape: Validator.start }]);
-      if (result && result.length > 0) {
-        // If the result is a success and the shape matches the data, add it to an array
-        if (result.filter(r => r.status === 'conformant').length > 0) {
-          validPaths.push(path);
-        }
+    const toValidate = paths.map(p => ({
+      node: p,
+      shape: Validator.start
+    }));
+
+    const results = validator.validate(db, toValidate);
+    results.forEach(resultItem => {
+      if (resultItem.status === 'conformant') {
+        const proofStore = new N3.Store();
+        Util.getProofGraph(resultItem.appinfo, proofStore, N3.DataFactory);
+        validQuads = [...validQuads, proofStore.getQuads()];
       }
     });
-  });
-  // Return a list of the valid notification paths
-  return validPaths;
+    return validQuads;
+  } catch (e) {
+    return e;
+  }
 };
 
 /**
