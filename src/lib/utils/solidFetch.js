@@ -90,6 +90,30 @@ export const getBasicPod = async webId => {
   }
 };
 
+export const getIdpFromWebId = async webId => {
+  try {
+    let idp = null;
+    if (webId) {
+      const idpConfigUrl = `${new URL(webId).origin}/.well-known/openid-configuration`;
+      // TODO: This could be parallelized
+      const issuer = await data[webId]['solid:oidcIssuer'];
+      console.log(`issuer: ${issuer}`);
+      const idpConfig = await auth.fetch(idpConfigUrl);
+
+      if (issuer) {
+        // TODO: investigate why just assigning issuer to idp fails in the login process
+        idp = `${issuer}`;
+      } else if (idpConfig.ok) {
+        idp = webId;
+      }
+    }
+    console.log(`The IdP for ${webId} is ${idp}`);
+    return idp;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const ensureSlash = (inputPath, needsSlash) => {
   const hasSlash = inputPath.endsWith('/');
   if (hasSlash && !needsSlash) {

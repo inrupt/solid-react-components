@@ -3,7 +3,7 @@ import auth from 'solid-auth-client';
 // In-house Components
 import LoginForm from './children/Form';
 // Utils
-import { SolidError } from '@utils';
+import { SolidError, getIdpFromWebId } from '@utils';
 // Entities
 import { Provider } from '@entities';
 
@@ -69,6 +69,7 @@ export default class LoginComponent extends Component<Props> {
       e.preventDefault();
 
       const { idp, withWebId } = this.state;
+
       const { callbackUri, errorsText } = this.props;
 
       if (!idp) {
@@ -81,7 +82,16 @@ export default class LoginComponent extends Component<Props> {
         throw new SolidError(errorsText.webIdNotValid, 'webIdNotValid');
       }
 
-      const session = await auth.login(idp, {
+      // If the user tries to log in sing their WebId, knowing that their IdP is not
+      // necessarily the same as their Pod provider, the WebId might not coincide
+      // match the IdP IRI. That is why getIdpFromWebId is required.
+      const provider = withWebId ? await getIdpFromWebId(idp) : idp;
+
+      if (provider === null) {
+        throw new SolidError(errorsText.noIdpForWebId, 'noIdpForWebId');
+      }
+
+      const session = await auth.login(provider, {
         callbackUri,
         storage: localStorage
       });
@@ -153,7 +163,12 @@ LoginComponent.defaultProps = {
     unknown: 'Something is wrong, please try again...',
     webIdNotValid: 'WebID is not valid',
     emptyProvider: 'Solid Provider is required',
-    emptyWebId: 'Valid WebID is required'
+    emptyWebId: 'Valid WebID is required',
+    noIdpForWebId:
+      'The WebID does not provide enough information to get you to' +
+      'your Identity Provider. Please log in directly into your Provider. To' +
+      'enable WebID login, you must add the "solid:oidcIssuer" predicate to your' +
+      'profile, or contact your administrator.'
   },
   providers: [
     {
