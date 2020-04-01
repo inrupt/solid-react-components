@@ -97,7 +97,6 @@ export const getIdpFromWebId = async webId => {
       const idpConfigUrl = `${new URL(webId).origin}/.well-known/openid-configuration`;
       // TODO: This could be parallelized
       const issuer = await data[webId]['solid:oidcIssuer'];
-      console.log(`issuer: ${issuer}`);
       const idpConfig = await auth.fetch(idpConfigUrl);
 
       if (issuer) {
@@ -107,7 +106,6 @@ export const getIdpFromWebId = async webId => {
         idp = webId;
       }
     }
-    console.log(`The IdP for ${webId} is ${idp}`);
     return idp;
   } catch (e) {
     console.error(e);
