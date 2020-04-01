@@ -69,7 +69,6 @@ export default class LoginComponent extends Component<Props> {
       e.preventDefault();
 
       const { idp, withWebId } = this.state;
-
       const { callbackUri, errorsText } = this.props;
 
       if (!idp) {
@@ -86,8 +85,7 @@ export default class LoginComponent extends Component<Props> {
       // necessarily the same as their Pod provider, the WebId might not coincide
       // match the IdP IRI. That is why getIdpFromWebId is required.
       const provider = withWebId ? await getIdpFromWebId(idp) : idp;
-
-      if (provider === null) {
+      if (!provider) {
         throw new SolidError(errorsText.noIdpForWebId, 'noIdpForWebId');
       }
 
