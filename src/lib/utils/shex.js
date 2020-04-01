@@ -312,8 +312,6 @@ const validateList = async (paths, shape) => {
    */
   window.fetch = solid.fetch;
 
-  let validQuads = [];
-
   // Load the notification shape using the ShEx Loader
   const loaded = await Loader.load([shape], [], paths, []);
   try {
@@ -321,20 +319,25 @@ const validateList = async (paths, shape) => {
     const db = Util.makeN3DB(loaded.data);
     const validator = Validator.construct(loaded.schema, { results: 'api' });
 
+    // Create an array of items to validate against a single shape
     const toValidate = paths.map(p => ({
       node: p,
       shape: Validator.start
     }));
 
+    // Run the shex validation against the list
     const results = validator.validate(db, toValidate);
-    results.forEach(resultItem => {
-      if (resultItem.status === 'conformant') {
+
+    // For all passing (conformant) items, use N3 and the ShEx util to get the graph data,
+    // so we have access to the valid data directly via Quads
+    const notificationList = results
+      .filter(resultItem => resultItem.status === 'conformant')
+      .map(resultItem => {
         const proofStore = new N3.Store();
         Util.getProofGraph(resultItem.appinfo, proofStore, N3.DataFactory);
-        validQuads = [...validQuads, proofStore.getQuads()];
-      }
-    });
-    return validQuads;
+        return proofStore.getQuads();
+      });
+    return notificationList;
   } catch (e) {
     return e;
   }
