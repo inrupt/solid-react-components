@@ -1,7 +1,7 @@
 import solid from 'solid-auth-client';
 import * as N3 from 'n3';
-import solidLDflex from '@solid/query-ldflex';
-import { solidResponse, SolidError, getBasicPod, shexUtil } from '@utils';
+import data from '@solid/query-ldflex';
+import { solidResponse, SolidError, shexUtil } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import ACLFactory from './access-control-factory';
@@ -72,7 +72,7 @@ export class Notification {
       /**
        * Delete inbox link reference from user card or custom file
        */
-      await solidLDflex[document || this.owner]['ldp:inbox'].delete(inbox);
+      await data[document || this.owner]['ldp:inbox'].delete(inbox);
 
       return solidResponse(200, 'Inbox was deleted');
     } catch (error) {
@@ -366,7 +366,7 @@ export class Notification {
       /**
        * Update subject read into notification a notification file.
        */
-      await solidLDflex[notificationPath]['https://www.w3.org/ns/solid/terms#read'].set(status);
+      await data[notificationPath]['https://www.w3.org/ns/solid/terms#read'].set(status);
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
@@ -415,7 +415,7 @@ export class Notification {
       const hasDocument = await this.hasInbox(document);
       if (!hasDocument) return false;
 
-      const inboxDocument = await solidLDflex[document]['ldp:inbox'];
+      const inboxDocument = await data[document]['ldp:inbox'];
       const inbox = inboxDocument ? await inboxDocument.value : false;
       return inbox;
     } catch (error) {
@@ -432,6 +432,7 @@ export class Notification {
     try {
       let notifications = [];
       const filteredNotifications = inboxRoot.filter(inbox => inbox.path);
+
       /**
        * Run over all inboxes to fetch notifications
        */
@@ -444,7 +445,7 @@ export class Notification {
         /**
          * Get container document
          */
-        const inbox = await solidLDflex[currentInbox.path];
+        const inbox = await data[currentInbox.path];
         let notificationPaths = [];
 
         if ((this.schema && !this.schema[name]) || !this.schema)
@@ -461,37 +462,24 @@ export class Notification {
          */
         const coreNotificationShape =
           'https://shexshapes.inrupt.net/public/notifications/core-notification.shex';
-        const validNotificationPaths = await shexUtil.validateList(
+        const validNotifications = await shexUtil.validateList(
           notificationPaths,
           coreNotificationShape
         );
 
-        /**
-         * Get notifications files from contains links
-         */
-        for await (const path of validNotificationPaths) {
-          // let isValid = true;
-          const turtleNotification = await solidLDflex[path];
-          const id = path
-            .split('/')
-            .pop()
-            .split('.')[0];
-          let notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
+        // Loop over resulting notifications
+        for (const notification of validNotifications) {
+          const notificationData = {};
+          // Loop over all predicatets in the notification shape and parse out the key and value
+          for (const field of this.schema[name].shape) {
+            // Find the quad for this field
+            const fieldQuad = notification.find(obj => {
+              return obj.predicate.id === this.getPredicate(field, name);
+            });
 
-          /**
-           * Run over the shape schema to build notification object
-           */
-          for await (const field of this.schema[name].shape) {
-            const data = await turtleNotification[this.getPredicate(field, name)];
-            const value = data ? data.value : null;
-            notificationData = value
-              ? { ...notificationData, [field.label]: value }
-              : notificationData;
+            notificationData[field.label] = fieldQuad ? fieldQuad.object.id : null;
           }
-
-          const actor = notificationData.actor && (await getBasicPod(notificationData.actor));
-          notificationData = { ...notificationData, actor };
-
+          // Add the new notification object to the array of validated notifications
           notifications = [...notifications, notificationData];
         }
       }
