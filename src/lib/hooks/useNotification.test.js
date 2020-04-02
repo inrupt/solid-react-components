@@ -1,7 +1,7 @@
 import { useNotification } from '@hooks';
 import { Notification } from '@classes';
-import { renderHook } from 'react-hooks-testing-library';
-import { cleanup } from 'react-testing-library';
+import { renderHook } from '@testing-library/react-hooks';
+import { cleanup } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 const webIdExample = 'https://example.org/#me';

@@ -19,6 +19,7 @@ export const BoolLine = (props: Props) => {
       <label htmlFor={id}>{label}</label>
       <input
         {...{
+          id,
           type: 'checkbox',
           defaultValue: value === 'true',
           checked: value === 'true',

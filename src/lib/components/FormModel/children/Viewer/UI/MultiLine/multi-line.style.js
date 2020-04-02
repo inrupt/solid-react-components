@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-export const Label = styled.span`
+export const Label = styled.label`
   font-weight: bold;
   font-size: 16px;
   letter-spacing: 0.4px;
