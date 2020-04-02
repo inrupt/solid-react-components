@@ -102,10 +102,18 @@ export const getIdpFromWebId = async webId => {
   let idp = null;
   if (webId) {
     const idpConfigUrl = `${new URL(webId).origin}/.well-known/openid-configuration`;
+    let issuer;
     // TODO: likely due to https://github.com/comunica/comunica/issues/565,
     // the following line throws an error that is not a promise rejection,
     // and therefore which is not catched by an async try/catch block
-    const issuer = await data[webId]['solid:oidcIssuer'];
+    const fileRequest = await auth.fetch(webId, {
+      method: 'HEAD'
+    });
+
+    if (fileRequest.ok) {
+      issuer = await data[webId]['solid:oidcIssuer'];
+    }
+
     if (issuer) {
       // TODO: investigate why just assigning issuer to idp fails in the login process
       idp = `${issuer}`;
