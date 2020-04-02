@@ -470,14 +470,14 @@ export class Notification {
         // Loop over resulting notifications
         for (const notification of validNotifications) {
           const notificationData = {};
-          // Loop over all predicatets in the notification shape and parse out the key and value
+          // Loop over all predicates in the notification shape and parse out the key and value
           for (const field of this.schema[name].shape) {
             // Find the quad for this field
             const fieldQuad = notification.find(obj => {
-              return obj.predicate.id === this.getPredicate(field, name);
+              return obj.predicate.value === this.getPredicate(field, name);
             });
 
-            notificationData[field.label] = fieldQuad ? fieldQuad.object.id : null;
+            notificationData[field.label] = fieldQuad ? fieldQuad.object.value : null;
           }
           // Add the new notification object to the array of validated notifications
           notifications = [...notifications, notificationData];
