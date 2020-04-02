@@ -104,8 +104,8 @@ export const getIdpFromWebId = async webId => {
     const idpConfigUrl = `${new URL(webId).origin}/.well-known/openid-configuration`;
     let issuer;
     // TODO: likely due to https://github.com/comunica/comunica/issues/565,
-    // the following line throws an error that is not a promise rejection,
-    // and therefore which is not catched by an async try/catch block
+    // this code first checks if the file exists before making a request. Otherwise,
+    // the request will fail and cannot be caught, halting code execution
     const fileRequest = await auth.fetch(webId, {
       method: 'HEAD'
     });
