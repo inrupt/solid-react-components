@@ -1,7 +1,7 @@
 import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import data from '@solid/query-ldflex';
-import { solidResponse, SolidError, shexUtil } from '@utils';
+import { solidResponse, SolidError, shexUtil, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import ACLFactory from './access-control-factory';
@@ -468,8 +468,8 @@ export class Notification {
         );
 
         // Loop over resulting notifications
-        for (const notification of validNotifications) {
-          const notificationData = {};
+        for await (const notification of validNotifications) {
+          let notificationData = {};
           // Loop over all predicates in the notification shape and parse out the key and value
           for (const field of this.schema[name].shape) {
             // Find the quad for this field
@@ -479,6 +479,13 @@ export class Notification {
 
             notificationData[field.label] = fieldQuad ? fieldQuad.object.value : null;
           }
+
+          // Take the actor webid and construct an object, fetching name and profile image
+          // We know that actor exists on the notification object because if it didn't, it would
+          // not pass ShEx validation
+          const actor = await getBasicPod(notificationData.actor);
+          notificationData = { ...notificationData, actor };
+
           // Add the new notification object to the array of validated notifications
           notifications = [...notifications, notificationData];
         }
