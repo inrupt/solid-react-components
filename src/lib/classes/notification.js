@@ -481,7 +481,9 @@ export class Notification {
           }
 
           // Take the actor webid and construct an object, fetching name and profile image
-          const actor = notificationData.actor && (await getBasicPod(notificationData.actor));
+          // We know that actor exists on the notification object because if it didn't, it would
+          // not pass ShEx validation
+          const actor = await getBasicPod(notificationData.actor);
           notificationData = { ...notificationData, actor };
 
           // Add the new notification object to the array of validated notifications
