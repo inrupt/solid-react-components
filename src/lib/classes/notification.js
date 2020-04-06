@@ -470,6 +470,16 @@ export class Notification {
         // Loop over resulting notifications
         for await (const notification of validNotifications) {
           let notificationData = {};
+
+          // For each notification, get the path and a unique identifier. The path comes from
+          // the subject, and each quad has a subject field, so the first quad is used
+          const path = notification[0].subject.value;
+          const id = path
+            .split('/')
+            .pop()
+            .split('.')[0];
+          notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
+
           // Loop over all predicates in the notification shape and parse out the key and value
           for (const field of this.schema[name].shape) {
             // Find the quad for this field
