@@ -1,5 +1,40 @@
 # Solid React Components Library
 
+## 0.5.1 ( April 16, 2020 )
+
+### Added
+- The Form Model now has the ability to be displayed in read-only mode
+- Read-only (or "View") version of each component
+
+### Updated
+- Form Model components were refactored:
+  - Props passed into form components have been simplified and streamlined
+  - Internal form componentry has been improved
+  - Increased test coverage of internal form components
+  - Added View mode, and View versions of form components
+  - Added i18n support for form model components via new language prop
+- Notifications are now fetched by relative path instead of assuming they are all .ttl files
+- Code comments updated and improved throughout the codebase
+- Upgraded react-router-dom to the latest version
+- Created an ACLFactory for the access-control-list class, which initializes the ACL link dynamically from the headers instead of assuming a file location
+- ShEx validation of a list of files was updated to more efficiently fetch files, and now returns an array of valid quads instead of a list of IRIs 
+
+### Fixed
+- Provider dropdown list will no longer pop up a keyboard on mobile devices
+- Classifier component now properly uses the `ui:category` predicate instead of `ui:from`
+- Form model component default values are now properly set, instead of defaulting to null or undefined
+- Checkbox form component bug fixed where the checkbox was always initializing empty
+- Error handling improved and fixed for the form model rendering process
+- Date/Time picker component regular expression used for formatting time was updated, fixing a bug where times were not displayed
+- Date/Time picker component bug fixed where min/max values were not working
+- Fixed a bug in the File Uploader where it was generating CORS errors in some circumstances
+- Fixed an issue where the autosave spinner wasn't displaying
+
+
+
+
+
+
 ## 0.5.0 ( December 18, 2019 )
 
 ### Added
