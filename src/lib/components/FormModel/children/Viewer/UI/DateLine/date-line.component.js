@@ -2,14 +2,23 @@ import React from 'react';
 import { format } from 'date-fns';
 
 import { FormModelConfig } from '@context';
-import { UITypes, FormModelUI } from '@constants';
+import { UITypes, FormModelUI, UI } from '@constants';
 import { getClosestLocale } from '@utils';
 
 import { Wrapper, Label, Value } from './date-line.style';
 
-const DateLine = ({ value, ...rest }: { value: String }) => {
-  const type = rest[FormModelUI.RDF_TYPE];
+type Props = {
+  data: object,
+  formModel: object,
+  parent: object,
+  name: String
+};
+
+const DateLine = (props: Props) => {
+  const { data, formModel, parent, name } = props;
+  const type = data[FormModelUI.RDF_TYPE];
   const locale = getClosestLocale();
+  const value = data[UI.VALUE];
 
   let renderValue;
   try {
@@ -34,7 +43,7 @@ const DateLine = ({ value, ...rest }: { value: String }) => {
     <FormModelConfig.Consumer>
       {({ theme }) => (
         <Wrapper className={theme && theme.dateLineViewerClass}>
-          <Label className="label">{rest[FormModelUI.UI_LABEL]}</Label>
+          <Label className="label">{data[FormModelUI.UI_LABEL]}</Label>
           <Value className="value">{renderValue}</Value>
         </Wrapper>
       )}

@@ -15,7 +15,8 @@ import {
   existDocument,
   createDocument,
   fetchLdflexDocument,
-  getBasicPod
+  getBasicPod,
+  getIdpFromWebId
 } from './solidFetch';
 
 const getFileName = path => {
@@ -38,5 +39,6 @@ export {
   parseInitialValue,
   isValidDate,
   getFormattedLocale,
-  getClosestLocale
+  getClosestLocale,
+  getIdpFromWebId
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from 'react-testing-library';
+import { render, cleanup } from '@testing-library/react';
 import RadioButtonList from './radio-button-list.component';
 import 'jest-dom/extend-expect';
 

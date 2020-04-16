@@ -1,20 +1,27 @@
-import React from 'react';
-import { FormModelConfig } from '@context';
-import { Wrapper, Label, Value } from './single-line.style';
+import React, { useContext } from 'react';
+import { ThemeContext } from '@context';
 
-import { FormModelUI } from '@constants';
+import { UI } from '@constants';
 
-const SingleLine = ({ value, ...rest }: { value: String }) => {
-  return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <Wrapper className={theme && theme.singleLineViewerClass}>
-          <Label className="label">{rest[FormModelUI.UI_LABEL]}</Label>
-          <Value className="value">{value || ''}</Value>
-        </Wrapper>
-      )}
-    </FormModelConfig.Consumer>
-  );
+type Props = {
+  id: string,
+  data: object
 };
 
-export default SingleLine;
+export const SingleLine = (props: Props) => {
+  const { id, data } = props;
+  const { theme } = useContext(ThemeContext);
+
+  const { [UI.LABEL]: label, [UI.VALUE]: value } = data;
+
+  return (
+    <div className={theme.singleLine}>
+      <label htmlFor={id} className={theme.singleLineLabel}>
+        {label}
+      </label>
+      <div id={id} className={theme.singleLineValue}>
+        {value}
+      </div>
+    </div>
+  );
+};

@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Wrapper, Label, Value } from './multi-line.style';
 
-import { FormModelConfig } from '@context';
-import { FormModelUI } from '@constants';
+import { ThemeContext } from '@context';
+import { UI } from '@constants';
 
-const MultiLine = ({ value, ...rest }: { value: String }) => {
+type Props = {
+  id: string,
+  data: object
+};
+
+export const MultiLine = (props: Props) => {
+  const { id, data } = props;
+  const { theme } = useContext(ThemeContext);
+  const { [UI.LABEL]: label, [UI.VALUE]: value } = data;
+
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <Wrapper className={theme && theme.multiLineViewerClass}>
-          <Label className="label">{rest[FormModelUI.UI_LABEL]}</Label>
-          <Value className="value">{value || ''}</Value>
-        </Wrapper>
-      )}
-    </FormModelConfig.Consumer>
+    <div className={theme && theme.multiLine}>
+      <Wrapper>
+        <Label htmlFor={id} className="label">
+          {label}
+        </Label>
+        <Value id={id} className="value">
+          {value || ''}
+        </Value>
+      </Wrapper>
+    </div>
   );
 };
 

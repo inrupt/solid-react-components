@@ -1,13 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-type Props = {
-  'ui:contents': any
+import { UI } from '@constants';
+import { DataContext, ThemeContext } from '@context';
+
+export const Heading = props => {
+  const { data } = props;
+
+  return <h3>{data[UI.CONTENTS]}</h3>;
 };
-
-const Heading = (props: Props) => {
-  // eslint-disable-next-line react/destructuring-assignment
-  const contents = props['ui:contents'];
-  return <h3>{contents}</h3>;
-};
-
-export default Heading;

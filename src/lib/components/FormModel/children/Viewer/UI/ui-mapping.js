@@ -1,13 +1,13 @@
 import React from 'react';
 import { UITypes } from '@constants';
 
-import SingleLine from './SingleLine';
+import { SingleLine } from './SingleLine';
 import MultiLine from './MultiLine';
 import DateLine from './DateLine';
-import BoolLine from './BoolLine';
+import { BoolLine } from './BoolLine';
 import ColorLine from './ColorLine';
-import Heading from '../../Form/UI/Heading';
-import Comment from '../../Form/UI/Comment';
+import { Heading } from '../../Form/UI/Heading';
+import { Comment } from '../../Form/UI/Comment';
 
 const UIMapping = type => {
   let component;

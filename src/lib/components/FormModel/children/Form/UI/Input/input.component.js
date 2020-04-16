@@ -1,37 +1,43 @@
-import React from 'react';
-import { InputTextTypes } from '@constants';
-import { FormModelConfig } from '@context';
-
+import React, { useContext, useState } from 'react';
 import { InputGroup } from './input.styles';
+import { ThemeContext } from '@context';
+import { UI, RDF, InputTextTypes } from '@constants';
 
-const Input = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
-  const type = rest['rdf:type'];
-  const label = rest['ui:label'] || '';
-  const maxLength = rest['ui:maxLength'] || 256;
-  const size = rest['ui:size'] || 40;
-  const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
-  const onChange = ({ target }) => {
-    const obj = { value: target.value, ...rest };
-    modifyFormObject(id, obj);
+export const Input = props => {
+  const { id, data, updateData } = props;
+  const { theme } = useContext(ThemeContext);
+
+  const {
+    [UI.LABEL]: label,
+    [UI.MAXLENGTH]: maxLength,
+    [RDF.TYPE]: type,
+    [UI.VALUE]: initialValue
+  } = data;
+
+  const [value, setValue] = useState(initialValue);
+
+  const onChange = event => {
+    setValue(event.target.value);
+  };
+
+  const onBlur = () => {
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
   };
 
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <InputGroup className={theme && theme.inputText}>
-          <label htmlFor={id} id={id}>
-            {label}
-          </label>
-          <input
-            id={id}
-            name={id}
-            type={InputTextTypes[type]}
-            {...{ maxLength, size, value: actualValue || '', onChange, onBlur }}
-          />
-        </InputGroup>
-      )}
-    </FormModelConfig.Consumer>
+    <InputGroup className={theme && theme.inputText}>
+      <label htmlFor={id}>{label}</label>
+      <input
+        {...{
+          id,
+          type: InputTextTypes[type],
+          value,
+          maxLength,
+          onChange,
+          onBlur
+        }}
+      />
+    </InputGroup>
   );
 };
-
-export default Input;

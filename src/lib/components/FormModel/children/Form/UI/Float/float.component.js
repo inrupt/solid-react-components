@@ -1,39 +1,51 @@
-import React from 'react';
-import { InputTextTypes } from '@constants';
-import { FormModelConfig } from '@context';
-
+import React, { useContext, useState } from 'react';
+import { InputTextTypes, UI, RDF } from '@constants';
+import { ThemeContext } from '@context';
 import { InputGroup } from '../Input/input.styles';
 
-const Float = ({ id, value, modifyFormObject, formObject, onSave, autoSave, onBlur, ...rest }) => {
-  const type = rest['rdf:type'];
-  const label = rest['ui:label'] || '';
-  const maxLength = rest['ui:maxLength'] || 256;
-  const minValue = rest['ui:ui:minValue'] || 0;
-  const size = rest['ui:size'] || 40;
-  const actualValue = formObject[id] || formObject[id] === '' ? formObject[id].value : value;
-  const onChange = ({ target }) => {
-    const obj = { value: target.value, ...rest };
-    modifyFormObject(id, obj);
+type Props = {
+  id: string,
+  data: object,
+  updateData: (string, string) => void
+};
+
+export const Float = (props: Props) => {
+  const { id, data, updateData } = props;
+  const { theme } = useContext(ThemeContext);
+
+  const {
+    [RDF.TYPE]: type,
+    [UI.LABEL]: label,
+    [UI.MAX_LENGTH]: maxLength,
+    [UI.MIN_VALUE]: minValue,
+    [UI.SIZE]: size,
+    [UI.VALUE]: initialValue
+  } = data;
+
+  const [value, setValue] = useState(initialValue);
+
+  const onChange = event => setValue(event.target.value);
+
+  const onBlur = () => {
+    const updatedPart = { ...data, value };
+    updateData(id, updatedPart);
   };
 
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <InputGroup className={theme && theme.inputText}>
-          <label htmlFor={id} id={id}>
-            {label}
-          </label>
-          <input
-            id={id}
-            name={id}
-            type={InputTextTypes[type]}
-            min={minValue}
-            {...{ maxLength, size, value: actualValue || '', onChange, onBlur }}
-          />
-        </InputGroup>
-      )}
-    </FormModelConfig.Consumer>
+    <InputGroup className={theme.floatField}>
+      <label htmlFor={id}>{label}</label>
+      <input
+        {...{
+          id,
+          type: InputTextTypes[type],
+          min: minValue,
+          maxLength,
+          size,
+          value,
+          onChange,
+          onBlur
+        }}
+      />
+    </InputGroup>
   );
 };
-
-export default Float;

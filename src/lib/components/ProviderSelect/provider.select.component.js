@@ -38,6 +38,7 @@ const ProviderSelect = (props: Props) => {
         placeholder,
         className: `solid-provider-select ${className || ''}`,
         options,
+        isSearchable: false,
         components: components && { Option, SingleValue },
         onChange
       }}

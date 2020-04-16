@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ThemeContext } from '@context';
+import { UI } from '@constants';
 
 import { Wrapper, Label, Value, ColorSwatch } from './color-line.style';
 
-import { FormModelConfig } from '@context';
-import { FormModelUI } from '@constants';
+export const ColorLine = props => {
+  const { id, data } = props;
+  const { theme } = useContext(ThemeContext);
 
-const ColorLine = ({ value, ...rest }: { value: String }) => {
+  const { [UI.LABEL]: label, [UI.VALUE]: value } = data;
+
   return (
-    <FormModelConfig.Consumer>
-      {({ theme }) => (
-        <Wrapper className={theme && theme.colorLine}>
-          <Label className="label">{rest[FormModelUI.UI_LABEL]}</Label>
-          <Value className="value">
-            {value}
-            <ColorSwatch color={value} />
-          </Value>
-        </Wrapper>
-      )}
-    </FormModelConfig.Consumer>
+    <Wrapper id={id} className={theme.colorLine}>
+      <Label className="label">{label}</Label>
+      <Value className="value">
+        {value}
+        <ColorSwatch color={value} />
+      </Value>
+    </Wrapper>
   );
 };
 

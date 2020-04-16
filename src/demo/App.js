@@ -9,10 +9,10 @@ import {
   ProfileUploader,
   useNotification,
   FormModel,
-  AutoSaveDefaultSpinner,
+  Spinner,
   ProfileViewer
 } from '@lib';
-import { AccessControlList } from '@classes';
+import { AccessControlList, ACLFactory } from '@classes';
 import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
@@ -105,7 +105,7 @@ const App = () => {
       const documentURI = `${uri.origin}/public/container`;
       const { MODES } = AccessControlList;
       const permissions = [{ modes: [MODES.CONTROL], agents: [webId] }];
-      const aclInstance = new AccessControlList(webId, documentURI);
+      const aclInstance = await ACLFactory.createNewAcl(webId, documentURI);
       await aclInstance.createACL(permissions);
     }
   };
@@ -144,20 +144,22 @@ const App = () => {
   return (
     <DemoWrapper>
       <Header />
-      <ProfileViewer
-        {...{
-          webId: 'https://jmartin.inrupt.net/profile/card#me',
-          direction: 'down',
-          viewMoreText: 'See Profile',
-          onError: error => {
-            // eslint-disable-next-line no-console
-            console.log('ERROR', error.statusText);
-          },
-          onClick: false
-        }}
-      >
-        <span>James</span>
-      </ProfileViewer>
+      {webId && (
+        <ProfileViewer
+          {...{
+            webId,
+            direction: 'down',
+            viewMoreText: 'See Profile',
+            onError: error => {
+              // eslint-disable-next-line no-console
+              console.log('ERROR', error.statusText);
+            },
+            onClick: false
+          }}
+        >
+          <span>Hover over me!</span>
+        </ProfileViewer>
+      )}
 
       <br />
       <button type="button" onClick={createAcl}>
@@ -167,17 +169,22 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelPath: 'https://khoward.dev.inrupt.net/public/FormModel/datetime.ttl#formRoot',
-          podPath: 'https://jmartin.inrupt.net/profile/card#me',
-          settings: {
+          modelSource: 'https://jmartin.inrupt.net/public/formmodel/float.ttl#formRoot',
+          dataSource: 'https://jmartin.inrupt.net/profile/card#me',
+          options: {
             theme: {
               inputText: 'sdk-input',
               inputCheckbox: 'sdk-checkbox checkbox',
-              inputTextArea: 'sdk-textarea'
+              inputTextArea: 'sdk-textarea',
+              multiple: 'sdk-multiple-button',
+              form: 'inrupt-sdk-form',
+              childGroup: 'inrupt-form-group'
             },
-            savingComponent: AutoSaveDefaultSpinner
+            autosaveIndicator: Spinner,
+            autosave: true,
+            viewer: false,
+            language: 'en'
           },
-          viewer: false,
           onError: error => {
             // eslint-disable-next-line no-console
             console.log(error, 'error');
@@ -199,7 +206,6 @@ const App = () => {
             console.log(response);
           }
         }}
-        autoSave
         liveUpdate
       />
       <Uploader

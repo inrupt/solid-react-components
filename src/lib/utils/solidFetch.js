@@ -90,6 +90,41 @@ export const getBasicPod = async webId => {
   }
 };
 
+/**
+ * A WebID is typically hosted by a Pod provider, while login has to be handled
+ * by an identity provider. Both services can be offered by the same provider,
+ * but not necessarily. In the latter case, the profile document (pointed to by
+ * the WebID) links to the Identity provider with the `solid:oidcProvider` predicate.
+ *
+ * @param {string} webId a webId iri
+ */
+export const getIdpFromWebId = async webId => {
+  let idp = null;
+  if (webId) {
+    const idpConfigUrl = `${new URL(webId).origin}/.well-known/openid-configuration`;
+    let issuer;
+    // TODO: likely due to https://github.com/comunica/comunica/issues/565,
+    // this code first checks if the file exists before making a request. Otherwise,
+    // the request will fail and cannot be caught, halting code execution
+    const fileRequest = await auth.fetch(webId, {
+      method: 'HEAD'
+    });
+
+    if (fileRequest.ok) {
+      issuer = await data[webId]['solid:oidcIssuer'];
+    }
+
+    if (issuer) {
+      // TODO: investigate why just assigning issuer to idp fails in the login process
+      idp = `${issuer}`;
+    } else {
+      const idpConfig = await auth.fetch(idpConfigUrl);
+      idp = idpConfig.ok ? webId : null;
+    }
+  }
+  return idp;
+};
+
 export const ensureSlash = (inputPath, needsSlash) => {
   const hasSlash = inputPath.endsWith('/');
   if (hasSlash && !needsSlash) {

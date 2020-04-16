@@ -1,9 +1,10 @@
 import solid from 'solid-auth-client';
 import * as N3 from 'n3';
-import solidLDflex from '@solid/query-ldflex';
-import { solidResponse, SolidError, getBasicPod, shexUtil } from '@utils';
+import data from '@solid/query-ldflex';
+import { solidResponse, SolidError, shexUtil, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
+import ACLFactory from './access-control-factory';
 import { NotificationTypes } from '@constants';
 import { ensureSlash } from '../utils/solidFetch';
 
@@ -71,7 +72,7 @@ export class Notification {
       /**
        * Delete inbox link reference from user card or custom file
        */
-      await solidLDflex[document || this.owner]['ldp:inbox'].delete(inbox);
+      await data[document || this.owner]['ldp:inbox'].delete(inbox);
 
       return solidResponse(200, 'Inbox was deleted');
     } catch (error) {
@@ -118,9 +119,10 @@ export class Notification {
 
   /**
    * Create inbox container with default permissions in the pod from a specific path
-   * @param inboxRoot
-   * @param owner
    * @returns {Promise<*>}
+   * @param inboxPath
+   * @param appPath
+   * @param settingFileName
    */
   createInbox = async (inboxPath, appPath, settingFileName = 'settings.ttl') => {
     try {
@@ -167,7 +169,7 @@ export class Notification {
 
       await solid.fetch(`${newInboxPath}.dummy`, { method: 'DELETE' });
       const permissions = [{ agents: null, modes: [AccessControlList.MODES.APPEND] }];
-      const aclContainer = new AccessControlList(this.owner, newInboxPath);
+      const aclContainer = await ACLFactory.createNewAcl(this.owner, newInboxPath);
       await aclContainer.createACL(permissions);
 
       return solidResponse(200, 'Inbox was created');
@@ -230,7 +232,7 @@ export class Notification {
       const { namedNode, literal } = termFactory;
 
       const fileName = Date.now();
-      const filePath = `${to + fileName}.ttl`;
+      const filePath = `${to + fileName}`;
 
       // This should be in a constant, but we may shift to use solid/context instead
       const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
@@ -268,10 +270,10 @@ export class Notification {
       });
 
       // Add the notification type to the node
-      writer.addQuad(namedNode(filePath), namedNode(rdfType), namedNode(notificationType));
+      writer.addQuad(namedNode(''), namedNode(rdfType), namedNode(notificationType));
 
       // Add the license to the node
-      writer.addQuad(namedNode(filePath), namedNode(licenseType), namedNode(licenseLink));
+      writer.addQuad(namedNode(''), namedNode(licenseType), namedNode(licenseLink));
 
       shape.forEach(item => {
         if (item.property && item.property.includes(':')) {
@@ -316,7 +318,7 @@ export class Notification {
             }
 
             writer.addQuad(
-              namedNode(filePath),
+              namedNode(''),
               namedNode(`${context[item.property.split(':')[0]]}${item.label}`),
               typedValue
             );
@@ -364,7 +366,7 @@ export class Notification {
       /**
        * Update subject read into notification a notification file.
        */
-      await solidLDflex[notificationPath]['https://www.w3.org/ns/solid/terms#read'].set(status);
+      await data[notificationPath]['https://www.w3.org/ns/solid/terms#read'].set(status);
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
@@ -413,7 +415,7 @@ export class Notification {
       const hasDocument = await this.hasInbox(document);
       if (!hasDocument) return false;
 
-      const inboxDocument = await solidLDflex[document]['ldp:inbox'];
+      const inboxDocument = await data[document]['ldp:inbox'];
       const inbox = inboxDocument ? await inboxDocument.value : false;
       return inbox;
     } catch (error) {
@@ -430,6 +432,7 @@ export class Notification {
     try {
       let notifications = [];
       const filteredNotifications = inboxRoot.filter(inbox => inbox.path);
+
       /**
        * Run over all inboxes to fetch notifications
        */
@@ -442,7 +445,7 @@ export class Notification {
         /**
          * Get container document
          */
-        const inbox = await solidLDflex[currentInbox.path];
+        const inbox = await data[currentInbox.path];
         let notificationPaths = [];
 
         if ((this.schema && !this.schema[name]) || !this.schema)
@@ -459,37 +462,41 @@ export class Notification {
          */
         const coreNotificationShape =
           'https://shexshapes.inrupt.net/public/notifications/core-notification.shex';
-        const validNotificationPaths = await shexUtil.validateList(
+        const validNotifications = await shexUtil.validateList(
           notificationPaths,
           coreNotificationShape
         );
 
-        /**
-         * Get notifications files from contains links
-         */
-        for await (const path of validNotificationPaths) {
-          // let isValid = true;
-          const turtleNotification = await solidLDflex[path];
+        // Loop over resulting notifications
+        for await (const notification of validNotifications) {
+          let notificationData = {};
+
+          // For each notification, get the path and a unique identifier. The path comes from
+          // the subject, and each quad has a subject field, so the first quad is used
+          const path = notification[0].subject.value;
           const id = path
             .split('/')
             .pop()
             .split('.')[0];
-          let notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
+          notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
 
-          /**
-           * Run over the shape schema to build notification object
-           */
-          for await (const field of this.schema[name].shape) {
-            const data = await turtleNotification[this.getPredicate(field, name)];
-            const value = data ? data.value : null;
-            notificationData = value
-              ? { ...notificationData, [field.label]: value }
-              : notificationData;
+          // Loop over all predicates in the notification shape and parse out the key and value
+          for (const field of this.schema[name].shape) {
+            // Find the quad for this field
+            const fieldQuad = notification.find(obj => {
+              return obj.predicate.value === this.getPredicate(field, name);
+            });
+
+            notificationData[field.label] = fieldQuad ? fieldQuad.object.value : null;
           }
 
-          const actor = notificationData.actor && (await getBasicPod(notificationData.actor));
+          // Take the actor webid and construct an object, fetching name and profile image
+          // We know that actor exists on the notification object because if it didn't, it would
+          // not pass ShEx validation
+          const actor = await getBasicPod(notificationData.actor);
           notificationData = { ...notificationData, actor };
 
+          // Add the new notification object to the array of validated notifications
           notifications = [...notifications, notificationData];
         }
       }
