@@ -71,10 +71,10 @@ export const ACL_PREFIXES = {
 //   PATTERN: `${uiBase}pattern`,
 //   DEFAULT: `${uiBase}default`
 // };
-export const FORM_MODEL = {
-  MULTIPLE_TYPE: 'http://www.w3.org/ns/ui#Multiple'
-};
-
+// export const FORM_MODEL = {
+//   MULTIPLE_TYPE: 'http://www.w3.org/ns/ui#Multiple'
+// };
+//
 // export const UITypes = {
 //   SingleLineTextField: 'http://www.w3.org/ns/ui#SingleLineTextField',
 //   MultiLineTextField: 'http://www.w3.org/ns/ui#MultiLineTextField',
