@@ -1,4 +1,4 @@
-import { VOCAB } from '@constants';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 import { Heading } from './Heading';
 import { Comment } from './Comment';
@@ -17,21 +17,21 @@ import { Group } from '../../Group';
 import Classifier from './Classifier';
 
 export const Mapping = {
-  [VOCAB.UI.Heading]: Heading,
-  [VOCAB.UI.Comment]: Comment,
-  [VOCAB.UI.SingleLineTextField]: Input,
-  [VOCAB.UI.IntegerField]: Integer,
-  [VOCAB.UI.DateField]: DateTimePicker,
-  [VOCAB.UI.DateTimeField]: DateTimePicker,
-  [VOCAB.UI.TimeField]: DateTimePicker,
-  [VOCAB.UI.BooleanField]: CheckBox,
-  [VOCAB.UI.DecimalField]: Decimal,
-  [VOCAB.UI.MultiLineTextField]: TextArea,
-  [VOCAB.UI.FloatField]: Float,
-  [VOCAB.UI.EmailField]: Email,
-  [VOCAB.UI.PhoneField]: Phone,
-  [VOCAB.UI.ColorField]: ColorPicker,
-  [VOCAB.UI.Multiple]: Multiple,
-  [VOCAB.UI.Group]: Group,
-  [VOCAB.UI.Classifier]: Classifier
+  [UI.Heading.value]: Heading,
+  [UI.Comment.value]: Comment,
+  [UI.SingleLineTextField.value]: Input,
+  [UI.IntegerField.value]: Integer,
+  [UI.DateField.value]: DateTimePicker,
+  [UI.DateTimeField.value]: DateTimePicker,
+  [UI.TimeField.value]: DateTimePicker,
+  [UI.BooleanField.value]: CheckBox,
+  [UI.DecimalField.value]: Decimal,
+  [UI.MultiLineTextField.value]: TextArea,
+  [UI.FloatField.value]: Float,
+  [UI.EmailField.value]: Email,
+  [UI.PhoneField.value]: Phone,
+  [UI.ColorField.value]: ColorPicker,
+  [UI.Multiple.value]: Multiple,
+  [UI.Group.value]: Group,
+  [UI.Classifier.value]: Classifier
 };

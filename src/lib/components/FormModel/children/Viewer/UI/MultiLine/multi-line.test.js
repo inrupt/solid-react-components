@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import MultiLine from './multi-line.component';
-import { UI } from '@constants';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 import 'jest-dom/extend-expect';
 
@@ -16,7 +16,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'multi'
+    [UI.label.value]: 'multi'
   };
   const { container } = render(<MultiLine data={data} />);
   expect(getByText(container, 'multi')).toBeTruthy();
@@ -24,8 +24,8 @@ test('Renders the label', () => {
 
 test('Renders the value', () => {
   const data = {
-    [UI.LABEL]: 'multi',
-    [UI.VALUE]: `test\nvalue`
+    [UI.label.value]: 'multi',
+    [UI.value.value]: `test\nvalue`
   };
 
   const { container } = render(<MultiLine id="testid" data={data} />);

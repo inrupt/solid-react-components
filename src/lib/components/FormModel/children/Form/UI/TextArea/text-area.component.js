@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
 import { TextAreaGroup } from './text-area.styles';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   id: string,
@@ -13,7 +13,11 @@ export const TextArea = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.LABEL]: label, [UI.MAX_LENGTH]: maxLength, [UI.VALUE]: initialValue } = data;
+  const {
+    [UI.label.value]: label,
+    [UI.maxLength.value]: maxLength,
+    [UI.value.value]: initialValue
+  } = data;
 
   const [value, setValue] = useState(initialValue);
 

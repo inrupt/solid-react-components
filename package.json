@@ -57,7 +57,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
+    "@inrupt/lit-generated-vocab-solid-common-rdfext": "^0.2.0",
     "@inrupt/solid-sdk-forms": "0.1.1",
+    "@pmcb55/lit-generated-vocab-common-rdfext": "^0.2.0",
     "@rdfjs/data-model": "^1.1.1",
     "@shexjs/core": "^1.0.0-alpha.9",
     "@shexjs/loader": "^1.0.0-alpha.5",

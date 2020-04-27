@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '@context';
 
-import { UI } from '@constants';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   id: string,
@@ -12,7 +12,7 @@ export const SingleLine = (props: Props) => {
   const { id, data } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.LABEL]: label, [UI.VALUE]: value } = data;
+  const { [UI.label.value]: label, [UI.value.value]: value } = data;
 
   return (
     <div className={theme.singleLine}>

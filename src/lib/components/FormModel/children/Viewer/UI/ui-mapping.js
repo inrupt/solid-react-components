@@ -1,5 +1,4 @@
 import React from 'react';
-import { UITypes } from '@constants';
 
 import { SingleLine } from './SingleLine';
 import MultiLine from './MultiLine';
@@ -8,56 +7,57 @@ import { BoolLine } from './BoolLine';
 import ColorLine from './ColorLine';
 import { Heading } from '../../Form/UI/Heading';
 import { Comment } from '../../Form/UI/Comment';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 const UIMapping = type => {
   let component;
   switch (type) {
-    case UITypes.SingleLineTextField:
+    case UI.SingleLineTextField.value:
       component = SingleLine;
       break;
-    case UITypes.MultiLineTextField:
+    case UI.MultiLineTextField.value:
       component = MultiLine;
       break;
-    case UITypes.DecimalField:
+    case UI.DecimalField.value:
       component = SingleLine;
       break;
-    case UITypes.FloatField:
+    case UI.FloatField.value:
       component = SingleLine;
       break;
-    case UITypes.IntegerField:
+    case UI.IntegerField.value:
       component = SingleLine;
       break;
-    case UITypes.EmailField:
+    case UI.EmailField.value:
       component = SingleLine;
       break;
-    case UITypes.PhoneField:
+    case UI.PhoneField.value:
       component = SingleLine;
       break;
-    case UITypes.TriStateField:
+    case UI.TriStateField.value:
       component = SingleLine;
       break;
-    case UITypes.BooleanField:
+    case UI.BooleanField.value:
       component = BoolLine;
       break;
-    case UITypes.ColorField:
+    case UI.ColorField.value:
       component = ColorLine;
       break;
-    case UITypes.DateField:
+    case UI.DateField.value:
       component = props => <DateLine {...props} />;
       break;
-    case UITypes.DateTimeField:
+    case UI.DateTimeField.value:
       component = props => <DateLine {...props} />;
       break;
-    case UITypes.TimeField:
+    case UI.TimeField.value:
       component = props => <DateLine {...props} />;
       break;
-    case UITypes.Classifier:
+    case UI.Classifier.value:
       component = SingleLine;
       break;
-    case UITypes.Heading:
+    case UI.Heading.value:
       component = Heading;
       break;
-    case UITypes.Comment:
+    case UI.Comment.value:
       component = Comment;
       break;
     default:

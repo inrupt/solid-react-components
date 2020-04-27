@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import { Phone } from './phone.component';
-import { UI } from '@constants';
 import 'jest-dom/extend-expect';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 afterAll(cleanup);
 
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'Phone label'
+    [UI.label.value]: 'Phone label'
   };
   const { container } = render(<Phone data={data} />);
   expect(getByText(container, 'Phone label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the Phone address', () => {
   const data = {
-    [UI.LABEL]: 'Phone label',
-    [UI.VALUE]: '(555) 555-5555'
+    [UI.label.value]: 'Phone label',
+    [UI.value.value]: '(555) 555-5555'
   };
   const { container } = render(<Phone id="testid" data={data} />);
   expect(getByLabelText(container, 'Phone label').value).toBe('(555) 555-5555');

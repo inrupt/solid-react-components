@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
 import Viewer from '../../viewer.component';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   key: string,
@@ -13,7 +13,7 @@ type Props = {
 export const MultipleViewer = (props: Props) => {
   const { key, formModel, parent } = props;
   const { theme } = useContext(ThemeContext);
-  const { [UI.LABEL]: label, [UI.PART]: part } = formModel;
+  const { [UI.label.value]: label, [UI.part.value]: part } = formModel;
   const parts = [];
 
   // Get list of parts for the
@@ -28,12 +28,12 @@ export const MultipleViewer = (props: Props) => {
       <p>{label}</p>
       {parts.map(item => {
         // Fetch the name from the object for a unique key
-        const key = item[UI.NAME];
+        const key = item[UI.name.value];
         return (
           <div key={key}>
             <Viewer
               {...{
-                formModel: item[UI.PARTS][Object.keys(item[UI.PARTS])[0]],
+                formModel: item[UI.parts.value][Object.keys(item[UI.parts.value])[0]],
                 parent
               }}
             />

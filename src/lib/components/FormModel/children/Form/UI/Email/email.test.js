@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import { Email } from './email.component';
-import { UI } from '@constants';
 import 'jest-dom/extend-expect';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 afterAll(cleanup);
 
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'email label'
+    [UI.label.value]: 'email label'
   };
   const { container } = render(<Email data={data} />);
   expect(getByText(container, 'email label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the email address', () => {
   const data = {
-    [UI.LABEL]: 'email label',
-    [UI.VALUE]: 'test@email.com'
+    [UI.label.value]: 'email label',
+    [UI.value.value]: 'test@email.com'
   };
   const { container } = render(<Email id="testid" data={data} />);
   expect(getByLabelText(container, 'email label').value).toBe('test@email.com');

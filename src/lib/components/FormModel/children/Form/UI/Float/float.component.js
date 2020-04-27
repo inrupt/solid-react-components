@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { InputTextTypes, UI, RDF } from '@constants';
+import { InputTextTypes } from '@constants';
 import { ThemeContext } from '@context';
 import { InputGroup } from '../Input/input.styles';
+import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   id: string,
@@ -14,12 +15,12 @@ export const Float = (props: Props) => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [RDF.TYPE]: type,
-    [UI.LABEL]: label,
-    [UI.MAX_LENGTH]: maxLength,
-    [UI.MIN_VALUE]: minValue,
-    [UI.SIZE]: size,
-    [UI.VALUE]: initialValue
+    [RDF.type.value]: type,
+    [UI.label.value]: label,
+    [UI.maxLength.value]: maxLength,
+    [UI.minValue.value]: minValue,
+    [UI.size.value]: size,
+    [UI.value.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

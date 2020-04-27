@@ -3,17 +3,17 @@ import { n3Helper } from '@inrupt/solid-sdk-forms';
 import unique from 'unique';
 import { SelectWrapper } from './classifier.style';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 export const Classifier = props => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
   const {
-    [UI.LABEL]: label,
-    [UI.VALUE]: initialValue,
-    [UI.CATEGORY]: category,
-    [UI.VALUES]: values
+    [UI.label.value]: label,
+    [UI.value.value]: initialValue,
+    [UI.category.value]: category,
+    [UI.values.value]: values
   } = data;
 
   const [options, setOptions] = useState([]);

@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import { Float } from './float.component';
-import { UI } from '@constants';
 import 'jest-dom/extend-expect';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 afterAll(cleanup);
 
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'float label'
+    [UI.label.value]: 'float label'
   };
   const { container } = render(<Float data={data} />);
   expect(getByText(container, 'float label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the float value', () => {
   const data = {
-    [UI.VALUE]: '123.43',
-    [UI.LABEL]: 'float label'
+    [UI.value.value]: '123.43',
+    [UI.label.value]: 'float label'
   };
 
   const { container } = render(<Float id="testid" data={data} />);

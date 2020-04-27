@@ -2,7 +2,6 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText } from '@testing-library/dom';
 import { DeleteButton } from './delete-button.component';
-import { UI } from '@constants';
 import 'jest-dom/extend-expect';
 
 afterAll(cleanup);

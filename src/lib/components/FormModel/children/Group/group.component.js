@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '@context';
-import { UI, RDF, VOCAB } from '@constants';
+import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   data: object,
@@ -23,14 +23,14 @@ export const Group = (props: Props) => {
   return (
     <div className={theme && theme.groupField}>
       {Object.entries(data).map(([, part]) => {
-        const { [RDF.TYPE]: type, [UI.NAME]: name } = part;
+        const { [RDF.type.value]: type, [UI.name.value]: name } = part;
         const Component = mapper[type];
 
         if (!Component) return null;
 
         /* if this component is being saved right now */
         const savingThis = savingData.names.some((componentName: string) => name === componentName);
-        const componentData = type === VOCAB.UI.Group ? part[UI.PARTS] : part;
+        const componentData = type === UI.Group.value ? part[UI.parts.value] : part;
 
         let Indicator = () => null;
         if (savingData && savingThis) Indicator = savingData.autosaveIndicator;

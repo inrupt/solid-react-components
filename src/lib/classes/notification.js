@@ -5,8 +5,8 @@ import { solidResponse, SolidError, shexUtil, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import ACLFactory from './access-control-factory';
-import { NotificationTypes } from '@constants';
 import { ensureSlash } from '../utils/solidFetch';
+import { AS } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',
@@ -239,7 +239,7 @@ export class Notification {
       const licenseType = 'http://schema.org/license';
 
       // If a type has not been set, default to Announce type
-      const notificationType = type || NotificationTypes.ANNOUNCE;
+      const notificationType = type || AS.Announce.value;
 
       // If a license has not been set, default to the CC license
       const licenseLink = license || 'https://creativecommons.org/licenses/by-sa/4.0/';

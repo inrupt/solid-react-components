@@ -13,7 +13,7 @@ import {
   ProfileViewer
 } from '@lib';
 import { AccessControlList, ACLFactory } from '@classes';
-import { NotificationTypes } from '@constants';
+import { AS } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -129,7 +129,7 @@ const App = () => {
           actor: 'https://solidsdk.inrupt.net/profile/card#me'
         },
         inboxUrl,
-        NotificationTypes.ANNOUNCE
+        AS.Announce.value
       );
     } catch (ex) {
       // eslint-disable-next-line no-console

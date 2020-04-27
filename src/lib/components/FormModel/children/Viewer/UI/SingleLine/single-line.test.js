@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import { SingleLine } from './single-line.component';
-import { UI } from '@constants';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 import 'jest-dom/extend-expect';
 
@@ -16,7 +16,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'single'
+    [UI.label.value]: 'single'
   };
   const { container } = render(<SingleLine data={data} />);
   expect(getByText(container, 'single')).toBeTruthy();
@@ -24,8 +24,8 @@ test('Renders the label', () => {
 
 test('Renders the value', () => {
   const data = {
-    [UI.LABEL]: 'single',
-    [UI.VALUE]: 'test value'
+    [UI.label.value]: 'single',
+    [UI.value.value]: 'test value'
   };
 
   const { container } = render(<SingleLine id="testid" data={data} />);

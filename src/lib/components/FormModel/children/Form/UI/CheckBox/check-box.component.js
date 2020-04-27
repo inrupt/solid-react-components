@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
 import { InputGroup } from '../Input/input.styles';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   id: string,
@@ -17,7 +17,7 @@ export const CheckBox = (props: Props) => {
 
   useEffect(() => {
     try {
-      const podValue = data[UI.VALUE];
+      const podValue = data[UI.value.value];
       if (!podValue || podValue === 'false') {
         setChecked(false);
       } else {
@@ -26,9 +26,9 @@ export const CheckBox = (props: Props) => {
     } catch (e) {
       setChecked(false);
     }
-  }, [data[UI.VALUE]]);
+  }, [data[UI.value.value]]);
 
-  const { [UI.LABEL]: label } = data;
+  const { [UI.label.value]: label } = data;
 
   const onChange = event => {
     const updatedPart = { ...data, value: String(event.target.checked) };

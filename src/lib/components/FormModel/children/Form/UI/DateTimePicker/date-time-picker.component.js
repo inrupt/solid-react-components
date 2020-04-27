@@ -6,7 +6,8 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { ThemeContext } from '@context';
-import { UITypes, DATE_FORMAT, UI, RDF } from '@constants';
+import { DATE_FORMAT } from '@constants';
+import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 import { parseInitialValue, isValidDate, getClosestLocale } from '@utils';
 
@@ -18,18 +19,18 @@ export const DateTimePicker = props => {
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    setDate(parseInitialValue(data[UI.VALUE], data[RDF.TYPE]));
-  }, [data[UI.VALUE]]);
+    setDate(parseInitialValue(data[UI.value.value], data[RDF.type.value]));
+  }, [data[UI.value.value]]);
 
   // Fetch relevant values from the data prop, which represents the properties in the form model
-  const minValue = data[UI.MIN_VALUE];
-  const maxValue = data[UI.MAX_VALUE];
-  const mindateOffset = parseInt(data[UI.MIN_DATE_OFFSET], 10);
-  const maxdateOffset = parseInt(data[UI.MAX_DATE_OFFSET], 10);
-  const mindatetimeOffset = parseInt(data[UI.MIN_DATETIME_OFFSET], 10);
-  const maxdatetimeOffset = parseInt(data[UI.MAX_DATETIME_OFFSET], 10);
-  const label = data[UI.LABEL] || '';
-  const type = data[RDF.TYPE];
+  const minValue = data[UI.minValue.value];
+  const maxValue = data[UI.maxValue.value];
+  const mindateOffset = parseInt(data[UI.minDateOffset.value], 10);
+  const maxdateOffset = parseInt(data[UI.maxDateOffset.value], 10);
+  const mindatetimeOffset = parseInt(data[UI.minDatetimeOffset.value], 10);
+  const maxdatetimeOffset = parseInt(data[UI.maxDatetimeOffset.value], 10);
+  const label = data[UI.label.value] || '';
+  const type = data[RDF.type.value];
 
   const onChange = date => {
     /* User wants to remove the date */
@@ -42,9 +43,9 @@ export const DateTimePicker = props => {
 
     let value;
     /* assign the format to save based on the type */
-    if (type === UITypes.TimeField) value = format(date, DATE_FORMAT.TIME);
-    if (type === UITypes.DateField) value = format(date, DATE_FORMAT.DATE);
-    if (type === UITypes.DateTimeField) value = date.toISOString();
+    if (type === UI.TimeField.value) value = format(date, DATE_FORMAT.TIME);
+    if (type === UI.DateField.value) value = format(date, DATE_FORMAT.DATE);
+    if (type === UI.DateTimeField.value) value = date.toISOString();
 
     const updatedPart = { ...data, value };
     updateData(id, updatedPart);
@@ -59,7 +60,7 @@ export const DateTimePicker = props => {
   let dateOptions;
 
   /* Transform the incoming values depending on the type of element to display */
-  if (type === UITypes.TimeField) {
+  if (type === UI.TimeField.value) {
     /* min, max Values are times */
     let minHours;
     let minMinutes;
@@ -93,7 +94,7 @@ export const DateTimePicker = props => {
     };
   }
 
-  if (type === UITypes.DateTimeField) {
+  if (type === UI.DateTimeField.value) {
     /* min, max Values are datetimes and offset is in seconds */
     if (!Number.isNaN(mindatetimeOffset)) minDate = addSeconds(new Date(), mindatetimeOffset);
     if (!Number.isNaN(maxdatetimeOffset)) maxDate = addSeconds(new Date(), maxdatetimeOffset);
@@ -105,7 +106,7 @@ export const DateTimePicker = props => {
     dateOptions = { minDate, maxDate, dateFormat: 'Pp', showTimeSelect: true };
   }
 
-  if (type === UITypes.DateField) {
+  if (type === UI.DateField.value) {
     /* min,maxValue are dates and offset is in days */
     if (!Number.isNaN(mindateOffset)) minDate = addDays(new Date(), mindateOffset);
     if (!Number.isNaN(maxdateOffset)) maxDate = addDays(new Date(), maxdateOffset);

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
-import { UI } from '@constants';
 import { ThemeContext } from '@context';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   data: object
@@ -9,7 +9,7 @@ type Props = {
 
 export const Comment = (props: Props) => {
   const { data } = props;
-  const { [UI.CONTENTS]: comment } = data;
+  const { [UI.contents.value]: comment } = data;
 
   const { theme } = useContext(ThemeContext);
 

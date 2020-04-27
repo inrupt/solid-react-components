@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import { CheckBox } from './check-box.component';
-import { UI } from '@constants';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 import 'jest-dom/extend-expect';
 
 afterAll(cleanup);
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'check'
+    [UI.label.value]: 'check'
   };
   const { container } = render(<CheckBox data={data} />);
   expect(getByText(container, 'check')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders a checked box', () => {
   const data = {
-    [UI.LABEL]: 'checklabel',
-    [UI.VALUE]: 'true'
+    [UI.label.value]: 'checklabel',
+    [UI.value.value]: 'true'
   };
   const { container } = render(<CheckBox id="testid" data={data} />);
   expect(getByLabelText(container, 'checklabel').checked).toBeTruthy();
@@ -32,8 +32,8 @@ test('Renders a checked box', () => {
 
 test('Renders an unchecked box', () => {
   const data = {
-    [UI.LABEL]: 'checklabel',
-    [UI.VALUE]: 'false'
+    [UI.label.value]: 'checklabel',
+    [UI.value.value]: 'false'
   };
   const { container } = render(<CheckBox id="testid" data={data} />);
   expect(getByLabelText(container, 'checklabel').checked).toBeFalsy();

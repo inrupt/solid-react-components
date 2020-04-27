@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText } from '@testing-library/dom';
 import { Decimal } from './decimal.component';
-import { UI } from '@constants';
 import 'jest-dom/extend-expect';
+import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 afterAll(cleanup);
 
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the decimal label', () => {
   const data = {
-    [UI.LABEL]: 'decimal label'
+    [UI.label.value]: 'decimal label'
   };
   const { container } = render(<Decimal data={data} />);
   expect(getByText(container, 'decimal label')).toBeTruthy();
