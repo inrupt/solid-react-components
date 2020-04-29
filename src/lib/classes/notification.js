@@ -461,7 +461,7 @@ export class Notification {
          * Validate the list of notification IRIs and return a list of valid ones
          */
         const coreNotificationShape =
-          'https://shexshapes.inrupt.net/public/notifications/core-notification.shex';
+          'https://shexshapes.inrupt.net/public/notifications/app-notification.shex';
         const validNotifications = await shexUtil.validateList(
           notificationPaths,
           coreNotificationShape
