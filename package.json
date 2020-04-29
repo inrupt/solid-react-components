@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-react-components",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Solid React Components",
   "scripts": {
     "start": "node scripts/start.js",
@@ -63,7 +63,7 @@
     "@shexjs/loader": "^1.0.0-alpha.5",
     "@shexjs/parser": "^1.0.0-alpha.4",
     "@solid/query-ldflex": "^2.6.0",
-    "@solid/react": "^1.8.0",
+    "@solid/react": "^1.10.0",
     "date-fns": "^2.8.0",
     "file-type": "^10.7.1",
     "html-webpack-include-assets-plugin": "^1.0.6",
