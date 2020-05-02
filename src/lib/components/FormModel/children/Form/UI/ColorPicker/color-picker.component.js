@@ -1,10 +1,9 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { ChromePicker } from 'react-color';
-
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
 
 import { PickerGroup, ColorSwatch, Cover, Popover } from './color-picker.styles';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 type Props = {
   id: string,

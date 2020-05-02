@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
 import { useLiveUpdate } from '@solid/react';
-
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
+
 import { SolidError, solidResponse } from '@utils';
 
 import { Mapping } from './children/Form/UI/component-mapping';
 import { Group } from './children/Group';
 import Viewer from './children/Viewer';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+
 
 type FormProps = {
   modelSource: string,

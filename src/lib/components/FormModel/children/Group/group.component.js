@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '@context';
-import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 type Props = {
   data: object,

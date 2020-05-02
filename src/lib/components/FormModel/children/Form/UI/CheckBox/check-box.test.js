@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { CheckBox } from './check-box.component';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
 import 'jest-dom/extend-expect';
 
 afterAll(cleanup);

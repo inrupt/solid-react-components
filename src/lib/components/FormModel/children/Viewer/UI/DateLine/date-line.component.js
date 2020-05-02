@@ -5,7 +5,7 @@ import { FormModelConfig } from '@context';
 import { getClosestLocale } from '@utils';
 
 import { Wrapper, Label, Value } from './date-line.style';
-import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 type Props = {
   data: object,

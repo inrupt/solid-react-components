@@ -7,7 +7,7 @@ import { BoolLine } from './BoolLine';
 import ColorLine from './ColorLine';
 import { Heading } from '../../Form/UI/Heading';
 import { Comment } from '../../Form/UI/Comment';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 const UIMapping = type => {
   let component;

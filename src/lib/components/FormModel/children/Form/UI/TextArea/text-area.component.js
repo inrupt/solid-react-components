@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ThemeContext } from '@context';
 import { TextAreaGroup } from './text-area.styles';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 type Props = {
   id: string,

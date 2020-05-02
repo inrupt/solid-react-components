@@ -1,4 +1,4 @@
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 import { Heading } from './Heading';
 import { Comment } from './Comment';

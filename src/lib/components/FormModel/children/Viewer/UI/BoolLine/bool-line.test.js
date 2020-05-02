@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { getByLabelText } from '@testing-library/dom';
 
 import { BoolLine } from './bool-line.component';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 test('Renders with value and label', async () => {
   const data = {

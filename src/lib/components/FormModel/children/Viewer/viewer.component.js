@@ -3,7 +3,7 @@ import UIMapping from './UI/ui-mapping';
 import { Group } from './viewer.style';
 import { ThemeContext } from '@context';
 import { MultipleViewer } from './UI/MultipleViewer/multiple-viewer.component';
-import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 type Props = {
   formModel: Object,

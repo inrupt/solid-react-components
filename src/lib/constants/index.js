@@ -1,5 +1,5 @@
-import { FOAF, RDF, VCARD } from '@pmcb55/lit-generated-vocab-common-rdfext';
-import { ACL } from '@inrupt/lit-generated-vocab-solid-common-rdfext';
+import { FOAF, RDF, VCARD } from '@inrupt/lit-generated-vocab-common';
+import { ACL } from '@inrupt/lit-generated-vocab-solid-common';
 
 export const PERMISSIONS = {
   APPEND: 'Append',

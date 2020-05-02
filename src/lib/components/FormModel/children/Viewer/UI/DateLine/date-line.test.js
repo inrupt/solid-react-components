@@ -3,7 +3,7 @@ import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import DateLine from './date-line.component';
 import 'jest-dom/extend-expect';
-import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 afterAll(cleanup);
 

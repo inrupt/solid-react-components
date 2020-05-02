@@ -1,12 +1,12 @@
 import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import data from '@solid/query-ldflex';
+import { AS } from '@inrupt/lit-generated-vocab-common';
 import { solidResponse, SolidError, shexUtil, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import ACLFactory from './access-control-factory';
 import { ensureSlash } from '../utils/solidFetch';
-import { AS } from '@pmcb55/lit-generated-vocab-common-rdfext';
 
 const PREFIXES = {
   terms: 'https://www.w3.org/ns/solid/terms#',

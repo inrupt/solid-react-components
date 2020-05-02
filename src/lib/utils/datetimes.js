@@ -1,7 +1,7 @@
 import { addHours, setHours, setMinutes, setSeconds } from 'date-fns';
 import * as locales from 'date-fns/locale';
 
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 /**
  * @param value - object stored in the pod

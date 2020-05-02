@@ -3,10 +3,10 @@ import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
+import { FOAF, RDF } from '@inrupt/lit-generated-vocab-common';
+import { ACL } from '@inrupt/lit-generated-vocab-solid-common';
 import { SolidError } from '@utils';
 import { PERMISSIONS, ACL_PREFIXES } from '@constants';
-import { FOAF, RDF } from '@pmcb55/lit-generated-vocab-common-rdfext';
-import { ACL } from '@inrupt/lit-generated-vocab-solid-common-rdfext';
 
 type Permissions = {
   agents: null | String | Array,

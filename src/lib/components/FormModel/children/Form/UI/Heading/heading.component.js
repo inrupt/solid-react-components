@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 export const Heading = props => {
   const { data } = props;

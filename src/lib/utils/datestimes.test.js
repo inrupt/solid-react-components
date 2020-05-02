@@ -1,5 +1,5 @@
 import { parseInitialValue, isValidDate } from './datetimes';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 describe('Parser should return the expected values', () => {
   const time = '19:00:34';

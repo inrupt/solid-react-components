@@ -3,7 +3,7 @@ import { render, cleanup } from '@testing-library/react';
 import { getByLabelText } from '@testing-library/dom';
 import { RadioButton } from './radio-button.component';
 import 'jest-dom/extend-expect';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 afterAll(cleanup);
 

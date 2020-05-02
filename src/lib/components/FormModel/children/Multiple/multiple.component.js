@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { ThemeContext } from '@context';
 import { Group } from '../Group';
 import { DeleteButton } from '../Form/UI/DeleteButton/delete-button.component';
-import { UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 type Props = {
   id: string,

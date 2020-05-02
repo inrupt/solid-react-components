@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import { ThemeContext } from '@context';
 import { DATE_FORMAT } from '@constants';
-import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 import { parseInitialValue, isValidDate, getClosestLocale } from '@utils';
 

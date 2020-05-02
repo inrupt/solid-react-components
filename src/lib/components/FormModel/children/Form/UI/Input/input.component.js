@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { InputGroup } from './input.styles';
 import { ThemeContext } from '@context';
 import { InputTextTypes } from '@constants';
-import { RDF, UI } from '@pmcb55/lit-generated-vocab-common-rdfext';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 export const Input = props => {
   const { id, data, updateData } = props;
