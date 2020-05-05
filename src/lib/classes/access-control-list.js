@@ -3,7 +3,7 @@ import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
-import { FOAF, RDF } from '@inrupt/lit-generated-vocab-common';
+import { FOAF, RDF, VCARD } from '@inrupt/lit-generated-vocab-common';
 import { ACL } from '@inrupt/lit-generated-vocab-solid-common';
 import { SolidError } from '@utils';
 import { PERMISSIONS, ACL_PREFIXES } from '@constants';
@@ -84,7 +84,16 @@ export default class AccessControlList {
    */
   createPermissionsTurtle = (permissions: Array<Permissions>) => {
     const { DataFactory } = N3;
-    const prefixes = { ...ACL_PREFIXES, '': `${this.aclUri}#`, me: this.owner };
+
+    const prefixes = {
+      ...ACL.PREFIX_AND_NAMESPACE,
+      ...FOAF.PREFIX_AND_NAMESPACE,
+      ...RDF.PREFIX_AND_NAMESPACE,
+      ...VCARD.PREFIX_AND_NAMESPACE,
+      '': `${this.aclUri}#`,
+      me: this.owner
+    };
+
     const { namedNode, quad } = DataFactory;
     const writer = new N3.Writer({ prefixes });
     const quadPermissions = permissions.map(({ modes, agents }) =>

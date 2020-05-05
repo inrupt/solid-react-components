@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-import { Wrapper, Label, Value } from './multi-line.style';
-
-import { ThemeContext } from '@context';
 import { UI } from '@inrupt/lit-generated-vocab-common';
+import { ThemeContext } from '@context';
+import { Wrapper, Label, Value } from './multi-line.style';
 
 type Props = {
   id: string,

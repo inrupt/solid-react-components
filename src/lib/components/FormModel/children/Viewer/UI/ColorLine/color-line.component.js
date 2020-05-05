@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
 
 import { Wrapper, Label, Value, ColorSwatch } from './color-line.style';
-import { UI } from '@inrupt/lit-generated-vocab-common';
 
 export const ColorLine = props => {
   const { id, data } = props;

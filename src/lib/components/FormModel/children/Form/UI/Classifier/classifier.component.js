@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { n3Helper } from '@inrupt/solid-sdk-forms';
 import unique from 'unique';
 import { UI } from '@inrupt/lit-generated-vocab-common';
-import { SelectWrapper } from './classifier.style';
 import { ThemeContext } from '@context';
+import { SelectWrapper } from './classifier.style';
 
 export const Classifier = props => {
   const { id, data, updateData } = props;

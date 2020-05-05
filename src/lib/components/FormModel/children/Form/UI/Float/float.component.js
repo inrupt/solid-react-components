@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 import { InputTextTypes } from '@constants';
 import { ThemeContext } from '@context';
 import { InputGroup } from '../Input/input.styles';
-import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 type Props = {
   id: string,

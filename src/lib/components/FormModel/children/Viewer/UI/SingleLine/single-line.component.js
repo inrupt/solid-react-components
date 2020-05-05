@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import { ThemeContext } from '@context';
-
 import { UI } from '@inrupt/lit-generated-vocab-common';
+import { ThemeContext } from '@context';
 
 type Props = {
   id: string,

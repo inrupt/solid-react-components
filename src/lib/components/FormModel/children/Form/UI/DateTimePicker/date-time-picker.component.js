@@ -5,9 +5,9 @@ import * as locales from 'date-fns/locale';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
 import { DATE_FORMAT } from '@constants';
-import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 import { parseInitialValue, isValidDate, getClosestLocale } from '@utils';
 

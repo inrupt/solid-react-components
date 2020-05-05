@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { SingleLine } from './SingleLine';
 import MultiLine from './MultiLine';
 import DateLine from './DateLine';
@@ -7,7 +8,6 @@ import { BoolLine } from './BoolLine';
 import ColorLine from './ColorLine';
 import { Heading } from '../../Form/UI/Heading';
 import { Comment } from '../../Form/UI/Comment';
-import { UI } from '@inrupt/lit-generated-vocab-common';
 
 const UIMapping = type => {
   let component;

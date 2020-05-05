@@ -1,5 +1,4 @@
-import { FOAF, RDF, VCARD } from '@inrupt/lit-generated-vocab-common';
-import { ACL } from '@inrupt/lit-generated-vocab-solid-common';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 export const PERMISSIONS = {
   APPEND: 'Append',
@@ -8,12 +7,12 @@ export const PERMISSIONS = {
   CONTROL: 'Control'
 };
 
-export const ACL_PREFIXES = {
-  [ACL.PREFIX]: ACL.NAMESPACE,
-  [FOAF.PREFIX]: FOAF.NAMESPACE,
-  [RDF.PREFIX]: RDF.NAMESPACE,
-  n: VCARD.NAMESPACE
-};
+// export const ACL_PREFIXES = {
+//   [ACL.PREFIX]: ACL.NAMESPACE,
+//   [FOAF.PREFIX]: FOAF.NAMESPACE,
+//   [RDF.PREFIX]: RDF.NAMESPACE,
+//   n: VCARD.NAMESPACE
+// };
 
 // export const ACL_PREFIXES = {
 //   acl: 'http://www.w3.org/ns/auth/acl#',
@@ -96,12 +95,19 @@ export const ACL_PREFIXES = {
 // };
 
 export const InputTextTypes = {
-  'http://www.w3.org/ns/ui#SingleLineTextField': 'text',
-  'http://www.w3.org/ns/ui#EmailField': 'email',
-  'http://www.w3.org/ns/ui#PhoneField': 'phone',
-  'http://www.w3.org/ns/ui#DecimalField': 'number',
-  'http://www.w3.org/ns/ui#FloatField': 'number',
-  'http://www.w3.org/ns/ui#IntegerField': 'number'
+  [UI.SingleLineTextField.value]: 'text',
+  [UI.EmailField.value]: 'email',
+  [UI.PhoneField.value]: 'phone',
+  [UI.DecimalField.value]: 'number',
+  [UI.FloatField.value]: 'number',
+  [UI.IntegerField.value]: 'number'
+
+  // 'http://www.w3.org/ns/ui#SingleLineTextField': 'text',
+  // 'http://www.w3.org/ns/ui#EmailField': 'email',
+  // 'http://www.w3.org/ns/ui#PhoneField': 'phone',
+  // 'http://www.w3.org/ns/ui#DecimalField': 'number',
+  // 'http://www.w3.org/ns/ui#FloatField': 'number',
+  // 'http://www.w3.org/ns/ui#IntegerField': 'number'
 };
 
 // export const FormModelUI = {
