@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { UI_COMMON } from '@inrupt/lit-generated-vocab-inrupt-common';
 import { lookup, extension } from 'mime-types';
 import auth from 'solid-auth-client';
 import { SolidError } from '@utils';
@@ -92,7 +93,22 @@ class Uploader extends Component<Props> {
           const data = f.target.result;
 
           if (limitSize && file.size > limitSize) {
-            throw new SolidError(errorsText.sizeLimit, 'file', 400);
+            throw new SolidError(
+              // Current mechanism allows calling code to override the
+              // 'sizeLimit' string we define as part of our 'defaultProps'.
+              // The problem with that is the calling code doesn't have our
+              // level of context, e.g. the size of the file being uploaded
+              // (although it does have the limitSize value).
+              UI_COMMON.errMsgFileUpload_exceededSizeLimit.messageParams(
+                file.name,
+                `${parseFloat(file.size / 1000000).toFixed(0)}Mbs`,
+                `${limitSize / 1000000}Mbs`
+              ),
+              'file',
+              400
+            );
+
+            // throw new SolidError(errorsText.sizeLimit, 'file', 400);
           }
 
           // Check if file has extension and add suffix string
@@ -280,9 +296,15 @@ class Uploader extends Component<Props> {
 
 Uploader.defaultProps = {
   errorsText: {
-    sizeLimit: 'File size exceeds the allowable limit',
-    unsupported: 'Unsupported media type',
-    maximumFiles: 'Sorry, you have exceeded the maximum number of files allowed per upload'
+    sizeLimit: UI_COMMON.errMsgFileUpload_exceededSizeLimit.messageParams(
+      '<Unknown1 - default>',
+      '<Unknown2 - default>',
+      '<Unknown3 - default>'
+    ), // 'File size exceeds the allowable limit',
+    unsupported: UI_COMMON.errMsgUnsupportedMediaType.messageParams('<Unknown - default>'), // 'Unsupported media type',
+    maximumFiles: UI_COMMON.errMsgFileUpload_exceededMaximumFiles.messageParams(
+      '<Unknown - default>'
+    ) // 'Sorry, you have exceeded the maximum number of files allowed per upload'
   }
 };
 
