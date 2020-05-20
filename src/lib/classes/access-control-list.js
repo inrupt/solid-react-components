@@ -6,7 +6,7 @@ import ldflex from '@solid/query-ldflex';
 import { FOAF, RDF, VCARD } from '@inrupt/lit-generated-vocab-common';
 import { ACL } from '@inrupt/lit-generated-vocab-solid-common';
 import { SolidError } from '@utils';
-import { PERMISSIONS, ACL_PREFIXES } from '@constants';
+import { PERMISSIONS } from '@constants';
 
 type Permissions = {
   agents: null | String | Array,
@@ -50,26 +50,26 @@ export default class AccessControlList {
     const subject = `${this.aclUri}#${modes.join('')}`;
     const { documentUri } = this;
     const originalPredicates = [
-      this.createQuad(subject, RDF.type, ACL.Authorization),
-      this.createQuad(subject, ACL.accessTo, namedNode(documentUri)),
-      this.createQuad(subject, ACL.default, namedNode(documentUri))
+      this.createQuad(subject, RDF.type.value, ACL.Authorization),
+      this.createQuad(subject, ACL.accessTo.value, namedNode(documentUri)),
+      this.createQuad(subject, ACL.default_.value, namedNode(documentUri))
     ];
     let predicates = [];
     if (agents) {
       const agentsArray = Array.isArray(agents) ? agents : [agents];
       const agentsQuads = agentsArray.map(agent =>
-        this.createQuad(subject, ACL.agent, namedNode(agent))
+        this.createQuad(subject, ACL.agent.value, namedNode(agent))
       );
       predicates = [...originalPredicates, ...agentsQuads];
     } else {
-      const publicQuad = this.createQuad(subject, ACL.agentClass, FOAF.Agent);
+      const publicQuad = this.createQuad(subject, ACL.agentClass.value, FOAF.Agent);
       predicates = [...originalPredicates, publicQuad];
     }
 
     const quadList = modes.reduce(
       (array, mode) => [
         ...array,
-        this.createQuad(subject, ACL.mode, namedNode(`${ACL.NAMESPACE}${mode}`))
+        this.createQuad(subject, ACL.mode.value, namedNode(`${ACL.NAMESPACE}${mode}`))
       ],
       predicates
     );

@@ -99,7 +99,7 @@ class Uploader extends Component<Props> {
               // The problem with that is the calling code doesn't have our
               // level of context, e.g. the size of the file being uploaded
               // (although it does have the limitSize value).
-              UI_COMMON.errMsgFileUpload_exceededSizeLimit.messageParams(
+              UI_COMMON.errFileUpload_exceededSizeLimit.messageParams(
                 file.name,
                 `${parseFloat(file.size / 1000000).toFixed(0)}Mbs`,
                 `${limitSize / 1000000}Mbs`
@@ -296,15 +296,13 @@ class Uploader extends Component<Props> {
 
 Uploader.defaultProps = {
   errorsText: {
-    sizeLimit: UI_COMMON.errMsgFileUpload_exceededSizeLimit.messageParams(
+    sizeLimit: UI_COMMON.errFileUpload_exceededSizeLimit.messageParams(
       '<Unknown1 - default>',
       '<Unknown2 - default>',
       '<Unknown3 - default>'
     ), // 'File size exceeds the allowable limit',
-    unsupported: UI_COMMON.errMsgUnsupportedMediaType.messageParams('<Unknown - default>'), // 'Unsupported media type',
-    maximumFiles: UI_COMMON.errMsgFileUpload_exceededMaximumFiles.messageParams(
-      '<Unknown - default>'
-    ) // 'Sorry, you have exceeded the maximum number of files allowed per upload'
+    unsupported: UI_COMMON.errUnsupportedMediaType.messageParams('<Unknown - default>'), // 'Unsupported media type',
+    maximumFiles: UI_COMMON.errFileUpload_exceededMaximumFiles.messageParams('<Unknown - default>') // 'Sorry, you have exceeded the maximum number of files allowed per upload'
   }
 };
 

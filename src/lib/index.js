@@ -20,7 +20,6 @@ import {
   Spinner
 } from '@components';
 import { shexUtil } from '@utils';
-import { NotificationTypes } from '@constants';
 
 import { useNotification } from '@hooks';
 
@@ -46,7 +45,6 @@ export {
   AppPermission,
   FormModel,
   Spinner,
-  NotificationTypes,
   ProfileViewer,
   ACLFactory,
   shexUtil

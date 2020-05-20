@@ -239,7 +239,7 @@ export class Notification {
       const licenseType = 'http://schema.org/license';
 
       // If a type has not been set, default to Announce type
-      const notificationType = type || AS.Announce.value;
+      const notificationType = type || AS.Announce.iriAsString;
 
       // If a license has not been set, default to the CC license
       const licenseLink = license || 'https://creativecommons.org/licenses/by-sa/4.0/';
@@ -461,7 +461,7 @@ export class Notification {
          * Validate the list of notification IRIs and return a list of valid ones
          */
         const coreNotificationShape =
-          'https://shexshapes.inrupt.net/public/notifications/app-notification.shex';
+          'https://shexshapes.inrupt.net/public/notifications/core-notification.shex';
         const validNotifications = await shexUtil.validateList(
           notificationPaths,
           coreNotificationShape

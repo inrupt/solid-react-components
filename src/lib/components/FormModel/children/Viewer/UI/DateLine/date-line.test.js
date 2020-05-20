@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'date label'
+    [UI.label]: 'date label'
   };
   const { container } = render(<DateLine data={data} />);
   expect(getByText(container, 'date label')).toBeTruthy();

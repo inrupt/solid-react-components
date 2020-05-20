@@ -23,7 +23,7 @@ test('Renders the label', () => {
 
 test('Renders the email address', () => {
   const data = {
-    [UI.label.value]: 'email label',
+    [UI.label.toString()]: 'email label',
     [UI.value.value]: 'test@email.com'
   };
   const { container } = render(<Email id="testid" data={data} />);
