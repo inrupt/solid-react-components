@@ -13,11 +13,7 @@ export const TextArea = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
-  const {
-    [UI.label.value]: label,
-    [UI.maxLength.value]: maxLength,
-    [UI.value.value]: initialValue
-  } = data;
+  const { [UI.label]: label, [UI.maxLength]: maxLength, [UI.value]: initialValue } = data;
 
   const [value, setValue] = useState(initialValue);
 

@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'check'
+    [UI.label]: 'check'
   };
   const { container } = render(<CheckBox data={data} />);
   expect(getByText(container, 'check')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders a checked box', () => {
   const data = {
-    [UI.label.value]: 'checklabel',
-    [UI.value.value]: 'true'
+    [UI.label]: 'checklabel',
+    [UI.value]: 'true'
   };
   const { container } = render(<CheckBox id="testid" data={data} />);
   expect(getByLabelText(container, 'checklabel').checked).toBeTruthy();
@@ -32,8 +32,8 @@ test('Renders a checked box', () => {
 
 test('Renders an unchecked box', () => {
   const data = {
-    [UI.label.value]: 'checklabel',
-    [UI.value.value]: 'false'
+    [UI.label]: 'checklabel',
+    [UI.value]: 'false'
   };
   const { container } = render(<CheckBox id="testid" data={data} />);
   expect(getByLabelText(container, 'checklabel').checked).toBeFalsy();

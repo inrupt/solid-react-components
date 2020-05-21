@@ -8,12 +8,12 @@ export const PERMISSIONS = {
 };
 
 export const InputTextTypes = {
-  [UI.SingleLineTextField.value]: 'text',
-  [UI.EmailField.value]: 'email',
-  [UI.PhoneField.value]: 'phone',
-  [UI.DecimalField.value]: 'number',
-  [UI.FloatField.value]: 'number',
-  [UI.IntegerField.value]: 'number'
+  [UI.SingleLineTextField]: 'text',
+  [UI.EmailField]: 'email',
+  [UI.PhoneField]: 'phone',
+  [UI.DecimalField]: 'number',
+  [UI.FloatField]: 'number',
+  [UI.IntegerField]: 'number'
 };
 
 /* See <https://date-fns.org/v2.8.1/docs/format> for format explanations */

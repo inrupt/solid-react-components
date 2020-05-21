@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'float label'
+    [UI.label]: 'float label'
   };
   const { container } = render(<Float data={data} />);
   expect(getByText(container, 'float label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the float value', () => {
   const data = {
-    [UI.value.value]: '123.43',
-    [UI.label.value]: 'float label'
+    [UI.value]: '123.43',
+    [UI.label]: 'float label'
   };
 
   const { container } = render(<Float id="testid" data={data} />);

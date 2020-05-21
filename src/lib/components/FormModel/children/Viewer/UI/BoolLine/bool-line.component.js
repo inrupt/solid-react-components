@@ -11,7 +11,7 @@ export const BoolLine = (props: Props) => {
   const { id, data } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.value.value]: value, [UI.label.value]: label } = data;
+  const { [UI.value]: value, [UI.label]: label } = data;
 
   return (
     <div className={theme.boolField}>

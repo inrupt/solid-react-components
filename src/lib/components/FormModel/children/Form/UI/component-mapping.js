@@ -17,21 +17,21 @@ import { Group } from '../../Group';
 import Classifier from './Classifier';
 
 export const Mapping = {
-  [UI.Heading.value]: Heading,
-  [UI.Comment.value]: Comment,
-  [UI.SingleLineTextField.value]: Input,
-  [UI.IntegerField.value]: Integer,
-  [UI.DateField.value]: DateTimePicker,
-  [UI.DateTimeField.value]: DateTimePicker,
-  [UI.TimeField.value]: DateTimePicker,
-  [UI.BooleanField.value]: CheckBox,
-  [UI.DecimalField.value]: Decimal,
-  [UI.MultiLineTextField.value]: TextArea,
-  [UI.FloatField.value]: Float,
-  [UI.EmailField.value]: Email,
-  [UI.PhoneField.value]: Phone,
-  [UI.ColorField.value]: ColorPicker,
-  [UI.Multiple.value]: Multiple,
-  [UI.Group.value]: Group,
-  [UI.Classifier.value]: Classifier
+  [UI.Heading]: Heading,
+  [UI.Comment]: Comment,
+  [UI.SingleLineTextField]: Input,
+  [UI.IntegerField]: Integer,
+  [UI.DateField]: DateTimePicker,
+  [UI.DateTimeField]: DateTimePicker,
+  [UI.TimeField]: DateTimePicker,
+  [UI.BooleanField]: CheckBox,
+  [UI.DecimalField]: Decimal,
+  [UI.MultiLineTextField]: TextArea,
+  [UI.FloatField]: Float,
+  [UI.EmailField]: Email,
+  [UI.PhoneField]: Phone,
+  [UI.ColorField]: ColorPicker,
+  [UI.Multiple]: Multiple,
+  [UI.Group]: Group,
+  [UI.Classifier]: Classifier
 };

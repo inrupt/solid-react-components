@@ -16,7 +16,7 @@ test('Renders without crashing', () => {
 
 test('Renders the heading', () => {
   const data = {
-    [UI.contents.value]: 'heading'
+    [UI.contents]: 'heading'
   };
   const { container } = render(<Heading data={data} />);
   expect(getByText(container, 'heading')).toBeTruthy();

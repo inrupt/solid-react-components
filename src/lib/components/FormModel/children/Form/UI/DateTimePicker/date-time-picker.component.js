@@ -19,18 +19,18 @@ export const DateTimePicker = props => {
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    setDate(parseInitialValue(data[UI.value.value], data[RDF.type.value]));
-  }, [data[UI.value.value]]);
+    setDate(parseInitialValue(data[UI.value], data[RDF.type]));
+  }, [data[UI.value]]);
 
   // Fetch relevant values from the data prop, which represents the properties in the form model
-  const minValue = data[UI.minValue.value];
-  const maxValue = data[UI.maxValue.value];
-  const mindateOffset = parseInt(data[UI.minDateOffset.value], 10);
-  const maxdateOffset = parseInt(data[UI.maxDateOffset.value], 10);
-  const mindatetimeOffset = parseInt(data[UI.minDatetimeOffset.value], 10);
-  const maxdatetimeOffset = parseInt(data[UI.maxDatetimeOffset.value], 10);
-  const label = data[UI.label.value] || '';
-  const type = data[RDF.type.value];
+  const minValue = data[UI.minValue];
+  const maxValue = data[UI.maxValue];
+  const mindateOffset = parseInt(data[UI.minDateOffset], 10);
+  const maxdateOffset = parseInt(data[UI.maxDateOffset], 10);
+  const mindatetimeOffset = parseInt(data[UI.minDatetimeOffset], 10);
+  const maxdatetimeOffset = parseInt(data[UI.maxDatetimeOffset], 10);
+  const label = data[UI.label] || '';
+  const type = data[RDF.type];
 
   const onChange = date => {
     /* User wants to remove the date */

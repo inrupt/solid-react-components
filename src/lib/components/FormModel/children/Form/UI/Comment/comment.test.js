@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the comment', () => {
   const data = {
-    [UI.contents.value]: 'comment'
+    [UI.contents]: 'comment'
   };
   const { container } = render(<Comment data={data} />);
   expect(getByText(container, 'comment')).toBeTruthy();

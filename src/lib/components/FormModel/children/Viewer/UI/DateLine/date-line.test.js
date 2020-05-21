@@ -24,8 +24,8 @@ test('Renders the label', () => {
 describe('Renders the value depending on the type', () => {
   it('Renders a time', () => {
     const data = {
-      [RDF.type.value]: UI.TimeField.value,
-      [UI.value.value]: '09:12:44'
+      [RDF.type]: UI.TimeField.value,
+      [UI.value]: '09:12:44'
     };
 
     const { container } = render(<DateLine data={data} />);
@@ -35,8 +35,8 @@ describe('Renders the value depending on the type', () => {
 
   it('Renders a date', () => {
     const data = {
-      [RDF.type.value]: UI.DateField.value,
-      [UI.value.value]: '2020-01-13'
+      [RDF.type]: UI.DateField.value,
+      [UI.value]: '2020-01-13'
     };
 
     const { container } = render(<DateLine data={data} />);
@@ -45,8 +45,8 @@ describe('Renders the value depending on the type', () => {
 
   it('Renders a datetime', () => {
     const data = {
-      [RDF.type.value]: UI.DateTimeField.value,
-      [UI.value.value]: '2020-01-13 09:12:44'
+      [RDF.type]: UI.DateTimeField.value,
+      [UI.value]: '2020-01-13 09:12:44'
     };
 
     const { container } = render(<DateLine data={data} />);

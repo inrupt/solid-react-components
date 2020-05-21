@@ -16,9 +16,9 @@ type Props = {
 
 const DateLine = (props: Props) => {
   const { data, formModel, parent, name } = props;
-  const type = data[RDF.type.value];
+  const type = data[RDF.type];
   const locale = getClosestLocale();
-  const value = data[UI.value.value];
+  const value = data[UI.value];
 
   let renderValue;
   try {
@@ -43,7 +43,7 @@ const DateLine = (props: Props) => {
     <FormModelConfig.Consumer>
       {({ theme }) => (
         <Wrapper className={theme && theme.dateLineViewerClass}>
-          <Label className="label">{data[UI.label.value]}</Label>
+          <Label className="label">{data[UI.label]}</Label>
           <Value className="value">{renderValue}</Value>
         </Wrapper>
       )}

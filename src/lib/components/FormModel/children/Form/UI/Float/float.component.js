@@ -15,12 +15,12 @@ export const Float = (props: Props) => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [RDF.type.value]: type,
-    [UI.label.value]: label,
-    [UI.maxLength.value]: maxLength,
-    [UI.minValue.value]: minValue,
-    [UI.size.value]: size,
-    [UI.value.value]: initialValue
+    [RDF.type]: type,
+    [UI.label]: label,
+    [UI.maxLength]: maxLength,
+    [UI.minValue]: minValue,
+    [UI.size]: size,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

@@ -15,11 +15,11 @@ export const Integer = (props: Props) => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [RDF.type.value]: type,
-    [UI.label.value]: label,
-    [UI.minValue.value]: minValue,
-    [UI.size.value]: size,
-    [UI.value.value]: initialValue
+    [RDF.type]: type,
+    [UI.label]: label,
+    [UI.minValue]: minValue,
+    [UI.size]: size,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

@@ -11,7 +11,6 @@ import { Mapping } from './children/Form/UI/component-mapping';
 import { Group } from './children/Group';
 import Viewer from './children/Viewer';
 
-
 type FormProps = {
   modelSource: string,
   dataSource: string,
@@ -183,7 +182,7 @@ export const FormModel = (props: FormProps) => {
   const mapper = { ...Mapping, ...customComponents };
 
   // Not finished loading/parsing
-  if (!formModel[UI.parts.value]) return null;
+  if (!formModel[UI.parts]) return null;
 
   return (
     <ThemeContext.Provider value={{ theme }}>
@@ -191,7 +190,7 @@ export const FormModel = (props: FormProps) => {
         {!viewer && (
           <Group
             {...{
-              data: formModel[UI.parts.value],
+              data: formModel[UI.parts],
               updateData,
               addNewField,
               deleteField,
@@ -205,7 +204,7 @@ export const FormModel = (props: FormProps) => {
             }}
           />
         )}
-        {viewer && <Viewer formModel={formModel} data={formModel[UI.parts.value]} />}
+        {viewer && <Viewer formModel={formModel} data={formModel[UI.parts]} />}
       </div>
     </ThemeContext.Provider>
   );

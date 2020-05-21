@@ -9,10 +9,10 @@ export const Input = props => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [UI.label.value]: label,
-    [UI.maxLength.value]: maxLength,
-    [RDF.type.value]: type,
-    [UI.value.value]: initialValue
+    [UI.label]: label,
+    [UI.maxLength]: maxLength,
+    [RDF.type]: type,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

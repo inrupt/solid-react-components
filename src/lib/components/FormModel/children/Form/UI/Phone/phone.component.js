@@ -15,12 +15,12 @@ export const Phone = (props: Props) => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [RDF.type.value]: type,
-    [UI.label.value]: label,
-    [UI.maxLength.value]: maxLength,
-    [UI.size.value]: size,
-    [UI.pattern.value]: pattern,
-    [UI.value.value]: initialValue
+    [RDF.type]: type,
+    [UI.label]: label,
+    [UI.maxLength]: maxLength,
+    [UI.size]: size,
+    [UI.pattern]: pattern,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

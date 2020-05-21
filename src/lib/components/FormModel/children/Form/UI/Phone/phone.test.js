@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'Phone label'
+    [UI.label]: 'Phone label'
   };
   const { container } = render(<Phone data={data} />);
   expect(getByText(container, 'Phone label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the Phone address', () => {
   const data = {
-    [UI.label.value]: 'Phone label',
-    [UI.value.value]: '(555) 555-5555'
+    [UI.label]: 'Phone label',
+    [UI.value]: '(555) 555-5555'
   };
   const { container } = render(<Phone id="testid" data={data} />);
   expect(getByLabelText(container, 'Phone label').value).toBe('(555) 555-5555');

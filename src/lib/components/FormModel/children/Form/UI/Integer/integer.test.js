@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'integer label'
+    [UI.label]: 'integer label'
   };
   const { container } = render(<Integer data={data} />);
   expect(getByText(container, 'integer label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the integer value', () => {
   const data = {
-    [UI.label.value]: 'integer label',
-    [UI.value.value]: '123'
+    [UI.label]: 'integer label',
+    [UI.value]: '123'
   };
   const { container } = render(<Integer id="testid" data={data} />);
   expect(getByLabelText(container, 'integer label').value).toBe('123');

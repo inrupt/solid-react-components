@@ -16,7 +16,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'multi'
+    [UI.label]: 'multi'
   };
   const { container } = render(<MultiLine data={data} />);
   expect(getByText(container, 'multi')).toBeTruthy();
@@ -24,8 +24,8 @@ test('Renders the label', () => {
 
 test('Renders the value', () => {
   const data = {
-    [UI.label.value]: 'multi',
-    [UI.value.value]: `test\nvalue`
+    [UI.label]: 'multi',
+    [UI.value]: `test\nvalue`
   };
 
   const { container } = render(<MultiLine id="testid" data={data} />);

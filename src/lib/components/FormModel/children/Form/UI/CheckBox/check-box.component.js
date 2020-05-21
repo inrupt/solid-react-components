@@ -17,7 +17,7 @@ export const CheckBox = (props: Props) => {
 
   useEffect(() => {
     try {
-      const podValue = data[UI.value.value];
+      const podValue = data[UI.value];
       if (!podValue || podValue === 'false') {
         setChecked(false);
       } else {
@@ -26,9 +26,9 @@ export const CheckBox = (props: Props) => {
     } catch (e) {
       setChecked(false);
     }
-  }, [data[UI.value.value]]);
+  }, [data[UI.value]]);
 
-  const { [UI.label.value]: label } = data;
+  const { [UI.label]: label } = data;
 
   const onChange = event => {
     const updatedPart = { ...data, value: String(event.target.checked) };

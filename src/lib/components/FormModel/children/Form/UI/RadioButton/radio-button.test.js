@@ -14,7 +14,7 @@ test('should render without crashing', () => {
 
 test('should render a label', () => {
   const data = {
-    [UI.label.value]: '123'
+    [UI.label]: '123'
   };
   const { container } = render(<RadioButton id="testId" data={data} />);
 
@@ -23,8 +23,8 @@ test('should render a label', () => {
 
 test('should render a selected radio button', () => {
   const data = {
-    [UI.label.value]: '123',
-    [UI.value.value]: true
+    [UI.label]: '123',
+    [UI.value]: true
   };
   const { container } = render(<RadioButton id="testId" data={data} />);
 

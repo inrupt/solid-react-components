@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the decimal label', () => {
   const data = {
-    [UI.label.value]: 'decimal label'
+    [UI.label]: 'decimal label'
   };
   const { container } = render(<Decimal data={data} />);
   expect(getByText(container, 'decimal label')).toBeTruthy();

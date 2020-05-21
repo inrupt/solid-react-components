@@ -12,7 +12,7 @@ type Props = {
 export const MultipleViewer = (props: Props) => {
   const { key, formModel, parent } = props;
   const { theme } = useContext(ThemeContext);
-  const { [UI.label.value]: label, [UI.part.value]: part } = formModel;
+  const { [UI.label]: label, [UI.part]: part } = formModel;
   const parts = [];
 
   // Get list of parts for the
@@ -27,12 +27,12 @@ export const MultipleViewer = (props: Props) => {
       <p>{label}</p>
       {parts.map(item => {
         // Fetch the name from the object for a unique key
-        const key = item[UI.name.value];
+        const key = item[UI.name];
         return (
           <div key={key}>
             <Viewer
               {...{
-                formModel: item[UI.parts.value][Object.keys(item[UI.parts.value])[0]],
+                formModel: item[UI.parts][Object.keys(item[UI.parts])[0]],
                 parent
               }}
             />

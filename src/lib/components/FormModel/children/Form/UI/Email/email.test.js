@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'email label'
+    [UI.label]: 'email label'
   };
   const { container } = render(<Email data={data} />);
   expect(getByText(container, 'email label')).toBeTruthy();
@@ -24,7 +24,7 @@ test('Renders the label', () => {
 test('Renders the email address', () => {
   const data = {
     [UI.label.toString()]: 'email label',
-    [UI.value.value]: 'test@email.com'
+    [UI.value]: 'test@email.com'
   };
   const { container } = render(<Email id="testid" data={data} />);
   expect(getByLabelText(container, 'email label').value).toBe('test@email.com');

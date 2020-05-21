@@ -11,7 +11,7 @@ export const SingleLine = (props: Props) => {
   const { id, data } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.label.value]: label, [UI.value.value]: value } = data;
+  const { [UI.label]: label, [UI.value]: value } = data;
 
   return (
     <div className={theme.singleLine}>

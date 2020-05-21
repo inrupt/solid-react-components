@@ -15,7 +15,7 @@ const ColorPicker = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.label.value]: label, [UI.value.value]: initialValue } = data;
+  const { [UI.label]: label, [UI.value]: initialValue } = data;
 
   const [pickerVisible, setPickerVisible] = useState(false);
   const [color, setColor] = useState(initialValue);

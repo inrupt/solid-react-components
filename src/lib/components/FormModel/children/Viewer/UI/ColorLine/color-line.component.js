@@ -8,7 +8,7 @@ export const ColorLine = props => {
   const { id, data } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.label.value]: label, [UI.value.value]: value } = data;
+  const { [UI.label]: label, [UI.value]: value } = data;
 
   return (
     <Wrapper id={id} className={theme.colorLine}>

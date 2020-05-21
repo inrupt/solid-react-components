@@ -23,14 +23,14 @@ export const Group = (props: Props) => {
   return (
     <div className={theme && theme.groupField}>
       {Object.entries(data).map(([, part]) => {
-        const { [RDF.type.value]: type, [UI.name.value]: name } = part;
+        const { [RDF.type]: type, [UI.name]: name } = part;
         const Component = mapper[type];
 
         if (!Component) return null;
 
         /* if this component is being saved right now */
         const savingThis = savingData.names.some((componentName: string) => name === componentName);
-        const componentData = type === UI.Group.value ? part[UI.parts.value] : part;
+        const componentData = type === UI.Group.iriAsString ? part[UI.parts] : part;
 
         let Indicator = () => null;
         if (savingData && savingThis) Indicator = savingData.autosaveIndicator;

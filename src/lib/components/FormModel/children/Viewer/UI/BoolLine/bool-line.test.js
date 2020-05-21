@@ -8,8 +8,8 @@ import { UI } from '@inrupt/lit-generated-vocab-common';
 
 test('Renders with value and label', async () => {
   const data = {
-    [UI.value.value]: '82346-123438-asdf8324',
-    [UI.label.value]: 'Not a default content'
+    [UI.value]: '82346-123438-asdf8324',
+    [UI.label]: 'Not a default content'
   };
   render(<BoolLine id="uniqueId" data={data} />);
 
@@ -17,13 +17,13 @@ test('Renders with value and label', async () => {
 });
 
 test('Renders without a label', async () => {
-  const data = { [UI.value.value]: '345' };
+  const data = { [UI.value]: '345' };
   const { container } = render(<BoolLine id="234" data={data} />);
   expect(container.firstChild.firstChild).toBeEmpty();
 });
 
 test('Renders without a value', async () => {
-  const data = { [UI.label.value]: 'Label for the bool' };
+  const data = { [UI.label]: 'Label for the bool' };
   const { container } = render(<BoolLine id="123" data={data} />);
   expect(getByLabelText(container, 'Label for the bool').checked).toBeFalsy();
 });

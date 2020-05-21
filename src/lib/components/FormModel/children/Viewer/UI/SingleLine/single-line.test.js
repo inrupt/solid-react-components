@@ -16,7 +16,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'single'
+    [UI.label]: 'single'
   };
   const { container } = render(<SingleLine data={data} />);
   expect(getByText(container, 'single')).toBeTruthy();
@@ -24,8 +24,8 @@ test('Renders the label', () => {
 
 test('Renders the value', () => {
   const data = {
-    [UI.label.value]: 'single',
-    [UI.value.value]: 'test value'
+    [UI.label]: 'single',
+    [UI.value]: 'test value'
   };
 
   const { container } = render(<SingleLine id="testid" data={data} />);

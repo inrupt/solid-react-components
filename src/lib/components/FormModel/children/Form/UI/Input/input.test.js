@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'input label'
+    [UI.label]: 'input label'
   };
   const { container } = render(<Input data={data} />);
   expect(getByText(container, 'input label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the input content', () => {
   const data = {
-    [UI.label.value]: 'input label',
-    [UI.value.value]: 'any content'
+    [UI.label]: 'input label',
+    [UI.value]: 'any content'
   };
   const { container } = render(<Input id="testid" data={data} />);
   expect(getByLabelText(container, 'input label').value).toBe('any content');

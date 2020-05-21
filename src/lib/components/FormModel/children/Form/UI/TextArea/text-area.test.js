@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'text area label'
+    [UI.label]: 'text area label'
   };
   const { container } = render(<TextArea data={data} />);
   expect(getByText(container, 'text area label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the text area value', () => {
   const data = {
-    [UI.label.value]: 'text area label',
-    [UI.value.value]: 'Lorem ipsum'
+    [UI.label]: 'text area label',
+    [UI.value]: 'Lorem ipsum'
   };
   const { container } = render(<TextArea id="testid" data={data} />);
   expect(getByLabelText(container, 'text area label').value).toBe('Lorem ipsum');

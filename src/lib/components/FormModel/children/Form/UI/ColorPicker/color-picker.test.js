@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.label.value]: 'choose color'
+    [UI.label]: 'choose color'
   };
   const { container } = render(<ColorPicker data={data} />);
   expect(getByText(container, 'choose color')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the color in text', () => {
   const data = {
-    [UI.label.value]: 'choose color',
-    [UI.value.value]: '#aabbcc'
+    [UI.label]: 'choose color',
+    [UI.value]: '#aabbcc'
   };
   const { container } = render(<ColorPicker data={data} />);
   expect(getByText(container, '#aabbcc')).toBeTruthy();

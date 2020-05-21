@@ -34,11 +34,11 @@ const Viewer = (props: Props) => {
         formFields.map(item => {
           // Grabs the field from the parent list of parts, and checks if we have parts in the new field as well
           const field = parts[item];
-          const type = field[RDF.type.value];
+          const type = field[RDF.type];
 
           // Fetch the component from the Viewer-specific mapper
           const Component = field && UIMapping(type);
-          const id = (field && field[UI.name.value]) || item;
+          const id = (field && field[UI.name]) || item;
 
           /**
            * Return null when field doesn't exists

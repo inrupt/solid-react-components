@@ -10,10 +10,10 @@ export const Classifier = props => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [UI.label.value]: label,
-    [UI.value.value]: initialValue,
-    [UI.category.value]: category,
-    [UI.values.value]: values
+    [UI.label]: label,
+    [UI.value]: initialValue,
+    [UI.category]: category,
+    [UI.values]: values
   } = data;
 
   const [options, setOptions] = useState([]);
