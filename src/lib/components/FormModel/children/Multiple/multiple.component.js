@@ -40,7 +40,7 @@ export const Multiple = (props: Props) => {
       {parts.map(item => {
         // Fetch the name from the object for a unique key
         const key = item[UI.name];
-        const type = UI.Group.value;
+        const type = UI.Group.iriAsString;
 
         // For now we only support Multiples containing Groups. Once that restriction goes away we need more checks
         // to see if the type is a part or another Component. This groupParts is a temporary fix until we add support

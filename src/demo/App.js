@@ -129,7 +129,7 @@ const App = () => {
           actor: 'https://solidsdk.inrupt.net/profile/card#me'
         },
         inboxUrl,
-        AS.Announce.value
+        AS.Announce.iriAsString
       );
     } catch (ex) {
       // eslint-disable-next-line no-console

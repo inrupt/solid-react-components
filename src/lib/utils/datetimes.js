@@ -9,7 +9,7 @@ import { UI } from '@inrupt/lit-generated-vocab-common';
  * @returns {Date} - local datetime for the given string
  */
 export const parseInitialValue = (value: string, type: string): Date => {
-  if (type === UI.TimeField.value) {
+  if (type === UI.TimeField.iriAsString) {
     if (!value) return '';
     const tokens = value.split(':');
 
@@ -20,7 +20,7 @@ export const parseInitialValue = (value: string, type: string): Date => {
 
     return date;
   }
-  if (type === UI.DateField.value) {
+  if (type === UI.DateField.iriAsString) {
     if (!value) return '';
     /* date constructor interprets `value` as a UTC time, instead of a local time.
       To convert that we apply the offset in hours.
@@ -31,7 +31,7 @@ export const parseInitialValue = (value: string, type: string): Date => {
     date = addHours(date, offset / 60);
     return date;
   }
-  if (type === UI.DateTimeField.value) {
+  if (type === UI.DateTimeField.iriAsString) {
     return new Date(value);
   }
 

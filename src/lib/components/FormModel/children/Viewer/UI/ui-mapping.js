@@ -12,52 +12,52 @@ import { Comment } from '../../Form/UI/Comment';
 const UIMapping = type => {
   let component;
   switch (type) {
-    case UI.SingleLineTextField.value:
+    case UI.SingleLineTextField.iriAsString:
       component = SingleLine;
       break;
-    case UI.MultiLineTextField.value:
+    case UI.MultiLineTextField.iriAsString:
       component = MultiLine;
       break;
-    case UI.DecimalField.value:
+    case UI.DecimalField.iriAsString:
       component = SingleLine;
       break;
-    case UI.FloatField.value:
+    case UI.FloatField.iriAsString:
       component = SingleLine;
       break;
-    case UI.IntegerField.value:
+    case UI.IntegerField.iriAsString:
       component = SingleLine;
       break;
-    case UI.EmailField.value:
+    case UI.EmailField.iriAsString:
       component = SingleLine;
       break;
-    case UI.PhoneField.value:
+    case UI.PhoneField.iriAsString:
       component = SingleLine;
       break;
-    case UI.TriStateField.value:
+    case UI.TriStateField.iriAsString:
       component = SingleLine;
       break;
-    case UI.BooleanField.value:
+    case UI.BooleanField.iriAsString:
       component = BoolLine;
       break;
-    case UI.ColorField.value:
+    case UI.ColorField.iriAsString:
       component = ColorLine;
       break;
-    case UI.DateField.value:
+    case UI.DateField.iriAsString:
       component = props => <DateLine {...props} />;
       break;
-    case UI.DateTimeField.value:
+    case UI.DateTimeField.iriAsString:
       component = props => <DateLine {...props} />;
       break;
-    case UI.TimeField.value:
+    case UI.TimeField.iriAsString:
       component = props => <DateLine {...props} />;
       break;
-    case UI.Classifier.value:
+    case UI.Classifier.iriAsString:
       component = SingleLine;
       break;
-    case UI.Heading.value:
+    case UI.Heading.iriAsString:
       component = Heading;
       break;
-    case UI.Comment.value:
+    case UI.Comment.iriAsString:
       component = Comment;
       break;
     default:

@@ -43,9 +43,9 @@ export const DateTimePicker = props => {
 
     let value;
     /* assign the format to save based on the type */
-    if (type === UI.TimeField.value) value = format(date, DATE_FORMAT.TIME);
-    if (type === UI.DateField.value) value = format(date, DATE_FORMAT.DATE);
-    if (type === UI.DateTimeField.value) value = date.toISOString();
+    if (type === UI.TimeField.iriAsString) value = format(date, DATE_FORMAT.TIME);
+    if (type === UI.DateField.iriAsString) value = format(date, DATE_FORMAT.DATE);
+    if (type === UI.DateTimeField.iriAsString) value = date.toISOString();
 
     const updatedPart = { ...data, value };
     updateData(id, updatedPart);
@@ -60,7 +60,7 @@ export const DateTimePicker = props => {
   let dateOptions;
 
   /* Transform the incoming values depending on the type of element to display */
-  if (type === UI.TimeField.value) {
+  if (type === UI.TimeField.iriAsString) {
     /* min, max Values are times */
     let minHours;
     let minMinutes;
@@ -94,7 +94,7 @@ export const DateTimePicker = props => {
     };
   }
 
-  if (type === UI.DateTimeField.value) {
+  if (type === UI.DateTimeField.iriAsString) {
     /* min, max Values are datetimes and offset is in seconds */
     if (!Number.isNaN(mindatetimeOffset)) minDate = addSeconds(new Date(), mindatetimeOffset);
     if (!Number.isNaN(maxdatetimeOffset)) maxDate = addSeconds(new Date(), maxdatetimeOffset);
@@ -106,7 +106,7 @@ export const DateTimePicker = props => {
     dateOptions = { minDate, maxDate, dateFormat: 'Pp', showTimeSelect: true };
   }
 
-  if (type === UI.DateField.value) {
+  if (type === UI.DateField.iriAsString) {
     /* min,maxValue are dates and offset is in days */
     if (!Number.isNaN(mindateOffset)) minDate = addDays(new Date(), mindateOffset);
     if (!Number.isNaN(maxdateOffset)) maxDate = addDays(new Date(), maxdateOffset);

@@ -8,7 +8,7 @@ describe('Parser should return the expected values', () => {
 
   it('should parse times correctly', () => {
     const [hours, minutes, seconds] = time.split(':').map(i => parseInt(i, 10));
-    const result = parseInitialValue(time, UI.TimeField.value);
+    const result = parseInitialValue(time, UI.TimeField.iriAsString);
 
     expect(result.getHours()).toBe(hours);
     expect(result.getMinutes()).toBe(minutes);
@@ -17,7 +17,7 @@ describe('Parser should return the expected values', () => {
 
   it('should parse dates correctly', () => {
     const [year, month, day] = date.split('-').map(i => parseInt(i, 10));
-    const result = parseInitialValue(date, UI.DateField.value);
+    const result = parseInitialValue(date, UI.DateField.iriAsString);
 
     expect(result.getFullYear()).toEqual(year);
     // Months start at 0
@@ -26,7 +26,7 @@ describe('Parser should return the expected values', () => {
   });
 
   it('should parse datetimes correctly', () => {
-    expect(parseInitialValue(dateTime, UI.DateTimeField.value)).toEqual(new Date(dateTime));
+    expect(parseInitialValue(dateTime, UI.DateTimeField.iriAsString)).toEqual(new Date(dateTime));
   });
 });
 

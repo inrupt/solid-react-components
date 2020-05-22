@@ -50,26 +50,26 @@ export default class AccessControlList {
     const subject = `${this.aclUri}#${modes.join('')}`;
     const { documentUri } = this;
     const originalPredicates = [
-      this.createQuad(subject, RDF.type.value, ACL.Authorization),
-      this.createQuad(subject, ACL.accessTo.value, namedNode(documentUri)),
-      this.createQuad(subject, ACL.default_.value, namedNode(documentUri))
+      this.createQuad(subject, RDF.type.iriAsString, ACL.Authorization),
+      this.createQuad(subject, ACL.accessTo.iriAsString, namedNode(documentUri)),
+      this.createQuad(subject, ACL.default_.iriAsString, namedNode(documentUri))
     ];
     let predicates = [];
     if (agents) {
       const agentsArray = Array.isArray(agents) ? agents : [agents];
       const agentsQuads = agentsArray.map(agent =>
-        this.createQuad(subject, ACL.agent.value, namedNode(agent))
+        this.createQuad(subject, ACL.agent.iriAsString, namedNode(agent))
       );
       predicates = [...originalPredicates, ...agentsQuads];
     } else {
-      const publicQuad = this.createQuad(subject, ACL.agentClass.value, FOAF.Agent);
+      const publicQuad = this.createQuad(subject, ACL.agentClass.iriAsString, FOAF.Agent);
       predicates = [...originalPredicates, publicQuad];
     }
 
     const quadList = modes.reduce(
       (array, mode) => [
         ...array,
-        this.createQuad(subject, ACL.mode.value, namedNode(`${ACL.NAMESPACE}${mode}`))
+        this.createQuad(subject, ACL.mode.iriAsString, namedNode(`${ACL.NAMESPACE}${mode}`))
       ],
       predicates
     );
@@ -195,10 +195,10 @@ export default class AccessControlList {
     for await (const subject of document.subjects) {
       let agents = [];
       let modes = [];
-      for await (const agent of subject['acl:agent']) {
+      for await (const agent of subject[ACL.agent]) {
         agents = [...agents, agent.value];
       }
-      for await (const mode of subject['acl:mode']) {
+      for await (const mode of subject[ACL.mode]) {
         const modeName = mode.value ? mode.value.split('#')[1] : '';
         modes = [...modes, modeName];
       }

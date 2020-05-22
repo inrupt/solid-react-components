@@ -14,7 +14,7 @@ const Viewer = (props: Props) => {
   const { theme } = useContext(ThemeContext);
   const { formModel, parent } = props;
   const [formFields, setFormFields] = useState([]);
-  const partsKey = UI.parts.value;
+  const partsKey = UI.parts.iriAsString;
   const parts = formModel[partsKey];
 
   const getArrayFields = () => {
@@ -51,7 +51,7 @@ const Viewer = (props: Props) => {
 
           return (
             <div>
-              {type === UI.Group.value && (
+              {type === UI.Group.iriAsString && (
                 <Viewer
                   {...{
                     key: item,
@@ -60,7 +60,7 @@ const Viewer = (props: Props) => {
                   }}
                 />
               )}
-              {type === UI.Multiple.value && (
+              {type === UI.Multiple.iriAsString && (
                 <MultipleViewer
                   {...{
                     key: item,
@@ -69,7 +69,7 @@ const Viewer = (props: Props) => {
                   }}
                 />
               )}
-              {type !== UI.Group.value && type !== UI.Multiple.value && (
+              {type !== UI.Group.iriAsString && type !== UI.Multiple.iriAsString && (
                 <Component
                   {...{
                     key: id,
