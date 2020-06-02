@@ -254,9 +254,6 @@ See https://github.com/solid/react-components#load-data-from-the-user-and-from-t
 ### UpdateContext
 See https://github.com/solid/react-components/blob/master/src/UpdateContext.js
 
-### AutoSaveDefaultSpinner
-A spinner for letting the user know when a form field was auto-saved.
-
 ## Class List
 
 Included in this library are a series of helper classes to make certain functionality easier for Solid developers. Each of these classes covers a specific functional area.
