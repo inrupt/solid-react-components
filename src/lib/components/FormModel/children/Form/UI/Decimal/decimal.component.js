@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { InputTextTypes, UI, RDF } from '@constants';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { InputTextTypes } from '@constants';
 import { ThemeContext } from '@context';
 import { InputGroup } from '../Input/input.styles';
 
@@ -8,12 +9,12 @@ export const Decimal = props => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [RDF.TYPE]: type,
-    [UI.LABEL]: label,
-    [UI.MAX_LENGTH]: maxLength,
-    [UI.MIN_VALUE]: minValue,
-    [UI.SIZE]: size,
-    [UI.VALUE]: initialValue
+    [RDF.type]: type,
+    [UI.label]: label,
+    [UI.maxLength]: maxLength,
+    [UI.minValue]: minValue,
+    [UI.size]: size,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

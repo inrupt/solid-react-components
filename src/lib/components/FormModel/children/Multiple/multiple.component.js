@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-import { UI, VOCAB } from '@constants';
 import { Group } from '../Group';
 import { DeleteButton } from '../Form/UI/DeleteButton/delete-button.component';
 
@@ -23,7 +23,7 @@ type Props = {
 export const Multiple = (props: Props) => {
   const { id, data, updateData, mapper, savingData, addNewField, deleteField } = props;
   const { theme } = useContext(ThemeContext);
-  const { [UI.LABEL]: label, [UI.PART]: part } = data;
+  const { [UI.label]: label, [UI.part]: part } = data;
 
   const parts = [];
 
@@ -39,14 +39,14 @@ export const Multiple = (props: Props) => {
       <p>{label}</p>
       {parts.map(item => {
         // Fetch the name from the object for a unique key
-        const key = item[UI.NAME];
-        const type = VOCAB.UI.Group;
+        const key = item[UI.name];
+        const type = UI.Group.iriAsString;
 
         // For now we only support Multiples containing Groups. Once that restriction goes away we need more checks
         // to see if the type is a part or another Component. This groupParts is a temporary fix until we add support
         // for more Component types in Multiples
-        const groupPartsKey = Object.keys(item[UI.PARTS])[0];
-        const groupParts = item[UI.PARTS][groupPartsKey][UI.PARTS];
+        const groupPartsKey = Object.keys(item[UI.parts])[0];
+        const groupParts = item[UI.parts][groupPartsKey][UI.parts];
 
         // If the group doesn't contain parts, exit gracefully. This shouldn't get hit with a valid form model.
         if (!groupParts) {

@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { n3Helper } from '@inrupt/solid-sdk-forms';
 import unique from 'unique';
-import { SelectWrapper } from './classifier.style';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
+import { SelectWrapper } from './classifier.style';
 
 export const Classifier = props => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
   const {
-    [UI.LABEL]: label,
-    [UI.VALUE]: initialValue,
-    [UI.CATEGORY]: category,
-    [UI.VALUES]: values
+    [UI.label]: label,
+    [UI.value]: initialValue,
+    [UI.category]: category,
+    [UI.values]: values
   } = data;
 
   const [options, setOptions] = useState([]);

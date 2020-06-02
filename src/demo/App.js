@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
 // import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
+import { AS } from '@inrupt/lit-generated-vocab-common';
 import SolidImg from '../assets/solid_logo.png';
 import {
   ProviderLogin,
@@ -13,7 +14,6 @@ import {
   ProfileViewer
 } from '@lib';
 import { AccessControlList, ACLFactory } from '@classes';
-import { NotificationTypes } from '@constants';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -129,7 +129,7 @@ const App = () => {
           actor: 'https://solidsdk.inrupt.net/profile/card#me'
         },
         inboxUrl,
-        NotificationTypes.ANNOUNCE
+        AS.Announce.iriAsString
       );
     } catch (ex) {
       // eslint-disable-next-line no-console

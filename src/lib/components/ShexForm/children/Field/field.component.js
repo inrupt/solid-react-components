@@ -2,7 +2,8 @@
 import React, { Fragment } from 'react';
 import { shexUtil } from '@utils';
 import { ShexConfig } from '@context';
-import { InputField, DropDownField } from '..';
+import InputField from '../InputField';
+import DropDownField from '../DropDownField';
 
 type FieldProps = {
   data: Object,

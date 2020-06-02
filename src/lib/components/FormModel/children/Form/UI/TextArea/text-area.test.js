@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import { TextArea } from './text-area.component';
-import { UI } from '@constants';
 import 'jest-dom/extend-expect';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 afterAll(cleanup);
 
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'text area label'
+    [UI.label]: 'text area label'
   };
   const { container } = render(<TextArea data={data} />);
   expect(getByText(container, 'text area label')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the text area value', () => {
   const data = {
-    [UI.LABEL]: 'text area label',
-    [UI.VALUE]: 'Lorem ipsum'
+    [UI.label]: 'text area label',
+    [UI.value]: 'Lorem ipsum'
   };
   const { container } = render(<TextArea id="testid" data={data} />);
   expect(getByLabelText(container, 'text area label').value).toBe('Lorem ipsum');

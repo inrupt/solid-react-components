@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByLabelText } from '@testing-library/dom';
-import { UI } from '@constants';
 import { RadioButton } from './radio-button.component';
 import 'jest-dom/extend-expect';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 afterAll(cleanup);
 
@@ -14,7 +14,7 @@ test('should render without crashing', () => {
 
 test('should render a label', () => {
   const data = {
-    [UI.LABEL]: '123'
+    [UI.label]: '123'
   };
   const { container } = render(<RadioButton id="testId" data={data} />);
 
@@ -23,8 +23,8 @@ test('should render a label', () => {
 
 test('should render a selected radio button', () => {
   const data = {
-    [UI.LABEL]: '123',
-    [UI.VALUE]: true
+    [UI.label]: '123',
+    [UI.value]: true
   };
   const { container } = render(<RadioButton id="testId" data={data} />);
 

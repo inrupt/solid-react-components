@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { UI, RDF, InputTextTypes } from '@constants';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { InputTextTypes } from '@constants';
 import { ThemeContext } from '@context';
 import { InputGroup } from '../Input/input.styles';
 
@@ -14,11 +15,11 @@ export const Integer = (props: Props) => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [RDF.TYPE]: type,
-    [UI.LABEL]: label,
-    [UI.MIN_VALUE]: minValue,
-    [UI.SIZE]: size,
-    [UI.VALUE]: initialValue
+    [RDF.type]: type,
+    [UI.label]: label,
+    [UI.minValue]: minValue,
+    [UI.size]: size,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

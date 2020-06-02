@@ -1,7 +1,7 @@
 import React from 'react';
 import unique from 'unique-string';
 import { ShexConfig } from '@context';
-import { DeleteButton } from '..';
+import DeleteButton from '../DeleteButton';
 import { ErrorMessage, SelectWrapper } from './styled.component';
 
 const DropDownField = ({

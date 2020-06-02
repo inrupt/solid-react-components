@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 type Props = {
   id: string,
@@ -12,7 +12,7 @@ export const RadioButton = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.LABEL]: label, [UI.VALUE]: initialValue } = data;
+  const { [UI.label]: label, [UI.value]: initialValue } = data;
 
   const [value, setValue] = useState(initialValue);
 

@@ -1,15 +1,15 @@
 import { addHours, setHours, setMinutes, setSeconds } from 'date-fns';
 import * as locales from 'date-fns/locale';
 
-import { UITypes } from '@constants';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 /**
  * @param value - object stored in the pod
- * @param type - one of UITypes[TimeField, DateField, DateTimeField]
+ * @param type - one of UI[TimeField, DateField, DateTimeField]
  * @returns {Date} - local datetime for the given string
  */
 export const parseInitialValue = (value: string, type: string): Date => {
-  if (type === UITypes.TimeField) {
+  if (type === UI.TimeField.iriAsString) {
     if (!value) return '';
     const tokens = value.split(':');
 
@@ -20,7 +20,7 @@ export const parseInitialValue = (value: string, type: string): Date => {
 
     return date;
   }
-  if (type === UITypes.DateField) {
+  if (type === UI.DateField.iriAsString) {
     if (!value) return '';
     /* date constructor interprets `value` as a UTC time, instead of a local time.
       To convert that we apply the offset in hours.
@@ -31,7 +31,7 @@ export const parseInitialValue = (value: string, type: string): Date => {
     date = addHours(date, offset / 60);
     return date;
   }
-  if (type === UITypes.DateTimeField) {
+  if (type === UI.DateTimeField.iriAsString) {
     return new Date(value);
   }
 

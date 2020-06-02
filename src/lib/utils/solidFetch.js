@@ -1,4 +1,5 @@
 import auth from 'solid-auth-client';
+import { VCARD } from '@inrupt/lit-generated-vocab-common';
 import data from '@solid/query-ldflex';
 
 export const fetchSchema = async file => {
@@ -71,8 +72,8 @@ export const getBasicPod = async webId => {
   try {
     if (webId) {
       try {
-        const nameData = await data[webId]['vcard:fn'];
-        const imageData = await data[webId]['vcard:hasPhoto'];
+        const nameData = await data[webId][VCARD.fn];
+        const imageData = await data[webId][VCARD.hasPhoto];
         const name = nameData ? nameData.value : webId;
         const image = imageData ? imageData.value : null;
         return { name, image, webId };

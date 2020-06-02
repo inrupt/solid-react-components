@@ -13,7 +13,6 @@
 
 # misc
 .DS_Store
-.idea
 .env.local
 .env.development.local
 .env.test.local
@@ -21,6 +20,7 @@
 
 # editors
 .idea
+*.iml
 
 npm-debug.log*
 yarn-debug.log*

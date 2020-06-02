@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import DateLine from './date-line.component';
-import { UI, UITypes, RDF } from '@constants';
 import 'jest-dom/extend-expect';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 
 afterAll(cleanup);
 
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'date label'
+    [UI.label]: 'date label'
   };
   const { container } = render(<DateLine data={data} />);
   expect(getByText(container, 'date label')).toBeTruthy();
@@ -24,8 +24,8 @@ test('Renders the label', () => {
 describe('Renders the value depending on the type', () => {
   it('Renders a time', () => {
     const data = {
-      [RDF.TYPE]: UITypes.TimeField,
-      [UI.VALUE]: '09:12:44'
+      [RDF.type]: UI.TimeField.value,
+      [UI.value]: '09:12:44'
     };
 
     const { container } = render(<DateLine data={data} />);
@@ -35,8 +35,8 @@ describe('Renders the value depending on the type', () => {
 
   it('Renders a date', () => {
     const data = {
-      [RDF.TYPE]: UITypes.DateField,
-      [UI.VALUE]: '2020-01-13'
+      [RDF.type]: UI.DateField.value,
+      [UI.value]: '2020-01-13'
     };
 
     const { container } = render(<DateLine data={data} />);
@@ -45,8 +45,8 @@ describe('Renders the value depending on the type', () => {
 
   it('Renders a datetime', () => {
     const data = {
-      [RDF.TYPE]: UITypes.DateTimeField,
-      [UI.VALUE]: '2020-01-13 09:12:44'
+      [RDF.type]: UI.DateTimeField.value,
+      [UI.value]: '2020-01-13 09:12:44'
     };
 
     const { container } = render(<DateLine data={data} />);

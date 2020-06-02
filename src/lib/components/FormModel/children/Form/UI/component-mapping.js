@@ -1,4 +1,4 @@
-import { VOCAB } from '@constants';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 import { Heading } from './Heading';
 import { Comment } from './Comment';
@@ -17,21 +17,21 @@ import { Group } from '../../Group';
 import Classifier from './Classifier';
 
 export const Mapping = {
-  [VOCAB.UI.Heading]: Heading,
-  [VOCAB.UI.Comment]: Comment,
-  [VOCAB.UI.SingleLineTextField]: Input,
-  [VOCAB.UI.IntegerField]: Integer,
-  [VOCAB.UI.DateField]: DateTimePicker,
-  [VOCAB.UI.DateTimeField]: DateTimePicker,
-  [VOCAB.UI.TimeField]: DateTimePicker,
-  [VOCAB.UI.BooleanField]: CheckBox,
-  [VOCAB.UI.DecimalField]: Decimal,
-  [VOCAB.UI.MultiLineTextField]: TextArea,
-  [VOCAB.UI.FloatField]: Float,
-  [VOCAB.UI.EmailField]: Email,
-  [VOCAB.UI.PhoneField]: Phone,
-  [VOCAB.UI.ColorField]: ColorPicker,
-  [VOCAB.UI.Multiple]: Multiple,
-  [VOCAB.UI.Group]: Group,
-  [VOCAB.UI.Classifier]: Classifier
+  [UI.Heading]: Heading,
+  [UI.Comment]: Comment,
+  [UI.SingleLineTextField]: Input,
+  [UI.IntegerField]: Integer,
+  [UI.DateField]: DateTimePicker,
+  [UI.DateTimeField]: DateTimePicker,
+  [UI.TimeField]: DateTimePicker,
+  [UI.BooleanField]: CheckBox,
+  [UI.DecimalField]: Decimal,
+  [UI.MultiLineTextField]: TextArea,
+  [UI.FloatField]: Float,
+  [UI.EmailField]: Email,
+  [UI.PhoneField]: Phone,
+  [UI.ColorField]: ColorPicker,
+  [UI.Multiple]: Multiple,
+  [UI.Group]: Group,
+  [UI.Classifier]: Classifier
 };

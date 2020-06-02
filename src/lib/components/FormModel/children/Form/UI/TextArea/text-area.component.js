@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
 import { TextAreaGroup } from './text-area.styles';
 
 type Props = {
@@ -13,7 +13,7 @@ export const TextArea = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.LABEL]: label, [UI.MAX_LENGTH]: maxLength, [UI.VALUE]: initialValue } = data;
+  const { [UI.label]: label, [UI.maxLength]: maxLength, [UI.value]: initialValue } = data;
 
   const [value, setValue] = useState(initialValue);
 

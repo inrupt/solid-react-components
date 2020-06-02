@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
 
-import { UI } from '@constants';
-import { DataContext, ThemeContext } from '@context';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 export const Heading = props => {
   const { data } = props;
 
-  return <h3>{data[UI.CONTENTS]}</h3>;
+  return <h3>{data[UI.contents]}</h3>;
 };

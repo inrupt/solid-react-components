@@ -1,17 +1,18 @@
 import React, { useContext, useState } from 'react';
-import { InputGroup } from './input.styles';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-import { UI, RDF, InputTextTypes } from '@constants';
+import { InputTextTypes } from '@constants';
+import { InputGroup } from './input.styles';
 
 export const Input = props => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
   const {
-    [UI.LABEL]: label,
-    [UI.MAXLENGTH]: maxLength,
-    [RDF.TYPE]: type,
-    [UI.VALUE]: initialValue
+    [UI.label]: label,
+    [UI.maxLength]: maxLength,
+    [RDF.type]: type,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);

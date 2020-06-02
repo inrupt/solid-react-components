@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-
-import { UI } from '@constants';
 
 type Props = {
   id: string,
@@ -12,7 +11,7 @@ export const BoolLine = (props: Props) => {
   const { id, data } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.VALUE]: value, [UI.LABEL]: label } = data;
+  const { [UI.value]: value, [UI.label]: label } = data;
 
   return (
     <div className={theme.boolField}>
