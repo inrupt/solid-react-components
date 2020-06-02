@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { ThemeContext } from '@context';
 import UIMapping from './UI/ui-mapping';
 import { Group } from './viewer.style';
-import { UI, VOCAB } from '@constants';
-import { ThemeContext } from '@context';
 import { MultipleViewer } from './UI/MultipleViewer/multiple-viewer.component';
 
 type Props = {
@@ -14,7 +14,7 @@ const Viewer = (props: Props) => {
   const { theme } = useContext(ThemeContext);
   const { formModel, parent } = props;
   const [formFields, setFormFields] = useState([]);
-  const partsKey = UI.PARTS;
+  const partsKey = UI.parts.iriAsString;
   const parts = formModel[partsKey];
 
   const getArrayFields = () => {
@@ -34,11 +34,11 @@ const Viewer = (props: Props) => {
         formFields.map(item => {
           // Grabs the field from the parent list of parts, and checks if we have parts in the new field as well
           const field = parts[item];
-          const type = field['rdf:type'];
+          const type = field[RDF.type];
 
           // Fetch the component from the Viewer-specific mapper
           const Component = field && UIMapping(type);
-          const id = (field && field[UI.NAME]) || item;
+          const id = (field && field[UI.name]) || item;
 
           /**
            * Return null when field doesn't exists
@@ -51,7 +51,7 @@ const Viewer = (props: Props) => {
 
           return (
             <div>
-              {type === VOCAB.UI.Group && (
+              {type === UI.Group.iriAsString && (
                 <Viewer
                   {...{
                     key: item,
@@ -60,7 +60,7 @@ const Viewer = (props: Props) => {
                   }}
                 />
               )}
-              {type === VOCAB.UI.Multiple && (
+              {type === UI.Multiple.iriAsString && (
                 <MultipleViewer
                   {...{
                     key: item,
@@ -69,7 +69,7 @@ const Viewer = (props: Props) => {
                   }}
                 />
               )}
-              {type !== VOCAB.UI.Group && type !== VOCAB.UI.Multiple && (
+              {type !== UI.Group.iriAsString && type !== UI.Multiple.iriAsString && (
                 <Component
                   {...{
                     key: id,

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText } from '@testing-library/dom';
 import { Heading } from './heading.component';
-import { UI } from '@constants';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 import 'jest-dom/extend-expect';
 
@@ -16,7 +16,7 @@ test('Renders without crashing', () => {
 
 test('Renders the heading', () => {
   const data = {
-    [UI.CONTENTS]: 'heading'
+    [UI.contents]: 'heading'
   };
   const { container } = render(<Heading data={data} />);
   expect(getByText(container, 'heading')).toBeTruthy();

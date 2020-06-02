@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
 import { useLiveUpdate } from '@solid/react';
-
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
+
 import { SolidError, solidResponse } from '@utils';
 
 import { Mapping } from './children/Form/UI/component-mapping';
@@ -182,7 +182,7 @@ export const FormModel = (props: FormProps) => {
   const mapper = { ...Mapping, ...customComponents };
 
   // Not finished loading/parsing
-  if (!formModel[UI.PARTS]) return null;
+  if (!formModel[UI.parts]) return null;
 
   return (
     <ThemeContext.Provider value={{ theme }}>
@@ -190,7 +190,7 @@ export const FormModel = (props: FormProps) => {
         {!viewer && (
           <Group
             {...{
-              data: formModel[UI.PARTS],
+              data: formModel[UI.parts],
               updateData,
               addNewField,
               deleteField,
@@ -204,7 +204,7 @@ export const FormModel = (props: FormProps) => {
             }}
           />
         )}
-        {viewer && <Viewer formModel={formModel} data={formModel[UI.PARTS]} />}
+        {viewer && <Viewer formModel={formModel} data={formModel[UI.parts]} />}
       </div>
     </ThemeContext.Provider>
   );

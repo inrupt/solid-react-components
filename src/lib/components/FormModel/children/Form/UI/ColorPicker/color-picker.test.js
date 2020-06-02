@@ -2,8 +2,8 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText } from '@testing-library/dom';
 import ColorPicker from './color-picker.component';
-import { UI } from '@constants';
 import 'jest-dom/extend-expect';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 afterAll(cleanup);
 
@@ -15,7 +15,7 @@ test('Renders without crashing', () => {
 
 test('Renders the label', () => {
   const data = {
-    [UI.LABEL]: 'choose color'
+    [UI.label]: 'choose color'
   };
   const { container } = render(<ColorPicker data={data} />);
   expect(getByText(container, 'choose color')).toBeTruthy();
@@ -23,8 +23,8 @@ test('Renders the label', () => {
 
 test('Renders the color in text', () => {
   const data = {
-    [UI.LABEL]: 'choose color',
-    [UI.VALUE]: '#aabbcc'
+    [UI.label]: 'choose color',
+    [UI.value]: '#aabbcc'
   };
   const { container } = render(<ColorPicker data={data} />);
   expect(getByText(container, '#aabbcc')).toBeTruthy();

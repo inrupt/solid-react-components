@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-import { Wrapper, Label, Value } from './multi-line.style';
-
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
+import { Wrapper, Label, Value } from './multi-line.style';
 
 type Props = {
   id: string,
@@ -12,7 +11,7 @@ type Props = {
 export const MultiLine = (props: Props) => {
   const { id, data } = props;
   const { theme } = useContext(ThemeContext);
-  const { [UI.LABEL]: label, [UI.VALUE]: value } = data;
+  const { [UI.label]: label, [UI.value]: value } = data;
 
   return (
     <div className={theme && theme.multiLine}>

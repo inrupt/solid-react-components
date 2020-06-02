@@ -1,5 +1,5 @@
 import { parseInitialValue, isValidDate } from './datetimes';
-import { UITypes } from '@constants';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 
 describe('Parser should return the expected values', () => {
   const time = '19:00:34';
@@ -8,7 +8,7 @@ describe('Parser should return the expected values', () => {
 
   it('should parse times correctly', () => {
     const [hours, minutes, seconds] = time.split(':').map(i => parseInt(i, 10));
-    const result = parseInitialValue(time, UITypes.TimeField);
+    const result = parseInitialValue(time, UI.TimeField.iriAsString);
 
     expect(result.getHours()).toBe(hours);
     expect(result.getMinutes()).toBe(minutes);
@@ -17,7 +17,7 @@ describe('Parser should return the expected values', () => {
 
   it('should parse dates correctly', () => {
     const [year, month, day] = date.split('-').map(i => parseInt(i, 10));
-    const result = parseInitialValue(date, UITypes.DateField);
+    const result = parseInitialValue(date, UI.DateField.iriAsString);
 
     expect(result.getFullYear()).toEqual(year);
     // Months start at 0
@@ -26,7 +26,7 @@ describe('Parser should return the expected values', () => {
   });
 
   it('should parse datetimes correctly', () => {
-    expect(parseInitialValue(dateTime, UITypes.DateTimeField)).toEqual(new Date(dateTime));
+    expect(parseInitialValue(dateTime, UI.DateTimeField.iriAsString)).toEqual(new Date(dateTime));
   });
 });
 
