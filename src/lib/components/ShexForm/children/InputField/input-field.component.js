@@ -1,6 +1,6 @@
 import React from 'react';
 import { ShexConfig } from '@context';
-import { DeleteButton } from '..';
+import DeleteButton from '../DeleteButton';
 import { ErrorMessage, InputWrapper, Input, InputGroup } from './styled.component';
 
 const InputField = ({

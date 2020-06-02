@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { ChromePicker } from 'react-color';
-
-import { UI } from '@constants';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
 
 import { PickerGroup, ColorSwatch, Cover, Popover } from './color-picker.styles';
@@ -16,7 +15,7 @@ const ColorPicker = (props: Props) => {
   const { id, data, updateData } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.LABEL]: label, [UI.VALUE]: initialValue } = data;
+  const { [UI.label]: label, [UI.value]: initialValue } = data;
 
   const [pickerVisible, setPickerVisible] = useState(false);
   const [color, setColor] = useState(initialValue);

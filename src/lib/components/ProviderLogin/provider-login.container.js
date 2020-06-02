@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import auth from 'solid-auth-client';
-// In-house Components
-import LoginForm from './children/Form';
 // Utils
 import { SolidError, getIdpFromWebId } from '@utils';
 // Entities
 import { Provider } from '@entities';
+// In-house Components
+import LoginForm from './children/Form';
 
 import SolidImg from '../../../assets/solid_logo.png';
 import InruptImg from '../../../assets/inrupt_logo.png';

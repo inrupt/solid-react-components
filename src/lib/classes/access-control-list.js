@@ -3,8 +3,10 @@ import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
+import { FOAF, RDF, VCARD } from '@inrupt/lit-generated-vocab-common';
+import { ACL } from '@inrupt/lit-generated-vocab-solid-common';
 import { SolidError } from '@utils';
-import { PERMISSIONS, ACL_PREFIXES } from '@constants';
+import { PERMISSIONS } from '@constants';
 
 type Permissions = {
   agents: null | String | Array,
@@ -45,30 +47,29 @@ export default class AccessControlList {
    * @param {Array<String> | null} agents Array of webId or null if for everyone
    */
   createQuadList = (modes: Array<String>, agents: Array<String> | null) => {
-    const { acl, foaf, rdf } = ACL_PREFIXES;
     const subject = `${this.aclUri}#${modes.join('')}`;
     const { documentUri } = this;
     const originalPredicates = [
-      this.createQuad(subject, `${rdf}type`, namedNode(`${acl}Authorization`)),
-      this.createQuad(subject, `${acl}accessTo`, namedNode(documentUri)),
-      this.createQuad(subject, `${acl}default`, namedNode(documentUri))
+      this.createQuad(subject, RDF.type.iriAsString, ACL.Authorization),
+      this.createQuad(subject, ACL.accessTo.iriAsString, namedNode(documentUri)),
+      this.createQuad(subject, ACL.default_.iriAsString, namedNode(documentUri))
     ];
     let predicates = [];
     if (agents) {
       const agentsArray = Array.isArray(agents) ? agents : [agents];
       const agentsQuads = agentsArray.map(agent =>
-        this.createQuad(subject, `${acl}agent`, namedNode(agent))
+        this.createQuad(subject, ACL.agent.iriAsString, namedNode(agent))
       );
       predicates = [...originalPredicates, ...agentsQuads];
     } else {
-      const publicQuad = this.createQuad(subject, `${acl}agentClass`, namedNode(`${foaf}Agent`));
+      const publicQuad = this.createQuad(subject, ACL.agentClass.iriAsString, FOAF.Agent);
       predicates = [...originalPredicates, publicQuad];
     }
 
     const quadList = modes.reduce(
       (array, mode) => [
         ...array,
-        this.createQuad(subject, `${acl}mode`, namedNode(`${acl}${mode}`))
+        this.createQuad(subject, ACL.mode.iriAsString, namedNode(`${ACL.NAMESPACE}${mode}`))
       ],
       predicates
     );
@@ -83,7 +84,16 @@ export default class AccessControlList {
    */
   createPermissionsTurtle = (permissions: Array<Permissions>) => {
     const { DataFactory } = N3;
-    const prefixes = { ...ACL_PREFIXES, '': `${this.aclUri}#`, me: this.owner };
+
+    const prefixes = {
+      ...ACL.PREFIX_AND_NAMESPACE,
+      ...FOAF.PREFIX_AND_NAMESPACE,
+      ...RDF.PREFIX_AND_NAMESPACE,
+      ...VCARD.PREFIX_AND_NAMESPACE,
+      '': `${this.aclUri}#`,
+      me: this.owner
+    };
+
     const { namedNode, quad } = DataFactory;
     const writer = new N3.Writer({ prefixes });
     const quadPermissions = permissions.map(({ modes, agents }) =>
@@ -185,10 +195,10 @@ export default class AccessControlList {
     for await (const subject of document.subjects) {
       let agents = [];
       let modes = [];
-      for await (const agent of subject['acl:agent']) {
+      for await (const agent of subject[ACL.agent]) {
         agents = [...agents, agent.value];
       }
-      for await (const mode of subject['acl:mode']) {
+      for await (const mode of subject[ACL.mode]) {
         const modeName = mode.value ? mode.value.split('#')[1] : '';
         modes = [...modes, modeName];
       }
@@ -243,9 +253,8 @@ export default class AccessControlList {
    */
   createMode = async ({ modes, agents }) => {
     try {
-      const { acl, foaf } = ACL_PREFIXES;
       const subject = `${this.aclUri}#${modes.join('')}`;
-      await ldflex[subject].type.add(namedNode(`${acl}Authorization`));
+      await ldflex[subject].type.add(ACL.Authorization);
       const path = namedNode(this.documentUri);
       await ldflex[subject]['acl:accessTo'].add(path);
       await ldflex[subject]['acl:default'].add(path);
@@ -255,11 +264,11 @@ export default class AccessControlList {
           await ldflex[subject]['acl:agent'].add(namedNode(agent));
         }
       } else {
-        await ldflex[subject]['acl:agentClass'].add(namedNode(`${foaf}Agent`));
+        await ldflex[subject]['acl:agentClass'].add(FOAF.Agent);
       }
 
       for await (const mode of modes) {
-        await ldflex[subject]['acl:mode'].add(namedNode(`${acl}${mode}`));
+        await ldflex[subject]['acl:mode'].add(namedNode(`${ACL.NAMESPACE}${mode}`));
       }
       return { modes, agents };
     } catch (e) {

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
+import { UI } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
-import { UI } from '@constants';
 
 import { Wrapper, Label, Value, ColorSwatch } from './color-line.style';
 
@@ -8,7 +8,7 @@ export const ColorLine = props => {
   const { id, data } = props;
   const { theme } = useContext(ThemeContext);
 
-  const { [UI.LABEL]: label, [UI.VALUE]: value } = data;
+  const { [UI.label]: label, [UI.value]: value } = data;
 
   return (
     <Wrapper id={id} className={theme.colorLine}>

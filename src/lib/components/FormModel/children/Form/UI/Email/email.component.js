@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { InputTextTypes, UI, RDF } from '@constants';
+import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { InputTextTypes } from '@constants';
+
 import { ThemeContext } from '@context';
 import { InputGroup } from '../Input/input.styles';
 
@@ -14,12 +16,12 @@ export const Email = (props: Props) => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    [RDF.TYPE]: type,
-    [UI.LABEL]: label,
-    [UI.MAX_LENGTH]: maxLength,
-    [UI.SIZE]: size,
-    [UI.PATTERN]: pattern,
-    [UI.VALUE]: initialValue
+    [RDF.type]: type,
+    [UI.label]: label,
+    [UI.maxLength]: maxLength,
+    [UI.size]: size,
+    [UI.pattern]: pattern,
+    [UI.value]: initialValue
   } = data;
 
   const [value, setValue] = useState(initialValue);
