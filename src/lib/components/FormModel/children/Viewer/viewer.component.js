@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { RDF, UI, DCTERMS } from '@inrupt/lit-generated-vocab-common';
 import { ThemeContext } from '@context';
 import UIMapping from './UI/ui-mapping';
 import { Group } from './viewer.style';
@@ -29,7 +29,7 @@ const Viewer = (props: Props) => {
 
   return (
     <Group parent={parent} className={theme && theme.groupField}>
-      {formModel['dc:title'] && <h2>{formModel['dc:title']}</h2>}
+      {formModel[DCTERMS.title] && <h2>{formModel[DCTERMS.title]}</h2>}
       {formFields.length > 0 &&
         formFields.map(item => {
           // Grabs the field from the parent list of parts, and checks if we have parts in the new field as well
@@ -47,7 +47,7 @@ const Viewer = (props: Props) => {
           if (!field) return null;
 
           /* eslint no-useless-computed-key: "off" */
-          const { ['ui:parts']: deleted, ...updatedField } = field;
+          const { [UI.parts]: deleted, ...updatedField } = field;
 
           return (
             <div>
