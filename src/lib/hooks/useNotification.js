@@ -73,7 +73,12 @@ export const useNotification = owner => {
            * @type {number}
            */
           const unread = Array.isArray(notificationList)
-            ? notificationList.filter(item => item.read === 'false').length
+            ? // TODO: PMCB55: The 'read' member of notification can be either
+              //  'null' if the Shape we validate against makes no mention of the
+              //  predicate 'solid:read'. But if the Shape does reference this
+              //  predicate, then it's value will be the string 'false' or 'true'
+              //  (but with the correct XSD:boolean datatype).
+              notificationList.filter(item => !item.read || item.read === 'false').length
             : 0;
 
           /**
@@ -135,6 +140,7 @@ export const useNotification = owner => {
     async (file, id, status = 'true') => {
       try {
         const { notify } = notification;
+
         /**
          * Update notification read to true
          */

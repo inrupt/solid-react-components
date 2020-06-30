@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UI_COMMON } from '@inrupt/lit-generated-vocab-inrupt-common';
+import { UI_COMMON } from '@inrupt/lit-vocab-common';
 import { lookup, extension } from 'mime-types';
 import auth from 'solid-auth-client';
 import { SolidError } from '@utils';

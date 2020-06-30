@@ -4,7 +4,7 @@
     "terms": "http://purl.org/dc/terms#",
     "as": "https://www.w3.org/ns/activitystreams#",
     "schema": "http://schema.org/",
-    "solid": "https://www.w3.org/ns/solid/terms#",
+    "solid": "http://www.w3.org/ns/solid/terms#",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   },

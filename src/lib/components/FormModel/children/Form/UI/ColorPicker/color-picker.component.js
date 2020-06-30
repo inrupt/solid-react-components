@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { ChromePicker } from 'react-color';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 
 import { PickerGroup, ColorSwatch, Cover, Popover } from './color-picker.styles';

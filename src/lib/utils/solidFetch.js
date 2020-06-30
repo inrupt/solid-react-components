@@ -1,5 +1,5 @@
 import auth from 'solid-auth-client';
-import { VCARD } from '@inrupt/lit-generated-vocab-common';
+import { VCARD } from '@solid/lit-vocab-common';
 import data from '@solid/query-ldflex';
 
 export const fetchSchema = async file => {
@@ -113,6 +113,8 @@ export const getIdpFromWebId = async webId => {
 
     if (fileRequest.ok) {
       issuer = await data[webId]['solid:oidcIssuer'];
+
+      console.log(`PMCB55: ISSUER [${issuer}] for WEBID [${webId}]`);
     }
 
     if (issuer) {
@@ -121,6 +123,13 @@ export const getIdpFromWebId = async webId => {
     } else {
       const idpConfig = await auth.fetch(idpConfigUrl);
       idp = idpConfig.ok ? webId : null;
+      console.log(
+        `PMCB55: IDP CONFIG [${JSON.stringify(
+          idpConfig,
+          null,
+          2
+        )}] for idpConfigUrl [${idpConfigUrl}]`
+      );
     }
   }
   return idp;

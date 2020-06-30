@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { RDF, UI } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 import { InputTextTypes } from '@constants';
 import { InputGroup } from './input.styles';

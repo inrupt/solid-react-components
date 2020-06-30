@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 import { Group } from '../Group';
 import { DeleteButton } from '../Form/UI/DeleteButton/delete-button.component';

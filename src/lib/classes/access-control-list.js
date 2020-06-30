@@ -3,8 +3,8 @@ import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import { isEqual } from 'lodash';
 import ldflex from '@solid/query-ldflex';
-import { FOAF, RDF, VCARD } from '@inrupt/lit-generated-vocab-common';
-import { ACL } from '@inrupt/lit-generated-vocab-solid-common';
+import { FOAF, RDF, VCARD } from '@solid/lit-vocab-common';
+import { ACL } from '@solid/lit-vocab-solid';
 import { SolidError } from '@utils';
 import { PERMISSIONS } from '@constants';
 

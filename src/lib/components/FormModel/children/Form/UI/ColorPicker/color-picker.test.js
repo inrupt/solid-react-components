@@ -3,7 +3,7 @@ import { render, cleanup } from '@testing-library/react';
 import { getByText } from '@testing-library/dom';
 import ColorPicker from './color-picker.component';
 import 'jest-dom/extend-expect';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 
 afterAll(cleanup);
 

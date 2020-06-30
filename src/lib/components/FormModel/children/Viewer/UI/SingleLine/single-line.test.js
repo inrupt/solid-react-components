@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { getByText, getByLabelText } from '@testing-library/dom';
 import { SingleLine } from './single-line.component';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 
 import 'jest-dom/extend-expect';
 

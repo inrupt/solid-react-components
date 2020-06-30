@@ -1,4 +1,4 @@
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 
 import { Heading } from './Heading';
 import { Comment } from './Comment';

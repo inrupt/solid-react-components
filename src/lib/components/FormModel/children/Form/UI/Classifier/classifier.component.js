@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { n3Helper } from '@inrupt/solid-sdk-forms';
 import unique from 'unique';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 import { SelectWrapper } from './classifier.style';
 

@@ -1,4 +1,4 @@
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 
 export const PERMISSIONS = {
   APPEND: 'Append',

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { DateTimePicker } from './date-time-picker.component';
 import 'jest-dom/extend-expect';
-import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { RDF, UI } from '@solid/lit-vocab-common';
 
 afterAll(cleanup);
 

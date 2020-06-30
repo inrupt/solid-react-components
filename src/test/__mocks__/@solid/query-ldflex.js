@@ -9,8 +9,8 @@ const ldflex = {
   properties: [],
   subjects: []
 };
-ldflex['ldp:inbox'] = ldflex;
-ldflex['https://example.org/#me'] = ldflex['ldp:inbox'];
+ldflex['http://www.w3.org/ns/ldp#inbox'] = ldflex;
+ldflex['https://example.org/#me'] = ldflex['http://www.w3.org/ns/ldp#inbox'];
 ldflex['https://example.org/public/test.ttl.acl'] = { ...ldflex };
 
 export default ldflex;

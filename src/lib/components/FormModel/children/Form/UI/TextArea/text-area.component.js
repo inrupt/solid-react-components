@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 import { TextAreaGroup } from './text-area.styles';
 

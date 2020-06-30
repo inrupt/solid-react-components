@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useWebId } from '@solid/react';
 import styled from 'styled-components';
-// import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
-import { AS } from '@inrupt/lit-generated-vocab-common';
-import SolidImg from '../assets/solid_logo.png';
+import { FormModel as FormModelClass } from '@inrupt/solid-sdk-forms';
+import { AS } from '@solid/lit-vocab-common';
 import {
   ProviderLogin,
   Uploader,
@@ -14,6 +13,7 @@ import {
   ProfileViewer
 } from '@lib';
 import { AccessControlList, ACLFactory } from '@classes';
+import SolidImg from '../assets/solid_logo.png';
 
 const HeaderWrapper = styled.section`
   margin-top: 60px;
@@ -84,10 +84,9 @@ const App = () => {
      * Comment this out if you want to increase App.js performance. To enable, uncomment this
      * section and also the import statement for FormModelClass
      */
-    /*
     const formModel = new FormModelClass(
       'https://solidsdk.inrupt.net/public/FormLanguage/examples/ShEx/decimal.shex',
-      'https://jmartin.inrupt.net/profile/card#me'
+      'https://pmcb55.inrupt.net/profile/card#me'
     );
     const schema = await formModel.parseSchema(
       'https://solidsdk.inrupt.net/public/FormLanguage/examples/ShEx/decimal.shex'
@@ -96,7 +95,6 @@ const App = () => {
 
     // eslint-disable-next-line no-console
     console.log(formModelOutput, 'model new');
-     */
   };
 
   const createAcl = async () => {
@@ -169,8 +167,10 @@ const App = () => {
       <ProviderLogin callbackUri={`${window.location.origin}/`} />
       <FormModel
         {...{
-          modelSource: 'https://jmartin.inrupt.net/public/formmodel/float.ttl#formRoot',
-          dataSource: 'https://jmartin.inrupt.net/profile/card#me',
+          modelSource: 'https://solidsdk.inrupt.net/sdk/userprofile.ttl#formRoot',
+          // 'https://jmartin.inrupt.net/public/formmodel/float.ttl#formRoot',
+          // dataSource: 'https://pmcb55.inrupt.net/profile/card#me',
+          dataSource: 'https://ldp.demo-ess.inrupt.com/p1/profile/card#me',
           options: {
             theme: {
               inputText: 'sdk-input',

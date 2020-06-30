@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 import { SingleLine } from './SingleLine';
 import MultiLine from './MultiLine';
 import DateLine from './DateLine';

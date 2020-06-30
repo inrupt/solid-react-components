@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { RDF, UI, DCTERMS } from '@inrupt/lit-generated-vocab-common';
+import { RDF, UI, DCTERMS } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 import UIMapping from './UI/ui-mapping';
 import { Group } from './viewer.style';

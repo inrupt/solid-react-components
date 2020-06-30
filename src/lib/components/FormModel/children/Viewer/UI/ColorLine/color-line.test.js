@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { render, screen } from '@testing-library/react';
 
 import { ColorLine } from './color-line.component';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 
 test('Renders with value and label', async () => {
   const data = { [UI.value]: '82346-123438-asdf8324', [UI.label]: 'Set content' };

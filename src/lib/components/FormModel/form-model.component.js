@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { FormActions, formUi } from '@inrupt/solid-sdk-forms';
 import { useLiveUpdate } from '@solid/react';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 
 import { SolidError, solidResponse } from '@utils';

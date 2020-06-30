@@ -1,7 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 
-import { RDF, UI } from '@inrupt/lit-generated-vocab-common';
+import { RDF, UI } from '@solid/lit-vocab-common';
 import { FormModelConfig } from '@context';
 import { getClosestLocale } from '@utils';
 

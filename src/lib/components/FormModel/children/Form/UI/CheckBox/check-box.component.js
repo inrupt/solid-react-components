@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { UI } from '@inrupt/lit-generated-vocab-common';
+import { UI } from '@solid/lit-vocab-common';
 import { ThemeContext } from '@context';
 import { InputGroup } from '../Input/input.styles';
 

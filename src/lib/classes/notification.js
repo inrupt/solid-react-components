@@ -1,23 +1,13 @@
 import solid from 'solid-auth-client';
 import * as N3 from 'n3';
 import data from '@solid/query-ldflex';
-import { AS } from '@inrupt/lit-generated-vocab-common';
+import { RDF, XSD, LDP, AS } from '@solid/lit-vocab-common';
+import { SOLID } from '@solid/lit-vocab-solid';
 import { solidResponse, SolidError, shexUtil, getBasicPod } from '@utils';
 import defaultShape from '../shapes/notification.json';
 import AccessControlList from './access-control-list';
 import ACLFactory from './access-control-factory';
 import { ensureSlash } from '../utils/solidFetch';
-
-const PREFIXES = {
-  terms: 'https://www.w3.org/ns/solid/terms#',
-  schema: 'http://www.w3.org/2000/01/rdf-schema#',
-  things: 'https://schema.org/Thing#',
-  ns: 'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
-  foaf: 'http://xmlns.com/foaf/0.1/',
-  acl: 'http://www.w3.org/ns/auth/acl#',
-  ldp: 'http://www.w3.org/ns/ldp#',
-  xsd: 'http://www.w3.org/2001/XMLSchema#'
-};
 
 /**
  * Notification Class for SOLID
@@ -72,7 +62,7 @@ export class Notification {
       /**
        * Delete inbox link reference from user card or custom file
        */
-      await data[document || this.owner]['ldp:inbox'].delete(inbox);
+      await data[document || this.owner][LDP.inbox].delete(inbox);
 
       return solidResponse(200, 'Inbox was deleted');
     } catch (error) {
@@ -92,12 +82,12 @@ export class Notification {
     const { namedNode } = termFactory;
     const writer = new N3.Writer({
       prefixes: {
-        ldp: PREFIXES.ldp
+        ...LDP.PREFIX_AND_NAMESPACE
       },
       format: 'text/turtle'
     });
 
-    writer.addQuad(namedNode(''), namedNode('ldp:inbox'), namedNode(inboxPath));
+    writer.addQuad(namedNode(''), LDP.inbox, namedNode(inboxPath));
     let resultPut = { ok: false };
 
     await writer.end(async (error, result) => {
@@ -198,7 +188,6 @@ export class Notification {
       }
       const result = await solid.fetch(file);
       const schema = await result.json();
-
       this.schema = {
         ...this.schema,
         [name]: schema
@@ -235,7 +224,6 @@ export class Notification {
       const filePath = `${to + fileName}`;
 
       // This should be in a constant, but we may shift to use solid/context instead
-      const rdfType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
       const licenseType = 'http://schema.org/license';
 
       // If a type has not been set, default to Announce type
@@ -270,7 +258,7 @@ export class Notification {
       });
 
       // Add the notification type to the node
-      writer.addQuad(namedNode(''), namedNode(rdfType), namedNode(notificationType));
+      writer.addQuad(namedNode(''), RDF.type, namedNode(notificationType));
 
       // Add the license to the node
       writer.addQuad(namedNode(''), namedNode(licenseType), namedNode(licenseLink));
@@ -305,10 +293,10 @@ export class Notification {
             } else {
               switch (item.datatype) {
                 case 'datetime':
-                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}dateTime`));
+                  typedValue = literal(value, XSD.dateTime);
                   break;
                 case 'boolean':
-                  typedValue = literal(value, namedNode(`${PREFIXES.xsd}boolean`));
+                  typedValue = literal(value, XSD.boolean_);
                   break;
                 case 'string':
                 default:
@@ -366,10 +354,15 @@ export class Notification {
       /**
        * Update subject read into notification a notification file.
        */
-      await data[notificationPath]['https://www.w3.org/ns/solid/terms#read'].set(status);
+      console.log(`PMCB55: MARK AS READ: [${status}], notificationPath: [${notificationPath}]`);
+
+      await data[notificationPath][SOLID.read].set(status);
+
+      console.log(`PMCB55: MARK AS READ - SUCCESS!!`);
 
       return solidResponse(200, 'Notification was updated');
     } catch (error) {
+      console.log(`PMCB55: MARK AS READ - FAILED WITH ERROR: [${JSON.stringify(error, null, 2)}]!`);
       throw new SolidError(error.message, 'Notification', error.status);
     }
   };
@@ -415,7 +408,7 @@ export class Notification {
       const hasDocument = await this.hasInbox(document);
       if (!hasDocument) return false;
 
-      const inboxDocument = await data[document]['ldp:inbox'];
+      const inboxDocument = await data[document][LDP.inbox];
       const inbox = inboxDocument ? await inboxDocument.value : false;
       return inbox;
     } catch (error) {
@@ -453,7 +446,7 @@ export class Notification {
         /**
          * Get contains links from inbox container
          */
-        for await (const path of inbox['ldp:contains']) {
+        for await (const path of inbox[LDP.contains]) {
           notificationPaths = [...notificationPaths, path.value];
         }
 
@@ -462,10 +455,14 @@ export class Notification {
          */
         const coreNotificationShape =
           'https://shexshapes.inrupt.net/public/notifications/core-notification.shex';
+
+        // console.log(`PMCB55: TEST VALIDATE <BEFORE>: [${JSON.stringify(notificationPaths, null, 2)}]`);
+
         const validNotifications = await shexUtil.validateList(
           notificationPaths,
           coreNotificationShape
         );
+        // console.log(`PMCB55: TEST VALIDATE <AFTER>: [${JSON.stringify(validNotifications, null, 2)}]`);
 
         // Loop over resulting notifications
         for await (const notification of validNotifications) {
@@ -480,12 +477,19 @@ export class Notification {
             .split('.')[0];
           notificationData = id !== '' ? { id, path, inboxName: currentInbox.inboxName } : {};
 
+          // console.log(`PMCB55: NOTIFICATION FROM VALID NOTIFICATIONS: [${JSON.stringify(notification, null, 2)}]`);
+
           // Loop over all predicates in the notification shape and parse out the key and value
           for (const field of this.schema[name].shape) {
             // Find the quad for this field
+            // console.log(`PMCB55: ABOUT TO FIND DATA FOR: field.label: [${field.label}], name: [${name}]`);
+
             const fieldQuad = notification.find(obj => {
+              // console.log(`PMCB55: FINDING: field.label: [${field.label}], name: [${name}], obj [${JSON.stringify(obj, null, 2)}]`);
               return obj.predicate.value === this.getPredicate(field, name);
             });
+
+            // console.log(`PMCB55: SETTING DATA fieldQUAD: [${fieldQuad ? fieldQuad.object.value : "XXX-NULL-XXX"}]: field.label: [${field.label}], fieldQUAD: [${fieldQuad ? fieldQuad.object.value : "XXX-NULL-XXX"}]`);
 
             notificationData[field.label] = fieldQuad ? fieldQuad.object.value : null;
           }

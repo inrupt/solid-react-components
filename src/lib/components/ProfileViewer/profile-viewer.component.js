@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ldflex from '@solid/query-ldflex';
+import { VCARD } from '@solid/lit-vocab-common';
 // In-house Components
 // Utils
 import { SolidError } from '@utils';
@@ -45,10 +46,18 @@ export default class ProfileViewer extends Component<ProfileViewerProps> {
     }
 
     try {
-      const name = await ldflex[webId].vcard_fn;
-      const image = await ldflex[webId].vcard_hasPhoto;
-      const company = await ldflex[webId]['vcard_organization-name'];
-      const title = await ldflex[webId].vcard_role;
+      // const name = await ldflex[webId].vcard_fn;
+      // const image = await ldflex[webId].vcard_hasPhoto;
+      // const company = await ldflex[webId]['vcard_organization-name'];
+      // const title = await ldflex[webId].vcard_role;
+
+      console.log(`PMCB55: ABOUT TO GET PROFILE PROPERTIES...`);
+      const name = await ldflex[webId][VCARD.fn];
+      const image = await ldflex[webId][VCARD.hasPhoto];
+      const company = await ldflex[webId][VCARD.organization_name];
+      const title = await ldflex[webId][VCARD.role];
+      console.log(`PMCB55: GOT [${name}], [${image}], [${company}], [${title}]`);
+
       this.setState({
         name: (name && name.value) || '',
         image: (image && image.value) || '',
