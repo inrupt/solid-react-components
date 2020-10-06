@@ -65,7 +65,7 @@
     "@shexjs/core": "^1.0.0-alpha.9",
     "@shexjs/loader": "^1.0.0-alpha.5",
     "@shexjs/parser": "^1.0.0-alpha.4",
-    "@solid/query-ldflex": "^2.6.0",
+    "@solid/query-ldflex": "^2.11.2",
     "@solid/react": "^1.10.0",
     "date-fns": "^2.14.0",
     "file-type": "^10.7.1",
