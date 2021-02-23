@@ -179,8 +179,8 @@ LoginComponent.defaultProps = {
     {
       label: 'Solid Community',
       image: SolidImg,
-      value: 'https://solid.community',
-      registerLink: 'https://solid.community/register',
+      value: 'https://solidcommunity.net',
+      registerLink: 'https://solidcommunity.net/register',
       description: 'This is a prototype implementation of a Solid server'
     }
   ],
