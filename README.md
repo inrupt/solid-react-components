@@ -2,6 +2,10 @@
 
 React components for building your own [Solid](https://solid.inrupt.com/) applications. Part of the [React SDK for Solid](https://github.com/inrupt-inc/solid-react-sdk).
 
+## Deprecation notice
+
+`@inrupt/solid-react-components` is now deprecated. We replaced it with `@inrupt/solid-ui-react`, [check it out](https://github.com/inrupt/solid-ui-react)!
+
 ## Dependencies
 
 The following is a list of some of the major dependencies of the solid-react-components library. These packages are all installed as part of the `npm install` step of setup.
