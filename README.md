@@ -1,5 +1,5 @@
 # DEPRECATED
-**There is a new version of the [Solid React SDK](https://github.com/inrupt/solid-ui-react) with a new UX that makes it much easier to build Solid React applications. Moving forward, support is limited to critical bug fixes and security issues for customers only until 01-Jul-2021, when it will reach its end of life. This package is superseded by [@inrupt/solid-ui-react](https://github.com/inrupt/solid-ui-react).**
+**There is a new version of the [Solid React SDK](https://docs.inrupt.com/developer-tools/javascript/react-sdk/) with a new UX that makes it much easier to build Solid React applications. Moving forward, support is limited to critical bug fixes and security issues for customers only until 01-Jul-2021, when it will reach its end of life. This package is superseded by [@inrupt/solid-ui-react](https://github.com/inrupt/solid-ui-react).**
 
 ## Solid React Components Library
 
